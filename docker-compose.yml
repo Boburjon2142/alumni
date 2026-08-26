@@ -38,7 +38,7 @@ services:
     build: ./frontend
     restart: always
     environment:
-      - NEXT_PUBLIC_API_URL=https://${DOMAIN}/api/v1
+      - NEXT_PUBLIC_API_URL=http://${DOMAIN}/api/v1
     ports:
       - "127.0.0.1:3005:3000"
     networks:
