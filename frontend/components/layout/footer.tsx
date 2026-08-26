@@ -1,0 +1,3 @@
+import Link from "next/link";
+import type { Dictionary } from "@/lib/i18n";
+export function Footer({t}:{t:Dictionary}){return <footer className="footer"><div className="container footer-grid"><div><div className="brand brand-logo footer-logo"><img src="/images/qardu-logo.webp?v=3" alt={`${t.university} logotipi`} width="420" height="120"/></div><p>{t.footerText}</p></div><div><h3>{t.platform}</h3><Link href="/directory">{t.navDirectory}</Link><Link href="/#featured">{t.navFeatured}</Link></div><div><h3>{t.help}</h3><Link href="/privacy">{t.privacy}</Link><a href="mailto:alumni@qarshidu.uz">alumni@qarshidu.uz</a></div></div><div className="container copyright">© {new Date().getFullYear()} {t.university}</div></footer>}
