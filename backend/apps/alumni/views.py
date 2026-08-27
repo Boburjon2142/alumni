@@ -5,13 +5,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import AlumniProfile, FeaturedAlumni
-from .serializers import FeaturedSerializer, OwnAlumniSerializer, PublicAlumniDetailSerializer, PublicAlumniSerializer
+from .serializers import FeaturedSerializer, OwnAlumniSerializer, PublicAlumniDetailSerializer, PublicAlumniListSerializer
 
 def visible_profiles(request):
     return AlumniProfile.objects.filter(is_published=True).select_related("faculty", "specialty").distinct()
 
 class AlumniListView(generics.ListAPIView):
-    permission_classes = [AllowAny]; serializer_class = PublicAlumniSerializer
+    permission_classes = [AllowAny]; serializer_class = PublicAlumniListSerializer
     filterset_fields = {"graduation_year": ["exact"]}
     search_fields = ["full_name", "current_company", "position", "city", "country", "specialty__name", "faculty__name"]
     def get_queryset(self):

@@ -24,6 +24,15 @@ def test_private_fields_not_exposed(client, alumni):
     assert response.status_code == 200 and "phone" not in response.data and "email" not in response.data
 
 @pytest.mark.django_db
+def test_directory_is_minimal_and_detail_is_public_safe(client, alumni):
+    listed = client.get("/api/v1/alumni/").data["data"][0]
+    assert set(listed) == {"id", "slug", "avatar", "image_url", "image_alt", "full_name"}
+    detail = client.get(f"/api/v1/alumni/{alumni.slug}/")
+    assert detail.status_code == 200
+    assert "phone" not in detail.data and "email" not in detail.data
+    assert "timeline" in detail.data and "achievements" in detail.data and "sources" in detail.data
+
+@pytest.mark.django_db
 def test_anonymous_cannot_edit_and_user_cannot_set_controlled_fields(client, alumni):
     assert client.patch("/api/v1/alumni/me/", {"full_name":"Hacked"}, format="json").status_code in (401, 403)
     client.login(email="alumni@example.com", password="StrongPass123")

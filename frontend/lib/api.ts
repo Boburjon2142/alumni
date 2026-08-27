@@ -1,4 +1,4 @@
-import type { Alumni, Featured, Page } from "@/types/alumni";
+import type { Alumni, AlumniPreview, Featured, Page } from "@/types/alumni";
 import type { Advice, AlumniEvent, Interview, Story } from "@/types/editorial";
 const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api/v1";
 async function request<T>(path:string):Promise<T>{
@@ -9,6 +9,7 @@ async function request<T>(path:string):Promise<T>{
 export const getFeatured=()=>request<Featured[]>("/featured-alumni/");
 export const getAlumni=(query="")=>request<Page<Alumni>>(`/alumni/${query?`?${query}`:""}`);
 export const getAlumniById=(id:string)=>request<Alumni>(`/alumni/${id}/`);
+export const getAlumniPreview=(slug:string,signal?:AbortSignal)=>fetch(`/api/alumni/${encodeURIComponent(slug)}`,{cache:"no-store",signal,headers:{Accept:"application/json"}}).then(response=>{if(!response.ok)throw new Error(`ALUMNI_DETAIL_${response.status}`);return response.json() as Promise<AlumniPreview>});
 export const getStories=(query="")=>request<Page<Story>>(`/stories/${query?`?${query}`:""}`);
 export const getStory=(slug:string)=>request<Story>(`/stories/${slug}/`);
 export const getInterviews=(query="")=>request<Page<Interview>>(`/interviews/${query?`?${query}`:""}`);

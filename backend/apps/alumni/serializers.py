@@ -19,6 +19,11 @@ class PublicAlumniSerializer(serializers.ModelSerializer):
         fields = ("id", "slug", "avatar", "image_url", "image_alt", "image_credit", "image_source_url", "full_name", "faculty", "specialty", "graduation_year", "degree", "current_company", "position", "industry", "city", "country", "skills", "bio", "biography_uz", "biography_en", "is_featured", "seo_title", "seo_description", "verified")
     def get_verified(self, obj): return obj.verification_status == AlumniProfile.Verification.VERIFIED
 
+class PublicAlumniListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AlumniProfile
+        fields = ("id", "slug", "avatar", "image_url", "image_alt", "full_name")
+
 class OwnAlumniSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email", read_only=True)
     verification_status = serializers.CharField(read_only=True)

@@ -34,11 +34,12 @@ export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
   const home = pathname === "/";
   const stories = locale === "en" ? "Stories" : locale === "ru" ? "Истории" : "Hikoyalar";
 
-  return <header className={`site-header ${home ? "home-header" : ""}`}><div className="container nav">
+  return <header className={`site-header ${home ? "home-header" : ""} ${open ? "menu-open" : ""}`}><div className="container nav">
     <Link href="/" className="brand brand-logo" aria-label={`${t.university} bosh sahifa`}><img src="/images/qardu-logo.webp?v=3" alt={`${t.university} logotipi`} width="420" height="120"/></Link>
     <nav className={open ? "nav-links open" : "nav-links"} aria-label="Asosiy navigatsiya">
       <Link href="/directory">{t.navDirectory}</Link>
-      <details className="nav-dropdown">
+      <Link className="mobile-stories-link" href="/stories" onClick={()=>setOpen(false)}>{stories}</Link>
+      <details className="nav-dropdown desktop-stories-dropdown">
         <summary>{stories}<ChevronDown aria-hidden="true"/></summary>
         <div className="nav-dropdown-panel">
           {storyMenus[locale].map(([href,title,description],index)=>{const Icon=storyIcons[index];return <Link href={href} key={href}><span className="nav-dropdown-icon"><Icon aria-hidden="true"/></span><span><strong>{title}</strong><small>{description}</small></span></Link>})}

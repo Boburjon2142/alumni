@@ -1,5 +1,5 @@
 import { Filter, Search, UsersRound } from "lucide-react";
-import { AlumniCard } from "@/components/alumni/alumni-card";
+import { AlumniCardGrid } from "@/components/alumni/alumni-card-grid";
 import { getAlumni } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import type { Alumni, Page } from "@/types/alumni";
@@ -36,7 +36,7 @@ export default async function Directory({ searchParams }: { searchParams: Promis
       <button type="submit">{t.results}</button>
     </form>
     {error ? <div className="empty-state error-state"><h2>{t.loadError}</h2><p>{t.retryText}</p></div>
-      : result && result.data.length ? <><div className="result-count"><strong>{result.pagination.count}</strong> {t.found}</div><div className="cards-grid directory-grid">{result.data.map(alumni => <AlumniCard alumni={alumni} key={alumni.id} t={t}/>)}</div><nav className="pagination" aria-label="Sahifalar">{result.pagination.previous&&<a href={`?${new URL(result.pagination.previous).searchParams}`}>{t.previous}</a>}<span>{result.pagination.page} / {result.pagination.pages}</span>{result.pagination.next&&<a href={`?${new URL(result.pagination.next).searchParams}`}>{t.next}</a>}</nav></>
+      : result && result.data.length ? <><div className="result-count"><strong>{result.pagination.count}</strong> {t.found}</div><AlumniCardGrid alumni={result.data} locale={locale}/><nav className="pagination" aria-label="Sahifalar">{result.pagination.previous&&<a href={`?${new URL(result.pagination.previous).searchParams}`}>{t.previous}</a>}<span>{result.pagination.page} / {result.pagination.pages}</span>{result.pagination.next&&<a href={`?${new URL(result.pagination.next).searchParams}`}>{t.next}</a>}</nav></>
       : <div className="empty-state"><UsersRound/><h2>{t.noResults}</h2><p>{t.noResultsText}</p><a className="button button-secondary" href="/directory">{t.clearFilters}</a></div>}
   </div></section>;
 }

@@ -2,5 +2,6 @@ export type Achievement = { id:number; title:string; description?:string; year?:
 export type TimelineItem = { id:number; year:number; title:string; organization?:string; description?:string; type:string; order:number };
 export type AlumniSource = { id:number; title:string; url:string; source_type:string; publisher?:string; published_date?:string; is_verified:boolean };
 export type Alumni = { id:number; slug:string; avatar?:string; image_url?:string; image_alt?:string; image_credit?:string; image_source_url?:string; full_name:string; faculty?:string; specialty?:string; graduation_year?:number; current_company?:string; position?:string; industry?:string; city?:string; country?:string; skills:string[]; bio?:string; biography_uz?:string; biography_en?:string; career_story_uz?:string; career_story_en?:string; is_featured:boolean; seo_title?:string; seo_description?:string; published_at?:string; achievements?:Achievement[]; timeline?:TimelineItem[]; sources?:AlumniSource[]; verified:boolean };
+export type AlumniPreview = Alumni & { advice?:{content_uz?:string;content_en?:string}|null };
 export type Featured = { id:number; title:string; short_description:string; display_order:number; alumni:Alumni };
 export type Page<T> = { success:true; data:T[]; pagination:{count:number;page:number;pages:number;next:string|null;previous:string|null} };
