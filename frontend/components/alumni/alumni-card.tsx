@@ -19,7 +19,7 @@ export function AlumniCard({ alumni, featured = false, t }: { alumni: Alumni; fe
       {alumni.verified && <span className="verified"><BadgeCheck size={17}/> {t.verified}</span>}
     </div>
     <div>
-      {featured && <span className="featured-label"><Award/> Faxriy bitiruvchi</span>}
+      {featured && <span className="featured-label"><Award size={14}/> {t.featuredBadge || t.graduate}</span>}
       <h3><Link href={`/alumni/${alumni.slug}`}>{alumni.full_name}</Link></h3>
       <p className="role">{alumni.position || t.graduate}{alumni.current_company && ` — ${alumni.current_company}`}</p>
     </div>

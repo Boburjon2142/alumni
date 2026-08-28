@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Achievement, AlumniProfile, AlumniSource, CareerTimelineItem, FeaturedAlumni
+from apps.editorial.serializers import AdviceSerializer
 
 class AchievementSerializer(serializers.ModelSerializer):
     class Meta: model = Achievement; fields = ("id", "title", "description", "year", "category", "order")
@@ -20,9 +21,11 @@ class PublicAlumniSerializer(serializers.ModelSerializer):
     def get_verified(self, obj): return obj.verification_status == AlumniProfile.Verification.VERIFIED
 
 class PublicAlumniListSerializer(serializers.ModelSerializer):
+    faculty = serializers.CharField(source="faculty.name", default=None)
+    specialty = serializers.CharField(source="specialty.name", default=None)
     class Meta:
         model = AlumniProfile
-        fields = ("id", "slug", "avatar", "image_url", "image_alt", "full_name")
+        fields = ("id", "slug", "avatar", "image_url", "image_alt", "full_name", "position", "current_company", "faculty", "specialty", "graduation_year", "is_featured")
 
 class OwnAlumniSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email", read_only=True)
@@ -43,5 +46,9 @@ class PublicAlumniDetailSerializer(PublicAlumniSerializer):
     achievements = AchievementSerializer(many=True, read_only=True)
     timeline = CareerTimelineSerializer(many=True, read_only=True)
     sources = AlumniSourceSerializer(many=True, read_only=True)
+    advice = serializers.SerializerMethodField()
     class Meta(PublicAlumniSerializer.Meta):
-        fields = PublicAlumniSerializer.Meta.fields + ("career_story_uz", "career_story_en", "published_at", "achievements", "timeline", "sources")
+        fields = PublicAlumniSerializer.Meta.fields + ("career_story_uz", "career_story_en", "published_at", "achievements", "timeline", "sources", "advice")
+    def get_advice(self, obj):
+        qs = obj.advice.filter(is_published=True)
+        return AdviceSerializer(qs, many=True).data

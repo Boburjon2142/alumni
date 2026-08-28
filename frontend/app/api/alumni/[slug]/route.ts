@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api/v1";
+const API = process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api/v1";
 
 export async function GET(_request:Request,{params}:{params:Promise<{slug:string}>}){
   const {slug}=await params;

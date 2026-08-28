@@ -119,8 +119,10 @@ class AlumniAdvice(PublishableModel):
     alumnus = models.ForeignKey(AlumniProfile, on_delete=models.PROTECT, related_name="advice")
     category = models.CharField(max_length=24, choices=Category.choices)
     title_uz = models.CharField(max_length=180, blank=True)
+    title_ru = models.CharField(max_length=180, blank=True)
     title_en = models.CharField(max_length=180, blank=True)
     content_uz = models.TextField(blank=True, max_length=1600)
+    content_ru = models.TextField(blank=True, max_length=1600)
     content_en = models.TextField(blank=True, max_length=1600)
     source_type = models.CharField(max_length=16, choices=SourceType.choices, default=SourceType.MANUAL)
     source_interview_item = models.ForeignKey(InterviewItem, null=True, blank=True, on_delete=models.PROTECT, related_name="derived_advice")
@@ -142,6 +144,10 @@ class AlumniAdvice(PublishableModel):
     @property
     def resolved_content_uz(self):
         return self.source_interview_item.answer_uz if self.source_interview_item_id else self.content_uz
+
+    @property
+    def resolved_content_ru(self):
+        return self.content_ru or self.content_uz
 
     @property
     def resolved_content_en(self):

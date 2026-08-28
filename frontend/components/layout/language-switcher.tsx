@@ -1,6 +1,6 @@
 "use client";
 import { Check, ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { Locale } from "@/lib/i18n";
 
 const options = [
@@ -17,14 +17,60 @@ function Flag({ code }: { code: Locale }) {
 
 export function LanguageSwitcher({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
   const current = options.find(item => item.code === locale)!;
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [open]);
+
   function select(code: Locale) {
-    document.cookie = `locale=${code};path=/;max-age=31536000;samesite=lax`;
+    document.cookie = `NEXT_LOCALE=${code};path=/;max-age=31536000;samesite=lax`;
     setOpen(false);
     window.location.reload();
   }
-  return <div className="language-switcher">
-    <button className="language-trigger" onClick={() => setOpen(!open)} aria-expanded={open} aria-haspopup="menu"><Flag code={locale}/><strong>{current.short}</strong><ChevronDown/></button>
-    {open && <div className="language-menu" role="menu">{options.map(item => <button key={item.code} role="menuitem" className={item.code===locale?"active":""} onClick={() => select(item.code)}><Flag code={item.code}/><span>{item.label}</span>{item.code===locale&&<Check/>}</button>)}</div>}
-  </div>;
+
+  return (
+    <div className="language-switcher" ref={ref}>
+      <button
+        className="language-trigger"
+        onClick={() => setOpen(!open)}
+        aria-expanded={open}
+        aria-haspopup="menu"
+        type="button"
+      >
+        <Flag code={locale}/>
+        <strong>{current.short}</strong>
+        <ChevronDown className="lang-chevron" aria-hidden="true"/>
+      </button>
+      {open && (
+        <div className="language-menu" role="menu">
+          {options.map(item => (
+            <button
+              key={item.code}
+              role="menuitem"
+              type="button"
+              className={item.code === locale ? "active" : ""}
+              onClick={() => select(item.code)}
+            >
+              <div className="lang-option-left">
+                <Flag code={item.code}/>
+                <span>{item.label}</span>
+              </div>
+              {item.code === locale && <Check size={16} className="lang-check"/>}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
+

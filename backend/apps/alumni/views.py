@@ -48,4 +48,4 @@ class MeView(APIView):
 class FeaturedListView(generics.ListAPIView):
     permission_classes = [AllowAny]; serializer_class = FeaturedSerializer; pagination_class = None
     def get_queryset(self):
-        return FeaturedAlumni.objects.filter(is_active=True, alumni__is_published=True, alumni__is_featured=True).select_related("alumni", "alumni__faculty", "alumni__specialty")[:6]
+        return FeaturedAlumni.objects.filter(is_active=True, alumni__is_published=True, alumni__is_featured=True).select_related("alumni", "alumni__faculty", "alumni__specialty")[:12]

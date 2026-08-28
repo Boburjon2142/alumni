@@ -1,19 +1,46 @@
-import type { Alumni, AlumniPreview, Featured, Page } from "@/types/alumni";
-import type { Advice, AlumniEvent, Interview, Story } from "@/types/editorial";
-const API = process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api/v1";
-async function request<T>(path:string):Promise<T>{
-  const response=await fetch(`${API}${path}`,{cache:"no-store"});
-  if(!response.ok) throw new Error("API so‘rovi bajarilmadi");
+import type {
+  Advice,
+  Alumni,
+  AlumniPreview,
+  Faculty,
+  Featured,
+  FeedbackPayload,
+  FeedbackResponse,
+  Page,
+  SuccessStory,
+} from "@/types/alumni";
+
+const API = process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api/v1";
+
+async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  const response = await fetch(`${API}${path}`, { cache: "no-store", ...options });
+  if (!response.ok) throw new Error("API so‘rovi bajarilmadi");
   return response.json() as Promise<T>;
 }
-export const getFeatured=()=>request<Featured[]>("/featured-alumni/");
-export const getAlumni=(query="")=>request<Page<Alumni>>(`/alumni/${query?`?${query}`:""}`);
-export const getAlumniById=(id:string)=>request<Alumni>(`/alumni/${id}/`);
-export const getAlumniPreview=(slug:string,signal?:AbortSignal)=>fetch(`/api/alumni/${encodeURIComponent(slug)}`,{cache:"no-store",signal,headers:{Accept:"application/json"}}).then(response=>{if(!response.ok)throw new Error(`ALUMNI_DETAIL_${response.status}`);return response.json() as Promise<AlumniPreview>});
-export const getStories=(query="")=>request<Page<Story>>(`/stories/${query?`?${query}`:""}`);
-export const getStory=(slug:string)=>request<Story>(`/stories/${slug}/`);
-export const getInterviews=(query="")=>request<Page<Interview>>(`/interviews/${query?`?${query}`:""}`);
-export const getInterview=(slug:string)=>request<Interview>(`/interviews/${slug}/`);
-export const getAdvice=(query="")=>request<Page<Advice>>(`/advice/${query?`?${query}`:""}`);
-export const getEvents=(query="")=>request<Page<AlumniEvent>>(`/events/${query?`?${query}`:""}`);
-export const getEvent=(slug:string)=>request<AlumniEvent>(`/events/${slug}/`);
+
+export const getFeatured = () => request<Featured[]>("/featured-alumni/");
+export const getAlumni = (query = "") => request<Page<Alumni>>(`/alumni/${query ? `?${query}` : ""}`);
+export const getAlumniById = (idOrSlug: string) => request<Alumni>(`/alumni/${encodeURIComponent(idOrSlug)}/`);
+export const getAlumniPreview = (slug: string, signal?: AbortSignal) =>
+  fetch(`/api/alumni/${encodeURIComponent(slug)}`, {
+    cache: "no-store",
+    signal,
+    headers: { Accept: "application/json" },
+  }).then((response) => {
+    if (!response.ok) throw new Error(`ALUMNI_DETAIL_${response.status}`);
+    return response.json() as Promise<AlumniPreview>;
+  });
+
+export const getStories = (query = "") => request<Page<SuccessStory>>(`/stories/${query ? `?${query}` : ""}`);
+export const getStoryBySlug = (slug: string) => request<SuccessStory>(`/stories/${encodeURIComponent(slug)}/`);
+
+export const getAdvice = (query = "") => request<Page<Advice>>(`/advice/${query ? `?${query}` : ""}`);
+export const getFaculties = () =>
+  request<any>("/faculties/").then((res) => (Array.isArray(res) ? res : res.data ?? []));
+
+export const sendFeedback = (payload: FeedbackPayload) =>
+  request<FeedbackResponse>("/feedback/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });

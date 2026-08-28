@@ -26,7 +26,7 @@ def test_private_fields_not_exposed(client, alumni):
 @pytest.mark.django_db
 def test_directory_is_minimal_and_detail_is_public_safe(client, alumni):
     listed = client.get("/api/v1/alumni/").data["data"][0]
-    assert set(listed) == {"id", "slug", "avatar", "image_url", "image_alt", "full_name"}
+    assert set(listed) == {"id", "slug", "avatar", "image_url", "image_alt", "full_name", "position", "current_company", "faculty", "specialty", "graduation_year", "is_featured"}
     detail = client.get(f"/api/v1/alumni/{alumni.slug}/")
     assert detail.status_code == 200
     assert "phone" not in detail.data and "email" not in detail.data

@@ -1,0 +1,1511 @@
+[
+{
+  "model": "alumni.alumniprofile",
+  "pk": 1,
+  "fields": {
+    "user": null,
+    "full_name": "QarDU bitiruvchisi",
+    "slug": "qardu-bitiruvchisi",
+    "avatar": "",
+    "image_url": "",
+    "image_alt": "",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": null,
+    "specialty": null,
+    "graduation_year": 2020,
+    "degree": "Bakalavr",
+    "current_company": "",
+    "position": "Yosh mutaxassis",
+    "industry": "",
+    "city": "",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "QarDUda olgan bilimlarini kasbiy rivoj va jamiyat manfaatiga yo‘naltirayotgan bitiruvchi.",
+    "biography_uz": "",
+    "biography_en": "",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "unverified",
+    "is_featured": true,
+    "featured_order": null,
+    "is_published": true,
+    "published_at": "2026-08-26T14:40:29.288Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-26T14:40:29.288Z",
+    "updated_at": "2026-08-26T14:40:29.288Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 2,
+  "fields": {
+    "user": null,
+    "full_name": "Azizbek Rahmonov",
+    "slug": "azizbek-rahmonov",
+    "avatar": "",
+    "image_url": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=800&h=1000&q=80",
+    "image_alt": "Azizbek Rahmonov professional portreti",
+    "image_credit": "Unsplash",
+    "image_source_url": "https://unsplash.com",
+    "faculty": 1,
+    "specialty": 1,
+    "graduation_year": 2015,
+    "degree": "Bakalavr",
+    "current_company": "Rivoj Digital Studio",
+    "position": "Senior dasturiy ta’minot muhandisi",
+    "industry": "Technology",
+    "city": "Toshkent",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Murakkab tizimlarni sodda va barqaror yechimlarga aylantirishga ixtisoslashgan texnik mutaxassis.",
+    "biography_uz": "Murakkab tizimlarni sodda va barqaror yechimlarga aylantirishga ixtisoslashgan texnik mutaxassis.",
+    "biography_en": "A technical professional focused on turning complex systems into clear, reliable products.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 1,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.495Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-26T15:23:31.495Z",
+    "updated_at": "2026-08-26T15:35:48.473Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 3,
+  "fields": {
+    "user": null,
+    "full_name": "Dilnoza Karimova",
+    "slug": "dilnoza-karimova",
+    "avatar": "",
+    "image_url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=800&h=1000&q=80",
+    "image_alt": "Dilnoza Karimova professional portreti",
+    "image_credit": "Unsplash",
+    "image_source_url": "https://unsplash.com",
+    "faculty": 2,
+    "specialty": 2,
+    "graduation_year": 2018,
+    "degree": "Bakalavr",
+    "current_company": "Barqaror Moliya Guruhi",
+    "position": "Moliyaviy tahlil rahbari",
+    "industry": "Finance",
+    "city": "Toshkent",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Ma’lumotlarga asoslangan qarorlar va yosh tahlilchilarni rivojlantirish bilan shug‘ullanadi.",
+    "biography_uz": "Ma’lumotlarga asoslangan qarorlar va yosh tahlilchilarni rivojlantirish bilan shug‘ullanadi.",
+    "biography_en": "She works on evidence-led financial decisions and the development of early-career analysts.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 2,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.498Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-26T15:23:31.499Z",
+    "updated_at": "2026-08-26T15:35:48.480Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 4,
+  "fields": {
+    "user": null,
+    "full_name": "Javohir Ergashev",
+    "slug": "javohir-ergashev",
+    "avatar": "",
+    "image_url": "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&h=1000&q=80",
+    "image_alt": "Javohir Ergashev professional portreti",
+    "image_credit": "Unsplash",
+    "image_source_url": "https://unsplash.com",
+    "faculty": 3,
+    "specialty": 3,
+    "graduation_year": 2011,
+    "degree": "Bakalavr",
+    "current_company": "Aniq Tahlil Markazi",
+    "position": "Ma’lumotlar tahlili bo‘yicha ekspert",
+    "industry": "Technology",
+    "city": "Samarqand",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Amaliy matematika yondashuvlarini biznes va jamoat loyihalaridagi tahliliy vazifalarga qo‘llaydi.",
+    "biography_uz": "Amaliy matematika yondashuvlarini biznes va jamoat loyihalaridagi tahliliy vazifalarga qo‘llaydi.",
+    "biography_en": "He applies mathematical thinking to analytical challenges in business and public-interest projects.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": false,
+    "featured_order": null,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.502Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-26T15:23:31.502Z",
+    "updated_at": "2026-08-26T15:35:48.482Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 5,
+  "fields": {
+    "user": null,
+    "full_name": "Madina Normurodova",
+    "slug": "madina-normurodova",
+    "avatar": "",
+    "image_url": "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&h=1000&q=80",
+    "image_alt": "Madina Normurodova professional portreti",
+    "image_credit": "Unsplash",
+    "image_source_url": "https://unsplash.com",
+    "faculty": 4,
+    "specialty": 4,
+    "graduation_year": 2007,
+    "degree": "Bakalavr",
+    "current_company": "Mazmun Media Loyihasi",
+    "position": "Tahririyat yo‘nalishi rahbari",
+    "industry": "Media",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Ta’limiy va ijtimoiy mavzularni aniq, mas’uliyatli media mahsulotlariga aylantiradi.",
+    "biography_uz": "Ta’limiy va ijtimoiy mavzularni aniq, mas’uliyatli media mahsulotlariga aylantiradi.",
+    "biography_en": "She turns educational and social themes into clear, responsible media products.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 4,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.504Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-26T15:23:31.505Z",
+    "updated_at": "2026-08-26T15:35:48.484Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 6,
+  "fields": {
+    "user": null,
+    "full_name": "Sardor Usmonov",
+    "slug": "sardor-usmonov",
+    "avatar": "",
+    "image_url": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&h=1000&q=80",
+    "image_alt": "Sardor Usmonov professional portreti",
+    "image_credit": "Unsplash",
+    "image_source_url": "https://unsplash.com",
+    "faculty": 5,
+    "specialty": 5,
+    "graduation_year": 2003,
+    "degree": "Bakalavr",
+    "current_company": "Hududiy Taraqqiyot Markazi",
+    "position": "Dasturlar koordinatori",
+    "industry": "Public Administration",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Hududiy loyihalarda tadqiqot, rejalashtirish va manfaatdor tomonlar hamkorligini muvofiqlashtiradi.",
+    "biography_uz": "Hududiy loyihalarda tadqiqot, rejalashtirish va manfaatdor tomonlar hamkorligini muvofiqlashtiradi.",
+    "biography_en": "He coordinates research, planning and stakeholder collaboration in regional programmes.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": false,
+    "featured_order": null,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.509Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-26T15:23:31.509Z",
+    "updated_at": "2026-08-26T15:35:48.487Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 7,
+  "fields": {
+    "user": null,
+    "full_name": "Nargiza Tursunova",
+    "slug": "nargiza-tursunova",
+    "avatar": "",
+    "image_url": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&h=1000&q=80",
+    "image_alt": "Nargiza Tursunova professional portreti",
+    "image_credit": "Unsplash",
+    "image_source_url": "https://unsplash.com",
+    "faculty": 6,
+    "specialty": 6,
+    "graduation_year": 1998,
+    "degree": "Bakalavr",
+    "current_company": "Yangi Avlod Ta’lim Markazi",
+    "position": "Akademik dasturlar maslahatchisi",
+    "industry": "Education",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "O‘qituvchilar uchun amaliy metodika va ta’lim dasturlarini takomillashtirish ustida ishlaydi.",
+    "biography_uz": "O‘qituvchilar uchun amaliy metodika va ta’lim dasturlarini takomillashtirish ustida ishlaydi.",
+    "biography_en": "She supports practical teaching methods and the improvement of learning programmes.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 6,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.511Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-26T15:23:31.511Z",
+    "updated_at": "2026-08-26T15:35:48.488Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 8,
+  "fields": {
+    "user": null,
+    "full_name": "Bekzod Murodov",
+    "slug": "bekzod-murodov",
+    "avatar": "",
+    "image_url": "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=800&h=1000&q=80",
+    "image_alt": "Bekzod Murodov professional portreti",
+    "image_credit": "Unsplash",
+    "image_source_url": "https://unsplash.com",
+    "faculty": 7,
+    "specialty": 7,
+    "graduation_year": 2020,
+    "degree": "Bakalavr",
+    "current_company": "Ilmiy Amaliyot Laboratoriyasi",
+    "position": "Tadqiqot loyihalari mutaxassisi",
+    "industry": "Science",
+    "city": "Toshkent",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Laboratoriya tartibi, ilmiy hujjatlashtirish va yosh tadqiqotchilar bilan ishlashga e’tibor qaratadi.",
+    "biography_uz": "Laboratoriya tartibi, ilmiy hujjatlashtirish va yosh tadqiqotchilar bilan ishlashga e’tibor qaratadi.",
+    "biography_en": "His work centres on laboratory practice, research documentation and early-career researchers.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": false,
+    "featured_order": null,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.514Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-26T15:23:31.514Z",
+    "updated_at": "2026-08-26T15:35:48.490Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 9,
+  "fields": {
+    "user": null,
+    "full_name": "Shahnoza Odilova",
+    "slug": "shahnoza-odilova",
+    "avatar": "",
+    "image_url": "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=800&h=1000&q=80",
+    "image_alt": "Shahnoza Odilova professional portreti",
+    "image_credit": "Unsplash",
+    "image_source_url": "https://unsplash.com",
+    "faculty": 2,
+    "specialty": 8,
+    "graduation_year": 2022,
+    "degree": "Bakalavr",
+    "current_company": "O‘sish Biznes Studiyasi",
+    "position": "Loyiha koordinatori",
+    "industry": "Business",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Kichik bizneslar uchun mijoz tadqiqoti va jarayonlarni tizimlashtirish loyihalarini boshqaradi.",
+    "biography_uz": "Kichik bizneslar uchun mijoz tadqiqoti va jarayonlarni tizimlashtirish loyihalarini boshqaradi.",
+    "biography_en": "She coordinates customer research and operational improvement projects for small businesses.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": false,
+    "featured_order": null,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.515Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-26T15:23:31.515Z",
+    "updated_at": "2026-08-26T15:35:48.492Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 10,
+  "fields": {
+    "user": null,
+    "full_name": "Ulug‘bek Sobirov",
+    "slug": "ulugbek-sobirov",
+    "avatar": "",
+    "image_url": "https://images.unsplash.com/photo-1557862921-37829c790f19?auto=format&fit=crop&w=800&h=1000&q=80",
+    "image_alt": "Ulug‘bek Sobirov professional portreti",
+    "image_credit": "Unsplash",
+    "image_source_url": "https://unsplash.com",
+    "faculty": 1,
+    "specialty": 9,
+    "graduation_year": 2018,
+    "degree": "Bakalavr",
+    "current_company": "Yechimlar Muhandislik Markazi",
+    "position": "Muhandislik jamoasi yetakchisi",
+    "industry": "Engineering",
+    "city": "Toshkent",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Mahsulot jamoalarida texnik sifat, hamkorlik va muhandislik jarayonlarini rivojlantiradi.",
+    "biography_uz": "Mahsulot jamoalarida texnik sifat, hamkorlik va muhandislik jarayonlarini rivojlantiradi.",
+    "biography_en": "He develops engineering quality, collaboration and delivery practices across product teams.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": false,
+    "featured_order": null,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.517Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-26T15:23:31.517Z",
+    "updated_at": "2026-08-26T15:35:48.493Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 11,
+  "fields": {
+    "user": null,
+    "full_name": "Mohira Saidova",
+    "slug": "mohira-saidova",
+    "avatar": "",
+    "image_url": "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?auto=format&fit=crop&w=800&h=1000&q=80",
+    "image_alt": "Mohira Saidova professional portreti",
+    "image_credit": "Unsplash",
+    "image_source_url": "https://unsplash.com",
+    "faculty": 6,
+    "specialty": 10,
+    "graduation_year": 2015,
+    "degree": "Bakalavr",
+    "current_company": "Kelajak Ko‘nikmalari Markazi",
+    "position": "Ta’lim dasturlari menejeri",
+    "industry": "Education",
+    "city": "Buxoro",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Talabalar uchun kasbiy yo‘naltirish va zamonaviy ko‘nikmalar dasturlarini ishlab chiqadi.",
+    "biography_uz": "Talabalar uchun kasbiy yo‘naltirish va zamonaviy ko‘nikmalar dasturlarini ishlab chiqadi.",
+    "biography_en": "She designs career guidance and modern-skills programmes for students.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": false,
+    "featured_order": null,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.518Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-26T15:23:31.518Z",
+    "updated_at": "2026-08-26T15:35:48.494Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 1,
+  "fields": {
+    "alumni": 2,
+    "title": "Senior dasturiy ta’minot muhandisi",
+    "short_description": "Murakkab tizimlarni sodda va barqaror yechimlarga aylantirishga ixtisoslashgan texnik mutaxassis.",
+    "display_order": 1,
+    "is_active": true,
+    "featured_at": "2026-08-26T15:23:31.497Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 2,
+  "fields": {
+    "alumni": 3,
+    "title": "Moliyaviy tahlil rahbari",
+    "short_description": "Ma’lumotlarga asoslangan qarorlar va yosh tahlilchilarni rivojlantirish bilan shug‘ullanadi.",
+    "display_order": 2,
+    "is_active": true,
+    "featured_at": "2026-08-26T15:23:31.500Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 3,
+  "fields": {
+    "alumni": 5,
+    "title": "Tahririyat yo‘nalishi rahbari",
+    "short_description": "Ta’limiy va ijtimoiy mavzularni aniq, mas’uliyatli media mahsulotlariga aylantiradi.",
+    "display_order": 4,
+    "is_active": true,
+    "featured_at": "2026-08-26T15:23:31.506Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 4,
+  "fields": {
+    "alumni": 7,
+    "title": "Akademik dasturlar maslahatchisi",
+    "short_description": "O‘qituvchilar uchun amaliy metodika va ta’lim dasturlarini takomillashtirish ustida ishlaydi.",
+    "display_order": 6,
+    "is_active": true,
+    "featured_at": "2026-08-26T15:23:31.512Z"
+  }
+},
+{
+  "model": "editorial.successstory",
+  "pk": 1,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T14:40:29.295Z",
+    "created_at": "2026-08-26T14:40:29.295Z",
+    "updated_at": "2026-08-26T14:40:29.295Z",
+    "alumnus": 1,
+    "slug": "qardudan-professional-rivoj-sari",
+    "title_uz": "QarDUdan professional rivoj sari",
+    "title_en": "From KarSU to professional growth",
+    "summary_uz": "Universitetda shakllangan bilim, intizom va hamjamiyat kuchining kasbiy yo‘lga ta’siri haqida hikoya.",
+    "summary_en": "A story about how university knowledge, discipline and community shape a professional journey.",
+    "hero_image": "",
+    "hero_image_url": "",
+    "hero_image_alt": "",
+    "hero_image_credit": "",
+    "hero_image_source_url": "",
+    "student_takeaway_uz": "Imkoniyatni kutmang: bilimni amaliyot bilan mustahkamlang va professional aloqalarni bugundan boshlang.",
+    "student_takeaway_en": "Do not wait for opportunity: apply your knowledge and start building professional relationships today."
+  }
+},
+{
+  "model": "editorial.successstory",
+  "pk": 2,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.519Z",
+    "created_at": "2026-08-26T15:23:31.519Z",
+    "updated_at": "2026-08-26T15:35:48.495Z",
+    "alumnus": 2,
+    "slug": "texnik-masuliyatdan-jamoa-yetakchiligigacha",
+    "title_uz": "Texnik mas’uliyatdan jamoa yetakchiligigacha",
+    "title_en": "From technical ownership to team leadership",
+    "summary_uz": "Kichik loyiha uchun mas’uliyat olish qanday qilib tizimli fikrlash va jamoa yetakchiligiga yo‘l ochgani haqida.",
+    "summary_en": "How ownership of a small project became a path toward systems thinking and team leadership.",
+    "hero_image": "",
+    "hero_image_url": "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1400&h=788&q=80",
+    "hero_image_alt": "Texnik mas’uliyatdan jamoa yetakchiligigacha hikoyasi uchun professional ish muhiti",
+    "hero_image_credit": "Unsplash",
+    "hero_image_source_url": "https://unsplash.com",
+    "student_takeaway_uz": "Talabalarga tavsiyasi: kichik loyiha bo‘lsa ham, natija uchun to‘liq mas’uliyat olishni mashq qiling.",
+    "student_takeaway_en": "His advice to students is to practise full ownership, even when the project itself is small."
+  }
+},
+{
+  "model": "editorial.successstory",
+  "pk": 3,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.524Z",
+    "created_at": "2026-08-26T15:23:31.524Z",
+    "updated_at": "2026-08-26T15:35:48.499Z",
+    "alumnus": 3,
+    "slug": "raqamlardan-qarorlargacha",
+    "title_uz": "Raqamlardan asoslangan qarorlargacha",
+    "title_en": "From numbers to better decisions",
+    "summary_uz": "Moliyaviy hisobotdan tashqariga chiqib, tahlilni rahbariyat uchun amaliy qarorga aylantirish tajribasi.",
+    "summary_en": "A journey from preparing reports to turning analysis into practical decisions for leaders.",
+    "hero_image": "",
+    "hero_image_url": "https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1400&h=788&q=80",
+    "hero_image_alt": "Raqamlardan asoslangan qarorlargacha hikoyasi uchun professional ish muhiti",
+    "hero_image_credit": "Unsplash",
+    "hero_image_source_url": "https://unsplash.com",
+    "student_takeaway_uz": "Talabalarga tavsiyasi: jadval tuzish bilan cheklanmay, raqam nimani o‘zgartirishi kerakligini ham ayting.",
+    "student_takeaway_en": "Her advice is not to stop at the spreadsheet: explain what the numbers should change."
+  }
+},
+{
+  "model": "editorial.successstory",
+  "pk": 4,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.527Z",
+    "created_at": "2026-08-26T15:23:31.527Z",
+    "updated_at": "2026-08-26T15:35:48.503Z",
+    "alumnus": 5,
+    "slug": "aniq-matndan-ishonchli-mediagacha",
+    "title_uz": "Aniq matndan ishonchli mediagacha",
+    "title_en": "From clear writing to trusted media",
+    "summary_uz": "Tahririyat intizomi va auditoriyani tinglash professional media yo‘nalishini qanday shakllantirgani haqida.",
+    "summary_en": "How editorial discipline and listening to audiences shaped a professional media path.",
+    "hero_image": "",
+    "hero_image_url": "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&h=788&q=80",
+    "hero_image_alt": "Aniq matndan ishonchli mediagacha hikoyasi uchun professional ish muhiti",
+    "hero_image_credit": "Unsplash",
+    "hero_image_source_url": "https://unsplash.com",
+    "student_takeaway_uz": "Uning tavsiyasi: yaxshi matn avval tinglashdan, keyin yozishdan boshlanadi.",
+    "student_takeaway_en": "Her advice is simple: strong writing begins with listening before drafting."
+  }
+},
+{
+  "model": "editorial.successstory",
+  "pk": 5,
+  "fields": {
+    "is_featured": false,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.531Z",
+    "created_at": "2026-08-26T15:23:31.531Z",
+    "updated_at": "2026-08-26T15:35:48.506Z",
+    "alumnus": 7,
+    "slug": "tajribani-metodikaga-aylantirish",
+    "title_uz": "Tajribani amaliy metodikaga aylantirish",
+    "title_en": "Turning experience into practical teaching",
+    "summary_uz": "Sinfdagi kuzatuvlar qanday qilib o‘qituvchilar uchun sodda va foydali metodikaga aylangani haqida.",
+    "summary_en": "How classroom observations became simple, useful methods for practising teachers.",
+    "hero_image": "",
+    "hero_image_url": "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1400&h=788&q=80",
+    "hero_image_alt": "Tajribani amaliy metodikaga aylantirish hikoyasi uchun professional ish muhiti",
+    "hero_image_credit": "Unsplash",
+    "hero_image_source_url": "https://unsplash.com",
+    "student_takeaway_uz": "Talabalarga tavsiyasi: nazariyani eslab qolishdan oldin uni qayerda sinashingizni aniqlang.",
+    "student_takeaway_en": "Her advice is to decide where you will test a theory before trying to memorise it."
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 1,
+  "fields": {
+    "story": 1,
+    "kind": "university",
+    "heading_uz": "Universitetdagi poydevor",
+    "heading_en": "",
+    "content_uz": "QarDUdagi ta’lim jarayoni nazariy bilim bilan birga mustaqil fikrlash, mas’uliyat va jamoada ishlash ko‘nikmalarini shakllantirdi.",
+    "content_en": "",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 2,
+  "fields": {
+    "story": 1,
+    "kind": "turning_point",
+    "heading_uz": "Burilish nuqtasi",
+    "heading_en": "",
+    "content_uz": "Kasbiy yo‘ldagi muhim qadam bilimni real vazifalarda sinab ko‘rish va tajribali mutaxassislar bilan aloqa o‘rnatishdan boshlandi.",
+    "content_en": "",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 3,
+  "fields": {
+    "story": 1,
+    "kind": "reflection",
+    "heading_uz": "Talabalarga tavsiya",
+    "heading_en": "",
+    "content_uz": "Har bir loyiha, amaliyot va uchrashuvni o‘sish imkoniyati deb qabul qiling. Izchil harakat kichik qadamlarni katta natijaga aylantiradi.",
+    "content_en": "",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 4,
+  "fields": {
+    "story": 2,
+    "kind": "university",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Universitet yillarida Azizbek algoritm va dasturlashni faqat fan sifatida emas, muammoni bosqichma-bosqich yechish usuli sifatida o‘rgandi.",
+    "content_en": "At university, Azizbek learned to see algorithms not only as a subject but as a disciplined way to solve problems.",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 5,
+  "fields": {
+    "story": 2,
+    "kind": "early_career",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Bitiruvdan keyin u kichik texnik jamoada qo‘llab-quvvatlash va ichki vositalar yaratish bilan ish boshladi.",
+    "content_en": "After graduation, he started in a small technical team, supporting systems and building internal tools.",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 6,
+  "fields": {
+    "story": 2,
+    "kind": "turning_point",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Ikkinchi yilida kechikayotgan loyihaning texnik rejasini qayta tuzish vazifasini olishi uning burilish nuqtasi bo‘ldi.",
+    "content_en": "His turning point came in his second year when he was asked to rebuild the plan for a delayed project.",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 7,
+  "fields": {
+    "story": 2,
+    "kind": "achievements",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "U vazifalarni kichik relizlarga ajratib, jamoa ichidagi kod ko‘rib chiqish jarayonini yo‘lga qo‘ydi.",
+    "content_en": "He split the work into smaller releases and introduced a consistent peer-review routine.",
+    "order": 4
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 8,
+  "fields": {
+    "story": 2,
+    "kind": "current_impact",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Bugun u muhandislik qarorlarida tezlik bilan birga barqarorlik va tushunarli kommunikatsiyani ustuvor deb biladi.",
+    "content_en": "Today he values reliability and clear communication as highly as delivery speed.",
+    "order": 5
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 9,
+  "fields": {
+    "story": 3,
+    "kind": "university",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Dilnoza universitetda moliya bilan birga statistika va taqdimot ko‘nikmalariga alohida e’tibor berdi.",
+    "content_en": "Dilnoza gave equal attention to finance, statistics and presentation skills at university.",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 10,
+  "fields": {
+    "story": 3,
+    "kind": "early_career",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Faoliyatining dastlabki bosqichida u muntazam hisobotlar tayyorlar, ammo natijalarning qarorlarga ta’siri cheklanganini sezardi.",
+    "content_en": "Early in her career she prepared regular reports but saw that they had limited influence on decisions.",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 11,
+  "fields": {
+    "story": 3,
+    "kind": "turning_point",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Bir budjet loyihasida xarajatlar sababini bo‘limlar kesimida tushuntirib berishi unga yangi mas’uliyat olib keldi.",
+    "content_en": "A budget assignment changed that when she clearly explained the drivers behind costs across departments.",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 12,
+  "fields": {
+    "story": 3,
+    "kind": "achievements",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Shundan so‘ng u hisobotlarni savol, dalil va tavsiya shaklida qurishni odat qildi.",
+    "content_en": "She then began structuring every analysis around a question, evidence and a practical recommendation.",
+    "order": 4
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 13,
+  "fields": {
+    "story": 3,
+    "kind": "current_impact",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Hozir u yosh tahlilchilarga aniqlik, manba sifati va xulosaning amaliy qiymatini birgalikda baholashni o‘rgatadi.",
+    "content_en": "Today she teaches junior analysts to evaluate clarity, source quality and decision value together.",
+    "order": 5
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 14,
+  "fields": {
+    "story": 4,
+    "kind": "university",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Madina filologiya ta’limida matnning ohangi, dalili va o‘quvchiga ta’sirini bir butun ko‘rishni o‘rgandi.",
+    "content_en": "Madina learned to consider tone, evidence and reader impact as one editorial responsibility.",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 15,
+  "fields": {
+    "story": 4,
+    "kind": "early_career",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "U dastlab ta’limiy materiallarni tahrirlash va qisqa axborot matnlarini tayyorlash bilan shug‘ullandi.",
+    "content_en": "She began by editing educational materials and producing concise information pieces.",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 16,
+  "fields": {
+    "story": 4,
+    "kind": "turning_point",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Auditoriya savollari asosida bir ruknni qayta qurishi uning ish uslubidagi muhim burilish bo‘ldi.",
+    "content_en": "Her turning point came when audience questions led her to redesign an entire content series.",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 17,
+  "fields": {
+    "story": 4,
+    "kind": "achievements",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Jamoa mavzularni avval foydalanuvchi ehtiyoji bilan tekshirib, so‘ng format va kanalni tanlay boshladi.",
+    "content_en": "The team started validating topics against user needs before choosing format and channel.",
+    "order": 4
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 18,
+  "fields": {
+    "story": 4,
+    "kind": "current_impact",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Bugun Madina tahririyat sifatini tezkorlikdan ustun qo‘ymaydi, aksincha ikkalasini aniq jarayon bilan uyg‘unlashtiradi.",
+    "content_en": "Today she balances editorial quality and speed through a clear, repeatable process.",
+    "order": 5
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 19,
+  "fields": {
+    "story": 5,
+    "kind": "university",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Nargiza talabalik davridayoq nazariya bilan amaliy kuzatuv o‘rtasidagi farqni qayd etib borardi.",
+    "content_en": "Nargiza noticed the gap between theory and observation while she was still a student.",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 20,
+  "fields": {
+    "story": 5,
+    "kind": "early_career",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Faoliyatini o‘qituvchilikdan boshlab, har bir mashg‘ulotdan keyin qisqa refleksiya yozishni odat qildi.",
+    "content_en": "She began as a teacher and developed a habit of writing a short reflection after each lesson.",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 21,
+  "fields": {
+    "story": 5,
+    "kind": "turning_point",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Bir guruh o‘qituvchilar bilan dars tahlili o‘tkazishi bu qaydlarni tizimli metodikaga aylantirishga turtki berdi.",
+    "content_en": "A collaborative lesson review prompted her to turn those notes into a repeatable method.",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 22,
+  "fields": {
+    "story": 5,
+    "kind": "achievements",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "U murakkab tavsiyalar o‘rniga sinab ko‘rish mumkin bo‘lgan kichik pedagogik qadamlarni taklif qildi.",
+    "content_en": "Instead of abstract guidance, she proposed small teaching practices that colleagues could test immediately.",
+    "order": 4
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 23,
+  "fields": {
+    "story": 5,
+    "kind": "current_impact",
+    "heading_uz": "",
+    "heading_en": "",
+    "content_uz": "Hozir u dasturlarni o‘qituvchining kundalik sharoitiga mosligi bilan baholaydi.",
+    "content_en": "Today she judges programmes by how well they fit the realities of a teacher’s working day.",
+    "order": 5
+  }
+},
+{
+  "model": "editorial.alumniinterview",
+  "pk": 1,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.541Z",
+    "created_at": "2026-08-26T15:23:31.541Z",
+    "updated_at": "2026-08-26T15:35:48.509Z",
+    "alumnus": 4,
+    "slug": "javohir-ergashev-bilan-suhbat",
+    "title_uz": "Tahliliy fikrlash — kasbiy til",
+    "title_en": "Analytical thinking as a professional language",
+    "intro_uz": "Amaliy matematika, murakkab savollar va tushunarli xulosalar haqida suhbat.",
+    "intro_en": "A conversation about applied mathematics, difficult questions and clear conclusions.",
+    "pull_quote_uz": "Aniq savol yaxshi tahlilning yarmidir.",
+    "pull_quote_en": "A precise question is half of a good analysis."
+  }
+},
+{
+  "model": "editorial.alumniinterview",
+  "pk": 2,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.546Z",
+    "created_at": "2026-08-26T15:23:31.546Z",
+    "updated_at": "2026-08-26T15:35:48.514Z",
+    "alumnus": 6,
+    "slug": "sardor-usmonov-bilan-suhbat",
+    "title_uz": "Jamoat loyihalarida tinglashning o‘rni",
+    "title_en": "Why listening matters in public programmes",
+    "intro_uz": "Hududiy loyihalarda reja, muloqot va javobgarlik haqida suhbat.",
+    "intro_en": "A conversation about planning, dialogue and accountability in regional programmes.",
+    "pull_quote_uz": "Yechim hujjatda emas, odamlar bilan suhbatda aniqlashadi.",
+    "pull_quote_en": "Solutions become clearer in conversation, not only in documents."
+  }
+},
+{
+  "model": "editorial.alumniinterview",
+  "pk": 3,
+  "fields": {
+    "is_featured": false,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.549Z",
+    "created_at": "2026-08-26T15:23:31.549Z",
+    "updated_at": "2026-08-26T15:35:48.518Z",
+    "alumnus": 11,
+    "slug": "mohira-saidova-bilan-suhbat",
+    "title_uz": "Talabadan kasbiy yo‘lga o‘tish",
+    "title_en": "Moving from student life into a career",
+    "intro_uz": "Ko‘nikmalar, tajriba va birinchi professional qadamlar haqida suhbat.",
+    "intro_en": "A conversation about skills, experience and the first professional steps.",
+    "pull_quote_uz": "Ishga tayyorlik diplomdan oldin, odatlardan boshlanadi.",
+    "pull_quote_en": "Career readiness begins with habits before it begins with a diploma."
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 1,
+  "fields": {
+    "interview": 1,
+    "question_uz": "QarDUdagi ta’lim sizga nimalar berdi?",
+    "question_en": "What did your education at KarSU give you?",
+    "answer_uz": "Menga masalani modelga aylantirish va taxminni dalildan ajratishni berdi. Bu odat har qanday sohadagi tahlilda foydali.",
+    "answer_en": "It taught me to turn a problem into a model and separate assumptions from evidence. That discipline is useful in any analytical field.",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 2,
+  "fields": {
+    "interview": 1,
+    "question_uz": "Professional yo‘lingizdagi eng muhim qaror qaysi bo‘lgan?",
+    "question_en": "What was the most important decision in your professional journey?",
+    "answer_uz": "Faqat hisoblash emas, natijani oddiy tilda tushuntirishni o‘rganishga qaror qilganim muhim bo‘lgan.",
+    "answer_en": "Choosing to explain results in plain language, not only calculate them, changed my career direction.",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 3,
+  "fields": {
+    "interview": 1,
+    "question_uz": "Eng katta qiyinchilik nima edi?",
+    "question_en": "What was the greatest challenge?",
+    "answer_uz": "Noaniq topshiriqlarda to‘g‘ri savolni topish eng katta qiyinchilik edi. Vaqt o‘tishi bilan savolni aniqlash ishning asosiy qismi ekanini bildim.",
+    "answer_en": "The hardest part was finding the right question in an ambiguous brief. I learned that defining the question is a substantial part of the work.",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 4,
+  "fields": {
+    "interview": 1,
+    "question_uz": "Talabalar qaysi ko‘nikmaga ko‘proq e’tibor berishi kerak?",
+    "question_en": "Which skill deserves more attention from students?",
+    "answer_uz": "Mantiqiy fikrlash bilan birga yozma kommunikatsiyaga. Yaxshi xulosa tushunarli bo‘lmasa, uning qiymati kamayadi.",
+    "answer_en": "Students should pair logical thinking with written communication. A strong result loses value when it cannot be understood.",
+    "order": 4
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 5,
+  "fields": {
+    "interview": 1,
+    "question_uz": "Bugungi talabalarga qanday maslahat berasiz?",
+    "question_en": "What advice would you give students today?",
+    "answer_uz": "Kichik ma’lumotlar to‘plamida ham sifatli savol va toza metod bilan ishlang. Ko‘lam keyin keladi.",
+    "answer_en": "Work carefully with small datasets and clear methods. Scale can come later.",
+    "order": 5
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 6,
+  "fields": {
+    "interview": 2,
+    "question_uz": "QarDUdagi ta’lim sizga nimalar berdi?",
+    "question_en": "What did your education at KarSU give you?",
+    "answer_uz": "Tarixiy jarayonlarni sabab va manfaatlar bilan ko‘rishni o‘rgandim. Bu jamoat loyihalarida shoshilinch xulosadan saqlaydi.",
+    "answer_en": "It taught me to examine processes through causes, interests and context. That prevents rushed conclusions in public programmes.",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 7,
+  "fields": {
+    "interview": 2,
+    "question_uz": "Professional yo‘lingizdagi eng muhim qaror qaysi bo‘lgan?",
+    "question_en": "What was the most important decision in your professional journey?",
+    "answer_uz": "Rejani kabinetda yakunlamasdan, avval manfaatdor tomonlar bilan tekshirishga o‘tganim eng muhim qaror edi.",
+    "answer_en": "My most important decision was to test plans with stakeholders before finalising them at a desk.",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 8,
+  "fields": {
+    "interview": 2,
+    "question_uz": "Eng katta qiyinchilik nima edi?",
+    "question_en": "What was the greatest challenge?",
+    "answer_uz": "Turli guruhlarning kutishlarini bitta aniq maqsad atrofida birlashtirish qiyin bo‘lgan. Bunda muntazam muloqot yordam berdi.",
+    "answer_en": "Bringing different expectations around one practical goal was difficult. Regular, respectful communication made it possible.",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 9,
+  "fields": {
+    "interview": 2,
+    "question_uz": "Talabalar qaysi ko‘nikmaga ko‘proq e’tibor berishi kerak?",
+    "question_en": "Which skill deserves more attention from students?",
+    "answer_uz": "Tinglash va qisqa, aniq qayd yuritishga. Eshitilgan fikr hujjatga va keyingi harakatga aylanishi kerak.",
+    "answer_en": "Students should practise listening and concise documentation. What is heard must become a record and a next step.",
+    "order": 4
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 10,
+  "fields": {
+    "interview": 2,
+    "question_uz": "Bugungi talabalarga qanday maslahat berasiz?",
+    "question_en": "What advice would you give students today?",
+    "answer_uz": "Odamlar bilan ishlashni alohida ko‘nikma deb biling. Hurmatli muloqot ko‘p texnik xatolarning oldini oladi.",
+    "answer_en": "Treat working with people as a professional skill in its own right. Respectful dialogue prevents many technical mistakes.",
+    "order": 5
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 11,
+  "fields": {
+    "interview": 3,
+    "question_uz": "QarDUdagi ta’lim sizga nimalar berdi?",
+    "question_en": "What did your education at KarSU give you?",
+    "answer_uz": "Ta’lim menga o‘rganish jarayonini kuzatish va odamning ehtiyojini tushunishni berdi. Bu dastur tuzishda juda muhim.",
+    "answer_en": "My education helped me observe how people learn and understand their needs. That perspective is essential when designing programmes.",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 12,
+  "fields": {
+    "interview": 3,
+    "question_uz": "Professional yo‘lingizdagi eng muhim qaror qaysi bo‘lgan?",
+    "question_en": "What was the most important decision in your professional journey?",
+    "answer_uz": "Bir vaqtning o‘zida ko‘p yo‘nalish ortidan ketmasdan, bitta ko‘nikmani amaliy loyiha bilan chuqurlashtirishga qaror qildim.",
+    "answer_en": "I stopped chasing many directions at once and chose to deepen one skill through a real project.",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 13,
+  "fields": {
+    "interview": 3,
+    "question_uz": "Eng katta qiyinchilik nima edi?",
+    "question_en": "What was the greatest challenge?",
+    "answer_uz": "Tajriba yetishmasligini yashirish istagi qiyin bo‘lgan. Savol berish va fikr-mulohaza so‘rash tezroq o‘sishga yordam berdi.",
+    "answer_en": "The temptation to hide inexperience was difficult. Asking questions and requesting feedback helped me progress faster.",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 14,
+  "fields": {
+    "interview": 3,
+    "question_uz": "Talabalar qaysi ko‘nikmaga ko‘proq e’tibor berishi kerak?",
+    "question_en": "Which skill deserves more attention from students?",
+    "answer_uz": "O‘zini boshqarish va taqdimot ko‘nikmasiga. Bilimni muddat, natija va auditoriya bilan bog‘lash kerak.",
+    "answer_en": "Self-management and presentation deserve more attention. Knowledge needs to connect with deadlines, outcomes and audiences.",
+    "order": 4
+  }
+},
+{
+  "model": "editorial.interviewitem",
+  "pk": 15,
+  "fields": {
+    "interview": 3,
+    "question_uz": "Bugungi talabalarga qanday maslahat berasiz?",
+    "question_en": "What advice would you give students today?",
+    "answer_uz": "Har semestr yakunida bitta ko‘rinadigan natija yarating: loyiha, tadqiqot yoki yaxshi hujjatlashtirilgan amaliyot.",
+    "answer_en": "Finish each semester with one visible result: a project, a research note or a well-documented practical experience.",
+    "order": 5
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 1,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.553Z",
+    "created_at": "2026-08-26T15:23:31.553Z",
+    "updated_at": "2026-08-26T15:35:48.523Z",
+    "alumnus": 2,
+    "category": "career",
+    "title_uz": "Mas’uliyatni kichik loyihadan boshlang",
+    "title_en": "Start ownership with a small project",
+    "content_uz": "Kichik vazifa bo‘lsa ham, maqsad, muddat va natijani o‘zingiz kuzating. Mas’uliyat odati keyingi katta imkoniyatlarga tayyorlaydi.",
+    "content_en": "Even on a small assignment, track the goal, deadline and outcome yourself. The habit of ownership prepares you for larger opportunities.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 2,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.554Z",
+    "created_at": "2026-08-26T15:23:31.554Z",
+    "updated_at": "2026-08-26T15:35:48.524Z",
+    "alumnus": 3,
+    "category": "study",
+    "title_uz": "Raqam ortidagi savolni toping",
+    "title_en": "Find the question behind the number",
+    "content_uz": "Formulani bilish yetarli emas. Har bir hisob nimani tushuntirishi va qaysi qarorga yordam berishini yozib ko‘ring.",
+    "content_en": "Knowing the formula is not enough. Write down what each calculation explains and which decision it should support.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 3,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.555Z",
+    "created_at": "2026-08-26T15:23:31.555Z",
+    "updated_at": "2026-08-26T15:35:48.524Z",
+    "alumnus": 4,
+    "category": "personal_growth",
+    "title_uz": "Xulosani sodda ayting",
+    "title_en": "Make the conclusion simple",
+    "content_uz": "Murakkab tahlilning qiymati uning tushunarli xulosasida. Natijani soha mutaxassisi bo‘lmagan odamga ham izohlashni mashq qiling.",
+    "content_en": "The value of complex analysis lies in a clear conclusion. Practise explaining the result to someone outside your field.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 4,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.556Z",
+    "created_at": "2026-08-26T15:23:31.556Z",
+    "updated_at": "2026-08-26T15:35:48.524Z",
+    "alumnus": 5,
+    "category": "career",
+    "title_uz": "Avval tinglang, keyin yozing",
+    "title_en": "Listen before you write",
+    "content_uz": "Yaxshi matn faqat uslubdan iborat emas. Auditoriya savolini tinglang, manbani tekshiring va keyin eng kerakli fikrni yozing.",
+    "content_en": "Good writing is more than style. Listen to the audience’s question, verify the source and then write what matters most.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 5,
+  "fields": {
+    "is_featured": false,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.557Z",
+    "created_at": "2026-08-26T15:23:31.557Z",
+    "updated_at": "2026-08-26T15:35:48.526Z",
+    "alumnus": 6,
+    "category": "leadership",
+    "title_uz": "Kelishuvni qayd eting",
+    "title_en": "Document the agreement",
+    "content_uz": "Uchrashuvdan keyin mas’ul shaxs, muddat va keyingi qadamni qisqa yozib yuboring. Bu ishonch va hamkorlikni mustahkamlaydi.",
+    "content_en": "After a meeting, record the owner, deadline and next step. This simple habit strengthens trust and collaboration.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 6,
+  "fields": {
+    "is_featured": false,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.557Z",
+    "created_at": "2026-08-26T15:23:31.557Z",
+    "updated_at": "2026-08-26T15:35:48.527Z",
+    "alumnus": 7,
+    "category": "study",
+    "title_uz": "Nazariyani kichik tajribada sinang",
+    "title_en": "Test theory through a small experiment",
+    "content_uz": "Yangi metodni birdan mukammal qilishga urinmang. Uni bitta mashg‘ulotda sinab, kuzatuv yozing va keyingi safar yaxshilang.",
+    "content_en": "Do not try to perfect a new method immediately. Test it in one session, note what happened and improve it next time.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 7,
+  "fields": {
+    "is_featured": false,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.558Z",
+    "created_at": "2026-08-26T15:23:31.558Z",
+    "updated_at": "2026-08-26T15:35:48.527Z",
+    "alumnus": 10,
+    "category": "leadership",
+    "title_uz": "Fikr-mulohazani jarayonga aylantiring",
+    "title_en": "Turn feedback into a routine",
+    "content_uz": "Fikr-mulohazani faqat xato paytida emas, muntazam so‘rang. Aniq savol va kichik o‘zgarish jamoaning o‘sishini tezlashtiradi.",
+    "content_en": "Ask for feedback regularly, not only after mistakes. A precise question and a small adjustment help teams improve faster.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 8,
+  "fields": {
+    "is_featured": false,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.559Z",
+    "created_at": "2026-08-26T15:23:31.559Z",
+    "updated_at": "2026-08-26T15:35:48.528Z",
+    "alumnus": 11,
+    "category": "personal_growth",
+    "title_uz": "Har semestrda bitta ko‘rinadigan natija",
+    "title_en": "Create one visible result each semester",
+    "content_uz": "Har semestr loyiha, tadqiqot yoki amaliy hisobot kabi ko‘rsatish mumkin bo‘lgan bitta sifatli natija yarating.",
+    "content_en": "Each semester, create one strong piece of visible work: a project, research note or well-documented practical report.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.event",
+  "pk": 1,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.560Z",
+    "created_at": "2026-08-26T15:23:31.560Z",
+    "updated_at": "2026-08-26T15:35:48.529Z",
+    "slug": "qardu-bitiruvchilar-uchrashuvi-2026",
+    "title_uz": "QarDU bitiruvchilar uchrashuvi 2026",
+    "title_en": "KarSU Alumni Meetup 2026",
+    "summary_uz": "Turli avlod bitiruvchilari va talabalar uchun tajriba almashish uchrashuvi.",
+    "summary_en": "An exchange of experience for alumni across generations and current students.",
+    "description_uz": "Turli avlod bitiruvchilari va talabalar uchun tajriba almashish uchrashuvi. Dastur savol-javob va amaliy tajriba almashish qismlarini o‘z ichiga oladi.",
+    "description_en": "An exchange of experience for alumni across generations and current students. The programme includes a moderated Q&A and practical exchange of experience.",
+    "event_type": "meetup",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&w=1400&h=788&q=80",
+    "cover_image_alt": "QarDU bitiruvchilar uchrashuvi 2026 tadbiri ishtirokchilari",
+    "cover_image_credit": "Unsplash",
+    "cover_image_source_url": "https://unsplash.com",
+    "start_at": "2026-09-19T15:35:48.528Z",
+    "end_at": "2026-09-19T18:35:48.528Z",
+    "location_type": "offline",
+    "location_uz": "Qarshi davlat universiteti bosh binosi",
+    "location_en": "KarSU main building",
+    "external_url": ""
+  }
+},
+{
+  "model": "editorial.event",
+  "pk": 2,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.561Z",
+    "created_at": "2026-08-26T15:23:31.561Z",
+    "updated_at": "2026-08-26T15:35:48.530Z",
+    "slug": "universitet-taraqqiyotida-bitiruvchilar-roli",
+    "title_uz": "Universitet taraqqiyotida bitiruvchilar roli",
+    "title_en": "The role of alumni in university development",
+    "summary_uz": "Ta’lim sifati va universitet hamkorliklari bo‘yicha ochiq konferensiya.",
+    "summary_en": "An open conference on education quality and university partnerships.",
+    "description_uz": "Ta’lim sifati va universitet hamkorliklari bo‘yicha ochiq konferensiya. Dastur savol-javob va amaliy tajriba almashish qismlarini o‘z ichiga oladi.",
+    "description_en": "An open conference on education quality and university partnerships. The programme includes a moderated Q&A and practical exchange of experience.",
+    "event_type": "conference",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?auto=format&fit=crop&w=1400&h=788&q=80",
+    "cover_image_alt": "Universitet taraqqiyotida bitiruvchilar roli tadbiri ishtirokchilari",
+    "cover_image_credit": "Unsplash",
+    "cover_image_source_url": "https://unsplash.com",
+    "start_at": "2026-10-16T15:35:48.528Z",
+    "end_at": "2026-10-16T19:35:48.528Z",
+    "location_type": "offline",
+    "location_uz": "Universitet konferensiya zali",
+    "location_en": "University conference hall",
+    "external_url": ""
+  }
+},
+{
+  "model": "editorial.event",
+  "pk": 3,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.562Z",
+    "created_at": "2026-08-26T15:23:31.562Z",
+    "updated_at": "2026-08-26T15:35:48.530Z",
+    "slug": "yosh-mutaxassislar-uchun-ochiq-suhbat",
+    "title_uz": "Yosh mutaxassislar uchun ochiq suhbat",
+    "title_en": "An open career talk for young professionals",
+    "summary_uz": "Bitiruvdan keyingi dastlabki qadamlar, portfolio va professional muloqot haqida.",
+    "summary_en": "A practical conversation about first career steps, portfolios and professional communication.",
+    "description_uz": "Bitiruvdan keyingi dastlabki qadamlar, portfolio va professional muloqot haqida. Dastur savol-javob va amaliy tajriba almashish qismlarini o‘z ichiga oladi.",
+    "description_en": "A practical conversation about first career steps, portfolios and professional communication. The programme includes a moderated Q&A and practical exchange of experience.",
+    "event_type": "career_talk",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1400&h=788&q=80",
+    "cover_image_alt": "Yosh mutaxassislar uchun ochiq suhbat tadbiri ishtirokchilari",
+    "cover_image_credit": "Unsplash",
+    "cover_image_source_url": "https://unsplash.com",
+    "start_at": "2026-11-13T15:35:48.528Z",
+    "end_at": "2026-11-13T17:35:48.528Z",
+    "location_type": "online",
+    "location_uz": "Online",
+    "location_en": "Online",
+    "external_url": ""
+  }
+},
+{
+  "model": "editorial.event",
+  "pk": 4,
+  "fields": {
+    "is_featured": false,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.563Z",
+    "created_at": "2026-08-26T15:23:31.563Z",
+    "updated_at": "2026-08-26T15:35:48.531Z",
+    "slug": "qardu-yubiley-uchrashuvi",
+    "title_uz": "QarDU yubiley uchrashuvi",
+    "title_en": "KarSU anniversary gathering",
+    "summary_uz": "Universitet tarixi va bitiruvchilar xotiralari atrofidagi ochiq uchrashuv.",
+    "summary_en": "An open gathering around university history and alumni memories.",
+    "description_uz": "Universitet tarixi va bitiruvchilar xotiralari atrofidagi ochiq uchrashuv. Dastur savol-javob va amaliy tajriba almashish qismlarini o‘z ichiga oladi.",
+    "description_en": "An open gathering around university history and alumni memories. The programme includes a moderated Q&A and practical exchange of experience.",
+    "event_type": "anniversary",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=1400&h=788&q=80",
+    "cover_image_alt": "QarDU yubiley uchrashuvi tadbiri ishtirokchilari",
+    "cover_image_credit": "Unsplash",
+    "cover_image_source_url": "https://unsplash.com",
+    "start_at": "2026-07-22T15:35:48.528Z",
+    "end_at": "2026-07-22T19:35:48.528Z",
+    "location_type": "offline",
+    "location_uz": "Qarshi shahri",
+    "location_en": "Karshi city",
+    "external_url": ""
+  }
+},
+{
+  "model": "editorial.event",
+  "pk": 5,
+  "fields": {
+    "is_featured": false,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.564Z",
+    "created_at": "2026-08-26T15:23:31.564Z",
+    "updated_at": "2026-08-26T15:35:48.533Z",
+    "slug": "talimda-amaliy-tajriba",
+    "title_uz": "Ta’limda amaliy tajriba",
+    "title_en": "Practical experience in education",
+    "summary_uz": "O‘qituvchilar va bitiruvchilar ishtirokidagi ochiq ma’ruza.",
+    "summary_en": "A public lecture featuring educators and alumni practitioners.",
+    "description_uz": "O‘qituvchilar va bitiruvchilar ishtirokidagi ochiq ma’ruza. Dastur savol-javob va amaliy tajriba almashish qismlarini o‘z ichiga oladi.",
+    "description_en": "A public lecture featuring educators and alumni practitioners. The programme includes a moderated Q&A and practical exchange of experience.",
+    "event_type": "guest_lecture",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=1400&h=788&q=80",
+    "cover_image_alt": "Ta’limda amaliy tajriba tadbiri ishtirokchilari",
+    "cover_image_credit": "Unsplash",
+    "cover_image_source_url": "https://unsplash.com",
+    "start_at": "2026-06-20T15:35:48.528Z",
+    "end_at": "2026-06-20T17:35:48.528Z",
+    "location_type": "offline",
+    "location_uz": "Universitet konferensiya zali",
+    "location_en": "University conference hall",
+    "external_url": ""
+  }
+},
+{
+  "model": "editorial.event",
+  "pk": 6,
+  "fields": {
+    "is_featured": false,
+    "is_published": true,
+    "published_at": "2026-08-26T15:23:31.564Z",
+    "created_at": "2026-08-26T15:23:31.564Z",
+    "updated_at": "2026-08-26T15:35:48.533Z",
+    "slug": "bitiruvchilar-va-talabalar-tajriba-almashinuvi",
+    "title_uz": "Bitiruvchilar va talabalar: tajriba almashinuvi",
+    "title_en": "Alumni and students: an exchange of experience",
+    "summary_uz": "Kasbiy yo‘llar va universitetdagi imkoniyatlar haqida avlodlararo suhbat.",
+    "summary_en": "An intergenerational conversation about career paths and opportunities at university.",
+    "description_uz": "Kasbiy yo‘llar va universitetdagi imkoniyatlar haqida avlodlararo suhbat. Dastur savol-javob va amaliy tajriba almashish qismlarini o‘z ichiga oladi.",
+    "description_en": "An intergenerational conversation about career paths and opportunities at university. The programme includes a moderated Q&A and practical exchange of experience.",
+    "event_type": "reunion",
+    "cover_image": "",
+    "cover_image_url": "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1400&h=788&q=80",
+    "cover_image_alt": "Bitiruvchilar va talabalar: tajriba almashinuvi tadbiri ishtirokchilari",
+    "cover_image_credit": "Unsplash",
+    "cover_image_source_url": "https://unsplash.com",
+    "start_at": "2026-05-06T15:35:48.528Z",
+    "end_at": "2026-05-06T18:35:48.528Z",
+    "location_type": "offline",
+    "location_uz": "Qarshi davlat universiteti bosh binosi",
+    "location_en": "KarSU main building",
+    "external_url": ""
+  }
+}
+]

@@ -11,6 +11,7 @@ class AlumnusSummarySerializer(serializers.Serializer):
     image_alt = serializers.CharField()
     position = serializers.CharField()
     current_company = serializers.CharField()
+    faculty = serializers.CharField(source="faculty.name", default=None)
 
 
 class StorySectionSerializer(serializers.ModelSerializer):
@@ -45,8 +46,9 @@ class InterviewDetailSerializer(InterviewListSerializer):
 class AdviceSerializer(serializers.ModelSerializer):
     alumnus = AlumnusSummarySerializer(read_only=True)
     content_uz = serializers.CharField(source="resolved_content_uz", read_only=True)
+    content_ru = serializers.CharField(source="resolved_content_ru", read_only=True)
     content_en = serializers.CharField(source="resolved_content_en", read_only=True)
-    class Meta: model = AlumniAdvice; fields = ("id", "category", "title_uz", "title_en", "content_uz", "content_en", "published_at", "is_featured", "alumnus")
+    class Meta: model = AlumniAdvice; fields = ("id", "category", "title_uz", "title_ru", "title_en", "content_uz", "content_ru", "content_en", "published_at", "is_featured", "alumnus")
 
 
 class EventSpeakerSerializer(serializers.ModelSerializer):
