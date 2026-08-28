@@ -1,0 +1,2283 @@
+[
+{
+  "model": "universities.faculty",
+  "pk": 1,
+  "fields": {
+    "name": "Axborot texnologiyalari"
+  }
+},
+{
+  "model": "universities.faculty",
+  "pk": 2,
+  "fields": {
+    "name": "Iqtisodiyot"
+  }
+},
+{
+  "model": "universities.faculty",
+  "pk": 3,
+  "fields": {
+    "name": "Matematika"
+  }
+},
+{
+  "model": "universities.faculty",
+  "pk": 4,
+  "fields": {
+    "name": "Filologiya"
+  }
+},
+{
+  "model": "universities.faculty",
+  "pk": 5,
+  "fields": {
+    "name": "Tarix"
+  }
+},
+{
+  "model": "universities.faculty",
+  "pk": 6,
+  "fields": {
+    "name": "Pedagogika"
+  }
+},
+{
+  "model": "universities.faculty",
+  "pk": 7,
+  "fields": {
+    "name": "Kimyo-biologiya"
+  }
+},
+{
+  "model": "universities.faculty",
+  "pk": 8,
+  "fields": {
+    "name": "Jismoniy madaniyat"
+  }
+},
+{
+  "model": "universities.faculty",
+  "pk": 9,
+  "fields": {
+    "name": "Huquqshunoslik"
+  }
+},
+{
+  "model": "universities.faculty",
+  "pk": 10,
+  "fields": {
+    "name": "O‘zbek filologiyasi"
+  }
+},
+{
+  "model": "universities.faculty",
+  "pk": 11,
+  "fields": {
+    "name": "Fizika-texnika"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 1,
+  "fields": {
+    "faculty": 1,
+    "name": "Dasturiy injiniring"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 2,
+  "fields": {
+    "faculty": 2,
+    "name": "Moliya va iqtisodiy tahlil"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 3,
+  "fields": {
+    "faculty": 3,
+    "name": "Amaliy matematika"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 4,
+  "fields": {
+    "faculty": 4,
+    "name": "O‘zbek tili va adabiyoti"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 5,
+  "fields": {
+    "faculty": 5,
+    "name": "Davlat boshqaruvi tarixi"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 6,
+  "fields": {
+    "faculty": 6,
+    "name": "Ta’lim metodikasi"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 7,
+  "fields": {
+    "faculty": 7,
+    "name": "Biologiya"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 8,
+  "fields": {
+    "faculty": 2,
+    "name": "Biznes boshqaruvi"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 9,
+  "fields": {
+    "faculty": 1,
+    "name": "Axborot tizimlari"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 10,
+  "fields": {
+    "faculty": 6,
+    "name": "Psixologiya va pedagogika"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 11,
+  "fields": {
+    "faculty": 7,
+    "name": "Biologiya va kimyo fani o‘qituvchisi (Biologiya/qishloq xo‘jaligi fanlari doktori, professor)"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 12,
+  "fields": {
+    "faculty": 3,
+    "name": "Matematika va informatika o‘qituvchisi (pedagogika fanlari bo‘yicha falsafa doktori — PhD)"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 13,
+  "fields": {
+    "faculty": 8,
+    "name": "Jismoniy madaniyat o‘qituvchisi"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 14,
+  "fields": {
+    "faculty": 8,
+    "name": "Jismoniy madaniyat o‘qituvchisi (Jismoniy madaniyat fakulteti bitiruvchisi)"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 15,
+  "fields": {
+    "faculty": 2,
+    "name": "Iqtisodiyot / Sanoat boshqaruvi yo‘nalishi"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 16,
+  "fields": {
+    "faculty": 9,
+    "name": "Yurist / Huquqshunoslik (Huquq-tartibot organlari sohasidagi mutaxassis)"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 17,
+  "fields": {
+    "faculty": 10,
+    "name": "O‘zbek filologiyasi / Filologiya (Filologiya fanlari bo‘yicha falsafa doktori — PhD)"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 18,
+  "fields": {
+    "faculty": 3,
+    "name": "Amaliy matematika va informatika (Fizika-matematika fanlari doktori — DSc, professor)"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 19,
+  "fields": {
+    "faculty": 3,
+    "name": "Matematika (Matematika fani mutaxassisi / o‘qituvchisi)"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 20,
+  "fields": {
+    "faculty": 10,
+    "name": "Filologiya / Adabiyotshunoslik (O‘zbek tili va adabiyoti mutaxassisi, yozuvchi va publitsist)"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 21,
+  "fields": {
+    "faculty": 11,
+    "name": "Fizika (Texnika fanlari doktori — DSc, professor)"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 22,
+  "fields": {
+    "faculty": 4,
+    "name": "Jurnalist / Filolog (Matbuot va tahririyat ishi mutaxassisi)"
+  }
+},
+{
+  "model": "universities.specialty",
+  "pk": 23,
+  "fields": {
+    "faculty": 4,
+    "name": "Filologiya (Teleradiojurnalist / Filolog)"
+  }
+},
+{
+  "model": "accounts.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1000000$ar42aqtGEL0hsh1kagcEvD$2IxKFayp+23FarH63xKAf+ePw19dCw4IdbJ82k47TUw=",
+    "last_login": "2026-08-26T03:26:20.888Z",
+    "is_superuser": true,
+    "first_name": "",
+    "last_name": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-08-26T03:25:23.177Z",
+    "email": "boburjonabduganiyev83@gmail.com",
+    "role": "admin",
+    "created_at": "2026-08-26T03:25:23.500Z",
+    "updated_at": "2026-08-26T03:25:23.500Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 25,
+  "fields": {
+    "user": null,
+    "full_name": "Allayev Dolli Hakimovich",
+    "slug": "allayev-dolli-hakimovich",
+    "avatar": "alumni/allayev-dolli-hakimovich/allayev-dolli-hakimovich.png",
+    "image_url": "",
+    "image_alt": "Dilshod Allayev portreti",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": 7,
+    "specialty": 11,
+    "graduation_year": 1993,
+    "degree": "Fan doktori (DSc), professor",
+    "current_company": "",
+    "position": "Oliy taʼlim tizimida pedagogik, ilmiy-tadqiqot va rahbarlik faoliyati (professor / rahbarlik lavozimlarida)",
+    "industry": "Oliy ta’lim va ilm-fan",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Biologiya va qishloq xo‘jaligi fanlari doktori, professor. Oliy taʼlim tizimida pedagogik, ilmiy-tadqiqot va rahbarlik faoliyati olib boruvchi yetuk olim.",
+    "biography_uz": "Allayev Dolli Hakimovich 1993-yilda Qarshi davlat universitetini Biologiya va kimyo fani o‘qituvchisi mutaxassisligi bo‘yicha tamomlagan. Biologiya va qishloq xo‘jaligi fanlari doktori, professor. Ko‘p yillar davomida universitetda kafedra mudiri, fakultet dekani, ilmiy laboratoriyalar rahbari hamda oliy ta’lim tizimida prorektorlik va ilmiy rahbarlik lavozimlarida samarali faoliyat yuritib kelmoqda.",
+    "biography_en": "Allayev Dolli Hakimovich graduated from Karshi State University in 1993 with a degree in Biology and Chemistry Teaching. He holds a DSc degree and Professor title, having served as department chair, dean, and university vice-rector.",
+    "career_story_uz": "Universitetdagi talabalik yillaridayoq murakkab muhandislik hisob-kitoblari va dasturlashga qiziqishi yuqori bo‘lgan. O‘qishni tamomlagach, ilmiy-tadqiqot institutlarida kichik ilmiy xodimlikdan boshlab, professorlik va ilmiy markaz rahbarligigacha bo‘lgan sharafli yo‘lni bosib o‘tgan.",
+    "career_story_en": "Starting his academic journey at KarSU, he developed a deep passion for computational engineering, rising from junior researcher to renowned professor and research director.",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 1,
+    "is_published": true,
+    "published_at": "2026-08-28T04:21:57.179Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-28T04:21:57.179Z",
+    "updated_at": "2026-08-28T04:39:48.798Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 26,
+  "fields": {
+    "user": null,
+    "full_name": "Panjiyev Maqsud Aliqulovich",
+    "slug": "panjiyev-maqsud-aliqulovich",
+    "avatar": "alumni/panjiyev-maqsud-aliqulovich/panjiyev-maqsud-aliqulovich.png",
+    "image_url": "",
+    "image_alt": "Murod Panjiyev portreti",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": 3,
+    "specialty": 12,
+    "graduation_year": 2003,
+    "degree": "Pedagogika fanlari bo‘yicha falsafa doktori (PhD)",
+    "current_company": "Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi",
+    "position": "Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi boshlig‘i o‘rinbosari",
+    "industry": "Maktabgacha va maktab taʼlimi",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Pedagogika fanlari bo‘yicha falsafa doktori (PhD). Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi boshlig‘i o‘rinbosari.",
+    "biography_uz": "Panjiyev Maqsud Aliqulovich 2003-yilda Qarshi davlat universitetini Matematika va informatika o‘qituvchisi mutaxassisligi bo‘yicha tamomlagan. Keyinchalik axborot-kommunikatsiya texnologiyalari yo‘nalishida tahsil olgan, pedagogika fanlari bo‘yicha falsafa doktori (PhD). Ta’lim tizimida o‘qituvchilikdan boshlab, tuman hokimi o‘rinbosari hamda viloyat maktabgacha va maktab ta’limi boshqarmasi boshlig‘i o‘rinbosari darajasigacha bo‘lgan mas’uliyatli boshqaruv yo‘lini bosib o‘tgan.",
+    "biography_en": "Panjiyev Maqsud Aliqulovich graduated from Karshi State University in 2003 with a degree in Mathematics and Computer Science Teaching. He holds a PhD in Pedagogical Sciences and serves as Deputy Head of the Kashkadarya Regional Preschool and School Education Department.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 2,
+    "is_published": true,
+    "published_at": "2026-08-28T04:21:57.207Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-28T04:21:57.207Z",
+    "updated_at": "2026-08-28T04:44:22.834Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 27,
+  "fields": {
+    "user": null,
+    "full_name": "Markayev Zafar Aliqulovich",
+    "slug": "markayev-zafar-aliqulovich",
+    "avatar": "alumni/markayev-zafar-aliqulovich/markayev-zafar-aliqulovich.png",
+    "image_url": "",
+    "image_alt": "Zafar Makayev portreti",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": 8,
+    "specialty": 14,
+    "graduation_year": null,
+    "degree": "",
+    "current_company": "",
+    "position": "O‘zbekiston Respublikasi Ichki ishlar vazirligi tizimida masʼul rahbarlik faoliyati (podpolkovnik unvonida)",
+    "industry": "Davlat xizmati va xavfsizlik",
+    "city": "Toshkent",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "O‘zbekiston Respublikasi Ichki ishlar vazirligi tizimida masʼul rahbarlik faoliyati (podpolkovnik unvonida).",
+    "biography_uz": "Markayev Zafar Aliqulovich Qarshi davlat universiteti Jismoniy madaniyat fakultetini tamomlagan. O‘zbekiston Respublikasi Ichki ishlar organlari tizimida uzoq yillik namunali xizmat faoliyatini olib borib, Ichki ishlar vazirligi vazir o‘rinbosarining boshqaruv apparati bo‘limi boshlig‘i (podpolkovnik) lavozimida mas’uliyatli xizmat qilib kelmoqda.",
+    "biography_en": "Markayev Zafar Aliqulovich graduated from the Faculty of Physical Culture at Karshi State University. He serves with distinction in the Ministry of Internal Affairs of the Republic of Uzbekistan as Head of Department in the Deputy Minister's Executive Office with the rank of Lieutenant Colonel.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 3,
+    "is_published": true,
+    "published_at": "2026-08-28T04:21:57.221Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-28T04:21:57.221Z",
+    "updated_at": "2026-08-28T05:03:34.286Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 28,
+  "fields": {
+    "user": null,
+    "full_name": "Qurbonov Oybek Abdusattorovich",
+    "slug": "qurbonov-oybek-abdusattorovich",
+    "avatar": "alumni/qurbonov-oybek-abdusattorovich/qurbonov-oybek-abdusattorovich.png",
+    "image_url": "",
+    "image_alt": "Otabek Qurbonov portreti",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": 2,
+    "specialty": 15,
+    "graduation_year": null,
+    "degree": "",
+    "current_company": "Qashqadaryo viloyati hokimligi",
+    "position": "Qashqadaryo viloyati hokimligi huzuridagi «Sanoatni rivojlantirish loyiha ofisi» rahbari (direktori)",
+    "industry": "Sanoat va investitsiyalar",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Qashqadaryo viloyati hokimligi huzuridagi «Sanoatni rivojlantirish loyiha ofisi» rahbari (direktori).",
+    "biography_uz": "Qurbonov Oybek Abdusattorovich Qarshi davlat universiteti bitiruvchisi bo‘lib, iqtisodiyot va sanoat boshqaruvi yo‘nalishida yetuk mutaxassis hisoblanadi. U sanoat va kimyo sohasidagi yirik korxonalarda boshqaruv lavozimlarida, xususan «Dehqonobod kaliy zavodi» AJ boshqaruvi raisi hamda hozirda Qashqadaryo viloyati hokimligi huzuridagi «Sanoatni rivojlantirish loyiha ofisi» direktori sifatida viloyat sanoatini modernizatsiya qilishda faoliyat olib bormoqda.",
+    "biography_en": "Qurbonov Oybek Abdusattorovich graduated from Karshi State University with a background in Economics and Industrial Management. He has led major industrial enterprises including Dehkanabad Potash Plant JSC and currently serves as Director of the Industrial Development Project Office under the Khokimiyat of Kashkadarya Region.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 4,
+    "is_published": true,
+    "published_at": "2026-08-28T04:21:57.235Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-28T04:21:57.235Z",
+    "updated_at": "2026-08-28T05:00:19.875Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 29,
+  "fields": {
+    "user": null,
+    "full_name": "Rajabov Alisher Hazratovich",
+    "slug": "rajabov-alisher-hazratovich",
+    "avatar": "alumni/anvar-rajabov/anvar-rajabov.png",
+    "image_url": "",
+    "image_alt": "Anvar Rajabov portreti",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": 9,
+    "specialty": 16,
+    "graduation_year": null,
+    "degree": "Bakalavr",
+    "current_company": "O‘zbekiston Respublikasi huquq-tartibot organlari",
+    "position": "O‘zbekiston Respublikasi huquq-tartibot (prokuratura / adliya) organlari tizimida masʼul rahbarlik faoliyati",
+    "industry": "Huquq-tartibot va adliya",
+    "city": "Toshkent",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "O‘zbekiston Respublikasi huquq-tartibot (prokuratura / adliya) organlari tizimida masʼul rahbarlik faoliyati.",
+    "biography_uz": "Rajabov Alisher Hazratovich Qarshi davlat universitetida oliy ma’lumot olgan yetuk huquqshunos. Prokuratura va adliya tizimi organlarida tergovchi, bo‘lim prokurori va tuman/shahar miqyosidagi mas’ul lavozimlarda faoliyat yuritgan. Hozirda O‘zbekiston Respublikasi huquq-tartibot tizimining mas’ul rahbarlik hamda nazorat lavozimlarida samarali xizmat qilib kelmoqda.",
+    "biography_en": "Rajabov Alisher Hazratovich graduated in law from Karshi State University. He has served with distinction across the prosecution and justice system in investigative, prosecutorial, and regional leadership capacities.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 5,
+    "is_published": true,
+    "published_at": "2026-08-28T04:21:57.249Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-28T04:21:57.249Z",
+    "updated_at": "2026-08-28T05:06:34.027Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 30,
+  "fields": {
+    "user": null,
+    "full_name": "Ravshanov Olim Poyonovich",
+    "slug": "ravshanov-olim-poyonovich",
+    "avatar": "alumni/olim-ravshanov/olim-ravshanov.png",
+    "image_url": "",
+    "image_alt": "Olim Ravshanov portreti",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": 10,
+    "specialty": 17,
+    "graduation_year": 2004,
+    "degree": "Filologiya fanlari bo‘yicha falsafa doktori (PhD)",
+    "current_company": "O‘zbekiston mahallalari uyushmasi",
+    "position": "O‘zbekiston mahallalari uyushmasining Qashqadaryo viloyati boshqarmasi boshlig‘i, Xalq deputatlari viloyat Kengashi deputati",
+    "industry": "Davlat va jamoat boshqaruvi",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "O‘zbekiston mahallalari uyushmasining Qashqadaryo viloyati boshqarmasi boshlig‘i, Xalq deputatlari Qashqadaryo viloyati Kengashi deputati.",
+    "biography_uz": "Ravshanov Olim Poyonovich Qarshi davlat universitetida bakalavriat (2002) va magistratura (2004) bosqichlarini tamomlagan. Filologiya fanlari bo‘yicha falsafa doktori (PhD). Universitetda 12 yil davomida ilmiy-pedagogik faoliyat yuritib, dekan muovini va dotsent lavozimlarida ishlagan. So‘ngra yoshlar ishlari, ma’naviyat-ma’rifat, mahalla va jamoat boshqaruvi tizimida qator rahbarlik lavozimlarida xizmat qilgan. Hozirda O‘zbekiston mahallalari uyushmasining Qashqadaryo viloyati boshqarmasi boshlig‘i va viloyat Kengashi deputati.",
+    "biography_en": "Ravshanov Olim Poyonovich earned both bachelor's (2002) and master's (2004) degrees from Karshi State University and holds a PhD in Philology. He currently heads the Kashkadarya Regional Branch of the Association of Neighborhoods of Uzbekistan and serves as a Deputy of the Regional Council of People's Deputies.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 6,
+    "is_published": true,
+    "published_at": "2026-08-28T04:21:57.269Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-28T04:21:57.269Z",
+    "updated_at": "2026-08-28T05:13:53.108Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 31,
+  "fields": {
+    "user": null,
+    "full_name": "Ashurova Sharofat Toshpo‘latovna",
+    "slug": "ashurova-sharofat-toshpolatovna",
+    "avatar": "alumni/sayyora-ashurova/sayyora-ashurova.png",
+    "image_url": "",
+    "image_alt": "Sayyora Ashurova portreti",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": 10,
+    "specialty": 20,
+    "graduation_year": null,
+    "degree": "Bakalavr",
+    "current_company": "Xalqaro “Oltin meros” xayriya jamoat fondi",
+    "position": "Xalqaro “Oltin meros” fondi viloyat bo‘limi raisi, O‘zbekiston Yozuvchilar uyushmasi aʼzosi",
+    "industry": "Madaniyat, adabiyot va meros",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Taniqli yozuvchi, publitsist. Xalqaro “Oltin meros” xayriya jamoat fondi Qashqadaryo viloyat bo‘limi boshqaruvi raisi, O‘zbekiston Yozuvchilar uyushmasi aʼzosi.",
+    "biography_uz": "Ashurova Sharofat Toshpo‘latovna Qarshi davlat pedagogika institutida (hozirgi Qarshi davlat universiteti) filologiya yo‘nalishida tahsil olgan. O‘zbekiston Yozuvchilar uyushmasi a’zosi, bir qator badiiy va publitsistik kitoblar muallifi. Uzoq yillardan buyon Xalqaro “Oltin meros” xayriya jamoat fondining Qashqadaryo viloyati bo‘limi boshqaruvi raisi sifatida viloyatning boy madaniy merosi, tarixiy obidalari va adabiy muhitini rivojlantirishga munosib hissa qo‘shib kelmoqda.",
+    "biography_en": "Ashurova Sharofat Toshpo'latovna graduated in philology from Karshi State Pedagogical Institute (now KarSU). A member of the Writers' Union of Uzbekistan and author of numerous literary and journalistic works, she serves as Chair of the Kashkadarya Regional Branch of the International 'Oltin Meros' Foundation.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 9,
+    "is_published": true,
+    "published_at": "2026-08-28T04:21:57.283Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-28T04:21:57.283Z",
+    "updated_at": "2026-08-28T05:45:01.906Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 32,
+  "fields": {
+    "user": null,
+    "full_name": "Muratov Shuxrat Kaxarovich",
+    "slug": "muratov-shuxrat-kaxarovich",
+    "avatar": "alumni/sardor-muratov/sardor-muratov.png",
+    "image_url": "",
+    "image_alt": "Sardor Muratov portreti",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": 3,
+    "specialty": 19,
+    "graduation_year": null,
+    "degree": "Bakalavr",
+    "current_company": "“Alp Texno Servis” XK",
+    "position": "Yirik tadbirkor va ishlab chiqaruvchi, “Alp Texno Servis” XK rahbari / asoschisi",
+    "industry": "Ishlab chiqarish va elektrotexnika",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Yirik tadbirkor va ishlab chiqaruvchi, “Alp Texno Servis” XK rahbari / asoschisi.",
+    "biography_uz": "Muratov Shuxrat Kaxarovich Qarshi davlat universiteti Matematika fakultetida tahsil olgan. 2005-yilda Qarshi shahrida maishiy elektronika va texnika jihozlari ishlab chiqarishga ixtisoslashgan “Alp Texno Servis” korxonasiga asos solgan. Ko‘p yillardan buyon viloyatda zamonaviy elektrotexnika ishlab chiqarishni rivojlantirib kelmoqda. 2023-yilda tadbirkorlik sohasidagi alohida yutuqlari uchun Prezident farmoni bilan davlat mukofoti bilan taqdirlangan.",
+    "biography_en": "Muratov Shuxrat Kaxarovich graduated in Mathematics from Karshi State University. In 2005, he founded 'Alp Texno Servis' private enterprise in Karshi, specializing in consumer electronics manufacturing. In 2023, he was honored with a State Award by Presidential Decree for outstanding entrepreneurial contributions.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 8,
+    "is_published": true,
+    "published_at": "2026-08-28T04:21:57.290Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-28T04:21:57.290Z",
+    "updated_at": "2026-08-28T05:34:39.462Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 33,
+  "fields": {
+    "user": null,
+    "full_name": "Nematov Sherzod Qalandarovich",
+    "slug": "nematov-sherzod-qalandarovich",
+    "avatar": "alumni/sirojiddin-nematov/sirojiddin-nematov.png",
+    "image_url": "",
+    "image_alt": "Sirojiddin Ne'matov portreti",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": 11,
+    "specialty": 21,
+    "graduation_year": 2005,
+    "degree": "Texnika fanlari doktori (DSc), professor",
+    "current_company": "Qarshi davlat texnika universiteti",
+    "position": "Qarshi davlat texnika universiteti (Qarshi muhandislik-iqtisodiyot instituti) rektori, professor",
+    "industry": "Oliy taʼlim va texnika fanlari",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Texnika fanlari doktori (DSc), professor. Qarshi davlat texnika universiteti rektori.",
+    "biography_uz": "Nematov Sherzod Qalandarovich 2005-yilda Qarshi davlat universiteti Fizika-texnika fakultetini tamomlagan. Texnika fanlari doktori (DSc), professor. QarDUda ilmiy-pedagogik faoliyatini boshlab, dotsent, kafedra mudiri, fakultet dekani hamda oliy ta’lim muassasalarida ilmiy ishlar va innovatsiyalar bo‘yicha prorektor vazifalarida xizmat qilgan. 2023-yildan buyon Qarshi davlat texnika universiteti (Qarshi muhandislik-iqtisodiyot instituti) rektori lavozimida samarali faoliyat yuritib kelmoqda.",
+    "biography_en": "Nematov Sherzod Qalandarovich graduated from the Faculty of Physics and Technology at Karshi State University in 2005. He holds a DSc degree and Professor title in Technical Sciences, and currently serves as Rector of Karshi State Technical University.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 10,
+    "is_published": true,
+    "published_at": "2026-08-28T04:21:57.297Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-28T04:21:57.297Z",
+    "updated_at": "2026-08-28T05:50:03.057Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 34,
+  "fields": {
+    "user": null,
+    "full_name": "Nusurov Usmon Nusratovich",
+    "slug": "nusurov-usmon-nusratovich",
+    "avatar": "alumni/umid-nusratov/umid-nusratov.png",
+    "image_url": "",
+    "image_alt": "Umid Nusratov portreti",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": 4,
+    "specialty": 22,
+    "graduation_year": null,
+    "degree": "Bakalavr",
+    "current_company": "Ommaviy axborot vositalari va matbuot xizmati",
+    "position": "Jurnalistika va ommaviy axborot vositalari sohasida rahbarlik/ijodiy faoliyat",
+    "industry": "Jurnalistika va OAV",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Taniqli jurnalist va publitsist. Jurnalistika va ommaviy axborot vositalari sohasida rahbarlik/ijodiy faoliyat olib boruvchi yetuk mutaxassis.",
+    "biography_uz": "Nusurov Usmon Nusratovich Qarshi davlat universitetida (Filologiya/Jurnalistika yo‘nalishida) tahsil olgan. Uzoq yillar davomida viloyat va respublika ommaviy axborot vositalarida muxbir, bo‘lim mudiri, mas’ul kotib, axborot xizmati rahbari hamda tahririyatlarda boshqaruv lavozimlarida faoliyat yuritgan. O‘zbekiston Jurnalistlar uyushmasi a’zosi sifatida faol publitsistik ijod bilan shug‘ullanadi.",
+    "biography_en": "Nusurov Usmon Nusratovich graduated in Philology and Journalism from Karshi State University. He has had a distinguished career in media, journalism, and public relations, serving as editor, department head, and press office lead across regional and national media.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 11,
+    "is_published": true,
+    "published_at": "2026-08-28T04:21:57.304Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-28T04:21:57.304Z",
+    "updated_at": "2026-08-28T05:48:10.563Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 35,
+  "fields": {
+    "user": null,
+    "full_name": "Xusan Temirov",
+    "slug": "xusan-temirov",
+    "avatar": "alumni/xurshid-temirov/xurshid-temirov.png",
+    "image_url": "",
+    "image_alt": "Xurshid Temirov portreti",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": 4,
+    "specialty": 23,
+    "graduation_year": 1982,
+    "degree": "Bakalavr",
+    "current_company": "O‘zbekiston milliy teleradiokompaniyasi tizimi",
+    "position": "Taniqli teleradiojurnalist, faxriy media sohasi namoyandasi va publitsist",
+    "industry": "Jurnalistika va Teleradio",
+    "city": "Qarshi",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Taniqli teleradiojurnalist, faxriy media sohasi namoyandasi va publitsist. Yosh jurnalistlar ustozi.",
+    "biography_uz": "Xusan Temirov 1982-yilda Qarshi davlat pedagogika instituti (hozirgi Qarshi davlat universiteti) Filologiya fakultetini tamomlagan. 1982-yildan buyon Qashqadaryo viloyati va O‘zbekiston milliy teleradiokompaniyasi tizimida teleradiojurnalist, muharrir, ko‘rsatuv va eshittirishlar muallifi sifatida samarali faoliyat yuritgan. O‘zbekiston teleradiojurnalistikasi va viloyat media sohasiga ulkan hissa qo‘shgan faxriy ustoz.",
+    "biography_en": "Xusan Temirov graduated from the Faculty of Philology at Karshi State Pedagogical Institute (now KarSU) in 1982. Since 1982, he has served with great acclaim as a TV/radio journalist, editor, and broadcast author across national and regional broadcasting networks.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 12,
+    "is_published": true,
+    "published_at": "2026-08-28T04:21:57.318Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-28T04:21:57.318Z",
+    "updated_at": "2026-08-28T05:52:06.246Z"
+  }
+},
+{
+  "model": "alumni.alumniprofile",
+  "pk": 36,
+  "fields": {
+    "user": null,
+    "full_name": "Xolmurodov Abdulhamid Erkinovich",
+    "slug": "xolmurodov-abdulhamid-erkinovich",
+    "avatar": "alumni/xolmurodov-abdulhamid-erkinovich/xolmurodov-abdulhamid-erkinovich.png",
+    "image_url": "",
+    "image_alt": "Abdulla Xolmurodov portreti",
+    "image_credit": "",
+    "image_source_url": "",
+    "faculty": 3,
+    "specialty": 18,
+    "graduation_year": 1996,
+    "degree": "Fizika-matematika fanlari doktori (DSc), professor",
+    "current_company": "Qarshi davlat universiteti",
+    "position": "Qarshi davlat universiteti Amaliy matematika kafedrasi professori",
+    "industry": "Oliy taʼlim va ilm-fan",
+    "city": "Koson tumani, Qashqadaryo",
+    "country": "O‘zbekiston",
+    "skills": [],
+    "bio": "Fizika-matematika fanlari doktori (DSc), professor. Qarshi davlat universiteti Amaliy matematika kafedrasi professori.",
+    "biography_uz": "Xolmurodov Abdulhamid Erkinovich 1974-yil 2-martda Qashqadaryo viloyati Koson tumanida tug‘ilgan. 1996-yilda Qarshi davlat universitetining Amaliy matematika va informatika yo‘nalishini tamomlagan. Fizika-matematika fanlari doktori (DSc), professor. QarDUda o‘qituvchilikdan boshlab kafedra mudiri, fakultet dekani hamda uzoq yillar o‘quv ishlari bo‘yicha prorektor lavozimlarida faoliyat yuritgan. Hozirda universitet professori sifatida ilmiy rahbarlik va pedagogik faoliyat olib bormoqda.",
+    "biography_en": "Xolmurodov Abdulhamid Erkinovich was born on March 2, 1974 in Koson district, Kashkadarya. He graduated from Karshi State University in 1996 with a degree in Applied Mathematics and Computer Science. He holds a DSc degree and Professor title, having served as Dean and Vice-Rector for Academic Affairs.",
+    "career_story_uz": "",
+    "career_story_en": "",
+    "linkedin_url": "",
+    "github_url": "",
+    "website_url": "",
+    "phone": "",
+    "visibility": "public",
+    "verification_status": "verified",
+    "is_featured": true,
+    "featured_order": 7,
+    "is_published": true,
+    "published_at": "2026-08-28T04:21:57.325Z",
+    "seo_title": "",
+    "seo_description": "",
+    "created_at": "2026-08-28T04:21:57.325Z",
+    "updated_at": "2026-08-28T05:22:14.967Z"
+  }
+},
+{
+  "model": "alumni.achievement",
+  "pk": 8,
+  "fields": {
+    "alumnus": 25,
+    "title": "«Shuhrat» medali sohibi",
+    "description": "Ilm-fan va texnologiyalarni rivojlantirishdagi xizmatlari uchun.",
+    "year": 2019,
+    "category": "professional",
+    "order": 0
+  }
+},
+{
+  "model": "alumni.achievement",
+  "pk": 9,
+  "fields": {
+    "alumnus": 25,
+    "title": "Scopus Top Researcher mukofoti",
+    "description": "Xalqaro ilmiy jurnallardagi iqtiboslar ko‘rsatkichi bo‘yicha.",
+    "year": 2022,
+    "category": "professional",
+    "order": 0
+  }
+},
+{
+  "model": "alumni.achievement",
+  "pk": 10,
+  "fields": {
+    "alumnus": 26,
+    "title": "Yilning eng yaxshi yosh olimi",
+    "description": "Matematik modellashtirish yo‘nalishida.",
+    "year": 2018,
+    "category": "professional",
+    "order": 0
+  }
+},
+{
+  "model": "alumni.achievement",
+  "pk": 15,
+  "fields": {
+    "alumnus": 32,
+    "title": "O‘zbekiston Respublikasi davlat mukofoti (2023-yil — Tadbirkorlik va ishlab chiqarish sohasidagi yutuqlari uchun)",
+    "description": "",
+    "year": 2023,
+    "category": "professional",
+    "order": 0
+  }
+},
+{
+  "model": "alumni.achievement",
+  "pk": 16,
+  "fields": {
+    "alumnus": 31,
+    "title": "O‘zbekiston Yozuvchilar uyushmasi aʼzosi",
+    "description": "",
+    "year": 2015,
+    "category": "professional",
+    "order": 0
+  }
+},
+{
+  "model": "alumni.achievement",
+  "pk": 17,
+  "fields": {
+    "alumnus": 34,
+    "title": "O‘zbekiston Jurnalistlar uyushmasi aʼzosi",
+    "description": "",
+    "year": 2010,
+    "category": "professional",
+    "order": 0
+  }
+},
+{
+  "model": "alumni.achievement",
+  "pk": 18,
+  "fields": {
+    "alumnus": 35,
+    "title": "Faxriy teleradiojurnalist, viloyat teleradio sohasiga qo‘shgan munosib hissasi uchun",
+    "description": "",
+    "year": 2020,
+    "category": "professional",
+    "order": 0
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 29,
+  "fields": {
+    "alumnus": 25,
+    "year": 1993,
+    "title": "1988 — 1993 yy. — Qarshi davlat universiteti talabasi",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 1
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 30,
+  "fields": {
+    "alumnus": 25,
+    "year": 1996,
+    "title": "1993 — 1996 yy. — O‘zbekiston Respublikasi Fanlar akademiyasi tizimidagi ilmiy-tadqiqot institutida aspirant / kichik ilmiy xodim",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 2
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 31,
+  "fields": {
+    "alumnus": 25,
+    "year": 2005,
+    "title": "1996 — 2005 yy. — Qarshi davlat universiteti biologiya yo‘nalishi kafedralarida o‘qituvchi, katta o‘qituvchi, dotsent",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 3
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 32,
+  "fields": {
+    "alumnus": 25,
+    "year": 2015,
+    "title": "2005 — 2015 yy. — Kafedra mudiri, fakultet dekani o‘rinbosari va dekan lavozimlarida faoliyat",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 4
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 33,
+  "fields": {
+    "alumnus": 25,
+    "year": 2021,
+    "title": "2015 — 2021 yy. — Ilmiy laboratoriyalar va amaliy tadqiqot loyihalari rahbari, kafedra mudiri",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 5
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 34,
+  "fields": {
+    "alumnus": 25,
+    "year": 2024,
+    "title": "2021-yildan hozirgacha — Oliy taʼlim va ilmiy-tadqiqot muassasalarida boshqaruv (prorektorlik/ilmiy rahbarlik) hamda professor sifatida ilmiy-pedagogik faoliyat",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 6
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 35,
+  "fields": {
+    "alumnus": 26,
+    "year": 2003,
+    "title": "1999 — 2003 yy. — Qarshi davlat universiteti talabasi",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 1
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 36,
+  "fields": {
+    "alumnus": 26,
+    "year": 2012,
+    "title": "2003 — 2012 yy. — Maktab va kasb-hunar taʼlimi muassasalarida o‘qituvchi, axborot texnologiyalari bo‘yicha masʼul xodim",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 2
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 37,
+  "fields": {
+    "alumnus": 26,
+    "year": 2018,
+    "title": "2012 — 2018 yy. — Qashqadaryo viloyati xalq taʼlimi boshqaruvi tizimida bo‘lim boshlig‘i va masʼul mutaxassis",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 3
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 38,
+  "fields": {
+    "alumnus": 26,
+    "year": 2021,
+    "title": "2018 — 2021 yy. — G‘uzor tumani hokimining yoshlar siyosati, ijtimoiy rivojlantirish va maʼnaviy-maʼrifiy ishlar bo‘yicha o‘rinbosari",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 4
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 39,
+  "fields": {
+    "alumnus": 26,
+    "year": 2024,
+    "title": "2021-yildan hozirgacha — Qashqadaryo viloyati Xalq taʼlimi (hozirgi Maktabgacha va maktab taʼlimi) boshqarmasi boshlig‘i o‘rinbosari",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 5
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 46,
+  "fields": {
+    "alumnus": 27,
+    "year": 2005,
+    "title": "Qarshi davlat universiteti Jismoniy madaniyat fakulteti talabasi (o‘qishni tamomlagan)",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 1
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 47,
+  "fields": {
+    "alumnus": 27,
+    "year": 2012,
+    "title": "O‘zbekiston Respublikasi Ichki ishlar organlari tizimida xizmat",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 2
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 48,
+  "fields": {
+    "alumnus": 27,
+    "year": 2024,
+    "title": "O‘zbekiston Respublikasi Ichki ishlar vazirligi vazir o‘rinbosarining boshqaruv apparati bo‘limi boshlig‘i (podpolkovnik)",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 3
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 49,
+  "fields": {
+    "alumnus": 28,
+    "year": 2018,
+    "title": "Sanoat va kimyo sohasidagi yirik korxonalarda turli boshqaruv lavozimlarida faoliyat yuritgan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 1
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 50,
+  "fields": {
+    "alumnus": 28,
+    "year": 2022,
+    "title": "2020 — 2022 yy. — «Dehqonobod kaliy zavodi» AJ boshqaruvi raisi",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 2
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 51,
+  "fields": {
+    "alumnus": 28,
+    "year": 2024,
+    "title": "2022-yildan hozirgacha — Sanoatni rivojlantirish va investitsiya loyihalarini boshqarish tizimida (Qashqadaryo viloyati hokimligi «Sanoatni rivojlantirish loyiha ofisi» direktori)",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 3
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 52,
+  "fields": {
+    "alumnus": 29,
+    "year": 2010,
+    "title": "Qarshi davlat universitetida oliy taʼlim olgan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 1
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 53,
+  "fields": {
+    "alumnus": 29,
+    "year": 2016,
+    "title": "Prokuratura va adliya tizimi organlarida tergovchi, bo‘lim prokurori va tuman/shahar miqyosidagi masʼul lavozimlarda faoliyat yuritgan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 2
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 54,
+  "fields": {
+    "alumnus": 29,
+    "year": 2024,
+    "title": "O‘zbekiston Respublikasi huquq-tartibot tizimining hududiy va respublika bo‘linmalarida rahbarlik hamda nazorat lavozimlarida xizmat qilgan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 3
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 55,
+  "fields": {
+    "alumnus": 30,
+    "year": 2004,
+    "title": "1998 — 2004 yy. — Qarshi davlat universitetida bakalavriat va magistratura bosqichlarida tahsil olgan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 1
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 56,
+  "fields": {
+    "alumnus": 30,
+    "year": 2016,
+    "title": "2004 — 2016 yy. — Qarshi davlat universitetida o‘qituvchi, katta o‘qituvchi, maʼnaviy-maʼrifiy ishlar bo‘yicha dekan muovini, kafedra dotsenti vazifalarida ilmiy-pedagogik faoliyat",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 2
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 57,
+  "fields": {
+    "alumnus": 30,
+    "year": 2021,
+    "title": "2016 — 2021 yy. — Yoshlar ishlari, maʼnaviyat va maʼrifat sohalarida, shuningdek, davlat va jamoat tashkilotlarida hududiy rahbarlik lavozimlarida",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 3
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 58,
+  "fields": {
+    "alumnus": 30,
+    "year": 2024,
+    "title": "2021 — 2024 yy. — Qashqadaryo viloyati Mahalla va nuroniylarni qo‘llab-quvvatlash boshqarmasi tizimida boshqaruv lavozimlarida faoliyat",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 4
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 59,
+  "fields": {
+    "alumnus": 30,
+    "year": 2024,
+    "title": "2024-yildan — Xalq deputatlari Qashqadaryo viloyati Kengashi deputati (14-Qiziltepa saylov okrugi)",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 5
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 60,
+  "fields": {
+    "alumnus": 30,
+    "year": 2024,
+    "title": "2024-yildan hozirgacha — O‘zbekiston mahallalari uyushmasining Qashqadaryo viloyati boshqarmasi boshlig‘i",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 6
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 61,
+  "fields": {
+    "alumnus": 36,
+    "year": 1996,
+    "title": "1991 — 1996-yy. — Qarshi davlat universiteti talabasi",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 1
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 62,
+  "fields": {
+    "alumnus": 36,
+    "year": 2010,
+    "title": "1996 — 2010-yy. — Qarshi davlat universitetida o‘qituvchi, katta o‘qituvchi, kafedra dotsenti",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 2
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 63,
+  "fields": {
+    "alumnus": 36,
+    "year": 2021,
+    "title": "2010 — 2021-yy. — Matematika fakulteti dekani muovini, fakultet dekani, kafedra mudiri",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 3
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 64,
+  "fields": {
+    "alumnus": 36,
+    "year": 2026,
+    "title": "2021 — 2026-yy. — Qarshi davlat universitetining o‘quv ishlari bo‘yicha prorektori",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 4
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 65,
+  "fields": {
+    "alumnus": 36,
+    "year": 2026,
+    "title": "2026-yildan hozirgacha — Qarshi davlat universiteti professori (ilmiy rahbarlik va kafedradagi pedagogik faoliyat)",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 5
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 66,
+  "fields": {
+    "alumnus": 32,
+    "year": 2000,
+    "title": "Qarshi davlat universiteti Matematika fakultetida oliy maʼlumot olgan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 1
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 67,
+  "fields": {
+    "alumnus": 32,
+    "year": 2005,
+    "title": "2005-yil — Qarshi shahrida maishiy elektronika va texnika jihozlari ishlab chiqarishga ixtisoslashgan “Alp Texno Servis” korxonasiga asos solgan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 2
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 68,
+  "fields": {
+    "alumnus": 32,
+    "year": 2023,
+    "title": "2005-yildan hozirgacha — “Alp Texno Servis” xususiy korxonasi rahbari sifatida Qashqadaryo viloyatida ishlab chiqarish, elektrotexnika va tadbirkorlik sohasida faoliyat yuritib kelmoqda",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 3
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 69,
+  "fields": {
+    "alumnus": 32,
+    "year": 2023,
+    "title": "2023-yil — Tadbirkorlik va ishlab chiqarish sohasidagi yutuqlari uchun O‘zbekiston Respublikasi Prezidentining farmoni bilan davlat mukofoti bilan taqdirlangan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 4
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 70,
+  "fields": {
+    "alumnus": 31,
+    "year": 1990,
+    "title": "Qarshi davlat pedagogika institutida (hozirgi Qarshi davlat universiteti) filologiya yo‘nalishida tahsil olgan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 1
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 71,
+  "fields": {
+    "alumnus": 31,
+    "year": 2000,
+    "title": "Matbuot, nashriyot, tahririyatlar hamda madaniyat-maʼrifat sohalarida ijodiy va boshqaruv faoliyati bilan shug‘ullangan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 2
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 72,
+  "fields": {
+    "alumnus": 31,
+    "year": 2010,
+    "title": "Bir qator badiiy, publitsistik kitoblar, tarixiy-madaniy merosga oid maqolalar va tadqiqotlar muallifi",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 3
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 73,
+  "fields": {
+    "alumnus": 31,
+    "year": 2015,
+    "title": "O‘zbekiston Yozuvchilar uyushmasi aʼzosi sifatida faol ijodiy faoliyat olib bormoqda",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 4
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 74,
+  "fields": {
+    "alumnus": 31,
+    "year": 2024,
+    "title": "Uzoq yillardan buyon Xalqaro “Oltin meros” xayriya jamoat fondining Qashqadaryo viloyati bo‘limiga rahbarlik qilib, viloyatning madaniy merosi, tarixiy obidalari va ziyoratgohlarini targ‘ib etish loyihalariga boshchilik qilmoqda",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 5
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 75,
+  "fields": {
+    "alumnus": 33,
+    "year": 2005,
+    "title": "2000 — 2005 yy. — Qarshi davlat universiteti Fizika-texnika fakulteti talabasi",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 1
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 76,
+  "fields": {
+    "alumnus": 33,
+    "year": 2012,
+    "title": "2005 — 2012 yy. — Qarshi davlat universitetida o‘qituvchi, katta o‘qituvchi, ilmiy izlanuvchi",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 2
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 77,
+  "fields": {
+    "alumnus": 33,
+    "year": 2019,
+    "title": "2012 — 2019 yy. — Dotsent, kafedra mudiri, fakultet dekani muovini va dekan vazifalarida boshqaruv hamda pedagogik faoliyat",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 3
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 78,
+  "fields": {
+    "alumnus": 33,
+    "year": 2023,
+    "title": "2019 — 2023 yy. — Oliy taʼlim muassasalarida ilmiy ishlar va innovatsiyalar bo‘yicha prorektor, ilmiy kengashlar aʼzosi (DSc ilmiy darajasi va professor unvoni himoyasi)",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 4
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 79,
+  "fields": {
+    "alumnus": 33,
+    "year": 2024,
+    "title": "2023-yildan hozirgacha — Qarshi davlat texnika universiteti rektori",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 5
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 80,
+  "fields": {
+    "alumnus": 34,
+    "year": 1995,
+    "title": "Qarshi davlat universitetida (Filologiya/Jurnalistika yo‘nalishida) tahsil olgan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 1
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 81,
+  "fields": {
+    "alumnus": 34,
+    "year": 2005,
+    "title": "Viloyat va respublika ommaviy axborot vositalarida (gazeta, jurnal yoki teleradiokompaniya tizimida) muxbir, bo‘lim mudiri, masʼul kotib",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 2
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 82,
+  "fields": {
+    "alumnus": 34,
+    "year": 2015,
+    "title": "Davlat yoki jamoat tuzilmalarida axborot xizmati rahbari (matbuot kotibi) hamda tahririyatlarda muharrir/boshqaruvchi lavozimlarida faoliyat yuritgan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 3
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 83,
+  "fields": {
+    "alumnus": 34,
+    "year": 2024,
+    "title": "O‘zbekiston Jurnalistlar uyushmasi doirasida ijodiy va publitsistik faoliyat olib borgan",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 4
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 84,
+  "fields": {
+    "alumnus": 35,
+    "year": 1982,
+    "title": "1977 — 1982 yy. — Qarshi davlat pedagogika instituti (hozirgi Qarshi davlat universiteti) Filologiya fakulteti talabasi",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 1
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 85,
+  "fields": {
+    "alumnus": 35,
+    "year": 1982,
+    "title": "1982-yildan boshlab — Qashqadaryo viloyati va O‘zbekiston milliy teleradiokompaniyasi tizimida teleradiojurnalist, muharrir, ko‘rsatuv va eshittirishlar muallifi",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 2
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 86,
+  "fields": {
+    "alumnus": 35,
+    "year": 2010,
+    "title": "Faoliyati davomida — Viloyat teleradiokanalida ko‘p yillik samarali mehnati, tahliliy-publitsistik dasturlari hamda viloyat media sohasiga qo‘shgan hissasi orqali tanilgan teleradiojurnalist",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 3
+  }
+},
+{
+  "model": "alumni.careertimelineitem",
+  "pk": 87,
+  "fields": {
+    "alumnus": 35,
+    "year": 2024,
+    "title": "Hozirda — Faxriy teleradiojurnalist, yosh jurnalistlar ustozi",
+    "organization": "",
+    "description": "",
+    "type": "career",
+    "order": 4
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 18,
+  "fields": {
+    "alumni": 25,
+    "title": "Faxriy bitiruvchi — Allayev Dolli Hakimovich",
+    "short_description": "Biologiya va qishloq xo‘jaligi fanlari doktori, professor. QarDU 1993-yil bitiruvchisi.",
+    "display_order": 1,
+    "is_active": true,
+    "featured_at": "2026-08-28T04:39:48.804Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 19,
+  "fields": {
+    "alumni": 26,
+    "title": "Faxriy bitiruvchi — Panjiyev Maqsud Aliqulovich",
+    "short_description": "Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi boshlig‘i o‘rinbosari. QarDU 2003-yil bitiruvchisi.",
+    "display_order": 2,
+    "is_active": true,
+    "featured_at": "2026-08-28T04:44:22.841Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 22,
+  "fields": {
+    "alumni": 27,
+    "title": "Faxriy bitiruvchi — Markayev Zafar Aliqulovich",
+    "short_description": "O‘zbekiston Respublikasi Ichki ishlar vazirligi masʼul xodimi (podpolkovnik).",
+    "display_order": 3,
+    "is_active": true,
+    "featured_at": "2026-08-28T04:58:02.971Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 23,
+  "fields": {
+    "alumni": 28,
+    "title": "Faxriy bitiruvchi — Qurbonov Oybek Abdusattorovich",
+    "short_description": "Qashqadaryo viloyati hokimligi huzuridagi «Sanoatni rivojlantirish loyiha ofisi» rahbari (direktori).",
+    "display_order": 4,
+    "is_active": true,
+    "featured_at": "2026-08-28T05:00:19.875Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 24,
+  "fields": {
+    "alumni": 29,
+    "title": "Faxriy bitiruvchi — Rajabov Alisher Hazratovich",
+    "short_description": "Huquq-tartibot organlari tizimi masʼul rahbar xodimi.",
+    "display_order": 5,
+    "is_active": true,
+    "featured_at": "2026-08-28T05:06:34.033Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 25,
+  "fields": {
+    "alumni": 30,
+    "title": "Faxriy bitiruvchi — Ravshanov Olim Poyonovich",
+    "short_description": "O‘zbekiston mahallalari uyushmasi viloyat boshqarmasi boshlig‘i, deputat.",
+    "display_order": 6,
+    "is_active": true,
+    "featured_at": "2026-08-28T05:13:53.113Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 26,
+  "fields": {
+    "alumni": 36,
+    "title": "Faxriy bitiruvchi — Xolmurodov Abdulhamid Erkinovich",
+    "short_description": "Fizika-matematika fanlari doktori, professor. QarDU 1996-yil bitiruvchisi.",
+    "display_order": 7,
+    "is_active": true,
+    "featured_at": "2026-08-28T05:22:14.967Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 27,
+  "fields": {
+    "alumni": 32,
+    "title": "Faxriy bitiruvchi — Muratov Shuxrat Kaxarovich",
+    "short_description": "“Alp Texno Servis” XK rahbari va asoschisi, yirik ishlab chiqaruvchi.",
+    "display_order": 8,
+    "is_active": true,
+    "featured_at": "2026-08-28T05:34:39.468Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 28,
+  "fields": {
+    "alumni": 31,
+    "title": "Faxriy bitiruvchi — Ashurova Sharofat Toshpo‘latovna",
+    "short_description": "Xalqaro “Oltin meros” fondi viloyat bo‘limi raisi, yozuvchi va publitsist.",
+    "display_order": 9,
+    "is_active": true,
+    "featured_at": "2026-08-28T05:45:01.910Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 29,
+  "fields": {
+    "alumni": 33,
+    "title": "Faxriy bitiruvchi — Nematov Sherzod Qalandarovich",
+    "short_description": "Qarshi davlat texnika universiteti rektori, DSc, professor.",
+    "display_order": 10,
+    "is_active": true,
+    "featured_at": "2026-08-28T05:46:10.947Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 30,
+  "fields": {
+    "alumni": 34,
+    "title": "Faxriy bitiruvchi — Nusurov Usmon Nusratovich",
+    "short_description": "Jurnalistika va OAV sohasida masʼul rahbar va yetuk publitsist.",
+    "display_order": 11,
+    "is_active": true,
+    "featured_at": "2026-08-28T05:48:10.570Z"
+  }
+},
+{
+  "model": "alumni.featuredalumni",
+  "pk": 31,
+  "fields": {
+    "alumni": 35,
+    "title": "Faxriy bitiruvchi — Xusan Temirov",
+    "short_description": "Taniqli teleradiojurnalist, faxriy media namoyandasi va publitsist.",
+    "display_order": 12,
+    "is_active": true,
+    "featured_at": "2026-08-28T05:52:06.248Z"
+  }
+},
+{
+  "model": "editorial.successstory",
+  "pk": 6,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:20:15.857Z",
+    "created_at": "2026-08-28T06:20:15.857Z",
+    "updated_at": "2026-08-28T06:20:15.857Z",
+    "alumnus": 30,
+    "slug": "olim-ravshanov-ilmiy-tafakkurdan-jamoat-boshqaruvigacha",
+    "title_uz": "Olim Ravshanov: Ilmiy tafakkurdan jamoat boshqaruvigacha",
+    "title_en": "Olim Ravshanov: From Academic Rigor to Public Governance",
+    "summary_uz": "Filologiya fakultetidan boshlangan ilmiy izlanishlar va mahallalar tizimida xonadonbay ishlash orqali jamoatchilik e’tirofiga erishish yo‘li.",
+    "summary_en": "From philological scholarship to public governance and grassroots neighborhood development in Kashkadarya.",
+    "hero_image": "",
+    "hero_image_url": "",
+    "hero_image_alt": "",
+    "hero_image_credit": "",
+    "hero_image_source_url": "",
+    "student_takeaway_uz": "Har qanday ijtimoiy boshqaruvda inson omilini birinchi o‘ringa qo‘yish va ilmiy tahlilga tayanish.",
+    "student_takeaway_en": "In any public governance, always prioritize human values and rely on deep analytical methods."
+  }
+},
+{
+  "model": "editorial.successstory",
+  "pk": 7,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:20:15.871Z",
+    "created_at": "2026-08-28T06:20:15.871Z",
+    "updated_at": "2026-08-28T06:20:15.871Z",
+    "alumnus": 32,
+    "slug": "shuhrat-muratov-formulalardan-yirik-sanoat-korxonasigacha",
+    "title_uz": "Shuhrat Muratov: Formulalardan yirik sanoat korxonasigacha",
+    "title_en": "Shuhrat Muratov: From Mathematical Formulas to Major Industrial Manufacturing",
+    "summary_uz": "Matematika fakultetida olingan analitik qobiliyatlarni ishlab chiqarishga yo‘naltirib, «Alp Texno Servis» XK ga asos solish tajribasi.",
+    "summary_en": "Transforming mathematical precision and analytical problem-solving into a leading home appliance manufacturing enterprise in Kashkadarya.",
+    "hero_image": "",
+    "hero_image_url": "",
+    "hero_image_alt": "",
+    "hero_image_credit": "",
+    "hero_image_source_url": "",
+    "student_takeaway_uz": "Matematik aniqlikdagi hisob-kitob, sifatga eʼtibor va tavakkaldan qo‘rqmaslik.",
+    "student_takeaway_en": "Mathematical precision in calculation, uncompromising focus on quality, and courage to take calculated risks."
+  }
+},
+{
+  "model": "editorial.successstory",
+  "pk": 8,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:20:15.881Z",
+    "created_at": "2026-08-28T06:20:15.881Z",
+    "updated_at": "2026-08-28T06:20:15.881Z",
+    "alumnus": 31,
+    "slug": "sharofat-ashurova-unutilayotgan-merosni-asrashga-bagishlangan-hayot",
+    "title_uz": "Sharofat Ashurova: Unutilayotgan merosni asrashga bag‘ishlangan hayot",
+    "title_en": "Sharofat Ashurova: A Lifetime Dedicated to Preserving Cultural Heritage",
+    "summary_uz": "Qashqadaryoning boy o‘tmishi, unutilayotgan madaniy obidalarini hujjatlashtirish va «Oltin meros» fondi orqali merosni asrab qolish yo‘li.",
+    "summary_en": "Documenting regional folklore, historical monuments, and preserving cultural legacy through the 'Oltin Meros' Foundation.",
+    "hero_image": "",
+    "hero_image_url": "",
+    "hero_image_alt": "",
+    "hero_image_credit": "",
+    "hero_image_source_url": "",
+    "student_takeaway_uz": "O‘z milliy o‘zligiga, tarixi va madaniyatiga sadoqat insonni jamiyatda chinakam eʼtirofga olib keladi.",
+    "student_takeaway_en": "Unwavering commitment to national identity, heritage, and culture earns lasting public respect and societal recognition."
+  }
+},
+{
+  "model": "editorial.successstory",
+  "pk": 9,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:20:15.890Z",
+    "created_at": "2026-08-28T06:20:15.890Z",
+    "updated_at": "2026-08-28T06:20:15.890Z",
+    "alumnus": 33,
+    "slug": "sherzod-nematov-talabalikdan-rektorlikkacha-bolgan-akademik-yol",
+    "title_uz": "Sherzod Nematov: Talabalikdan rektorlikkacha bo‘lgan akademik yo‘l",
+    "title_en": "Sherzod Nematov: From University Student to Technical University Rector",
+    "summary_uz": "Fizika-texnika fakulteti talabaligidan boshlangan ilmiy izlanishlar, DSc ilmiy darajasi va Qarshi davlat texnika universiteti rektori lavozimiga erishish tarixi.",
+    "summary_en": "Academic career from physics student to PhD, DSc professor, and Rector of Karshi State Technical University.",
+    "hero_image": "",
+    "hero_image_url": "",
+    "hero_image_alt": "",
+    "hero_image_credit": "",
+    "hero_image_source_url": "",
+    "student_takeaway_uz": "Oliy taʼlimda muvaffaqiyatga erishish uchun sohani ich-ichidan bilish va tizimli mehnat talab etiladi.",
+    "student_takeaway_en": "Achieving excellence in higher education requires deep insider knowledge of the field and disciplined, systematic work."
+  }
+},
+{
+  "model": "editorial.successstory",
+  "pk": 10,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:20:15.901Z",
+    "created_at": "2026-08-28T06:20:15.901Z",
+    "updated_at": "2026-08-28T06:20:15.901Z",
+    "alumnus": 35,
+    "slug": "husan-temirov-viloyat-media-maydonining-ishonchli-ovozi",
+    "title_uz": "Husan Temirov: Viloyat media maydonining ishonchli ovozi",
+    "title_en": "Husan Temirov: The Trusted Voice of Regional Broadcasting",
+    "summary_uz": "1982-yil bitiruvchisining teleradiodagi qirq yillik fidokorona mehnati, tahliliy dasturlari va o‘ziga xos jurnalistika maktabi.",
+    "summary_en": "Four decades of dedicated broadcast journalism, insightful public affairs programming, and mentorship in Kashkadarya media.",
+    "hero_image": "",
+    "hero_image_url": "",
+    "hero_image_alt": "",
+    "hero_image_credit": "",
+    "hero_image_source_url": "",
+    "student_takeaway_uz": "Ishga vijdonan yondashish va o‘z auditoriyasi bilan samimiy muloqot o‘rnatish.",
+    "student_takeaway_en": "Approach your work with unwavering integrity and cultivate genuine, heartfelt rapport with your audience."
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 24,
+  "fields": {
+    "story": 6,
+    "kind": "university",
+    "heading_uz": "Boshlanish va ilm yo‘li",
+    "heading_en": "Academic Roots and Scholarly Journey",
+    "content_uz": "Filologiya fakultetida tahsil olib, o‘z faoliyatini universitetda oddiy o‘qituvchilikdan boshlagan. Ilmiy izlanishlarini to‘xtatmay, filologiya fanlari bo‘yicha falsafa doktori (PhD) ilmiy darajasini himoya qilgan.",
+    "content_en": "After graduating from the Faculty of Philology, he began his career as an academic instructor at Karshi State University. Pursuing continuous research, he successfully defended his PhD in Philological Sciences.",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 25,
+  "fields": {
+    "story": 6,
+    "kind": "turning_point",
+    "heading_uz": "Burilish nuqtasi",
+    "heading_en": "The Turning Point",
+    "content_uz": "Nazariy bilimlarni amaliy boshqaruvga ko‘chirib, yoshlar va maʼnaviyat sohasidagi loyihalarni muvofiqlashtirishga kirishgan.",
+    "content_en": "Translating academic theory into practical management, he spearheaded key youth initiatives and cultural leadership programs.",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 26,
+  "fields": {
+    "story": 6,
+    "kind": "achievements",
+    "heading_uz": "Muvaffaqiyat omili",
+    "heading_en": "Key Success Factors",
+    "content_uz": "Mahalla tizimida kabinetdan chiqib, bevosita xonadonlar bilan ishlash mexanizmini joriy qilgani. Uning boshqaruvidagi tizimli yondashuv Qashqadaryo viloyati mahallalar uyushmasi boshqarmasi rahbari va viloyat Kengashi deputati darajasiga olib chiqqan.",
+    "content_en": "He pioneered proactive grassroots engagement in the mahalla system. His systematic approach elevated him to Head of the Kashkadarya Regional Mahalla Association and Deputy of the Regional Council.",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 27,
+  "fields": {
+    "story": 7,
+    "kind": "university",
+    "heading_uz": "Boshlanish va biznesga qadam",
+    "heading_en": "Early Beginnings and Stepping into Business",
+    "content_uz": "Matematika fakultetini tamomlab, olingan analitik fikrlash qobiliyatini tadbirkorlik sohasiga yo‘naltirgan.",
+    "content_en": "Graduating from the Faculty of Mathematics, he channeled his rigorous analytical thinking into private enterprise and industrial engineering.",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 28,
+  "fields": {
+    "story": 7,
+    "kind": "early_career",
+    "heading_uz": "Qiyinchiliklar va rivojlanish",
+    "heading_en": "Overcoming Challenges & Scaling Operations",
+    "content_uz": "2005-yilda tashkil etilgan kichik xizmat ko‘rsatish ustaxonasi (“Alp Texno Servis”)ni bosqichma-bosqich kengaytirib, Qashqadaryoning o‘zida murakkab elektrotexnika va maishiy texnika ishlab chiqarish liniyalarini yo‘lga qo‘ygan.",
+    "content_en": "Starting in 2005 from a modest technical workshop ('Alp Texno Servis'), he progressively scaled operations into state-of-the-art consumer electronics and appliance manufacturing lines in Karshi.",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 29,
+  "fields": {
+    "story": 7,
+    "kind": "achievements",
+    "heading_uz": "Muvaffaqiyat omili",
+    "heading_en": "Key Success Factors",
+    "content_uz": "Viloyat bozorida importga qaramlikni kamaytirish, mahalliy ishlab chiqarish quvvatlarini yaratish va yuzlab yoshlarni ish bilan taʼminlash. Mehnatlari davlat darajasida eʼtirof etilib, nufuzli davlat mukofotiga sazovor bo‘lgan.",
+    "content_en": "Substantially substituting imports with locally engineered products and creating hundreds of technical jobs for youth. His contributions earned high-level state recognition and prestigious honors.",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 30,
+  "fields": {
+    "story": 8,
+    "kind": "university",
+    "heading_uz": "Boshlanish va ijodiy izlanish",
+    "heading_en": "Creative Search and Literary Foundation",
+    "content_uz": "Filologik taʼlimdan so‘ng matbuot, tahririyat va o‘qituvchilik orqali xalq og‘zaki ijodi hamda viloyat tarixini o‘rganishga kirishgan.",
+    "content_en": "Following her philological education at the university, she embarked on extensive research into folklore and regional history through journalism, publishing, and teaching.",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 31,
+  "fields": {
+    "story": 8,
+    "kind": "early_career",
+    "heading_uz": "Hayotiy missiya",
+    "heading_en": "A Life's Sacred Mission",
+    "content_uz": "Qashqadaryoning boy o‘tmishi, unutilayotgan tarixiy obidalari va madaniy ziyoratgohlarini hujjatlashtirish, ularni keng ommaga yetkazishni o‘zining asosiy vazifasi deb bilgan.",
+    "content_en": "She made it her life's calling to document historical shrines, architectural monuments, and forgotten cultural assets across the region for future generations.",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 32,
+  "fields": {
+    "story": 8,
+    "kind": "achievements",
+    "heading_uz": "Muvaffaqiyat omili",
+    "heading_en": "Key Success Factors",
+    "content_uz": "“Oltin meros” xalqaro xayriya jamoat fondining viloyat bo‘limi rahbari hamda Yozuvchilar uyushmasi aʼzosi sifatida ko‘plab moddiy-madaniy yodgorliklarni asrab qolish, restavratsiya ishlariga jamoatchilik va homiylarni jalb qilish loyihalariga boshchilik qilgan.",
+    "content_en": "As head of the regional branch of the 'Oltin Meros' Foundation and member of the Writers' Union, she mobilized conservation efforts, community restoration, and sponsorship for invaluable historic landmarks.",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 33,
+  "fields": {
+    "story": 9,
+    "kind": "university",
+    "heading_uz": "Boshlanish va ilmiy faoliyat",
+    "heading_en": "Academic Inception and Scientific Research",
+    "content_uz": "Qarshi davlat universitetining Fizika-texnika fakultetini tamomlab, shu sohada ilmiy-tadqiqot ishlarini davom ettirgan.",
+    "content_en": "After graduating from the Faculty of Physics and Technology at Karshi State University, he dedicated himself to advanced scientific inquiry and engineering research.",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 34,
+  "fields": {
+    "story": 9,
+    "kind": "early_career",
+    "heading_uz": "Karyera pillapoyalari",
+    "heading_en": "Academic Milestones",
+    "content_uz": "Oddiy o‘qituvchilikdan boshlab kafedra mudiri, dekan muovini, fakultet dekani hamda ilmiy ishlar bo‘yicha prorektorlik bosqichlarini bosib o‘tgan.",
+    "content_en": "He ascended through the academic ranks from junior instructor to department chair, vice dean, faculty dean, and vice rector for research and innovations.",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 35,
+  "fields": {
+    "story": 9,
+    "kind": "achievements",
+    "heading_uz": "Muvaffaqiyat omili",
+    "heading_en": "Key Success Factors",
+    "content_uz": "Ilmiy tadqiqotlarni faqat laboratoriyada qoldirmay, sanoat va amaliyot bilan bog‘lagan (DSc fan doktori va professorlik). Natijada mintaqaning bosh texnika oliygohi — Qarshi davlat texnika universiteti rektori lavozimiga tayinlangan.",
+    "content_en": "He bridged laboratory research with industrial application (earning a Doctor of Technical Sciences and Full Professorship), leading to his appointment as Rector of the premier technical university in the region.",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 36,
+  "fields": {
+    "story": 10,
+    "kind": "university",
+    "heading_uz": "Boshlanish va efir sari yo‘l",
+    "heading_en": "Early Years and the Path to Broadcasting",
+    "content_uz": "1982-yilda Filologiya fakultetini tamomlab, o‘z davrida viloyat teleradiosi tahririyatiga yosh mutaxassis sifatida kirib kelgan.",
+    "content_en": "Graduating from the Faculty of Philology in 1982, he joined the regional television and radio editorial team as an enthusiastic young journalist.",
+    "order": 1
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 37,
+  "fields": {
+    "story": 10,
+    "kind": "early_career",
+    "heading_uz": "Ijodiy jasorat",
+    "heading_en": "Creative Courage on Air",
+    "content_uz": "Matbuot va teleradioda jonli efirlar, qishloq xo‘jaligi, ijtimoiy masalalar hamda oddiy mehnatkashlar hayotini yorituvchi tahliliy reportajlari bilan xalq mehrini qozongan.",
+    "content_en": "He won wide public acclaim through live broadcasts and sharp analytical reporting on agriculture, social developments, and the everyday lives of hardworking citizens.",
+    "order": 2
+  }
+},
+{
+  "model": "editorial.storysection",
+  "pk": 38,
+  "fields": {
+    "story": 10,
+    "kind": "achievements",
+    "heading_uz": "Muvaffaqiyat omili",
+    "heading_en": "Key Success Factors",
+    "content_uz": "Jurnalistik etika, xolislik va samimiyatni birlamchi o‘ringa qo‘ygan holda, bir necha o‘n yillar davomida Qashqadaryo media makonida o‘z maktabini yarata olgan.",
+    "content_en": "By prioritizing journalistic ethics, impartiality, and sincerity, he established a distinguished school of broadcasting in Kashkadarya over several decades.",
+    "order": 3
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 44,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:04:11.932Z",
+    "created_at": "2026-08-28T06:04:11.932Z",
+    "updated_at": "2026-08-28T06:04:11.932Z",
+    "alumnus": 25,
+    "category": "academic",
+    "title_uz": "",
+    "title_ru": "",
+    "title_en": "",
+    "content_uz": "Ilm va ta’limga intilish — insonni doimo yuksak marralarga yetaklaydi. O‘z ustingizda tinimsiz ishlang va tanlagan sohangizning yetuk mutaxassisi bo‘ling.",
+    "content_ru": "Стремление к науке и образованию всегда ведет человека к высоким достижениям. Неустанно работайте над собой и стремитесь стать ведущим экспертом в выбранной сфере.",
+    "content_en": "The pursuit of knowledge and education always leads to great accomplishments. Work relentlessly on self-improvement and become a leading expert in your field.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 45,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:04:11.933Z",
+    "created_at": "2026-08-28T06:04:11.933Z",
+    "updated_at": "2026-08-28T06:04:11.933Z",
+    "alumnus": 26,
+    "category": "leadership",
+    "title_uz": "",
+    "title_ru": "",
+    "title_en": "",
+    "content_uz": "Zamonaviy bilim, axborot texnologiyalari va kuchli intizom har qanday sohada muvaffaqiyat garovidir. Doimo yangilikka ochiq bo‘ling.",
+    "content_ru": "Современные знания, информационные технологии и строгая дисциплина — залог успеха в любой отрасли. Всегда будьте открыты новым возможностям.",
+    "content_en": "Modern knowledge, information technologies, and strong discipline are the keys to success in any domain. Always stay open to innovation.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 46,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:04:11.940Z",
+    "created_at": "2026-08-28T06:04:11.940Z",
+    "updated_at": "2026-08-28T06:04:11.940Z",
+    "alumnus": 27,
+    "category": "discipline",
+    "title_uz": "",
+    "title_ru": "",
+    "title_en": "",
+    "content_uz": "Qat’iyat, jismoniy va ma’naviy yetuklik hamda Vatan oldidagi burchga sadoqat har bir yoshning hayotiy dasturilamali bo‘lishi lozim.",
+    "content_ru": "Целеустремлённость, физическая и духовная зрелость, а также верность долгу перед Родиной должны быть главным жизненным ориентиром каждого молодого человека.",
+    "content_en": "Determination, physical and moral integrity, and steadfast dedication to serving one's homeland should guide every young professional.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 47,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:04:11.946Z",
+    "created_at": "2026-08-28T06:04:11.946Z",
+    "updated_at": "2026-08-28T06:04:11.946Z",
+    "alumnus": 28,
+    "category": "career",
+    "title_uz": "",
+    "title_ru": "",
+    "title_en": "",
+    "content_uz": "Sanoat va iqtisodiyotda aniq maqsad, tizimli tahlil va qat’iy mehnat muvaffaqiyat keltiradi. Har bir loyihaga mas’uliyat bilan yondashing.",
+    "content_ru": "В промышленности и экономике успех достигается четкими целями, системным анализом и упорным трудом. Подходите к каждому проекту с высокой ответственностью.",
+    "content_en": "In industry and economy, success is driven by clear objectives, systematic analysis, and dedicated effort. Approach every project with utmost accountability.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 48,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:04:11.950Z",
+    "created_at": "2026-08-28T06:04:11.950Z",
+    "updated_at": "2026-08-28T06:04:11.950Z",
+    "alumnus": 29,
+    "category": "leadership",
+    "title_uz": "",
+    "title_ru": "",
+    "title_en": "",
+    "content_uz": "Qonun ustuvorligi, halollik va adolatga sadoqat — huquqshunoslikning eng oliy qadriyatlaridir. O‘z prinsiplaringizda qat’iy turing.",
+    "content_ru": "Верховенство закона, честность и преданность справедливости — высшие ценности юриспруденции. Будьте тверды в своих профессиональных принципах.",
+    "content_en": "The rule of law, integrity, and dedication to justice are the highest ideals in law. Stand firm by your core values.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 49,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:04:11.955Z",
+    "created_at": "2026-08-28T06:04:11.955Z",
+    "updated_at": "2026-08-28T06:04:11.955Z",
+    "alumnus": 30,
+    "category": "society",
+    "title_uz": "",
+    "title_ru": "",
+    "title_en": "",
+    "content_uz": "Mahalla — jamiyat tayanchi. Xalqimiz bilan hamnafas yashash, har bir insonning dardu tashvishi bilan qiziqish — eng oliy mas’uliyatdir.",
+    "content_ru": "Махалля — основа общества. Жить в гармонии с народом и заботиться о благополучии каждого человека — наша высшая гражданская ответственность.",
+    "content_en": "The neighborhood (mahalla) is the pillar of society. Living in harmony with people and addressing their needs is the highest public duty.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 50,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:04:11.960Z",
+    "created_at": "2026-08-28T06:04:11.960Z",
+    "updated_at": "2026-08-28T06:04:11.960Z",
+    "alumnus": 36,
+    "category": "academic",
+    "title_uz": "",
+    "title_ru": "",
+    "title_en": "",
+    "content_uz": "Matematika va aniq fanlar inson tafakkurini charxlaydi. Doimiy izlanish va chuqur bilim orqali ilm-fanda yuksak natijalarga erishish mumkin.",
+    "content_ru": "Математика и точные науки развивают гибкость мышления. Лишь благодаря непрерывному поиску и глубоким знаниям достигаются вершины науки.",
+    "content_en": "Mathematics and exact sciences sharpen human intellect. Through continuous research and profound knowledge, one can reach the highest peaks of science.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 51,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:04:11.960Z",
+    "created_at": "2026-08-28T06:04:11.960Z",
+    "updated_at": "2026-08-28T06:04:11.960Z",
+    "alumnus": 32,
+    "category": "business",
+    "title_uz": "",
+    "title_ru": "",
+    "title_en": "",
+    "content_uz": "Tadbirkorlikda aniq hisob-kitob, yangilikka intilish va sifat eng muhim omildir. O‘z biznesingizda qat’iyatli bo‘ling.",
+    "content_ru": "В предпринимательстве решающими факторами являются точный расчет, стремление к инновациям и бескомпромиссное качество. Будьте настойчивы в своем деле.",
+    "content_en": "In entrepreneurship, precise calculation, striving for innovation, and quality are key factors. Be persistent in your vision.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 52,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:04:11.970Z",
+    "created_at": "2026-08-28T06:04:11.970Z",
+    "updated_at": "2026-08-28T06:04:11.970Z",
+    "alumnus": 31,
+    "category": "culture",
+    "title_uz": "",
+    "title_ru": "",
+    "title_en": "",
+    "content_uz": "Milliy qadriyatlarimiz, boy tariximiz va adabiyotimizni asrab-avaylash, yosh avlod qalbiga vatanparvarlik va ma’naviyat tuyg‘ularini singdirish har birimizning sharafli burchimizdir.",
+    "content_ru": "Сохранение нашего богатого историко-культурного наследия и литературы, воспитание патриотизма и высокой духовности у молодёжи — наш благородный долг.",
+    "content_en": "Preserving our cultural heritage, rich history, and literature, while inspiring patriotism and spirituality in future generations, is our noble responsibility.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 53,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:04:11.974Z",
+    "created_at": "2026-08-28T06:04:11.974Z",
+    "updated_at": "2026-08-28T06:04:11.974Z",
+    "alumnus": 33,
+    "category": "engineering",
+    "title_uz": "",
+    "title_ru": "",
+    "title_en": "",
+    "content_uz": "Muhandislik va zamonaviy texnologiyalar yurtimiz taraqqiyotining asosiy drayveridir. Amaliy ko‘nikma va ilmiy izlanishni uyg‘unlashtirgan mutaxassis har doim talabgir bo‘ladi.",
+    "content_ru": "Инженерия и современные технологии — главный двигатель прогресса. Специалист, сочетающий практические навыки с научными исследованиями, всегда будет востребован.",
+    "content_en": "Engineering and modern technologies are key drivers of development. Professionals who bridge hands-on skills with rigorous research will always be in high demand.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 54,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:04:11.977Z",
+    "created_at": "2026-08-28T06:04:11.980Z",
+    "updated_at": "2026-08-28T06:04:11.980Z",
+    "alumnus": 34,
+    "category": "media",
+    "title_uz": "",
+    "title_ru": "",
+    "title_en": "",
+    "content_uz": "Jurnalistika — xolislik, teran mushohada va so‘z mas’uliyatini talab qiluvchi kasbdir. Doimo haqqoniy va xalq dardi bilan yozing.",
+    "content_ru": "Журналистика требует беспристрастности, глубокого осмысления и высокой ответственности за каждое слово. Всегда пишите правдиво и во благо общества.",
+    "content_en": "Journalism demands impartiality, deep reflection, and responsibility for the written word. Always remain truthful and devoted to public interest.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+},
+{
+  "model": "editorial.alumniadvice",
+  "pk": 55,
+  "fields": {
+    "is_featured": true,
+    "is_published": true,
+    "published_at": "2026-08-28T06:04:11.981Z",
+    "created_at": "2026-08-28T06:04:11.981Z",
+    "updated_at": "2026-08-28T06:04:11.981Z",
+    "alumnus": 35,
+    "category": "media",
+    "title_uz": "",
+    "title_ru": "",
+    "title_en": "",
+    "content_uz": "Efir madaniyati, samimiyat va so‘z qudratini his etish — jurnalistikaning jon tomiridir. Tinglovchi va tomoshabin mehrini qozonish uchun doimo fidoyi bo‘ling.",
+    "content_ru": "Культура эфира, искренность и чувство силы слова — душа журналистики. Чтобы завоевать признание аудитории, отдавайте профессии все сердце.",
+    "content_en": "Broadcasting culture, sincerity, and mastering the power of language are the lifeblood of journalism. Dedicated service wins the audience's lasting trust.",
+    "source_type": "manual",
+    "source_interview_item": null
+  }
+}
+]
