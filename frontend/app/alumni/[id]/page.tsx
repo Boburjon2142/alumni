@@ -195,8 +195,11 @@ export default async function Profile({ params }: Props) {
                 <ol className="career-timeline">
                   {a.timeline.map((item) => (
                     <li key={item.id}>
-                      <time>{item.year}</time>
-                      <div>
+                      <time className="timeline-year">{item.year}</time>
+                      <div className="timeline-marker">
+                        <span className="timeline-dot" aria-hidden="true" />
+                      </div>
+                      <div className="timeline-content">
                         <h3>{item.title}</h3>
                         {item.organization && <strong>{item.organization}</strong>}
                         {item.description && <p>{item.description}</p>}
