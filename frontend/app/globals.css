@@ -3976,14 +3976,14 @@ button:disabled { cursor: not-allowed; }
 
 .timeline-card-section {
   background: #f8fafc;
-  padding: 36px 36px 20px 36px !important;
+  padding: 40px 40px 24px 44px !important;
   border: 1px solid #e2e8f0 !important;
   border-radius: 20px;
   box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
 }
 
 .timeline-card-section h2 {
-  margin: 0 0 28px !important;
+  margin: 0 0 32px !important;
   color: #0d1667;
   font-size: 24px !important;
   font-weight: 700;
@@ -3995,7 +3995,7 @@ button:disabled { cursor: not-allowed; }
   flex-direction: column !important;
   gap: 0 !important;
   margin: 0 !important;
-  padding: 0 0 0 8px !important;
+  padding: 0 0 0 16px !important;
   list-style: none !important;
 }
 
@@ -4004,7 +4004,7 @@ button:disabled { cursor: not-allowed; }
   position: absolute !important;
   top: 10px !important;
   bottom: 24px !important;
-  left: 72px !important;
+  left: 88px !important;
   width: 2px !important;
   background: #e2e8f0 !important;
 }
@@ -4012,9 +4012,9 @@ button:disabled { cursor: not-allowed; }
 .career-timeline li {
   position: relative !important;
   display: grid !important;
-  grid-template-columns: 56px 1fr !important;
-  gap: 34px !important;
-  padding: 0 0 28px !important;
+  grid-template-columns: 60px 1fr !important;
+  gap: 40px !important;
+  padding: 0 0 32px !important;
   align-items: start !important;
 }
 
@@ -4022,7 +4022,7 @@ button:disabled { cursor: not-allowed; }
   content: "" !important;
   position: absolute !important;
   top: 6px !important;
-  left: 67px !important;
+  left: 83px !important;
   width: 12px !important;
   height: 12px !important;
   border: 3px solid #ffffff !important;
