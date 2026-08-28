@@ -7,9 +7,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=${POSTGRES_USER}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER:-alumni_user}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-alumni_password_2026}
+      - POSTGRES_DB=${POSTGRES_DB:-alumni_db}
     networks:
       - alumni_network
 
@@ -24,17 +24,16 @@ services:
       - USE_POSTGRES=true
       - POSTGRES_DB=${POSTGRES_DB:-alumni_db}
       - POSTGRES_USER=${POSTGRES_USER:-alumni_user}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-alumni_password_2026}
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
-      - DATABASE_URL=postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:-django-insecure-secret-key-qardu-alumni-production-2026}
       - DJANGO_DEBUG=False
       - DJANGO_ALLOWED_HOSTS=*
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - TELEGRAM_ADMIN_CHAT_ID=${TELEGRAM_ADMIN_CHAT_ID}
-      - CSRF_TRUSTED_ORIGINS=http://${DOMAIN},https://${DOMAIN},http://89.39.95.153,https://89.39.95.153
-      - CORS_ALLOWED_ORIGINS=http://${DOMAIN},https://${DOMAIN},http://89.39.95.153,https://89.39.95.153
+      - CSRF_TRUSTED_ORIGINS=http://${DOMAIN:-89.39.95.153},https://${DOMAIN:-89.39.95.153},http://89.39.95.153,http://localhost:3000
+      - CORS_ALLOWED_ORIGINS=http://${DOMAIN:-89.39.95.153},https://${DOMAIN:-89.39.95.153},http://89.39.95.153,http://localhost:3000
     ports:
       - "127.0.0.1:8005:8000"
     depends_on:
@@ -47,7 +46,7 @@ services:
     restart: always
     environment:
       - API_URL=http://backend:8000/api/v1
-      - NEXT_PUBLIC_API_URL=http://${DOMAIN}/api/v1
+      - NEXT_PUBLIC_API_URL=http://${DOMAIN:-89.39.95.153}/api/v1
     ports:
       - "127.0.0.1:3005:3000"
     networks:
