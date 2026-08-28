@@ -90,7 +90,7 @@ class Achievement(models.Model):
     class Category(models.TextChoices):
         PROFESSIONAL="professional", "Professional"; ACADEMIC="academic", "Academic"; PUBLIC_SERVICE="public_service", "Public Service"; LEADERSHIP="leadership", "Leadership"; INTERNATIONAL="international", "International"; AWARD="award", "Award"; INNOVATION="innovation", "Innovation"
     alumnus = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name="achievements")
-    title = models.CharField(max_length=220)
+    title = models.CharField(max_length=500)
     description = models.TextField(blank=True, max_length=1200)
     year = models.PositiveSmallIntegerField(null=True, blank=True)
     category = models.CharField(max_length=32, choices=Category.choices, default=Category.PROFESSIONAL)
@@ -103,7 +103,7 @@ class CareerTimelineItem(models.Model):
         EDUCATION="education", "Education"; CAREER="career", "Career"; AWARD="award", "Award"; LEADERSHIP="leadership", "Leadership"; MILESTONE="milestone", "Milestone"
     alumnus = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name="timeline")
     year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1956), MaxValueValidator(date.today().year + 1)])
-    title = models.CharField(max_length=220)
+    title = models.CharField(max_length=500)
     organization = models.CharField(max_length=180, blank=True)
     description = models.TextField(blank=True, max_length=1200)
     type = models.CharField(max_length=24, choices=Type.choices, default=Type.CAREER)
