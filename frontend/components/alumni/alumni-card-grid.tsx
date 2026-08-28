@@ -20,12 +20,19 @@ export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: L
   const load = (nextSlug: string) => {
     setLoading(true);
     setError(false);
-    setProfile(null);
     const controller = new AbortController();
     getAlumniPreview(nextSlug, controller.signal)
-      .then(setProfile)
+      .then((fullData) => {
+        setProfile((prev) => (prev ? { ...prev, ...fullData } : (fullData as AlumniPreview)));
+      })
       .catch((err) => {
-        if (err.name !== "AbortError") setError(true);
+        if (err.name !== "AbortError") {
+          // If no initial profile exists, flag error
+          setProfile((prev) => {
+            if (!prev) setError(true);
+            return prev;
+          });
+        }
       })
       .finally(() => setLoading(false));
     return controller;
@@ -39,11 +46,15 @@ export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: L
 
   const openProfile = (item: Alumni, event: React.MouseEvent<HTMLButtonElement>) => {
     triggerRef.current = event.currentTarget;
+    setProfile(item as any);
     setSlug(item.slug);
   };
 
   const close = (open: boolean) => {
-    if (!open) setSlug(null);
+    if (!open) {
+      setSlug(null);
+      setProfile(null);
+    }
   };
 
   return (
@@ -64,10 +75,11 @@ export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: L
 
           return (
             <button
-              type="button"
-              className="alumni-card alumni-card-minimal alumni-card-fullphoto"
-              onClick={(event) => openProfile(item, event)}
               key={item.id}
+              type="button"
+              className="minimal-alumni-card"
+              onClick={(e) => openProfile(item, e)}
+              aria-haspopup="dialog"
               aria-label={ariaLabel}
             >
               <div className="card-photo-container">
@@ -84,8 +96,8 @@ export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: L
                   {item.position && (
                     <span className="minimal-card-role">{item.position}</span>
                   )}
-                  <span className="minimal-card-hint" aria-hidden="true">
-                    {hint} <ArrowRight size={14} />
+                  <span className="minimal-card-cta">
+                    {hint} <ArrowRight aria-hidden="true" />
                   </span>
                 </div>
               </div>
@@ -93,12 +105,13 @@ export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: L
           );
         })}
       </div>
+
       <AlumniQuickProfile
-        open={!!slug}
+        open={Boolean(slug)}
         onOpenChange={close}
         profile={profile}
-        loading={loading}
-        error={error}
+        loading={loading && !profile}
+        error={error && !profile}
         onRetry={() => slug && load(slug)}
         locale={locale}
         returnFocus={() => triggerRef.current?.focus()}
