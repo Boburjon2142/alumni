@@ -46,13 +46,18 @@ def seed_all():
     for item in data:
         if item["model"] == "alumni.alumniprofile":
             fields = item["fields"]
+            slug = fields.get("slug", "")
+            img_url = fields.get("image_url", "")
+            if not img_url and slug:
+                img_url = f"/images/faxriylar/{slug}.png"
+
             AlumniProfile.objects.update_or_create(
                 id=item["pk"],
                 defaults={
                     "full_name": fields.get("full_name", ""),
-                    "slug": fields.get("slug", ""),
+                    "slug": slug,
                     "avatar": fields.get("avatar", ""),
-                    "image_url": fields.get("image_url", ""),
+                    "image_url": img_url,
                     "image_alt": fields.get("image_alt", ""),
                     "degree": fields.get("degree", ""),
                     "faculty_id": fields.get("faculty"),

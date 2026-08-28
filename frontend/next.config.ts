@@ -1,11 +1,13 @@
 import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   distDir: process.env.NODE_ENV === "production" ? ".next-build" : ".next",
-  images: { remotePatterns: [
-    { protocol: "http", hostname: "localhost" },
-    { protocol: "http", hostname: "127.0.0.1" },
-    { protocol: "https", hostname: "images.unsplash.com", pathname: "/photo-**" },
-  ] },
+  images: {
+    unoptimized: true,
+    remotePatterns: [
+      { protocol: "http", hostname: "**" },
+      { protocol: "https", hostname: "**" },
+    ],
+  },
   async redirects() {
     return [
       {
