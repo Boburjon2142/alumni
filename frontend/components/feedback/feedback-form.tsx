@@ -138,13 +138,13 @@ export function FeedbackForm({
         name: name.trim() || undefined,
         contact: contact.trim() || undefined,
         message: message.trim(),
-        page_url: initialUrl || (typeof window !== "undefined" ? window.location.href : undefined),
+        page_url: initialUrl || (typeof window !== "undefined" ? window.location.href : "http://89.39.95.153/feedback"),
         page_type: initialStoryId ? "story_detail" : "feedback_page",
       });
       setSubmitted(true);
-    } catch (err) {
-      console.error(err);
-      setErrorMsg(t.feedbackError);
+    } catch (err: any) {
+      console.error("Feedback form error:", err);
+      setErrorMsg(err?.message || t.feedbackError);
     } finally {
       setLoading(false);
     }
