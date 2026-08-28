@@ -32,7 +32,7 @@ export function AlumniQuickProfile({open,onOpenChange,profile,loading,error,onRe
           {!loading && error && <div className="quick-profile-error" role="alert"><p>{t.error}</p><button type="button" onClick={onRetry}>{t.retry}</button></div>}
           {!loading && !error && profile && <>
             <header className="quick-profile-header">
-              <RemoteImage className="quick-profile-photo" src={profile.avatar||profile.image_url} alt={profile.image_alt||`${profile.full_name} portreti`} fallback={initials} sizes="(max-width: 640px) 100vw, 280px"/>
+              <RemoteImage className="quick-profile-photo" src={profile.image_url || profile.avatar || `/images/faxriylar/${profile.slug}.png`} alt={profile.image_alt||`${profile.full_name} portreti`} fallback={initials} sizes="(max-width: 640px) 100vw, 280px"/>
               <div>
                 {profile.verified && <span className="quick-verified"><BadgeCheck aria-hidden="true"/>{t.verified}</span>}
                 <Dialog.Title>{profile.full_name}</Dialog.Title>

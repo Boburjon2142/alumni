@@ -73,7 +73,7 @@ export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: L
               <div className="card-photo-container">
                 <RemoteImage
                   className="alumni-card-image-full"
-                  src={item.avatar || item.image_url}
+                  src={item.image_url || item.avatar || `/images/faxriylar/${item.slug}.png`}
                   alt={item.image_alt || `${item.full_name} portreti`}
                   fallback={initials}
                   sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, (max-width: 1180px) 33vw, 25vw"
