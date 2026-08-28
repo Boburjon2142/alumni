@@ -4,17 +4,18 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
 
-    const baseUrls = Array.from(new Set([
+    const candidates = [
       process.env.API_URL,
       "http://backend:8000/api/v1",
-      process.env.NEXT_PUBLIC_API_URL,
       "http://127.0.0.1:8000/api/v1",
-    ].filter(Boolean))) as string[];
+    ].filter(Boolean) as string[];
 
-    for (const base of baseUrls) {
+    let lastError: any = null;
+
+    for (const base of candidates) {
       try {
-        const url = `${base.replace(/\/$/, "")}/feedback/`;
-        const response = await fetch(url, {
+        const targetUrl = `${base.replace(/\/$/, "")}/feedback/`;
+        const response = await fetch(targetUrl, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -24,34 +25,37 @@ export async function POST(request: Request) {
           cache: "no-store",
         });
 
+        const data = await response.json().catch(() => ({}));
+
         if (response.ok) {
-          const data = await response.json();
           return NextResponse.json(data, { status: 201 });
         } else {
-          const errData = await response.json().catch(() => ({}));
           const detailMsg =
-            errData?.message ||
-            errData?.detail ||
-            (typeof errData === "object" ? Object.values(errData).flat().join(" ") : "") ||
-            "Murojaatni saqlashda xatolik yuz berdi";
+            data?.error?.message ||
+            (data?.error?.fields ? Object.entries(data.error.fields).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(", ") : v}`).join("; ") : null) ||
+            data?.message ||
+            data?.detail ||
+            "Murojaat ma'lumotlarini tekshiring";
+
           return NextResponse.json(
-            { detail: detailMsg, errors: errData },
+            { detail: detailMsg, errors: data },
             { status: response.status }
           );
         }
-      } catch (err) {
+      } catch (err: any) {
+        lastError = err;
         console.error(`Failed to post feedback to ${base}:`, err);
       }
     }
 
     return NextResponse.json(
-      { detail: "Backend xizmati bilan ulanishda xatolik yuz berdi" },
+      { detail: `Backend xizmatiga ulanib bo'lmadi: ${lastError?.message || 'aloqa mavjud emas'}` },
       { status: 502 }
     );
-  } catch (error) {
-    console.error("Feedback proxy error:", error);
+  } catch (error: any) {
+    console.error("Feedback route error:", error);
     return NextResponse.json(
-      { detail: "Murojaatni qayta ishlashda xatolik yuz berdi" },
+      { detail: `Xatolik yuz berdi: ${error?.message || 'Server xatosi'}` },
       { status: 500 }
     );
   }
