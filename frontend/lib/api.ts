@@ -48,7 +48,10 @@ export const sendFeedback = (payload: FeedbackPayload) =>
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
-  }).then((res) => {
-    if (!res.ok) throw new Error("Feedback request failed");
+  }).then(async (res) => {
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.detail || "Feedback request failed");
+    }
     return res.json() as Promise<FeedbackResponse>;
   });

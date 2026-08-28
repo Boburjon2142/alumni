@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Feedback
 
 class FeedbackSerializer(serializers.ModelSerializer):
+    page_url = serializers.CharField(required=False, allow_blank=True, max_length=500, default="")
+
     class Meta:
         model = Feedback
         fields = ("id", "type", "name", "contact", "message", "page_type", "page_url", "alumni", "story", "created_at")
