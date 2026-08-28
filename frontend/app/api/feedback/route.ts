@@ -27,11 +27,16 @@ export async function POST(request: Request) {
         if (response.ok) {
           const data = await response.json();
           return NextResponse.json(data, { status: 201 });
-        } else if (response.status === 400) {
+        } else {
           const errData = await response.json().catch(() => ({}));
+          const detailMsg =
+            errData?.message ||
+            errData?.detail ||
+            (typeof errData === "object" ? Object.values(errData).flat().join(" ") : "") ||
+            "Murojaatni saqlashda xatolik yuz berdi";
           return NextResponse.json(
-            { detail: "Murojaat ma'lumotlarini tekshiring", errors: errData },
-            { status: 400 }
+            { detail: detailMsg, errors: errData },
+            { status: response.status }
           );
         }
       } catch (err) {
