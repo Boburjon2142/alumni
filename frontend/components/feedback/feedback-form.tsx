@@ -40,6 +40,9 @@ export function FeedbackForm({
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
+  const [focusedIndex, setFocusedIndex] = useState(-1);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
   // Close dropdown on outside click
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -47,14 +50,9 @@ export function FeedbackForm({
         setDropdownOpen(false);
       }
     }
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") setDropdownOpen(false);
-    }
     document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
     };
   }, []);
 
@@ -194,14 +192,53 @@ export function FeedbackForm({
               <span className="required-star">*</span>
             </label>
 
-            <div className="custom-dropdown-container" ref={dropdownRef}>
+            <div 
+              className="custom-dropdown-container" 
+              ref={dropdownRef}
+              onKeyDown={(e) => {
+                if (!dropdownOpen) {
+                  if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    setDropdownOpen(true);
+                    setFocusedIndex(types.findIndex(t => t.value === type));
+                  }
+                  return;
+                }
+                
+                if (e.key === "ArrowDown") {
+                  e.preventDefault();
+                  setFocusedIndex((prev) => (prev + 1) % types.length);
+                } else if (e.key === "ArrowUp") {
+                  e.preventDefault();
+                  setFocusedIndex((prev) => (prev - 1 + types.length) % types.length);
+                } else if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  if (focusedIndex >= 0) {
+                    setType(types[focusedIndex].value);
+                    setDropdownOpen(false);
+                    triggerRef.current?.focus();
+                  }
+                } else if (e.key === "Escape") {
+                  e.preventDefault();
+                  setDropdownOpen(false);
+                  triggerRef.current?.focus();
+                } else if (e.key === "Tab") {
+                  setDropdownOpen(false);
+                }
+              }}
+            >
               <button
                 type="button"
+                ref={triggerRef}
                 className={`custom-dropdown-trigger ${dropdownOpen ? "open" : ""}`}
-                onClick={() => setDropdownOpen((prev) => !prev)}
+                onClick={() => {
+                  if (!dropdownOpen) setFocusedIndex(types.findIndex(t => t.value === type));
+                  setDropdownOpen((prev) => !prev);
+                }}
                 aria-haspopup="listbox"
                 aria-expanded={dropdownOpen}
                 aria-controls="feedback-type-options"
+                aria-activedescendant={dropdownOpen && focusedIndex >= 0 ? `feedback-type-option-${types[focusedIndex].value}` : undefined}
               >
                 <div className="trigger-left">
                   <div className={`trigger-icon-badge ${selectedType.colorClass}`}>
@@ -220,19 +257,22 @@ export function FeedbackForm({
 
               {dropdownOpen && (
                 <div id="feedback-type-options" className="custom-dropdown-menu" role="listbox">
-                  {types.map((item) => {
+                  {types.map((item, index) => {
                     const ItemIcon = item.icon;
                     const isSelected = item.value === type;
+                    const isFocused = index === focusedIndex;
                     return (
                       <button
                         key={item.value}
+                        id={`feedback-type-option-${item.value}`}
                         type="button"
-                        className={`custom-dropdown-option ${isSelected ? "selected" : ""}`}
+                        className={`custom-dropdown-option ${isSelected ? "selected" : ""} ${isFocused ? "focused" : ""}`}
                         role="option"
                         aria-selected={isSelected}
                         onClick={() => {
                           setType(item.value);
                           setDropdownOpen(false);
+                          triggerRef.current?.focus();
                         }}
                       >
                         <div className={`option-icon-badge ${item.colorClass}`}>
@@ -303,7 +343,7 @@ export function FeedbackForm({
                       : "+998 90 123 45 67 yoki email@qarshidu.uz"
                   }
                   className="feedback-input"
-                  autoComplete="email tel"
+                  autoComplete="off"
                   maxLength={160}
                 />
               </div>

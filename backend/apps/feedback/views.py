@@ -1,9 +1,12 @@
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+import logging
 from .models import Feedback
 from .serializers import FeedbackSerializer
 from .telegram import send_telegram_notification
+
+logger = logging.getLogger(__name__)
 
 class FeedbackCreateView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
@@ -12,7 +15,10 @@ class FeedbackCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         ip = self.request.META.get("HTTP_X_FORWARDED_FOR", self.request.META.get("REMOTE_ADDR", ""))
         feedback = serializer.save(ip_address=ip[:45] if ip else None)
-        send_telegram_notification(feedback)
+        try:
+            send_telegram_notification(feedback)
+        except Exception as e:
+            logger.error(f"Failed to send telegram notification: {e}")
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)

@@ -119,7 +119,7 @@ export type Page<T> = {
 };
 
 export type FeedbackPayload = {
-  type: string;
+  type: "proposal" | "question" | "error_report" | "additional_info" | "other";
   name?: string;
   contact?: string;
   message: string;
@@ -128,8 +128,20 @@ export type FeedbackPayload = {
 };
 
 export type FeedbackResponse = {
-  id: number;
-  status: string;
+  success: boolean;
+  message: string;
+  data: {
+    id: number;
+    type: string;
+    name: string;
+    contact: string;
+    message: string;
+    page_type: string;
+    page_url: string;
+    alumni: number | null;
+    story: number | null;
+    created_at: string;
+  };
 };
 
 export type StorySection = {

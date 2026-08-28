@@ -36,7 +36,9 @@ export const getStoryBySlug = (slug: string) => request<SuccessStory>(`/stories/
 
 export const getAdvice = (query = "") => request<Page<Advice>>(`/advice/${query ? `?${query}` : ""}`);
 export const getFaculties = () =>
-  request<any>("/faculties/").then((res) => (Array.isArray(res) ? res : res.data ?? []));
+  request<Faculty[] | { data: Faculty[] }>("/faculties/").then((res) =>
+    Array.isArray(res) ? res : (res as { data: Faculty[] }).data ?? []
+  );
 
 export const sendFeedback = (payload: FeedbackPayload) =>
   fetch("/api/feedback", {

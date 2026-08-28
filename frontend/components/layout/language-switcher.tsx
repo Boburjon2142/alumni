@@ -18,6 +18,8 @@ function Flag({ code }: { code: Locale }) {
 export function LanguageSwitcher({ locale }: { locale: Locale }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const [focusedIndex, setFocusedIndex] = useState(-1);
   const current = options.find(item => item.code === locale)!;
 
   useEffect(() => {
@@ -39,12 +41,49 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
   }
 
   return (
-    <div className="language-switcher" ref={ref}>
+    <div 
+      className="language-switcher" 
+      ref={ref}
+      onKeyDown={(e) => {
+        if (!open) {
+          if (e.key === "ArrowDown" || e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setOpen(true);
+            setFocusedIndex(options.findIndex(o => o.code === locale));
+          }
+          return;
+        }
+
+        if (e.key === "ArrowDown") {
+          e.preventDefault();
+          setFocusedIndex(prev => (prev + 1) % options.length);
+        } else if (e.key === "ArrowUp") {
+          e.preventDefault();
+          setFocusedIndex(prev => (prev - 1 + options.length) % options.length);
+        } else if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          if (focusedIndex >= 0) {
+            select(options[focusedIndex].code);
+          }
+        } else if (e.key === "Escape") {
+          e.preventDefault();
+          setOpen(false);
+          triggerRef.current?.focus();
+        } else if (e.key === "Tab") {
+          setOpen(false);
+        }
+      }}
+    >
       <button
+        ref={triggerRef}
         className="language-trigger"
-        onClick={() => setOpen(!open)}
+        onClick={() => {
+          if (!open) setFocusedIndex(options.findIndex(o => o.code === locale));
+          setOpen(!open);
+        }}
         aria-expanded={open}
         aria-haspopup="menu"
+        aria-controls="language-menu-options"
         type="button"
       >
         <Flag code={locale}/>
@@ -52,22 +91,27 @@ export function LanguageSwitcher({ locale }: { locale: Locale }) {
         <ChevronDown className="lang-chevron" aria-hidden="true"/>
       </button>
       {open && (
-        <div className="language-menu" role="menu">
-          {options.map(item => (
-            <button
-              key={item.code}
-              role="menuitem"
-              type="button"
-              className={item.code === locale ? "active" : ""}
-              onClick={() => select(item.code)}
-            >
-              <div className="lang-option-left">
-                <Flag code={item.code}/>
-                <span>{item.label}</span>
-              </div>
-              {item.code === locale && <Check size={16} className="lang-check"/>}
-            </button>
-          ))}
+        <div id="language-menu-options" className="language-menu" role="menu" aria-activedescendant={focusedIndex >= 0 ? `lang-option-${options[focusedIndex].code}` : undefined}>
+          {options.map((item, index) => {
+            const isSelected = item.code === locale;
+            const isFocused = index === focusedIndex;
+            return (
+              <button
+                key={item.code}
+                id={`lang-option-${item.code}`}
+                role="menuitem"
+                type="button"
+                className={`${isSelected ? "active" : ""} ${isFocused ? "focused" : ""}`}
+                onClick={() => select(item.code)}
+              >
+                <div className="lang-option-left">
+                  <Flag code={item.code}/>
+                  <span>{item.label}</span>
+                </div>
+                {isSelected && <Check size={16} className="lang-check"/>}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
