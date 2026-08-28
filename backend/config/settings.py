@@ -62,15 +62,18 @@ REST_FRAMEWORK = {
     "EXCEPTION_HANDLER": "common.exceptions.api_exception_handler",
 }
 SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SECURE = not DEBUG
+SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "false").lower() == "true"
 SESSION_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = os.getenv("CSRF_COOKIE_SECURE", "false").lower() == "true"
 SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = "DENY"
 
+raw_csrf = os.getenv("CSRF_TRUSTED_ORIGINS", "http://89.39.95.153,http://localhost:3000,http://127.0.0.1:3000,http://backend:8000,https://89.39.95.153").split(",")
+CSRF_TRUSTED_ORIGINS = [h.strip() for h in raw_csrf if h.strip()]
+
 # --- Production Security ---
-if not DEBUG:
-    SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "true").lower() == "true"
+if not DEBUG and os.getenv("SECURE_SSL_REDIRECT", "false").lower() == "true":
+    SECURE_SSL_REDIRECT = True
     SECURE_HSTS_SECONDS = int(os.getenv("SECURE_HSTS_SECONDS", "31536000"))
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True
