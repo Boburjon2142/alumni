@@ -14,7 +14,8 @@ DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
 if not DEBUG and SECRET_KEY == "dev-only-change-me":
     raise ImproperlyConfigured("SECRET_KEY cannot be 'dev-only-change-me' in production")
 
-ALLOWED_HOSTS = [h for h in os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",") if h]
+raw_hosts = os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+ALLOWED_HOSTS = list(set([h.strip() for h in raw_hosts if h.strip()] + ["localhost", "127.0.0.1", "backend", "web"]))
 
 INSTALLED_APPS = [
     "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes",
