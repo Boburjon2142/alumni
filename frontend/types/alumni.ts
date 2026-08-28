@@ -125,6 +125,8 @@ export type FeedbackPayload = {
   message: string;
   page_url?: string;
   page_type?: string;
+  alumni?: number | null;
+  story?: number | null;
 };
 
 export type FeedbackResponse = {
