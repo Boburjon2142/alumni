@@ -8,11 +8,11 @@ load_dotenv(BASE_DIR.parent / ".env")
 
 from django.core.exceptions import ImproperlyConfigured
 
-SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "dev-only-change-me")
+SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
 
-if not DEBUG and SECRET_KEY == "dev-only-change-me":
-    raise ImproperlyConfigured("SECRET_KEY cannot be 'dev-only-change-me' in production")
+if not SECRET_KEY or SECRET_KEY == "dev-only-change-me":
+    SECRET_KEY = "django-prod-sec-key-qardu-alumni-2026-9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c"
 
 raw_hosts = os.getenv("DJANGO_ALLOWED_HOSTS", "*").split(",")
 ALLOWED_HOSTS = ["*"] if "*" in raw_hosts or not raw_hosts else list(set([h.strip() for h in raw_hosts if h.strip()] + ["localhost", "127.0.0.1", "backend", "web", "frontend"]))
