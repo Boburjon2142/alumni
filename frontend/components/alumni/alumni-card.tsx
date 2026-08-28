@@ -9,7 +9,8 @@ export function AlumniCard({ alumni, featured = false, t }: { alumni: Alumni; fe
   return <article className={`alumni-card ${featured ? "featured-card" : ""}`}>
     <RemoteImage
       className="alumni-card-image"
-      src={alumni.avatar || alumni.image_url}
+      src={alumni.image_url || alumni.avatar || `/images/faxriylar/${alumni.slug}.png`}
+      slug={alumni.slug}
       alt={alumni.image_alt || `${alumni.full_name} portreti`}
       fallback={initials}
       sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"

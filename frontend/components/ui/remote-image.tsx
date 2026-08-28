@@ -19,6 +19,7 @@ export function RemoteImage({
   sizes,
   className = "",
   fallback,
+  slug,
   priority = false,
 }: {
   src?: string;
@@ -26,21 +27,38 @@ export function RemoteImage({
   sizes: string;
   className?: string;
   fallback?: string;
+  slug?: string;
   priority?: boolean;
 }) {
   const [failed, setFailed] = useState(false);
-  const imageSrc = formatSrc(src);
+  const [usingFallback, setUsingFallback] = useState(false);
+
+  const directSrc = formatSrc(src);
+  const localSlugSrc = slug ? `/images/faxriylar/${slug}.png` : undefined;
+
+  let activeSrc = directSrc;
+  if (!activeSrc || usingFallback) {
+    activeSrc = localSlugSrc;
+  }
+
+  const handleError = () => {
+    if (!usingFallback && localSlugSrc && directSrc !== localSlugSrc) {
+      setUsingFallback(true);
+    } else {
+      setFailed(true);
+    }
+  };
 
   return (
     <div className={`remote-image ${className}`}>
-      {imageSrc && !failed ? (
+      {activeSrc && !failed ? (
         <Image
-          src={imageSrc}
+          src={activeSrc}
           alt={alt}
           fill
           sizes={sizes}
           priority={priority}
-          onError={() => setFailed(true)}
+          onError={handleError}
         />
       ) : (
         <span className="remote-image-fallback" aria-label={alt}>

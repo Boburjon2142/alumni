@@ -55,7 +55,8 @@ export default async function Profile({ params }: Props) {
           <div className="honorary-profile-photo-wrapper">
             <RemoteImage
               className="honorary-profile-photo-img"
-              src={a.avatar || a.image_url}
+              src={a.image_url || a.avatar || `/images/faxriylar/${a.slug}.png`}
+              slug={a.slug}
               alt={a.image_alt || `${a.full_name} portreti`}
               fallback={initials}
               sizes="(max-width: 640px) 100vw, 320px"

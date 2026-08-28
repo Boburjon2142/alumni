@@ -31,7 +31,8 @@ export function AdviceCard({ advice, locale }: { advice: Advice; locale: Locale 
         <Link href={`/alumni/${alumnus.slug}`} className="advice-author-link">
           <RemoteImage
             className="advice-author-photo"
-            src={alumnus.avatar || alumnus.image_url}
+            src={alumnus.image_url || alumnus.avatar || `/images/faxriylar/${alumnus.slug}.png`}
+            slug={alumnus.slug}
             alt={`${alumnus.full_name} portreti`}
             fallback={initials}
             sizes="48px"
