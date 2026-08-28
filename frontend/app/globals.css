@@ -3976,9 +3976,93 @@ button:disabled { cursor: not-allowed; }
 
 .timeline-card-section {
   background: #f8fafc;
-  padding: 32px 28px !important;
+  padding: 36px 36px 20px 36px !important;
   border: 1px solid #e2e8f0 !important;
-  border-radius: 18px;
+  border-radius: 20px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+}
+
+.timeline-card-section h2 {
+  margin: 0 0 28px !important;
+  color: #0d1667;
+  font-size: 24px !important;
+  font-weight: 700;
+}
+
+.career-timeline {
+  position: relative;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+  margin: 0 !important;
+  padding: 0 0 0 8px !important;
+  list-style: none !important;
+}
+
+.career-timeline:before {
+  content: "" !important;
+  position: absolute !important;
+  top: 10px !important;
+  bottom: 24px !important;
+  left: 72px !important;
+  width: 2px !important;
+  background: #e2e8f0 !important;
+}
+
+.career-timeline li {
+  position: relative !important;
+  display: grid !important;
+  grid-template-columns: 56px 1fr !important;
+  gap: 34px !important;
+  padding: 0 0 28px !important;
+  align-items: start !important;
+}
+
+.career-timeline li:before {
+  content: "" !important;
+  position: absolute !important;
+  top: 6px !important;
+  left: 67px !important;
+  width: 12px !important;
+  height: 12px !important;
+  border: 3px solid #ffffff !important;
+  border-radius: 50% !important;
+  background: #612175 !important;
+  box-shadow: 0 0 0 2px #892376 !important;
+  z-index: 2 !important;
+}
+
+.career-timeline time {
+  color: #612175 !important;
+  font-size: 15px !important;
+  font-weight: 800 !important;
+  font-variant-numeric: tabular-nums !important;
+  line-height: 1.4 !important;
+  padding-top: 2px !important;
+  text-align: left !important;
+}
+
+.career-timeline h3 {
+  margin: 0 0 6px !important;
+  color: #0f172a !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  line-height: 1.4 !important;
+}
+
+.career-timeline strong {
+  display: block !important;
+  margin-top: 4px !important;
+  color: #64748b !important;
+  font-size: 13.5px !important;
+  font-weight: 500 !important;
+}
+
+.career-timeline p {
+  margin: 6px 0 0 !important;
+  color: #64748b !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
 }
 
 .profile-advice-quote {
@@ -4016,6 +4100,9 @@ button:disabled { cursor: not-allowed; }
   .honorary-profile-grid-2col {
     grid-template-columns: 1fr;
     gap: 40px;
+  }
+  .timeline-card-section {
+    padding: 28px 20px 16px 20px !important;
   }
 }
 
