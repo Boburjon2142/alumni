@@ -3,6 +3,9 @@ import html
 import requests
 import logging
 
+from pathlib import Path
+from dotenv import load_dotenv
+
 logger = logging.getLogger(__name__)
 
 def send_telegram_notification(feedback):
@@ -12,6 +15,13 @@ def send_telegram_notification(feedback):
     """
     bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
     chat_id = os.getenv("TELEGRAM_ADMIN_CHAT_ID")
+
+    if not bot_token or not chat_id:
+        base_dir = Path(__file__).resolve().parent.parent.parent
+        load_dotenv(base_dir / ".env")
+        load_dotenv(base_dir.parent / ".env")
+        bot_token = os.getenv("TELEGRAM_BOT_TOKEN")
+        chat_id = os.getenv("TELEGRAM_ADMIN_CHAT_ID")
 
     if not bot_token or not chat_id:
         logger.warning("Telegram bot token yoki admin chat ID sozlanmagan.")

@@ -1,6 +1,7 @@
-import { Filter, Search, GraduationCap, X } from "lucide-react";
+import { GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { AlumniCardGrid } from "@/components/alumni/alumni-card-grid";
+import { DirectoryFilters } from "@/components/alumni/directory-filters";
 import { getAlumni, getFaculties } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import type { Alumni, Faculty, Page } from "@/types/alumni";
@@ -60,71 +61,19 @@ export default async function AlumniPage({
           <p>{t.directoryText}</p>
         </div>
 
-        <form className="directory-controls" method="GET" action="/alumni">
-          <div className="directory-search">
-            <Search className="search-icon" aria-hidden="true" />
-            <label className="sr-only" htmlFor="alumni-search">
-              {t.search}
-            </label>
-            <input
-              id="alumni-search"
-              name="search"
-              defaultValue={params.search}
-              placeholder={t.searchPlaceholder}
-            />
-          </div>
-
-          <details className="filters" open={Boolean(params.faculty || params.graduation_year)}>
-            <summary className="filter-toggle-btn">
-              <Filter className="filter-icon" aria-hidden="true" />
-              <span>{t.filters}</span>
-              {(params.faculty || params.graduation_year) && (
-                <span className="active-filter-badge">
-                  {[params.faculty, params.graduation_year].filter(Boolean).length}
-                </span>
-              )}
-            </summary>
-            <div className="filter-grid">
-              <div className="filter-field">
-                <label htmlFor="filter-faculty">{t.faculty}</label>
-                <div className="select-wrapper">
-                  <select id="filter-faculty" name="faculty" defaultValue={params.faculty || ""}>
-                    <option value="">{t.allFaculties}</option>
-                    {faculties.map((f) => (
-                      <option key={f.id} value={f.name}>
-                        {f.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className="filter-field">
-                <label htmlFor="filter-grad-year">{t.year}</label>
-                <input
-                  id="filter-grad-year"
-                  name="graduation_year"
-                  type="number"
-                  defaultValue={params.graduation_year}
-                  placeholder="2010"
-                  min="1956"
-                  max={new Date().getFullYear()}
-                />
-              </div>
-            </div>
-          </details>
-
-          <div className="filter-actions-row">
-            <button type="submit" className="button button-primary submit-filter-btn">
-              {t.results}
-            </button>
-            {hasActiveFilters && (
-              <Link href="/alumni" className="button button-ghost clear-btn" title={t.clearFilters}>
-                <X size={16} /> {t.clearFilters}
-              </Link>
-            )}
-          </div>
-        </form>
+        <DirectoryFilters
+          faculties={faculties}
+          locale={locale}
+          translations={{
+            search: t.search,
+            searchPlaceholder: t.searchPlaceholder,
+            filters: t.filters,
+            faculty: t.faculty,
+            allFaculties: t.allFaculties,
+            year: t.year,
+            clearFilters: t.clearFilters,
+          }}
+        />
 
         {error ? (
           <div className="empty-state error-state">

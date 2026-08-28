@@ -47,8 +47,15 @@ export function FeedbackForm({
         setDropdownOpen(false);
       }
     }
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") setDropdownOpen(false);
+    }
     document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
   }, []);
 
   const types = [
@@ -194,6 +201,7 @@ export function FeedbackForm({
                 onClick={() => setDropdownOpen((prev) => !prev)}
                 aria-haspopup="listbox"
                 aria-expanded={dropdownOpen}
+                aria-controls="feedback-type-options"
               >
                 <div className="trigger-left">
                   <div className={`trigger-icon-badge ${selectedType.colorClass}`}>
@@ -211,7 +219,7 @@ export function FeedbackForm({
               </button>
 
               {dropdownOpen && (
-                <div className="custom-dropdown-menu" role="listbox">
+                <div id="feedback-type-options" className="custom-dropdown-menu" role="listbox">
                   {types.map((item) => {
                     const ItemIcon = item.icon;
                     const isSelected = item.value === type;
@@ -269,6 +277,7 @@ export function FeedbackForm({
                       : "Ali Valiyev"
                   }
                   className="feedback-input"
+                  autoComplete="name"
                   maxLength={160}
                 />
               </div>
@@ -294,6 +303,7 @@ export function FeedbackForm({
                       : "+998 90 123 45 67 yoki email@qarshidu.uz"
                   }
                   className="feedback-input"
+                  autoComplete="email tel"
                   maxLength={160}
                 />
               </div>

@@ -20,6 +20,21 @@ export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
     setOpen(false);
   }, [pathname]);
 
+  useEffect(() => {
+    if (!open) return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setOpen(false);
+    };
+
+    document.addEventListener("keydown", onKeyDown);
+    document.body.classList.add("nav-open");
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.classList.remove("nav-open");
+    };
+  }, [open]);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -37,7 +52,11 @@ export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
         </Link>
 
         {/* Navigation panel */}
-        <nav className={open ? "nav-links open" : "nav-links"} aria-label="Asosiy navigatsiya">
+        <nav
+          id="primary-navigation"
+          className={open ? "nav-links open" : "nav-links"}
+          aria-label="Asosiy navigatsiya"
+        >
           <div className="nav-menu-grid">
             <Link href="/" className={`nav-item-link ${pathname === "/" ? "active" : ""}`} onClick={close}>
               {t.navHome}
@@ -105,6 +124,7 @@ export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
             className="menu-button"
             onClick={() => setOpen(!open)}
             aria-expanded={open}
+            aria-controls="primary-navigation"
             aria-label={open ? "Menyuni yopish" : "Menyuni ochish"}
           >
             {open ? <X /> : <Menu />}

@@ -39,8 +39,11 @@ export const getFaculties = () =>
   request<any>("/faculties/").then((res) => (Array.isArray(res) ? res : res.data ?? []));
 
 export const sendFeedback = (payload: FeedbackPayload) =>
-  request<FeedbackResponse>("/feedback/", {
+  fetch("/api/feedback", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
+  }).then((res) => {
+    if (!res.ok) throw new Error("Feedback request failed");
+    return res.json() as Promise<FeedbackResponse>;
   });

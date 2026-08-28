@@ -147,9 +147,12 @@ export type SuccessStory = {
   title: string;
   title_uz: string;
   title_en?: string;
+  title_ru?: string;
   excerpt?: string;
+  summary?: string;
   summary_uz?: string;
   summary_en?: string;
+  summary_ru?: string;
   cover_image?: string;
   cover_alt?: string;
   hero_image?: string;
