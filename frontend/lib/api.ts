@@ -43,15 +43,25 @@ export const getFaculties = () =>
     Array.isArray(res) ? res : (res as { data: Faculty[] }).data ?? []
   );
 
-export const sendFeedback = (payload: FeedbackPayload) =>
-  fetch("/api/feedback", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  }).then(async (res) => {
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.detail || "Feedback request failed");
+export const sendFeedback = async (payload: FeedbackPayload): Promise<FeedbackResponse> => {
+  const endpoints = ["/api-proxy/feedback", "/api/feedback", "/api/v1/feedback/"];
+  let lastError: any = null;
+
+  for (const endpoint of endpoints) {
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (res.ok) {
+        return (await res.json()) as FeedbackResponse;
+      }
+    } catch (err) {
+      lastError = err;
     }
-    return res.json() as Promise<FeedbackResponse>;
-  });
+  }
+
+  throw new Error(lastError?.message || "Murojaatni yuborib bo‘lmadi");
+};
