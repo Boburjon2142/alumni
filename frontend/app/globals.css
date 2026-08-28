@@ -3938,6 +3938,88 @@ button:disabled { cursor: not-allowed; }
   color: #fde68a;
 }
 
+/* --- Honorary Profile 2-Column Responsive Layout --- */
+.honorary-profile-body {
+  padding-top: 60px !important;
+  padding-bottom: 96px !important;
+  display: block !important;
+  grid-template-columns: none !important;
+  max-width: 100% !important;
+}
+
+.honorary-profile-grid-2col {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+.honorary-col-left,
+.honorary-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+
+.honorary-col-left > .profile-section,
+.honorary-col-right > .profile-section {
+  position: relative;
+  padding: 0 0 36px 0 !important;
+  border-bottom: 1px solid #e1e4ec;
+  margin-bottom: 0 !important;
+}
+
+.honorary-col-left > .profile-section:last-child,
+.honorary-col-right > .profile-section:last-child {
+  border-bottom: none;
+}
+
+.timeline-card-section {
+  background: #f8fafc;
+  padding: 32px 28px !important;
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 18px;
+}
+
+.profile-advice-quote {
+  position: relative;
+  margin: 0;
+  padding: 24px 28px;
+  background: #fbf8fc;
+  border: 1px solid #f1e2f3;
+  border-left: 4px solid #892376;
+  border-radius: 14px;
+}
+
+.profile-advice-quote p {
+  margin: 0 0 12px;
+  font-size: 16.5px;
+  line-height: 1.65;
+  color: #273253;
+  font-weight: 500;
+  font-style: italic;
+}
+
+.profile-advice-category {
+  display: inline-block;
+  padding: 4px 10px;
+  background: #eed9ee;
+  color: #612175;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+@media (max-width: 1024px) {
+  .honorary-profile-grid-2col {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+}
+
+
 
 
 
