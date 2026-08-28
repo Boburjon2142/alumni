@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
+
 const nextConfig: NextConfig = {
   distDir: process.env.NODE_ENV === "production" ? ".next-build" : ".next",
+  compress: true,
+  poweredByHeader: false,
+  reactStrictMode: true,
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -11,16 +15,17 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
-        source: '/directory',
-        destination: '/alumni',
+        source: "/directory",
+        destination: "/alumni",
         permanent: true,
       },
       {
-        source: '/directory/:path*',
-        destination: '/alumni/:path*',
+        source: "/directory/:path*",
+        destination: "/alumni/:path*",
         permanent: true,
       },
     ];
   },
 };
+
 export default nextConfig;

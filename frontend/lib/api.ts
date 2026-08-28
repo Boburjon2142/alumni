@@ -13,7 +13,10 @@ import type {
 const API = process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api/v1";
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(`${API}${path}`, { cache: "no-store", ...options });
+  const response = await fetch(`${API}${path}`, {
+    next: { revalidate: 60 },
+    ...options,
+  });
   if (!response.ok) throw new Error("API so‘rovi bajarilmadi");
   return response.json() as Promise<T>;
 }
@@ -23,7 +26,7 @@ export const getAlumni = (query = "") => request<Page<Alumni>>(`/alumni/${query 
 export const getAlumniById = (idOrSlug: string) => request<Alumni>(`/alumni/${encodeURIComponent(idOrSlug)}/`);
 export const getAlumniPreview = (slug: string, signal?: AbortSignal) =>
   fetch(`/api/alumni/${encodeURIComponent(slug)}`, {
-    cache: "no-store",
+    next: { revalidate: 120 },
     signal,
     headers: { Accept: "application/json" },
   }).then((response) => {

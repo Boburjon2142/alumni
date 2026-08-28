@@ -16,7 +16,7 @@ services:
   backend:
     build: ./backend
     restart: always
-    command: gunicorn --bind 0.0.0.0:8000 config.wsgi:application
+    command: gunicorn --workers 3 --threads 2 --worker-class gthread --keep-alive 65 --bind 0.0.0.0:8000 config.wsgi:application
     volumes:
       - static_volume:/app/static
       - media_volume:/app/media
