@@ -76,6 +76,7 @@ def seed_all():
                     "visibility": fields.get("visibility", "public"),
                     "is_published": True,
                     "is_featured": True,
+                    "is_honorary": True,
                     "featured_order": fields.get("featured_order") or item["pk"],
                     "published_at": fields.get("published_at"),
                 }
@@ -200,6 +201,7 @@ def seed_all():
     AlumniProfile.objects.update(
         is_published=True,
         is_featured=True,
+        is_honorary=True,
         visibility="public",
         approval_status=AlumniProfile.ApprovalStatus.APPROVED,
         verification_status=AlumniProfile.Verification.VERIFIED,
