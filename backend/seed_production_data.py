@@ -72,6 +72,7 @@ def seed_all():
                     "biography_uz": fields.get("biography_uz", ""),
                     "career_story_uz": fields.get("career_story_uz", ""),
                     "verification_status": fields.get("verification_status", "verified"),
+                    "approval_status": fields.get("approval_status", "approved"),
                     "visibility": fields.get("visibility", "public"),
                     "is_published": True,
                     "is_featured": True,
@@ -195,8 +196,14 @@ def seed_all():
             )
     print(f"[OK] Alumni Advice: {AlumniAdvice.objects.count()}")
 
-    # Guarantee all seeded profiles are published and active
-    AlumniProfile.objects.update(is_published=True, is_featured=True, visibility="public")
+    # Guarantee all seeded profiles are published, approved and active
+    AlumniProfile.objects.update(
+        is_published=True,
+        is_featured=True,
+        visibility="public",
+        approval_status=AlumniProfile.ApprovalStatus.APPROVED,
+        verification_status=AlumniProfile.Verification.VERIFIED,
+    )
     SuccessStory.objects.update(is_published=True)
     AlumniAdvice.objects.update(is_published=True)
     FeaturedAlumni.objects.update(is_active=True)

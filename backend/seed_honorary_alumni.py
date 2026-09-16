@@ -371,6 +371,8 @@ for item in alumni_data:
         is_featured=item.get("is_featured", False),
         featured_order=item.get("display_order"),
         is_published=True,
+        is_honorary=True,
+        approval_status=AlumniProfile.ApprovalStatus.APPROVED,
         verification_status=AlumniProfile.Verification.VERIFIED,
         visibility=AlumniProfile.Visibility.PUBLIC,
     )
