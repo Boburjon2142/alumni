@@ -1,61 +1,37 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
-const slides = [
-  {
-    id: "hero_slide_1",
-    sources: [
-      { media: "(max-width: 599px)", srcSet: "/images/hero-carousel/alumni-background-9x16.png" },
-      { media: "(max-width: 1024px)", srcSet: "/images/hero-carousel/alumni-background-4x3.png" },
-      { media: "(min-width: 1025px)", srcSet: "/images/hero-carousel/large_slide_1.png" },
-    ],
-    fallback: "/images/hero-carousel/large_slide_1.png",
-  },
-  {
-    id: "hero_slide_2",
-    sources: [
-      { media: "(max-width: 599px)", srcSet: "/images/hero-carousel/alumni-background-9x16.png" },
-      { media: "(max-width: 1024px)", srcSet: "/images/hero-carousel/alumni-background-4x3.png" },
-      { media: "(min-width: 1025px)", srcSet: "/images/hero-carousel/large_slide_2.png" },
-    ],
-    fallback: "/images/hero-carousel/large_slide_2.png",
-  },
+const heroVariants = [
+  { minWidth: 1800, width: 1920, height: 1080 },
+  { minWidth: 1440, width: 1600, height: 900 },
+  { minWidth: 1200, width: 1366, height: 768 },
+  { minWidth: 900, width: 1024, height: 768 },
+  { minWidth: 600, width: 768, height: 1024 },
+  { minWidth: 410, width: 430, height: 932 },
+  { minWidth: 383, width: 390, height: 844 },
+  { minWidth: 368, width: 375, height: 812 },
 ];
 
 export function HeroCarousel() {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveIndex((prev) => (prev + 1) % slides.length);
-    }, 3000);
-
-    return () => clearInterval(timer);
-  }, []);
-
   return (
-    <div className="hero-carousel-container" aria-hidden="true">
-      {slides.map((slide, idx) => {
-        const isActive = idx === activeIndex;
-        return (
-          <picture
-            key={slide.id}
-            className={`hero-carousel-slide ${isActive ? "active" : ""}`}
-          >
-            {slide.sources.map((src, sIdx) => (
-              <source key={sIdx} media={src.media} srcSet={src.srcSet} />
-            ))}
-            <img
-              src={slide.fallback}
-              alt=""
-              fetchPriority={idx === 0 ? "high" : "low"}
-              loading={idx === 0 ? "eager" : "lazy"}
-              className="hero-carousel-img"
-            />
-          </picture>
-        );
-      })}
+    <div className="hero-banner-wrapper">
+      <picture className="hero-responsive-picture">
+        {heroVariants.map(({ minWidth, width, height }) => (
+          <source
+            key={width}
+            media={`(min-width: ${minWidth}px)`}
+            srcSet={`/images/hero/profiles/hero-${width}x${height}.png`}
+            width={width}
+            height={height}
+          />
+        ))}
+        <img
+          src="/images/hero/profiles/hero-360x800.png"
+          width={360}
+          height={800}
+          alt="Qarshi davlat universiteti faxriy bitiruvchilari"
+          fetchPriority="high"
+          loading="eager"
+          className="hero-responsive-img"
+        />
+      </picture>
     </div>
   );
 }

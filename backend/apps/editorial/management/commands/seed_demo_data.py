@@ -56,7 +56,7 @@ INTERVIEWS = [
 ]
 
 QUESTIONS = [
-    ("QarDUdagi ta’lim sizga nimalar berdi?", "What did your education at KarSU give you?"),
+    ("QarshiDUdagi ta’lim sizga nimalar berdi?", "What did your education at KarSU give you?"),
     ("Professional yo‘lingizdagi eng muhim qaror qaysi bo‘lgan?", "What was the most important decision in your professional journey?"),
     ("Eng katta qiyinchilik nima edi?", "What was the greatest challenge?"),
     ("Talabalar qaysi ko‘nikmaga ko‘proq e’tibor berishi kerak?", "Which skill deserves more attention from students?"),
@@ -81,10 +81,10 @@ ADVICE = [
 ]
 
 EVENTS = [
-    ("qardu-bitiruvchilar-uchrashuvi-2026", "meetup", "QarDU bitiruvchilar uchrashuvi 2026", "KarSU Alumni Meetup 2026", "Turli avlod bitiruvchilari va talabalar uchun tajriba almashish uchrashuvi.", "An exchange of experience for alumni across generations and current students.", 24, 3, "Qarshi davlat universiteti bosh binosi", "KarSU main building", "1540575467063-178a50c2df87", True),
+    ("qarshidu-bitiruvchilar-uchrashuvi-2026", "meetup", "QarshiDU bitiruvchilar uchrashuvi 2026", "KarSU Alumni Meetup 2026", "Turli avlod bitiruvchilari va talabalar uchun tajriba almashish uchrashuvi.", "An exchange of experience for alumni across generations and current students.", 24, 3, "Qarshi davlat universiteti bosh binosi", "KarSU main building", "1540575467063-178a50c2df87", True),
     ("universitet-taraqqiyotida-bitiruvchilar-roli", "conference", "Universitet taraqqiyotida bitiruvchilar roli", "The role of alumni in university development", "Ta’lim sifati va universitet hamkorliklari bo‘yicha ochiq konferensiya.", "An open conference on education quality and university partnerships.", 51, 4, "Universitet konferensiya zali", "University conference hall", "1505373877841-8d25f7d46678", True),
     ("yosh-mutaxassislar-uchun-ochiq-suhbat", "career_talk", "Yosh mutaxassislar uchun ochiq suhbat", "An open career talk for young professionals", "Bitiruvdan keyingi dastlabki qadamlar, portfolio va professional muloqot haqida.", "A practical conversation about first career steps, portfolios and professional communication.", 79, 2, "Online", "Online", "1524178232363-1fb2b075b655", True),
-    ("qardu-yubiley-uchrashuvi", "anniversary", "QarDU yubiley uchrashuvi", "KarSU anniversary gathering", "Universitet tarixi va bitiruvchilar xotiralari atrofidagi ochiq uchrashuv.", "An open gathering around university history and alumni memories.", -35, 4, "Qarshi shahri", "Karshi city", "1523580846011-d3a5bc25702b", False),
+    ("qarshidu-yubiley-uchrashuvi", "anniversary", "QarshiDU yubiley uchrashuvi", "KarSU anniversary gathering", "Universitet tarixi va bitiruvchilar xotiralari atrofidagi ochiq uchrashuv.", "An open gathering around university history and alumni memories.", -35, 4, "Qarshi shahri", "Karshi city", "1523580846011-d3a5bc25702b", False),
     ("talimda-amaliy-tajriba", "guest_lecture", "Ta’limda amaliy tajriba", "Practical experience in education", "O‘qituvchilar va bitiruvchilar ishtirokidagi ochiq ma’ruza.", "A public lecture featuring educators and alumni practitioners.", -67, 2, "Universitet konferensiya zali", "University conference hall", "1509062522246-3755977927d7", False),
     ("bitiruvchilar-va-talabalar-tajriba-almashinuvi", "reunion", "Bitiruvchilar va talabalar: tajriba almashinuvi", "Alumni and students: an exchange of experience", "Kasbiy yo‘llar va universitetdagi imkoniyatlar haqida avlodlararo suhbat.", "An intergenerational conversation about career paths and opportunities at university.", -112, 3, "Qarshi davlat universiteti bosh binosi", "KarSU main building", "1531482615713-2afd69097998", False),
 ]

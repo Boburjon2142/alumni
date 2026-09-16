@@ -20,8 +20,23 @@ vi.mock("lucide-react", () => {
     X: Icon,
     ChevronDown: Icon,
     Check: Icon,
+    LogIn: Icon,
+    AlertTriangle: Icon,
+    UserCheck: Icon,
+    KeyRound: Icon,
+    Mail: Icon,
+    RotateCw: Icon,
+    ShieldCheck: Icon,
   };
 });
+
+vi.mock("@/components/auth/auth-modal", () => ({
+  AuthModal: ({ trigger }: any) => trigger || <button type="button">Kirish</button>,
+}));
+
+vi.mock("@/components/about/about-modal", () => ({
+  AboutModal: ({ trigger }: any) => trigger || null,
+}));
 
 vi.mock("./language-switcher", () => ({
   LanguageSwitcher: () => <div data-testid="lang-switcher" />,
@@ -31,7 +46,9 @@ const mockT = {
   university: "University",
   navHome: "Home",
   navAlumni: "Alumni",
+  navGroups: "Groups",
   navStories: "Stories",
+  navInterviews: "Interviews",
   navAdvice: "Advice",
   navAbout: "About",
   navFeedback: "Feedback",

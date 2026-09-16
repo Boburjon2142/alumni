@@ -27,7 +27,26 @@ class StoryDetailView(generics.RetrieveAPIView):
 
 class InterviewListView(PublishedListMixin, generics.ListAPIView):
     serializer_class = InterviewListSerializer
-    def get_queryset(self): return AlumniInterview.objects.filter(is_published=True, alumnus__is_published=True, items__isnull=False).select_related("alumnus").distinct()
+    def get_queryset(self):
+        qs = AlumniInterview.objects.filter(is_published=True, alumnus__is_published=True, items__isnull=False).select_related("alumnus", "alumnus__faculty").distinct()
+        search = self.request.query_params.get("search")
+        if search:
+            search = search.strip()
+            qs = qs.filter(
+                Q(title_uz__icontains=search) |
+                Q(title_en__icontains=search) |
+                Q(intro_uz__icontains=search) |
+                Q(intro_en__icontains=search) |
+                Q(pull_quote_uz__icontains=search) |
+                Q(pull_quote_en__icontains=search) |
+                Q(alumnus__full_name__icontains=search) |
+                Q(alumnus__position__icontains=search) |
+                Q(alumnus__current_company__icontains=search) |
+                Q(alumnus__faculty__name__icontains=search)
+            )
+        if self.request.query_params.get("featured") == "true":
+            qs = qs.filter(is_featured=True)
+        return qs
 
 
 class InterviewDetailView(generics.RetrieveAPIView):

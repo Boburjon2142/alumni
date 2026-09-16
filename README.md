@@ -1,4 +1,4 @@
-# QarDU ALUMNI MVP
+# QarshiDU ALUMNI MVP
 
 Qarshi davlat universiteti bitiruvchilari uchun Next.js + Django REST Framework asosidagi professional MVP.
 
@@ -52,3 +52,13 @@ Production muhitida xavfsizlik va barqarorlikni ta'minlash uchun quyidagilarga e
 
 Public alumni serializer email va telefonni umuman e’lon qilmaydi. `verification_status`, role va featured holati alumni update serializerida yozilmaydi. Visibility barcha detail/list querysetlariga server tomonda qo‘llanadi.
 
+
+## Local account sign-in
+
+Google sign-in uses Google Identity Services and server-side verification of the signed ID token, audience, expiry and session nonce. Configure `GOOGLE_CLIENT_ID` in `backend/.env` using a **Web application** client in Google Cloud. Add both `http://localhost:3000` and `http://127.0.0.1:3000` to **Authorized JavaScript origins** (and the HTTPS origin for production). No client secret is needed for this flow. Restart the backend after changing environment settings. See https://developers.google.com/identity/gsi/web/guides/get-google-api-clientid.
+
+For email codes, configure the `EMAIL_*` and `DEFAULT_FROM_EMAIL` values documented in `backend/.env.example`. A console email backend does not deliver mail; the UI reports the service as unavailable in that configuration. Failed SMTP delivery returns an error instead of success. Do not commit real SMTP passwords.
+
+Run `python manage.py migrate` in `backend` to add the Google account identifier. Sign-in and profile editing use the same-origin `/api/v1/` proxy, Django session cookies and CSRF tokens. `/profile` loads the authenticated user's profile. Registration requires verified email and retains the full name, email, graduation year and consent fields.
+
+Validation: `python -m pytest apps/accounts/tests.py -q` from `backend`; `npm.cmd test -- components/onboarding/onboarding.test.tsx components/alumni/edit-profile-modal.test.tsx __tests__/api.test.ts` and `node node_modules/typescript/bin/tsc --noEmit` from `frontend`.

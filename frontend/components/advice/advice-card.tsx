@@ -40,7 +40,7 @@ export function AdviceCard({ advice, locale }: { advice: Advice; locale: Locale 
           <div className="advice-author-info">
             <strong className="advice-author-name">{alumnus.full_name}</strong>
             <span className="advice-author-role">
-              {alumnus.position || alumnus.faculty || (locale === "ru" ? "Выпускник КарГУ" : locale === "en" ? "KarSU Alumnus" : "QarDU bitiruvchisi")}
+              {alumnus.position || alumnus.faculty || (locale === "ru" ? "Выпускник КарГУ" : locale === "en" ? "KarSU Alumnus" : "QarshiDU bitiruvchisi")}
               {alumnus.current_company && ` · ${alumnus.current_company}`}
             </span>
           </div>

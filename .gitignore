@@ -9,3 +9,9 @@ frontend/.next-build/
 .env.*
 backend/.env
 backend/.env.*
+tmp/
+*.log
+frontend/tsconfig.tsbuildinfo
+.system_generated/
+profiles/
+scratch/

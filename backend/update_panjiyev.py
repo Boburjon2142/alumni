@@ -60,7 +60,7 @@ FeaturedAlumni.objects.filter(alumni=profile).delete()
 FeaturedAlumni.objects.create(
     alumni=profile,
     title="Faxriy bitiruvchi — Panjiyev Maqsud Aliqulovich",
-    short_description="Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi boshlig‘i o‘rinbosari. QarDU 2003-yil bitiruvchisi.",
+    short_description="Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi boshlig‘i o‘rinbosari. QarshiDU 2003-yil bitiruvchisi.",
     display_order=2,
     is_active=True
 )

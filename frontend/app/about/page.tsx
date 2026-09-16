@@ -4,7 +4,6 @@ import {
   GraduationCap,
   History,
   ShieldCheck,
-  Sparkles,
   ArrowRight,
   Search,
   Award,
@@ -37,7 +36,7 @@ export default async function AboutPage() {
               ? "QARSU HONORARY ALUMNI PORTAL"
               : locale === "ru"
               ? "ПОРТАЛ ПОЧЁТНЫХ ВЫПУСКНИКОВ КАРГУ"
-              : "QARDU FAXRIY BITIRUVCHILARI MARKAZI"}
+              : "QARSHI DAVLAT UNIVERSITETI FAXRIY BITIRUVCHILARI MARKAZI"}
           </span>
           <h1>{t.aboutTitle}</h1>
           <p className="about-lead">
@@ -249,7 +248,7 @@ export default async function AboutPage() {
         <div className="about-principles-card">
           <div className="principles-header">
             <div className="principles-badge">
-              <Sparkles size={20} />
+              <ShieldCheck size={20} />
             </div>
             <h2>
               {locale === "en"

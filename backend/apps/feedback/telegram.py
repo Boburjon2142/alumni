@@ -40,7 +40,7 @@ def send_telegram_notification(feedback):
     type_text = type_labels.get(feedback.type, feedback.get_type_display())
     
     text = (
-        f"<b>📩 Yangi QarDU Alumni murojaati</b>\n\n"
+        f"<b>📩 Yangi QarshiDU Alumni murojaati</b>\n\n"
         f"<b>Turi:</b> {html.escape(type_text)}\n"
     )
 

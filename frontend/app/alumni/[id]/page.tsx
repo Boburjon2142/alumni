@@ -3,6 +3,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Award, BadgeCheck, BookOpen, ExternalLink, GraduationCap, MapPin, MessageSquareQuote } from "lucide-react";
 import { RemoteImage } from "@/components/ui/remote-image";
+import { EditProfileModal } from "@/components/alumni/edit-profile-modal";
+import { PeerConfirmation } from "@/components/alumni/peer-confirmation";
+import { AlumniImpactCard } from "@/components/impact/alumni-impact-card";
 import { getAlumniById } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
 
@@ -12,7 +15,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   try {
     const alumnus = await getAlumniById(id);
-    const title = alumnus.seo_title || `${alumnus.full_name} — QarDU faxriy bitiruvchisi`;
+    const title = alumnus.seo_title || `${alumnus.full_name} — QarshiDU faxriy bitiruvchisi`;
     const description = alumnus.seo_description || alumnus.biography_uz || alumnus.bio;
     return {
       title,
@@ -76,11 +79,9 @@ export default async function Profile({ params }: Props) {
               {a.current_company && ` — ${a.current_company}`}
             </p>
 
-            {a.verified && (
-              <span className="verified-badge">
-                <BadgeCheck size={18} /> {t.verified}
-              </span>
-            )}
+            <div style={{ margin: "0.85rem 0" }}>
+              <PeerConfirmation alumnus={a} locale={locale} />
+            </div>
 
             <div className="honorary-meta">
               {a.faculty && (
@@ -101,12 +102,19 @@ export default async function Profile({ params }: Props) {
                 </span>
               )}
             </div>
+
+            <div style={{ marginTop: "1.25rem", display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
+              <EditProfileModal alumnus={a} locale={locale} />
+            </div>
           </div>
         </div>
       </header>
 
       {/* Profile Body: 2-Column Responsive Layout */}
       <div className="container honorary-profile-body">
+        {/* Alumni Impact & Recognition section */}
+        <AlumniImpactCard slug={a.slug} t={t} />
+
         <div className="honorary-profile-grid-2col">
           {/* Chap ustun: Qisqacha tavsif & Yoshlar uchun maslahatlar */}
           <div className="honorary-col-left">
@@ -195,11 +203,8 @@ export default async function Profile({ params }: Props) {
                 <ol className="career-timeline">
                   {a.timeline.map((item) => (
                     <li key={item.id}>
-                      <time className="timeline-year">{item.year}</time>
-                      <div className="timeline-marker">
-                        <span className="timeline-dot" aria-hidden="true" />
-                      </div>
-                      <div className="timeline-content">
+                      <time>{item.year}</time>
+                      <div>
                         <h3>{item.title}</h3>
                         {item.organization && <strong>{item.organization}</strong>}
                         {item.description && <p>{item.description}</p>}

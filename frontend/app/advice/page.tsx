@@ -57,7 +57,7 @@ export default async function AdvicePage({
               ? "Practical wisdom, life lessons, and career insights shared by distinguished KarSU alumni."
               : locale === "ru"
               ? "Практические рекомендации, жизненный опыт и карьерные советы от почётных выпускников КарГУ."
-              : "QarDU faxriy bitiruvchilarining hayotiy tajribasi, kasbiy saboqlari va talabalarga bergan amaliy tavsiyalari."}
+              : "Qarshi davlat universiteti faxriy bitiruvchilarining hayotiy tajribasi, kasbiy saboqlari va talabalarga bergan amaliy tavsiyalari."}
           </p>
         </div>
 

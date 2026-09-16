@@ -13,7 +13,7 @@ async function run() {
   // Fill in the form
   await page.fill("#name", "Raximov Ogabek");
   await page.fill("#contact", "boburjonabduganiyev83@gmail.com");
-  await page.fill("#message", "QarDU bitiruvchilari platformasi ajoyib ishlamoqda. Telegram bot orqali bildirishnoma yetkazildi.");
+  await page.fill("#message", "QarshiDU bitiruvchilari platformasi ajoyib ishlamoqda. Telegram bot orqali bildirishnoma yetkazildi.");
 
   // Click Submit
   await page.click("button[type='submit']");

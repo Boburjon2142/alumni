@@ -3,7 +3,7 @@ import urllib.request
 import json
 import urllib.parse
 
-print("=== QARDU ALUMNI QA LIVE SMOKE TEST ===\n")
+print("=== QARSHIDU ALUMNI QA LIVE SMOKE TEST ===\n")
 
 # 1. Frontend Route Status Checks
 routes = ["/", "/alumni", "/stories", "/advice", "/about", "/feedback", "/privacy"]

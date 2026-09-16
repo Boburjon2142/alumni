@@ -60,7 +60,7 @@ FeaturedAlumni.objects.filter(alumni=profile).delete()
 FeaturedAlumni.objects.create(
     alumni=profile,
     title="Faxriy bitiruvchi — Allayev Dolli Hakimovich",
-    short_description="Biologiya va qishloq xo‘jaligi fanlari doktori, professor. QarDU 1993-yil bitiruvchisi.",
+    short_description="Biologiya va qishloq xo‘jaligi fanlari doktori, professor. QarshiDU 1993-yil bitiruvchisi.",
     display_order=1,
     is_active=True
 )

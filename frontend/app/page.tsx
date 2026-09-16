@@ -24,26 +24,27 @@ export default async function Home() {
 
   return (
     <>
-      {/* 01. Hero Section (with dynamic responsive background carousel) */}
+      {/* 01. Hero Section (Responsive Fullscreen Showcase Banner) */}
       <section className={`hero hero-v2 locale-${locale}`}>
         <HeroCarousel />
-
-        <div className="container hero-grid">
-          <div className="hero-content">
-            <span className="hero-eyebrow-badge">{t.heroEyebrow}</span>
-            <h1>
-              <span>{t.heroTitle}</span>{" "}
-              <span>{t.heroLine2}</span>{" "}
-              <em>{t.heroAccent}</em>
-            </h1>
-            <p>{t.heroDescription}</p>
-            <div className="hero-actions">
-              <Button href="/alumni">
-                {t.heroCtaPrimary} <ArrowRight />
-              </Button>
-              <Button href="/advice" variant="secondary">
-                {t.heroCtaSecondary}
-              </Button>
+        <div className="hero-message-layer">
+          <div className="container">
+            <div className="hero-message">
+              <span className="hero-eyebrow-badge">{t.heroEyebrow}</span>
+              <h1>
+                <span>{t.heroTitle}</span>{" "}
+                <span>{t.heroLine2}</span>{" "}
+                <em>{t.heroAccent}</em>
+              </h1>
+              <p>{t.heroDescription}</p>
+              <div className="hero-actions">
+                <Button href="/alumni">
+                  {t.heroCtaPrimary} <ArrowRight aria-hidden="true" />
+                </Button>
+                <Button href="/advice" variant="secondary">
+                  {t.heroCtaSecondary}
+                </Button>
+              </div>
             </div>
           </div>
         </div>

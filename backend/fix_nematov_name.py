@@ -15,7 +15,7 @@ if not profile:
 if profile:
     profile.full_name = "Nematov Sherzod Qalandarovich"
     profile.slug = "nematov-sherzod-qalandarovich"
-    profile.biography_uz = "Nematov Sherzod Qalandarovich 2005-yilda Qarshi davlat universiteti Fizika-texnika fakultetini tamomlagan. Texnika fanlari doktori (DSc), professor. QarDUda ilmiy-pedagogik faoliyatini boshlab, dotsent, kafedra mudiri, fakultet dekani hamda oliy ta’lim muassasalarida ilmiy ishlar va innovatsiyalar bo‘yicha prorektor vazifalarida xizmat qilgan. 2023-yildan buyon Qarshi davlat texnika universiteti (Qarshi muhandislik-iqtisodiyot instituti) rektori lavozimida samarali faoliyat yuritib kelmoqda."
+    profile.biography_uz = "Nematov Sherzod Qalandarovich 2005-yilda Qarshi davlat universiteti Fizika-texnika fakultetini tamomlagan. Texnika fanlari doktori (DSc), professor. QarshiDUda ilmiy-pedagogik faoliyatini boshlab, dotsent, kafedra mudiri, fakultet dekani hamda oliy ta’lim muassasalarida ilmiy ishlar va innovatsiyalar bo‘yicha prorektor vazifalarida xizmat qilgan. 2023-yildan buyon Qarshi davlat texnika universiteti (Qarshi muhandislik-iqtisodiyot instituti) rektori lavozimida samarali faoliyat yuritib kelmoqda."
     profile.biography_en = "Nematov Sherzod Qalandarovich graduated from the Faculty of Physics and Technology at Karshi State University in 2005. He holds a DSc degree and Professor title in Technical Sciences, and currently serves as Rector of Karshi State Technical University."
 
     # Update avatar paths

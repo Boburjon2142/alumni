@@ -8,10 +8,22 @@ import type { Locale } from "@/lib/i18n";
 import { RemoteImage } from "@/components/ui/remote-image";
 
 const copy = {
-  uz:{close:"Profil oynasini yopish",loading:"Profil yuklanmoqda",error:"Profil ma’lumotlarini yuklab bo‘lmadi.",retry:"Qayta urinish",verified:"Tasdiqlangan",about:"Qisqacha",timeline:"Faoliyat yo‘li",achievements:"Asosiy yutuqlar",advice:"Talabalarga maslahat",sources:"Tasdiqlangan manbalar",full:"To‘liq profilni ko‘rish",graduate:"QarDU bitiruvchisi"},
-  ru:{close:"Закрыть профиль",loading:"Профиль загружается",error:"Не удалось загрузить профиль.",retry:"Повторить",verified:"Подтвержден",about:"Кратко",timeline:"Карьерный путь",achievements:"Достижения",advice:"Совет студентам",sources:"Источники",full:"Открыть полный профиль",graduate:"Выпускник КарГУ"},
-  en:{close:"Close profile",loading:"Loading profile",error:"Unable to load the profile.",retry:"Try again",verified:"Verified",about:"Overview",timeline:"Career timeline",achievements:"Key achievements",advice:"Advice for students",sources:"Verified sources",full:"View full profile",graduate:"KarSU alumnus"},
+  uz:{close:"Profil oynasini yopish",loading:"Profil yuklanmoqda",error:"Profil ma’lumotlarini yuklab bo‘lmadi.",retry:"Qayta urinish",verified:"Tasdiqlangan",about:"Qisqacha",timeline:"Faoliyat yo‘li",achievements:"Asosiy yutuqlar",advice:"Talabalarga maslahat",sources:"Tasdiqlangan manbalar",full:"To‘liq profilni ko‘rish",graduate:"QarshiDU bitiruvchisi",academic:"Ilmiy maqomi",specialty:"Mutaxassisligi",year:"Bitiruv yili"},
+  ru:{close:"Закрыть профиль",loading:"Профиль загружается",error:"Не удалось загрузить профиль.",retry:"Повторить",verified:"Подтвержден",about:"Кратко",timeline:"Карьерный путь",achievements:"Достижения",advice:"Совет студентам",sources:"Источники",full:"Открыть полный профиль",graduate:"Выпускник КарГУ",academic:"Учёный статус",specialty:"Специальность",year:"Год выпуска"},
+  en:{close:"Close profile",loading:"Loading profile",error:"Unable to load the profile.",retry:"Try again",verified:"Verified",about:"Overview",timeline:"Career timeline",achievements:"Key achievements",advice:"Advice for students",sources:"Verified sources",full:"View full profile",graduate:"KarSU alumnus",academic:"Academic status",specialty:"Specialty",year:"Graduation year"},
 } as const;
+
+const degreeMap: Record<string, Record<string, string>> = {
+  phd: { uz: "Falsafa doktori (PhD)", ru: "Доктор философии (PhD)", en: "PhD" },
+  dsc: { uz: "Fan doktori (DSc)", ru: "Доктор наук (DSc)", en: "DSc" },
+};
+
+const titleMap: Record<string, Record<string, string>> = {
+  docent: { uz: "Dotsent", ru: "Доцент", en: "Associate Professor (Docent)" },
+  professor: { uz: "Professor", ru: "Профессор", en: "Professor" },
+  senior_researcher: { uz: "Katta ilmiy xodim", ru: "Старший научный сотрудник", en: "Senior Researcher" },
+  academician: { uz: "Akademik", ru: "Академик", en: "Academician" },
+};
 
 export function AlumniQuickProfile({open,onOpenChange,profile,loading,error,onRetry,locale,returnFocus}:{open:boolean;onOpenChange:(open:boolean)=>void;profile:AlumniPreview|null;loading:boolean;error:boolean;onRetry:()=>void;locale:Locale;returnFocus:()=>void}){
   const t=copy[locale];
@@ -21,6 +33,10 @@ export function AlumniQuickProfile({open,onOpenChange,profile,loading,error,onRe
   const adviceText = adviceItem
     ? (locale === "en" && adviceItem.content_en) || adviceItem.content_uz
     : "";
+
+  const titleLabel = profile?.academic_title ? (titleMap[profile.academic_title]?.[locale] || profile.academic_title) : "";
+  const degreeLabel = profile?.academic_degree ? (degreeMap[profile.academic_degree]?.[locale] || profile.academic_degree) : "";
+  const academicBadge = [titleLabel, degreeLabel].filter(Boolean).join(", ");
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -38,8 +54,9 @@ export function AlumniQuickProfile({open,onOpenChange,profile,loading,error,onRe
                 <Dialog.Title>{profile.full_name}</Dialog.Title>
                 <Dialog.Description id="quick-profile-description">{profile.position||t.graduate}{profile.current_company&&` — ${profile.current_company}`}</Dialog.Description>
                 <div className="quick-profile-facts">
-                  {profile.specialty && <span><GraduationCap/><strong>Mutaxassisligi:</strong> {profile.specialty}</span>}
-                  {profile.graduation_year && <span><Award/><strong>Bitiruv yili:</strong> {profile.graduation_year}-yil</span>}
+                  {academicBadge && <span><GraduationCap/><strong>{t.academic}:</strong> {academicBadge}</span>}
+                  {profile.specialty && <span><GraduationCap/><strong>{t.specialty}:</strong> {profile.specialty}</span>}
+                  {profile.graduation_year && <span><Award/><strong>{t.year}:</strong> {profile.graduation_year}-yil</span>}
                   {(profile.city||profile.country) && <span><MapPin/>{[profile.city, profile.country].filter(Boolean).join(", ")}</span>}
                 </div>
               </div>

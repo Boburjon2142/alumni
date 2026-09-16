@@ -1,7 +1,8 @@
 import Link from "next/link";
-import type { Dictionary } from "@/lib/i18n";
+import type { Dictionary, Locale } from "@/lib/i18n";
+import { AboutModal } from "@/components/about/about-modal";
 
-export function Footer({ t }: { t: Dictionary }) {
+export function Footer({ t, locale }: { t: Dictionary; locale?: Locale }) {
   return (
     <footer className="footer">
       <div className="container footer-grid">
@@ -14,11 +15,23 @@ export function Footer({ t }: { t: Dictionary }) {
 
         <div className="footer-links-col">
           <h3>{t.brand}</h3>
-          <Link href="/alumni">{t.navAlumni}</Link>
           <Link href="/stories">{t.navStories}</Link>
-          <Link href="/advice">{t.navAdvice}</Link>
-          <Link href="/about">{t.navAbout}</Link>
+          <Link href="/interviews">{t.navInterviews}</Link>
+          <Link href="/impact">{t.navImpact}</Link>
           <Link href="/feedback">{t.navFeedback}</Link>
+          {locale ? (
+            <AboutModal
+              locale={locale}
+              t={t}
+              trigger={
+                <button type="button" className="footer-modal-btn">
+                  {t.navAbout}
+                </button>
+              }
+            />
+          ) : (
+            <Link href="/about">{t.navAbout}</Link>
+          )}
         </div>
 
         <div className="footer-links-col">
@@ -37,3 +50,4 @@ export function Footer({ t }: { t: Dictionary }) {
     </footer>
   );
 }
+

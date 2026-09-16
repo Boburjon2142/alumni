@@ -59,7 +59,7 @@ export async function POST(request: Request) {
         };
 
         const typeStr = typeLabels[type] || type || "Taklif";
-        let text = `<b>📩 Yangi QarDU Alumni murojaati</b>\n\n`;
+        let text = `<b>📩 Yangi QarshiDU Alumni murojaati</b>\n\n`;
         text += `<b>Turi:</b> ${escapeHtml(typeStr)}\n`;
         if (name) text += `<b>Ism:</b> ${escapeHtml(name)}\n`;
         if (contact) text += `<b>Aloqa:</b> ${escapeHtml(contact)}\n`;
@@ -105,3 +105,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

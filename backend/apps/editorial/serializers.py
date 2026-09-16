@@ -12,6 +12,7 @@ class AlumnusSummarySerializer(serializers.Serializer):
     position = serializers.CharField()
     current_company = serializers.CharField()
     faculty = serializers.CharField(source="faculty.name", default=None)
+    graduation_year = serializers.IntegerField(default=None)
 
 
 class StorySectionSerializer(serializers.ModelSerializer):
@@ -35,7 +36,8 @@ class InterviewItemSerializer(serializers.ModelSerializer):
 
 class InterviewListSerializer(serializers.ModelSerializer):
     alumnus = AlumnusSummarySerializer(read_only=True)
-    class Meta: model = AlumniInterview; fields = ("id", "slug", "title_uz", "title_en", "intro_uz", "intro_en", "pull_quote_uz", "pull_quote_en", "published_at", "is_featured", "alumnus")
+    items_count = serializers.IntegerField(source="items.count", read_only=True)
+    class Meta: model = AlumniInterview; fields = ("id", "slug", "title_uz", "title_en", "intro_uz", "intro_en", "pull_quote_uz", "pull_quote_en", "published_at", "is_featured", "alumnus", "items_count")
 
 
 class InterviewDetailSerializer(InterviewListSerializer):

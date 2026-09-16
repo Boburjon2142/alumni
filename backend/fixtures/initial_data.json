@@ -647,7 +647,7 @@
       "country": "O‘zbekiston",
       "skills": [],
       "bio": "Texnika fanlari doktori (DSc), professor. Qarshi davlat texnika universiteti rektori.",
-      "biography_uz": "Nematov Sherzod Qalandarovich 2005-yilda Qarshi davlat universiteti Fizika-texnika fakultetini tamomlagan. Texnika fanlari doktori (DSc), professor. QarDUda ilmiy-pedagogik faoliyatini boshlab, dotsent, kafedra mudiri, fakultet dekani hamda oliy ta’lim muassasalarida ilmiy ishlar va innovatsiyalar bo‘yicha prorektor vazifalarida xizmat qilgan. 2023-yildan buyon Qarshi davlat texnika universiteti (Qarshi muhandislik-iqtisodiyot instituti) rektori lavozimida samarali faoliyat yuritib kelmoqda.",
+      "biography_uz": "Nematov Sherzod Qalandarovich 2005-yilda Qarshi davlat universiteti Fizika-texnika fakultetini tamomlagan. Texnika fanlari doktori (DSc), professor. QarshiDUda ilmiy-pedagogik faoliyatini boshlab, dotsent, kafedra mudiri, fakultet dekani hamda oliy ta’lim muassasalarida ilmiy ishlar va innovatsiyalar bo‘yicha prorektor vazifalarida xizmat qilgan. 2023-yildan buyon Qarshi davlat texnika universiteti (Qarshi muhandislik-iqtisodiyot instituti) rektori lavozimida samarali faoliyat yuritib kelmoqda.",
       "biography_en": "Nematov Sherzod Qalandarovich graduated from the Faculty of Physics and Technology at Karshi State University in 2005. He holds a DSc degree and Professor title in Technical Sciences, and currently serves as Rector of Karshi State Technical University.",
       "career_story_uz": "",
       "career_story_en": "",
@@ -776,7 +776,7 @@
       "country": "O‘zbekiston",
       "skills": [],
       "bio": "Fizika-matematika fanlari doktori (DSc), professor. Qarshi davlat universiteti Amaliy matematika kafedrasi professori.",
-      "biography_uz": "Xolmurodov Abdulhamid Erkinovich 1974-yil 2-martda Qashqadaryo viloyati Koson tumanida tug‘ilgan. 1996-yilda Qarshi davlat universitetining Amaliy matematika va informatika yo‘nalishini tamomlagan. Fizika-matematika fanlari doktori (DSc), professor. QarDUda o‘qituvchilikdan boshlab kafedra mudiri, fakultet dekani hamda uzoq yillar o‘quv ishlari bo‘yicha prorektor lavozimlarida faoliyat yuritgan. Hozirda universitet professori sifatida ilmiy rahbarlik va pedagogik faoliyat olib bormoqda.",
+      "biography_uz": "Xolmurodov Abdulhamid Erkinovich 1974-yil 2-martda Qashqadaryo viloyati Koson tumanida tug‘ilgan. 1996-yilda Qarshi davlat universitetining Amaliy matematika va informatika yo‘nalishini tamomlagan. Fizika-matematika fanlari doktori (DSc), professor. QarshiDUda o‘qituvchilikdan boshlab kafedra mudiri, fakultet dekani hamda uzoq yillar o‘quv ishlari bo‘yicha prorektor lavozimlarida faoliyat yuritgan. Hozirda universitet professori sifatida ilmiy rahbarlik va pedagogik faoliyat olib bormoqda.",
       "biography_en": "Xolmurodov Abdulhamid Erkinovich was born on March 2, 1974 in Koson district, Kashkadarya. He graduated from Karshi State University in 1996 with a degree in Applied Mathematics and Computer Science. He holds a DSc degree and Professor title, having served as Dean and Vice-Rector for Academic Affairs.",
       "career_story_uz": "",
       "career_story_en": "",
@@ -1575,7 +1575,7 @@
     "fields": {
       "alumni": 25,
       "title": "Faxriy bitiruvchi — Allayev Dolli Hakimovich",
-      "short_description": "Biologiya va qishloq xo‘jaligi fanlari doktori, professor. QarDU 1993-yil bitiruvchisi.",
+      "short_description": "Biologiya va qishloq xo‘jaligi fanlari doktori, professor. QarshiDU 1993-yil bitiruvchisi.",
       "display_order": 1,
       "is_active": true,
       "featured_at": "2026-08-28T04:39:48.804Z"
@@ -1587,7 +1587,7 @@
     "fields": {
       "alumni": 26,
       "title": "Faxriy bitiruvchi — Panjiyev Maqsud Aliqulovich",
-      "short_description": "Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi boshlig‘i o‘rinbosari. QarDU 2003-yil bitiruvchisi.",
+      "short_description": "Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi boshlig‘i o‘rinbosari. QarshiDU 2003-yil bitiruvchisi.",
       "display_order": 2,
       "is_active": true,
       "featured_at": "2026-08-28T04:44:22.841Z"
@@ -1647,7 +1647,7 @@
     "fields": {
       "alumni": 36,
       "title": "Faxriy bitiruvchi — Xolmurodov Abdulhamid Erkinovich",
-      "short_description": "Fizika-matematika fanlari doktori, professor. QarDU 1996-yil bitiruvchisi.",
+      "short_description": "Fizika-matematika fanlari doktori, professor. QarshiDU 1996-yil bitiruvchisi.",
       "display_order": 7,
       "is_active": true,
       "featured_at": "2026-08-28T05:22:14.967Z"

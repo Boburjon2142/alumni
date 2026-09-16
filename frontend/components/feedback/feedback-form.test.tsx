@@ -111,7 +111,7 @@ describe("FeedbackForm", () => {
 
     await waitFor(() => {
       expect(screen.getByRole("alert")).toBeInTheDocument();
-      expect(screen.getByText("Error occurred")).toBeInTheDocument();
+      expect(screen.getByText("Server error")).toBeInTheDocument();
     });
   });
 });
