@@ -1,8 +1,17 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { Dictionary, Locale } from "@/lib/i18n";
 import { AboutModal } from "@/components/about/about-modal";
 
 export function Footer({ t, locale }: { t: Dictionary; locale?: Locale }) {
+  const pathname = usePathname();
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <footer className="footer">
       <div className="container footer-grid">
@@ -50,4 +59,3 @@ export function Footer({ t, locale }: { t: Dictionary; locale?: Locale }) {
     </footer>
   );
 }
-

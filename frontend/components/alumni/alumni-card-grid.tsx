@@ -3,10 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight } from "lucide-react";
 import type { Alumni, AlumniPreview } from "@/types/alumni";
-import type { Locale } from "@/lib/i18n";
+import { getRecognitionTitle, type Locale } from "@/lib/i18n";
 import { getAlumniPreview } from "@/lib/api";
 import { RemoteImage } from "@/components/ui/remote-image";
 import { AlumniQuickProfile } from "./alumni-quick-profile";
+import { RecognitionIcon } from "./recognition-icon";
 
 export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: Locale }) {
   const [slug, setSlug] = useState<string | null>(null);
@@ -90,6 +91,27 @@ export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: L
                   fallback={initials}
                   sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, (max-width: 1180px) 33vw, 25vw"
                 />
+                {item.recognitions && item.recognitions.length > 0 && (() => {
+                  const titleName = getRecognitionTitle(
+                    item.recognitions[0].slug,
+                    locale,
+                    item.recognitions[0].name
+                  );
+                  return (
+                    <div
+                      className="card-recognition-emblem"
+                      title={titleName}
+                      aria-label={titleName}
+                    >
+                      <RecognitionIcon
+                        icon={item.recognitions[0].icon}
+                        size={13}
+                        className="emblem-icon"
+                      />
+                      <span className="emblem-text">{titleName}</span>
+                    </div>
+                  );
+                })()}
                 <div className="card-photo-gradient" />
                 <div className="card-photo-content">
                   <span className="minimal-card-name">{item.full_name}</span>

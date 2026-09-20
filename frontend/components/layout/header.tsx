@@ -77,6 +77,10 @@ export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
     }
   };
 
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <header ref={headerRef} className={`site-header ${home ? "home-header" : ""} ${open ? "menu-open" : ""}`}>
       <div className="container nav">

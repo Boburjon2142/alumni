@@ -9,7 +9,7 @@ from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import AlumniProfile, FeaturedAlumni, GraduationYearChangeRequest
+from .models import AlumniProfile, AlumniRecognition, FeaturedAlumni, GraduationYearChangeRequest, RecognitionTitle
 from .notifications import get_approver_display_name, notify_new_alumni_confirmed
 
 from .serializers import (
@@ -20,13 +20,22 @@ from .serializers import (
     OwnAlumniSerializer,
     PublicAlumniDetailSerializer,
     PublicAlumniListSerializer,
+    RecognitionTitleSerializer,
 )
 
 def visible_profiles(request):
     return AlumniProfile.objects.filter(
         is_published=True,
         approval_status=AlumniProfile.ApprovalStatus.APPROVED
-    ).select_related("faculty", "specialty").distinct()
+    ).select_related("faculty", "specialty").prefetch_related("recognitions__title").distinct()
+
+class RecognitionTitleListView(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = RecognitionTitleSerializer
+    pagination_class = None
+
+    def get_queryset(self):
+        return RecognitionTitle.objects.filter(is_active=True).order_by("order", "name")
 
 class AlumniListView(generics.ListAPIView):
     permission_classes = [AllowAny]
@@ -45,7 +54,19 @@ class AlumniListView(generics.ListAPIView):
         company = self.request.query_params.get("company")
         location = self.request.query_params.get("location")
         year = self.request.query_params.get("year") or self.request.query_params.get("graduation_year")
+        recognition = self.request.query_params.get("recognition")
 
+        if search:
+            qs = qs.filter(
+                Q(full_name__icontains=search) |
+                Q(current_company__icontains=search) |
+                Q(position__icontains=search) |
+                Q(current_activity__icontains=search) |
+                Q(city__icontains=search) |
+                Q(country__icontains=search) |
+                Q(specialty__name__icontains=search) |
+                Q(faculty__name__icontains=search)
+            )
         if faculty:
             qs = qs.filter(faculty__name__icontains=faculty)
         if specialty:
@@ -58,6 +79,12 @@ class AlumniListView(generics.ListAPIView):
             qs = qs.filter(Q(city__icontains=location) | Q(country__icontains=location))
         if year and str(year).isdigit():
             qs = qs.filter(graduation_year=int(year))
+        if recognition:
+            qs = qs.filter(
+                recognitions__title__slug=recognition,
+                recognitions__is_active=True,
+                recognitions__title__is_active=True
+            )
         if self.request.query_params.get("featured") == "true":
             qs = qs.filter(Q(is_honorary=True) | Q(is_featured=True))
 
@@ -68,7 +95,7 @@ class AlumniListView(generics.ListAPIView):
             "newest": ("-published_at", "full_name"),
             "featured": ("-is_honorary", "-is_featured", "featured_order", "full_name"),
         }
-        return qs.order_by(*allowed.get(ordering, allowed["featured"]))
+        return qs.order_by(*allowed.get(ordering, allowed["featured"])).distinct()
 
 class AlumniDetailView(generics.RetrieveAPIView):
     permission_classes = [AllowAny]

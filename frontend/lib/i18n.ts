@@ -133,6 +133,10 @@ const dictionaries = {
     allFaculties: "Barcha fakultetlar",
     year: "Bitiruv yili",
     allYears: "Barcha yillar",
+    allRecognitions: "Barcha unvonlar",
+    filterBy: "Filtrlangan:",
+    clearAll: "Barchasini tozalash",
+    filterRecognition: "Faxriy unvon",
     clearFilters: "Filtrlarni tozalash",
     results: "Natijalarni ko‘rish",
     found: "ta bitiruvchi topildi",
@@ -423,6 +427,10 @@ const dictionaries = {
     allFaculties: "Все факультеты",
     year: "Год выпуска",
     allYears: "Все годы",
+    allRecognitions: "Все звания",
+    filterBy: "Фильтры:",
+    clearAll: "Очистить всё",
+    filterRecognition: "Почётное звание",
     clearFilters: "Сбросить фильтры",
     results: "Показать результаты",
     found: "выпускников найдено",
@@ -713,6 +721,10 @@ const dictionaries = {
     allFaculties: "All Faculties",
     year: "Graduation Year",
     allYears: "All Years",
+    allRecognitions: "All Titles",
+    filterBy: "Filtered by:",
+    clearAll: "Clear all",
+    filterRecognition: "Honorary Title",
     clearFilters: "Clear Filters",
     results: "View Results",
     found: "alumni found",
@@ -918,3 +930,54 @@ export function getCategoryLabel(category: string, locale: Locale): string {
   }
   return category;
 }
+
+export const recognitionTitlesMap: Record<string, Record<Locale, string>> = {
+  "faxriy-ustoz": {
+    uz: "Faxriy ustoz",
+    ru: "Почётный наставник",
+    en: "Honorary Mentor",
+  },
+  "karyera-koprigi": {
+    uz: "Karyera ko‘prigi",
+    ru: "Карьерный мост",
+    en: "Career Bridge",
+  },
+  "faol-bitiruvchi": {
+    uz: "Faol bitiruvchi",
+    ru: "Активный выпускник",
+    en: "Active Alumnus",
+  },
+  "universitet-fidoyisi": {
+    uz: "Universitet fidoyisi",
+    ru: "Преданный университету",
+    en: "University Devotee",
+  },
+  "ilm-fan-fidoyisi": {
+    uz: "Ilm-fan fidoyisi",
+    ru: "Деятель науки",
+    en: "Science Champion",
+  },
+  "innovatsiya-yetakchisi": {
+    uz: "Innovatsiya yetakchisi",
+    ru: "Лидер инноваций",
+    en: "Innovation Leader",
+  },
+  "tadbirkor-bitiruvchi": {
+    uz: "Tadbirkor bitiruvchi",
+    ru: "Выпускник-предприниматель",
+    en: "Entrepreneur Alumnus",
+  },
+  "yil-bitiruvchisi": {
+    uz: "Yil bitiruvchisi",
+    ru: "Выпускник года",
+    en: "Alumnus of the Year",
+  },
+};
+
+export function getRecognitionTitle(slug: string, locale: Locale, fallback?: string): string {
+  if (slug && recognitionTitlesMap[slug]?.[locale]) {
+    return recognitionTitlesMap[slug][locale];
+  }
+  return fallback || slug;
+}
+

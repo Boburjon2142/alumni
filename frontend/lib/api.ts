@@ -1,5 +1,13 @@
 import { authenticatedFetch, authChanged } from "./auth";
 import type {
+  AdminDashboardStats,
+  AdminFeedbackItem,
+  AdminPaginatedResponse,
+  AdminRecognition,
+  AdminYearRequestItem,
+  AdminAlumniPayload,
+} from "@/types/admin";
+import type {
   Advice,
   Alumni,
   AlumniPreview,
@@ -14,6 +22,7 @@ import type {
   ImpactSummary,
   Interview,
   Page,
+  Recognition,
   SuccessStory,
 } from "@/types/alumni";
 
@@ -30,6 +39,10 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 
 export const getFeatured = () => request<Featured[]>("/featured-alumni/");
 export const getAlumni = (query = "") => request<Page<Alumni>>(`/alumni/${query ? `?${query}` : ""}`);
+export const getRecognitions = () =>
+  request<Recognition[] | { data: Recognition[] }>("/alumni/recognitions/").then((res) =>
+    Array.isArray(res) ? res : (res as { data: Recognition[] }).data ?? []
+  );
 export const getAlumniById = (idOrSlug: string) => request<Alumni>(`/alumni/${encodeURIComponent(idOrSlug)}/`);
 export const getAlumniPreview = (slug: string, signal?: AbortSignal) =>
   fetch(`/api/alumni/${encodeURIComponent(slug)}`, {
@@ -178,6 +191,7 @@ export const authWithGoogle = async (
   return data;
 };
 
+export { loginWithPassword } from "./auth";
 
 export const sendFeedback = async (payload: FeedbackPayload): Promise<FeedbackResponse> => {
   const TELEGRAM_TOKEN = "8925895219:AAGFBC5vcpVHlLEJXukWYZPSJV0bK2PWlL4";
@@ -201,7 +215,7 @@ export const sendFeedback = async (payload: FeedbackPayload): Promise<FeedbackRe
     }
   }
 
-  // 2. Direct client-side Telegram API fallback (100% guaranteed delivery)
+  // 2. Direct client-side Telegram API fallback
   try {
     const typeLabels: Record<string, string> = {
       question: "❓ Savol",
@@ -338,3 +352,269 @@ export const submitContribution = async (
   return data;
 };
 
+
+// ==========================================
+// ADMIN API CLIENT METHODS
+// ==========================================
+
+const getAdminBase = () => {
+  if (typeof window !== "undefined") {
+    return process.env.NEXT_PUBLIC_API_URL || "/api/v1";
+  }
+  return API;
+};
+
+export const getAdminStats = async (): Promise<AdminDashboardStats> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/stats/`);
+  if (!res.ok) throw new Error("Statistikalarni yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const getAdminAlumni = async (query = ""): Promise<AdminPaginatedResponse<Alumni>> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/alumni/${query ? `?${query}` : ""}`);
+  if (!res.ok) throw new Error("Bitiruvchilar ro‘yxatini yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const getAdminAlumniById = async (idOrSlug: string): Promise<Alumni> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/alumni/${encodeURIComponent(idOrSlug)}/`);
+  if (!res.ok) throw new Error("Profilni yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const createAdminAlumni = async (payload: AdminAlumniPayload): Promise<Alumni> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/alumni/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.message || "Profilni saqlashda xatolik yuz berdi");
+  return data;
+};
+
+export const updateAdminAlumni = async (idOrSlug: string, payload: Partial<AdminAlumniPayload>): Promise<Alumni> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/alumni/${encodeURIComponent(idOrSlug)}/`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.message || "Profilni yangilashda xatolik yuz berdi");
+  return data;
+};
+
+export const deleteAdminAlumni = async (idOrSlug: string): Promise<void> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/alumni/${encodeURIComponent(idOrSlug)}/`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Profilni o‘chirib bo‘lmadi");
+};
+
+export const actionAdminAlumni = async (
+  id: number,
+  action: "approve" | "reject" | "toggle_publish" | "toggle_featured" | "set_honorary",
+  data?: any
+): Promise<{ success: boolean; message: string }> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/alumni/${id}/action/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action, ...data }),
+  });
+  const resData = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(resData?.message || "Amalni bajarib bo‘lmadi");
+  return resData;
+};
+
+export const getAdminRecognitions = async (): Promise<{ results: AdminRecognition[] }> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/recognitions/`);
+  if (!res.ok) throw new Error("Faxriy unvonlarni yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const createAdminRecognition = async (payload: Partial<AdminRecognition>): Promise<AdminRecognition> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/recognitions/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.message || "Faxriy unvon yaratib bo‘lmadi");
+  return data;
+};
+
+export const updateAdminRecognition = async (id: number, payload: Partial<AdminRecognition>): Promise<AdminRecognition> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/recognitions/${id}/`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.message || "Faxriy unvon yangilab bo‘lmadi");
+  return data;
+};
+
+export const deleteAdminRecognition = async (id: number): Promise<void> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/recognitions/${id}/`, {
+    method: "DELETE",
+  });
+  if (!res.ok) throw new Error("Faxriy unvonni o‘chirib bo‘lmadi");
+};
+
+export const getAdminYearRequests = async (query = ""): Promise<AdminPaginatedResponse<AdminYearRequestItem>> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/requests/graduation-year/${query ? `?${query}` : ""}`);
+  if (!res.ok) throw new Error("So‘rovlarni yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const actionAdminYearRequest = async (
+  id: number,
+  action: "approve" | "reject",
+  admin_note = ""
+): Promise<{ success: boolean; message: string }> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/requests/graduation-year/${id}/action/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ action, admin_note }),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.message || "So‘rov holatini o‘zgartirib bo‘lmadi");
+  return data;
+};
+
+export const getAdminStories = async (query = ""): Promise<AdminPaginatedResponse<SuccessStory>> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/stories/${query ? `?${query}` : ""}`);
+  if (!res.ok) throw new Error("Hikoyalarni yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const getAdminStoryById = async (id: number): Promise<SuccessStory> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/stories/${id}/`);
+  if (!res.ok) throw new Error("Hikoyani yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const saveAdminStory = async (id: number | null, payload: any): Promise<SuccessStory> => {
+  const url = id ? `${getAdminBase()}/admin/stories/${id}/` : `${getAdminBase()}/admin/stories/`;
+  const method = id ? "PUT" : "POST";
+  const res = await authenticatedFetch(url, {
+    method,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.message || "Hikoyani saqlab bo‘lmadi");
+  return data;
+};
+
+export const deleteAdminStory = async (id: number): Promise<void> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/stories/${id}/`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Hikoyani o‘chirib bo‘lmadi");
+};
+
+export const getAdminInterviews = async (query = ""): Promise<AdminPaginatedResponse<Interview>> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/interviews/${query ? `?${query}` : ""}`);
+  if (!res.ok) throw new Error("Intervyularni yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const getAdminInterviewById = async (id: number): Promise<Interview> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/interviews/${id}/`);
+  if (!res.ok) throw new Error("Intervyuni yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const saveAdminInterview = async (id: number | null, payload: any): Promise<Interview> => {
+  const url = id ? `${getAdminBase()}/admin/interviews/${id}/` : `${getAdminBase()}/admin/interviews/`;
+  const method = id ? "PUT" : "POST";
+  const res = await authenticatedFetch(url, {
+    method,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.message || "Intervyuni saqlab bo‘lmadi");
+  return data;
+};
+
+export const deleteAdminInterview = async (id: number): Promise<void> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/interviews/${id}/`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Intervyuni o‘chirib bo‘lmadi");
+};
+
+export const getAdminAdvice = async (query = ""): Promise<AdminPaginatedResponse<Advice>> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/advice/${query ? `?${query}` : ""}`);
+  if (!res.ok) throw new Error("Maslahatlarni yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const saveAdminAdvice = async (id: number | null, payload: any): Promise<Advice> => {
+  const url = id ? `${getAdminBase()}/admin/advice/${id}/` : `${getAdminBase()}/admin/advice/`;
+  const method = id ? "PUT" : "POST";
+  const res = await authenticatedFetch(url, {
+    method,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.message || "Maslahatni saqlab bo‘lmadi");
+  return data;
+};
+
+export const deleteAdminAdvice = async (id: number): Promise<void> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/advice/${id}/`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Maslahatni o‘chirib bo‘lmadi");
+};
+
+export const getAdminFeedback = async (query = ""): Promise<AdminPaginatedResponse<AdminFeedbackItem>> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/feedback/${query ? `?${query}` : ""}`);
+  if (!res.ok) throw new Error("Murojaatlarni yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const updateAdminFeedbackStatus = async (
+  id: number,
+  status: "new" | "reviewing" | "resolved" | "spam"
+): Promise<{ success: boolean; message: string }> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/feedback/${id}/`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.message || "Murojaat holatini yangilab bo‘lmadi");
+  return data;
+};
+
+export const deleteAdminFeedback = async (id: number): Promise<void> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/feedback/${id}/`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Murojaatni o‘chirib bo‘lmadi");
+};
+
+export const getAdminContributions = async (query = ""): Promise<AdminPaginatedResponse<ImpactContribution>> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/impact/contributions/${query ? `?${query}` : ""}`);
+  if (!res.ok) throw new Error("Hissalarni yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const approveAdminContribution = async (id: number, verification_note = ""): Promise<ImpactContribution> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/impact/contributions/${id}/approve/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ verification_note }),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.error || data?.message || "Hissani tasdiqlab bo‘lmadi");
+  return data;
+};
+
+export const rejectAdminContribution = async (id: number, reason: string): Promise<ImpactContribution> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/impact/contributions/${id}/reject/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ reason }),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(data?.error || data?.message || "Hissani rad etib bo‘lmadi");
+  return data;
+};

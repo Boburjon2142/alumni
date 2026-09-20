@@ -6,15 +6,22 @@ from .models import (
     Achievement,
     AlumniConsent,
     AlumniProfile,
+    AlumniRecognition,
     AlumniSource,
     CareerTimelineItem,
     EducationExperience,
     FeaturedAlumni,
     GraduationYearChangeRequest,
+    RecognitionTitle,
     WorkExperience,
 )
 from apps.editorial.serializers import AdviceSerializer
 from apps.universities.models import Faculty
+
+class RecognitionTitleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecognitionTitle
+        fields = ("id", "name", "slug", "icon", "description", "order")
 
 class AchievementSerializer(serializers.ModelSerializer):
     class Meta: model = Achievement; fields = ("id", "title", "description", "year", "category", "order")
@@ -71,6 +78,7 @@ class PublicAlumniSerializer(serializers.ModelSerializer):
     specialty = serializers.CharField(source="specialty.name", default=None)
     verified = serializers.SerializerMethodField()
     approved_by_name = serializers.SerializerMethodField()
+    recognitions = serializers.SerializerMethodField()
 
     class Meta:
         model = AlumniProfile
@@ -81,7 +89,7 @@ class PublicAlumniSerializer(serializers.ModelSerializer):
             "current_company", "position", "current_activity", "industry", "city", "country",
             "skills", "bio", "biography_uz", "biography_en",
             "is_featured", "is_honorary", "seo_title", "seo_description", "verified",
-            "approval_status", "approved_at", "approved_by_name"
+            "approval_status", "approved_at", "approved_by_name", "recognitions"
         )
     def get_verified(self, obj): return obj.verification_status == AlumniProfile.Verification.VERIFIED
     def get_approved_by_name(self, obj):
@@ -90,18 +98,48 @@ class PublicAlumniSerializer(serializers.ModelSerializer):
         from apps.alumni.notifications import get_approver_display_name
         return get_approver_display_name(obj.approved_by)
 
+    def get_recognitions(self, obj):
+        return [
+            {
+                "id": r.title.id,
+                "name": r.title.name,
+                "slug": r.title.slug,
+                "icon": r.title.icon,
+                "description": r.title.description,
+                "year": r.year,
+            }
+            for r in obj.recognitions.all()
+            if r.is_active and r.title.is_active
+        ]
+
 
 class PublicAlumniListSerializer(serializers.ModelSerializer):
     faculty = serializers.CharField(source="faculty.name", default=None)
     specialty = serializers.CharField(source="specialty.name", default=None)
+    recognitions = serializers.SerializerMethodField()
+
     class Meta:
         model = AlumniProfile
         fields = (
             "id", "slug", "avatar", "image_url", "image_alt", "full_name",
             "position", "current_company", "current_activity",
             "faculty", "specialty", "graduation_year",
-            "is_featured", "is_honorary"
+            "is_featured", "is_honorary", "recognitions"
         )
+
+    def get_recognitions(self, obj):
+        return [
+            {
+                "id": r.title.id,
+                "name": r.title.name,
+                "slug": r.title.slug,
+                "icon": r.title.icon,
+                "description": r.title.description,
+                "year": r.year,
+            }
+            for r in obj.recognitions.all()
+            if r.is_active and r.title.is_active
+        ]
 
 class OwnAlumniSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(source="user.email", read_only=True)

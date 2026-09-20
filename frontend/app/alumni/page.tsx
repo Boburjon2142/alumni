@@ -2,9 +2,9 @@ import { GraduationCap } from "lucide-react";
 import Link from "next/link";
 import { AlumniCardGrid } from "@/components/alumni/alumni-card-grid";
 import { DirectoryFilters } from "@/components/alumni/directory-filters";
-import { getAlumni, getFaculties } from "@/lib/api";
+import { getAlumni, getFaculties, getRecognitions } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
-import type { Alumni, Faculty, Page } from "@/types/alumni";
+import type { Alumni, Faculty, Page, Recognition } from "@/types/alumni";
 
 export const metadata = {
   title: "Faxriy bitiruvchilar — Qarshi davlat universiteti",
@@ -27,12 +27,14 @@ export default async function AlumniPage({
 
   let result: Page<Alumni> | null = null;
   let faculties: Faculty[] = [];
+  let recognitions: Recognition[] = [];
   let error = false;
 
   try {
-    const [alumniRes, facultyRes] = await Promise.allSettled([
+    const [alumniRes, facultyRes, recognitionRes] = await Promise.allSettled([
       getAlumni(query.toString()),
       getFaculties(),
+      getRecognitions(),
     ]);
 
     if (alumniRes.status === "fulfilled") {
@@ -44,12 +46,16 @@ export default async function AlumniPage({
     if (facultyRes.status === "fulfilled") {
       faculties = facultyRes.value;
     }
+
+    if (recognitionRes.status === "fulfilled") {
+      recognitions = recognitionRes.value;
+    }
   } catch {
     error = true;
   }
 
   const hasActiveFilters = Boolean(
-    params.search || params.faculty || params.graduation_year
+    params.search || params.recognition || params.faculty || params.graduation_year
   );
 
   return (
@@ -63,6 +69,7 @@ export default async function AlumniPage({
 
         <DirectoryFilters
           faculties={faculties}
+          recognitions={recognitions}
           locale={locale}
           translations={{
             search: t.search,
@@ -72,6 +79,9 @@ export default async function AlumniPage({
             allFaculties: t.allFaculties,
             year: t.year,
             clearFilters: t.clearFilters,
+            allRecognitions: t.allRecognitions,
+            filterBy: t.filterBy,
+            clearAll: t.clearAll,
           }}
         />
 

@@ -2,6 +2,7 @@
 
 import { ChevronUp } from "lucide-react";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import type { Locale } from "@/lib/i18n";
 
 const labels: Record<Locale, string> = {
@@ -12,6 +13,7 @@ const labels: Record<Locale, string> = {
 
 export function BackToTop({ locale }: { locale: Locale }) {
   const [visible, setVisible] = useState(false);
+  const pathname = usePathname();
 
   useEffect(() => {
     const update = () => setVisible(window.scrollY > 420);
@@ -25,5 +27,20 @@ export function BackToTop({ locale }: { locale: Locale }) {
     window.scrollTo({ top: 0, behavior: reduceMotion ? "auto" : "smooth" });
   }
 
-  return <button type="button" className={`back-to-top ${visible ? "visible" : ""}`} onClick={goToTop} aria-label={labels[locale]} title={labels[locale]}><ChevronUp aria-hidden="true"/><span>TOP</span></button>;
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
+  return (
+    <button
+      type="button"
+      className={`back-to-top ${visible ? "visible" : ""}`}
+      onClick={goToTop}
+      aria-label={labels[locale]}
+      title={labels[locale]}
+    >
+      <ChevronUp aria-hidden="true" />
+      <span>TOP</span>
+    </button>
+  );
 }

@@ -5,7 +5,9 @@ import Link from "next/link";
 import { Award, BadgeCheck, Building2, ExternalLink, GraduationCap, Lightbulb, MapPin, X } from "lucide-react";
 import type { AlumniPreview } from "@/types/alumni";
 import type { Locale } from "@/lib/i18n";
+import { getRecognitionTitle } from "@/lib/i18n";
 import { RemoteImage } from "@/components/ui/remote-image";
+import { RecognitionIcon } from "./recognition-icon";
 
 const copy = {
   uz:{close:"Profil oynasini yopish",loading:"Profil yuklanmoqda",error:"Profil ma’lumotlarini yuklab bo‘lmadi.",retry:"Qayta urinish",verified:"Tasdiqlangan",about:"Qisqacha",timeline:"Faoliyat yo‘li",achievements:"Asosiy yutuqlar",advice:"Talabalarga maslahat",sources:"Tasdiqlangan manbalar",full:"To‘liq profilni ko‘rish",graduate:"QarshiDU bitiruvchisi",academic:"Ilmiy maqomi",specialty:"Mutaxassisligi",year:"Bitiruv yili"},
@@ -56,9 +58,33 @@ export function AlumniQuickProfile({open,onOpenChange,profile,loading,error,onRe
                 <div className="quick-profile-facts">
                   {academicBadge && <span><GraduationCap/><strong>{t.academic}:</strong> {academicBadge}</span>}
                   {profile.specialty && <span><GraduationCap/><strong>{t.specialty}:</strong> {profile.specialty}</span>}
-                  {profile.graduation_year && <span><Award/><strong>{t.year}:</strong> {profile.graduation_year}-yil</span>}
+                  {profile.graduation_year && <span><Award/><strong>{t.year}:</strong> {locale === "ru" ? `${profile.graduation_year} год` : locale === "en" ? `Class of ${profile.graduation_year}` : `${profile.graduation_year}-yil`}</span>}
                   {(profile.city||profile.country) && <span><MapPin/>{[profile.city, profile.country].filter(Boolean).join(", ")}</span>}
                 </div>
+                {Boolean(profile.recognitions?.length) && (
+                  <div className="quick-profile-recognitions" style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "12px" }}>
+                    {profile.recognitions!.map((r) => (
+                      <span
+                        key={r.slug || r.id}
+                        style={{
+                          display: "inline-flex",
+                          alignItems: "center",
+                          gap: "5px",
+                          padding: "3px 9px",
+                          borderRadius: "6px",
+                          background: "#fbf5ee",
+                          border: "1px solid #ebd8c2",
+                          color: "#8c4f18",
+                          fontSize: "12px",
+                          fontWeight: 700,
+                        }}
+                      >
+                        <RecognitionIcon icon={r.icon} size={14} />
+                        <span>{getRecognitionTitle(r.slug, locale, r.name)}</span>
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </header>
             <div className="quick-profile-body">

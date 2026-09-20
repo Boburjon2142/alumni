@@ -54,7 +54,7 @@ def test_directory_is_minimal_and_detail_is_public_safe(client, alumni):
     expected_fields = {
         "id", "slug", "avatar", "image_url", "image_alt", "full_name",
         "position", "current_company", "current_activity", "faculty",
-        "specialty", "graduation_year", "is_featured", "is_honorary"
+        "specialty", "graduation_year", "is_featured", "is_honorary", "recognitions"
     }
     assert set(listed) == expected_fields
     detail = client.get(f"/api/v1/alumni/{alumni.slug}/")
@@ -694,6 +694,35 @@ def test_alumni_education_experiences(client, alumni):
     assert pub_res.status_code == 200
     assert len(pub_res.data["educations"]) == 2
     assert pub_res.data["educations"][0]["institution"] == "Qarshi davlat universiteti"
+
+@pytest.mark.django_db
+def test_recognition_titles_endpoint_and_filtering(client, alumni):
+    from apps.alumni.models import RecognitionTitle, AlumniRecognition
+
+    title1 = RecognitionTitle.objects.create(name="Faxriy ustoz", slug="faxriy-ustoz", icon="🎖️", order=1, is_active=True)
+    title2 = RecognitionTitle.objects.create(name="Innovatsiya yetakchisi", slug="innovatsiya-yetakchisi", icon="🚀", order=2, is_active=True)
+
+    # 1. Test recognitions endpoint
+    res = client.get("/api/v1/alumni/recognitions/")
+    assert res.status_code == 200
+    assert len(res.data) == 2
+    assert res.data[0]["slug"] == "faxriy-ustoz"
+
+    # 2. Attach recognition to alumni
+    AlumniRecognition.objects.create(alumnus=alumni, title=title1, is_active=True)
+
+    # 3. Filter by recognition slug
+    match_res = client.get("/api/v1/alumni/?recognition=faxriy-ustoz")
+    assert match_res.status_code == 200
+    assert match_res.data["pagination"]["count"] == 1
+    assert len(match_res.data["data"][0]["recognitions"]) == 1
+    assert match_res.data["data"][0]["recognitions"][0]["slug"] == "faxriy-ustoz"
+
+    # 4. Filter by non-matching recognition slug
+    nomatch_res = client.get("/api/v1/alumni/?recognition=innovatsiya-yetakchisi")
+    assert nomatch_res.status_code == 200
+    assert nomatch_res.data["pagination"]["count"] == 0
+
 
 
 

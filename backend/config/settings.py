@@ -23,9 +23,14 @@ INSTALLED_APPS = [
     "apps.feedback", "apps.impact",
 ]
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware", "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware", "django.middleware.csrf.CsrfViewMiddleware",
-    "django.contrib.auth.middleware.AuthenticationMiddleware", "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.gzip.GZipMiddleware",
+    "django.middleware.security.SecurityMiddleware",
+    "django.middleware.http.ConditionalGetMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 ROOT_URLCONF = "config.urls"
@@ -39,7 +44,28 @@ if os.getenv("USE_POSTGRES", "false").lower() == "true" and os.getenv("POSTGRES_
         "HOST": os.getenv("POSTGRES_HOST", "localhost"), "PORT": os.getenv("POSTGRES_PORT", "5432"),
         "CONN_MAX_AGE": 600}}
 else:
-    DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": BASE_DIR / "db.sqlite3", "CONN_MAX_AGE": 600}}
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+            "CONN_MAX_AGE": 600,
+            "OPTIONS": {
+                "timeout": 20,
+            },
+        }
+    }
+
+# Optimize SQLite performance with WAL mode and memory cache
+from django.db.backends.signals import connection_created
+def _configure_sqlite_db(sender, connection, **kwargs):
+    if connection.vendor == "sqlite":
+        with connection.cursor() as cursor:
+            cursor.execute("PRAGMA journal_mode = WAL;")
+            cursor.execute("PRAGMA synchronous = NORMAL;")
+            cursor.execute("PRAGMA cache_size = -64000;")
+            cursor.execute("PRAGMA temp_store = MEMORY;")
+
+connection_created.connect(_configure_sqlite_db)
 
 AUTH_USER_MODEL = "accounts.User"
 AUTH_PASSWORD_VALIDATORS = [

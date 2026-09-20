@@ -257,3 +257,38 @@ class GraduationYearChangeRequest(models.Model):
     def __str__(self):
         return f"{self.alumnus.full_name}: {self.old_year} -> {self.requested_year} ({self.get_status_display()})"
 
+
+class RecognitionTitle(models.Model):
+    name = models.CharField(max_length=120)
+    slug = models.SlugField(max_length=140, unique=True)
+    icon = models.CharField(max_length=64, blank=True, default="award")
+    description = models.TextField(blank=True, max_length=500)
+    is_active = models.BooleanField(default=True, db_index=True)
+    order = models.PositiveSmallIntegerField(default=0)
+
+    class Meta:
+        ordering = ("order", "name")
+        verbose_name = "Faxriy unvon"
+        verbose_name_plural = "Faxriy unvonlar"
+
+    def __str__(self):
+        return self.name
+
+
+class AlumniRecognition(models.Model):
+    alumnus = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name="recognitions")
+    title = models.ForeignKey(RecognitionTitle, on_delete=models.CASCADE, related_name="alumni_recognitions")
+    year = models.PositiveSmallIntegerField(null=True, blank=True)
+    is_active = models.BooleanField(default=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ("title__order", "-year", "id")
+        unique_together = ("alumnus", "title")
+        verbose_name = "Bitiruvchi faxriy unvoni"
+        verbose_name_plural = "Bitiruvchilar faxriy unvonlari"
+
+    def __str__(self):
+        return f"{self.alumnus.full_name} — {self.title.name}"
+
+

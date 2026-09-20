@@ -1,3 +1,12 @@
+export type Recognition = {
+  id: number;
+  name: string;
+  slug: string;
+  icon: string;
+  description?: string;
+  year?: number;
+};
+
 export type Achievement = {
   id: number;
   title: string;
@@ -114,8 +123,14 @@ export type Alumni = {
   biography_en?: string;
   career_story_uz?: string;
   career_story_en?: string;
+  linkedin_url?: string;
+  github_url?: string;
+  website_url?: string;
+  phone?: string;
+  contact_email?: string;
   is_featured: boolean;
   is_honorary?: boolean;
+  is_published?: boolean;
   seo_title?: string;
   seo_description?: string;
   published_at?: string;
@@ -130,6 +145,7 @@ export type Alumni = {
   approval_status?: "pending" | "approved" | "rejected" | string;
   approved_at?: string;
   approved_by_name?: string;
+  recognitions?: Recognition[];
 };
 
 export type AlumniPreview = Alumni;
@@ -250,6 +266,7 @@ export type SuccessStory = {
   hero_image_url?: string;
   hero_image_alt?: string;
   published_at?: string;
+  is_featured?: boolean;
   sections?: StorySection[];
   student_takeaway_uz?: string;
   student_takeaway_en?: string;
