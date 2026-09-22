@@ -23,6 +23,7 @@ export default async function GroupsPage({
 
   const query = new URLSearchParams();
   if (params.search) query.set("search", params.search);
+  if (params.region) query.set("region", params.region);
 
   let groups: import("@/types/alumni").GraduationGroup[] = [];
   let error = false;
@@ -44,8 +45,8 @@ export default async function GroupsPage({
           <p className="section-sublead">{t.groupsSubtitle}</p>
         </div>
 
-        {/* Search Bar */}
-        <GroupsFilter t={t} />
+        {/* Search Bar & Region Dropdown */}
+        <GroupsFilter t={t} locale={locale} />
 
         {/* Results */}
         {error ? (

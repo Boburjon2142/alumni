@@ -165,15 +165,39 @@ class GraduationGroupListView(APIView):
     @cache_api_response("graduation_groups", timeout=600)
     def get(self, request):
         search = request.query_params.get("search", "").strip()
+        region = request.query_params.get("region", "").strip() or request.query_params.get("city", "").strip()
+        
+        base_qs = visible_profiles(request).exclude(graduation_year__isnull=True)
+        
+        if region:
+            if region.lower() in ["xorij", "chet el", "foreign", "abroad"]:
+                base_qs = base_qs.exclude(country__iexact="O‘zbekiston").exclude(country__iexact="O'zbekiston").exclude(country__iexact="Uzbekistan")
+            else:
+                base_qs = base_qs.filter(
+                    Q(city__icontains=region)
+                    | Q(country__icontains=region)
+                    | Q(current_activity__icontains=region)
+                    | Q(current_company__icontains=region)
+                )
+
+        if search:
+            if search.isdigit():
+                base_qs = base_qs.filter(graduation_year=int(search))
+            else:
+                base_qs = base_qs.filter(
+                    Q(full_name__icontains=search)
+                    | Q(city__icontains=search)
+                    | Q(country__icontains=search)
+                    | Q(current_company__icontains=search)
+                    | Q(position__icontains=search)
+                    | Q(current_activity__icontains=search)
+                )
+
         qs = (
-            visible_profiles(request)
-            .exclude(graduation_year__isnull=True)
-            .values("graduation_year")
+            base_qs.values("graduation_year")
             .annotate(members_count=Count("id"))
             .order_by("-graduation_year")
         )
-        if search and search.isdigit():
-            qs = qs.filter(graduation_year=int(search))
 
         groups = [
             {
@@ -196,7 +220,20 @@ class GraduationGroupDetailView(generics.ListAPIView):
         current_year = date.today().year
         if year < 1956 or year > current_year + 1:
             raise ValidationError({"year": f"Bitiruv yili 1956 va {current_year + 1} oralig‘ida bo‘lishi kerak."})
-        return visible_profiles(self.request).filter(graduation_year=year).order_by("-is_honorary", "-is_featured", "featured_order", "full_name")
+        
+        qs = visible_profiles(self.request).filter(graduation_year=year)
+        region = self.request.query_params.get("region", "").strip() or self.request.query_params.get("city", "").strip()
+        if region:
+            if region.lower() in ["xorij", "chet el", "foreign", "abroad"]:
+                qs = qs.exclude(country__iexact="O‘zbekiston").exclude(country__iexact="O'zbekiston").exclude(country__iexact="Uzbekistan")
+            else:
+                qs = qs.filter(
+                    Q(city__icontains=region)
+                    | Q(country__icontains=region)
+                    | Q(current_activity__icontains=region)
+                    | Q(current_company__icontains=region)
+                )
+        return qs.order_by("-is_honorary", "-is_featured", "featured_order", "full_name")
 
     @cache_api_response("graduation_group_detail", timeout=600)
     def list(self, request, *args, **kwargs):
