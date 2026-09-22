@@ -72,7 +72,15 @@ const nextConfig: NextConfig = {
   },
   async rewrites() {
     const backendUrl = (process.env.API_URL || "http://127.0.0.1:8000").replace(/\/api\/v1\/?$/, "").replace(/\/$/, "");
-    return { fallback: [
+    return [
+      {
+        source: "/static/:path*",
+        destination: `${backendUrl}/static/:path*`,
+      },
+      {
+        source: "/admin/:path*",
+        destination: `${backendUrl}/admin/:path*`,
+      },
       {
         source: "/api/v1/:path*",
         destination: `${backendUrl}/api/v1/:path*`,
@@ -81,7 +89,7 @@ const nextConfig: NextConfig = {
         source: "/media/:path*",
         destination: `${backendUrl}/media/:path*`,
       },
-    ] };
+    ];
   },
 };
 
