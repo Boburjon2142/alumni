@@ -1,0 +1,114 @@
+================================================================================
+          QARDU ALUMNI PORTALI - KELGUSI YANGILANISHLAR VA SERVER BO'YICHA
+                            TO'LIQ QO'LLANMA (YO'RIQNOMA)
+================================================================================
+Domen:           https://alumni.qarshidu.uz
+Server IP:       213.230.96.104
+Loyiha yo'li:    /var/www/alumni
+SSH porti:       24050
+GitHub Repo:     https://github.com/Boburjon2142/alumni.git (branch: main)
+================================================================================
+
+
+--------------------------------------------------------------------------------
+1. LOKALDA O'ZGARISHLAR QILISH VA GITHUBGA YUKLASH TARTIBI
+--------------------------------------------------------------------------------
+Lokal kompyuteringizda (VS Code / Antigravity IDE) kodni o'zgartirgandan so'ng:
+
+A) Agar ma'lumotlar bazasida (DB) yangi ma'lumotlar qo'shilgan bo'lsa, avval dump oling:
+   (Lokal backend terminalida):
+   cd backend
+   python -Xutf8 manage.py dumpdata --natural-foreign --natural-primary --exclude contenttypes --exclude auth.Permission --indent 2 -o fixtures/production_data_dump.json
+   cd ..
+
+B) O'zgarishlarni GitHub'ga push qilish:
+   git add .
+   git commit -m "Yangi xususiyatlar va yangilanishlar"
+   git push origin main
+
+
+--------------------------------------------------------------------------------
+2. PRODUCTION SERVERDA YANGILANISHLARNI QABUL QILIB OLISH
+--------------------------------------------------------------------------------
+Serverga kiring:
+   ssh -p 24050 root@213.230.96.104
+
+A) FAQAT FRONTEND (DIZAYN/SAHIFALAR) O'ZGARGAN BO'LSA:
+   cd /var/www/alumni
+   git pull origin main
+   cd frontend
+   npm run build
+   pm2 restart alumni-frontend
+
+B) FAQAT BACKEND (DJANGO / MODELLAR / API) O'ZGARGAN BO'LSA:
+   cd /var/www/alumni
+   git pull origin main
+   cd backend
+   source venv/bin/activate
+   pip install -r requirements.txt
+   python manage.py migrate
+   python manage.py collectstatic --noinput
+   pm2 restart alumni-backend
+
+C) MA'LUMOTLAR BAZASINI YANGILASH (Lokal bazani serverga to'liq ko'chirish):
+   cd /var/www/alumni/backend
+   source venv/bin/activate
+   python manage.py loaddata fixtures/production_data_dump.json
+   pm2 restart alumni-backend
+
+D) BARCHASINI BIR YO'LA TO'LIQ YANGILASH (ENG TEZ VA ISHONCHLI BUYRUQ):
+   cd /var/www/alumni && git pull origin main && cd /var/www/alumni/backend && source venv/bin/activate && pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput && cd /var/www/alumni/frontend && npm run build && pm2 restart all && pm2 save
+
+
+--------------------------------------------------------------------------------
+3. SERVERNI NAZORAT QILISH VA LOGLARNI KO'RISH
+--------------------------------------------------------------------------------
+- Jarayonlar holatini ko'rish:
+  pm2 status
+
+- Xatoliklar va jonli loglarni kuzatish:
+  pm2 logs
+  (yoki alohida: pm2 logs alumni-frontend  yoki  pm2 logs alumni-backend)
+
+- Nginx holatini tekshirish:
+  systemctl status nginx
+  nginx -t && systemctl reload nginx
+
+
+================================================================================
+4. KELGUSI ISHLAR VA AI AGENT UCHUN TAYYOR PROMPTLAR (NUSXA KO'CHIRIB ISHLATING)
+================================================================================
+
+--------------------------------------------------------------------------------
+PROMPT 1: Yangi sahifa yoki komponent yaratishda
+--------------------------------------------------------------------------------
+"QarDU Alumni portaliga [SAHIFA_NOMI, masalan: Tadbirlar / Mentorlik / Karyera] sahifasini qo'shish kerak. Dizayni mavjud loyiha uslubi (Tailwind/globals.css, Yashil va Oltin ranglar, dark mode qo'llab-quvvatlashi) bilan 100% mos bo'lsin. Backend uchun tegishli Django model va API endpointlarni yarating, frontendda esa to'liq responsiv UI va filtrlash imkoniyatlarini taqdim eting. Testlarni yurgizib tekshiring."
+
+
+--------------------------------------------------------------------------------
+PROMPT 2: Telegram kanaldan yangiliklar olishni yangilash yoki kengaytirish
+--------------------------------------------------------------------------------
+"Telegram kanalimiz (@qarduuz)dan yangiliklarni avtomatik tortib oluvchi skriptni takomillashtiring. Yangi postlar yuklanganda ularning rasmlari, matni va sanasini bazaga avtomatik qo'shsin, eskilari takrorlanmasin. Backend admin panelidan bir tugma bilan yangiliklarni sinxronlash imkoniyati ham bo'lsin."
+
+
+--------------------------------------------------------------------------------
+PROMPT 3: Yangilanishlarni GitHub va Serverga avtomat yuklash
+--------------------------------------------------------------------------------
+"Lokalda qilingan so'nggi barcha o'zgarishlarni tekshirib, ma'lumotlar bazasi fixture'larini eksport qil va GitHub'ga 'main' branchga push qil. Shuningdek, production serverda yangilanishni qo'llash uchun kerak bo'ladigan buyruqlarni taqdim et."
+
+
+--------------------------------------------------------------------------------
+PROMPT 4: Bitiruvchilar uchun yangi xizmat yoki so'rovnoma qo'shish
+--------------------------------------------------------------------------------
+"Bitiruvchilar o'rtasida yangi so'rovnoma (survey/feedback) moduli qo'shilsin. Formada [KERAKLI_MAYDONLAR] bo'lsin. /join va /feedback sahifalari kabi chap tomonda forma, o'ng tomonda QarDU logotipi va ma'lumot paneli bo'lgan split-layout dizaynidan foydalanilsin. Natijalar admin panelda chiroyli jadval va eksport (Excel/CSV) ko'rinishida ko'rinsin."
+
+
+--------------------------------------------------------------------------------
+PROMPT 5: Serverda xatolik yuz berganda diagnostika qilish
+--------------------------------------------------------------------------------
+"Serverda [XATOLIK_MATNI_YOKI_KODI, masalan: 502 Bad Gateway / CORS xatosi] yuz berdi. Nginx konfiguratsiyasi (/etc/nginx/sites-available/alumni.qarshidu.uz), PM2 jarayonlari va Django sozlamalarini (ALLOWED_HOSTS, CORS_ALLOWED_ORIGINS, CSRF_TRUSTED_ORIGINS) tekshirib, muammoni to'liq bartaraf etuvchi aniq ko'rsatma ber."
+
+================================================================================
+Fayl yaratildi: 2026-09-22
+Loyiha: Qarshi Davlat Universiteti (QarDU) Bitiruvchilar Assotsiatsiyasi Portali
+================================================================================
