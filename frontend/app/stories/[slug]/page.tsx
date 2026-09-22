@@ -25,19 +25,46 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const story = await getStoryBySlug(slug);
     const title = story.title_uz || "Muvaffaqiyat hikoyasi";
     const desc = story.summary_uz || "Qarshi davlat universiteti bitiruvchisi muvaffaqiyat hikoyasi.";
+    const rawImage = story.hero_image_url || story.hero_image || "/brand/Logo.png";
+    const imageUrl = rawImage.startsWith("http")
+      ? rawImage
+      : `https://alumni.qarshidu.uz${rawImage.startsWith("/") ? "" : "/"}${rawImage}`;
+
     return {
       title: `${title} — QarDU ALUMNI`,
       description: desc,
       openGraph: {
         title: `${title} — QarDU ALUMNI`,
         description: desc,
-        images: story.hero_image_url || story.hero_image ? [story.hero_image_url || story.hero_image!] : [],
+        url: `https://alumni.qarshidu.uz/stories/${story.slug}`,
+        siteName: "QarDU Alumni",
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: title,
+          },
+        ],
+        type: "article",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `${title} — QarDU ALUMNI`,
+        description: desc,
+        images: [imageUrl],
       },
     };
   } catch {
-    return { title: "Muvaffaqiyat hikoyasi — Qarshi davlat universiteti ALUMNI" };
+    return {
+      title: "Muvaffaqiyat hikoyasi — Qarshi davlat universiteti ALUMNI",
+      openGraph: {
+        images: ["https://alumni.qarshidu.uz/brand/Logo.png"],
+      },
+    };
   }
 }
+
 
 export default async function StoryDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

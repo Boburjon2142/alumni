@@ -9,14 +9,46 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   try {
     const news = await getNewsBySlug(slug);
+    const rawImage = news.cover_image_url || news.cover_image || "/brand/Logo.png";
+    const imageUrl = rawImage.startsWith("http")
+      ? rawImage
+      : `https://alumni.qarshidu.uz${rawImage.startsWith("/") ? "" : "/"}${rawImage}`;
+
     return {
       title: `${news.title_uz} — QarDU ALUMNI`,
       description: news.summary_uz,
+      openGraph: {
+        title: news.title_uz,
+        description: news.summary_uz,
+        url: `https://alumni.qarshidu.uz/news/${news.slug}`,
+        siteName: "QarDU Alumni",
+        images: [
+          {
+            url: imageUrl,
+            width: 1200,
+            height: 630,
+            alt: news.title_uz,
+          },
+        ],
+        type: "article",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: news.title_uz,
+        description: news.summary_uz,
+        images: [imageUrl],
+      },
     };
   } catch {
-    return { title: "Yangilik — Qarshi davlat universiteti ALUMNI" };
+    return {
+      title: "Yangilik — Qarshi davlat universiteti ALUMNI",
+      openGraph: {
+        images: ["https://alumni.qarshidu.uz/brand/Logo.png"],
+      },
+    };
   }
 }
+
 
 function formatDate(dateStr?: string | null, locale = "uz") {
   if (!dateStr) return "";

@@ -17,18 +17,51 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   try {
     const alumnus = await getAlumniById(id);
-    const title = alumnus.seo_title || `${alumnus.full_name} — QarshiDU faxriy bitiruvchisi`;
-    const description = alumnus.seo_description || alumnus.biography_uz || alumnus.bio;
+    const title = alumnus.seo_title || `${alumnus.full_name} — QarshiDU bitiruvchisi`;
+    const description = alumnus.seo_description || alumnus.biography_uz || alumnus.bio || `${alumnus.full_name} haqida to‘liq ma’lumot, hayot yo‘li va erishgan yutuqlari.`;
+    
+    // Resolve absolute image URL for Telegram preview
+    const rawImage = alumnus.image_url || alumnus.avatar || `/images/faxriylar/${alumnus.slug}.webp`;
+    const imageUrl = rawImage.startsWith("http")
+      ? rawImage
+      : `https://alumni.qarshidu.uz${rawImage.startsWith("/") ? "" : "/"}${rawImage}`;
+
     return {
       title,
       description,
       alternates: { canonical: `/alumni/${alumnus.slug}` },
-      openGraph: { title, description },
+      openGraph: {
+        title,
+        description,
+        url: `https://alumni.qarshidu.uz/alumni/${alumnus.slug}`,
+        siteName: "QarDU Alumni",
+        images: [
+          {
+            url: imageUrl,
+            width: 800,
+            height: 800,
+            alt: alumnus.full_name,
+          },
+        ],
+        type: "profile",
+      },
+      twitter: {
+        card: "summary_large_image",
+        title,
+        description,
+        images: [imageUrl],
+      },
     };
   } catch {
-    return {};
+    return {
+      title: "Bitiruvchi profili — Qarshi davlat universiteti",
+      openGraph: {
+        images: ["https://alumni.qarshidu.uz/brand/Logo.png"],
+      },
+    };
   }
 }
+
 
 export default async function Profile({ params }: Props) {
   const locale = await getLocale();

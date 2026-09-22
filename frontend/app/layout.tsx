@@ -7,12 +7,36 @@ import { getDictionary, getLocale } from "@/lib/i18n";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://alumni.qarshidu.uz"),
   title: {
     default: "Hamjamiyat — Qarshi davlat universiteti",
     template: "%s | Hamjamiyat",
   },
   description: "QarshiDU bitiruvchilari uchun professional hamjamiyat va imkoniyatlar platformasi.",
+  openGraph: {
+    title: "Hamjamiyat — Qarshi davlat universiteti",
+    description: "QarshiDU bitiruvchilari uchun professional hamjamiyat va imkoniyatlar platformasi.",
+    url: "https://alumni.qarshidu.uz",
+    siteName: "QarDU Alumni",
+    images: [
+      {
+        url: "https://alumni.qarshidu.uz/brand/Logo.png",
+        width: 600,
+        height: 600,
+        alt: "Qarshi davlat universiteti logotipi",
+      },
+    ],
+    locale: "uz_UZ",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hamjamiyat — Qarshi davlat universiteti",
+    description: "QarshiDU bitiruvchilari uchun professional hamjamiyat va imkoniyatlar platformasi.",
+    images: ["https://alumni.qarshidu.uz/brand/Logo.png"],
+  },
 };
+
 
 export default async function RootLayout({
   children,
