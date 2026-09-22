@@ -12,7 +12,6 @@ import {
   KeyRound,
   Mail,
   RotateCw,
-  Send,
   ShieldCheck,
   Users,
   X,
@@ -318,15 +317,6 @@ export function AlumniForm({
           <Link href="/alumni" className="button button-primary">
             <Users size={16} /> {locale === "en" ? "View Alumni Directory" : locale === "ru" ? "Список выпускников" : "Bitiruvchilar ro'yxati"}
           </Link>
-          <a
-            href="https://t.me/qarshidu_alumni_bot"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="button button-secondary"
-            style={{ display: "inline-flex", alignItems: "center", gap: "6px" }}
-          >
-            <Send size={15} /> Botda «Tasdiqlanganlar»
-          </a>
           <Link href="/" className="button button-secondary">
             {t.submissionHomeBtn}
           </Link>
