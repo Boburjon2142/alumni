@@ -34,6 +34,7 @@ export function GoogleSignInButton({ onSuccess, locale }: Pick<Props, "onSuccess
   const success = useRef(onSuccess);
   success.current = onSuccess;
   const [error, setError] = useState("");
+  const [notConfigured, setNotConfigured] = useState(false);
   const [loading, setLoading] = useState(true);
   const busy = useRef(false);
   useEffect(() => {
@@ -43,7 +44,13 @@ export function GoogleSignInButton({ onSuccess, locale }: Pick<Props, "onSuccess
         const response = await fetch("/api/v1/auth/google/config/", { credentials: "same-origin", cache: "no-store" });
         if (!response.ok) throw new Error("Kirish xizmatiga ulanib bo'lmadi.");
         const config = await response.json();
-        if (!config.client_id) throw new Error("Google orqali kirish hali sozlanmagan. Hozircha email orqali kiring.");
+        if (!config.client_id) {
+          if (!cancelled) {
+            setNotConfigured(true);
+            setLoading(false);
+          }
+          return;
+        }
         await loadGoogle();
         if (cancelled || !container.current) return;
         const google = window.google?.accounts.id;
@@ -71,7 +78,12 @@ export function GoogleSignInButton({ onSuccess, locale }: Pick<Props, "onSuccess
     return () => { cancelled = true; };
   }, [locale]);
   return <div className="google-signin-body" aria-busy={loading}>
-    {loading && <p role="status">{locale === "en" ? "Loading..." : locale === "ru" ? "Загрузка..." : "Yuklanmoqda..."}</p>}
+    {loading && <p role="status" className="text-sm text-slate-500">{locale === "en" ? "Loading..." : locale === "ru" ? "Загрузка..." : "Yuklanmoqda..."}</p>}
+    {notConfigured && (
+      <div className="google-not-configured-notice p-3.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-600 leading-relaxed text-center">
+        <span>{locale === "en" ? "Google Sign-In is not configured yet. Please use Email verification code." : locale === "ru" ? "Вход через Google еще не настроен. Пожалуйста, используйте код подтверждения по email." : "Google orqali kirish hali sozlanmagan. Hozircha email orqali kiring."}</span>
+      </div>
+    )}
     {error && <p className="form-error" role="alert">{error}</p>}
     <div ref={container} />
   </div>;

@@ -54,7 +54,7 @@ export function AuthModal({
   trigger?: React.ReactNode;
 }) {
   const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<"google" | "otp">("google");
+  const [activeTab, setActiveTab] = useState<"otp" | "google">("otp");
 
   // Email OTP state
   const [email, setEmail] = useState("");
@@ -212,7 +212,7 @@ export function AuthModal({
               <p className="auth-dialog-subtitle">
                 {loggedInUser
                   ? "Siz tizimga muvaffaqiyatli kirdingiz"
-                  : "Google hisobi yoki Email tasdiqlash kodi orqali kiring"}
+                  : "Email tasdiqlash kodi yoki Google hisobi orqali kiring"}
               </p>
             </div>
             <Dialog.Close
@@ -271,17 +271,17 @@ export function AuthModal({
                 <div className="auth-tabs">
                   <button
                     type="button"
-                    className={`auth-tab-btn ${activeTab === "google" ? "active" : ""}`}
-                    onClick={() => setActiveTab("google")}
-                  >
-                    <GoogleIcon /> Google orqali
-                  </button>
-                  <button
-                    type="button"
                     className={`auth-tab-btn ${activeTab === "otp" ? "active" : ""}`}
                     onClick={() => setActiveTab("otp")}
                   >
                     <Mail size={16} /> Email tasdiqlash kodi
+                  </button>
+                  <button
+                    type="button"
+                    className={`auth-tab-btn ${activeTab === "google" ? "active" : ""}`}
+                    onClick={() => setActiveTab("google")}
+                  >
+                    <GoogleIcon /> Google orqali
                   </button>
                 </div>
 

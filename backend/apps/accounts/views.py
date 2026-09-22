@@ -1,3 +1,5 @@
+import html
+import logging
 import secrets
 from datetime import timedelta
 from django.conf import settings
@@ -25,6 +27,8 @@ from .serializers import (
     UserSerializer,
     VerifyCodeSerializer,
 )
+
+logger = logging.getLogger(__name__)
 
 class RegisterView(APIView):
     permission_classes = [AllowAny]
@@ -77,7 +81,23 @@ class SendVerificationCodeView(APIView):
             expires_at=expires_at,
         )
 
-        # Send Email via Django send_mail (uses free SMTP / console backend)
+        # 1. Telegram bot / admin guruhga tezkor bildirishnoma yuborish
+        try:
+            from apps.alumni.telegram_bot import send_telegram_raw
+            admin_chat_id = getattr(settings, "TELEGRAM_ADMIN_CHAT_ID", None)
+            if admin_chat_id:
+                tg_text = (
+                    f"🔐 <b>QarshiDU Alumni — Yangi tasdiqlash kodi</b>\n\n"
+                    f"📧 Email: <code>{html.escape(email)}</code>\n"
+                    f"🔑 Kod: <code>{code}</code>\n"
+                    f"🎯 Maqsad: {purpose}\n"
+                    f"⏰ Amal qilish muddati: 10 daqiqa"
+                )
+                send_telegram_raw(admin_chat_id, tg_text)
+        except Exception as e:
+            logger.warning("Telegram notification for verification code failed: %s", e)
+
+        # 2. Send Email via Django send_mail
         subject = f"QarshiDU Alumni — Tasdiqlash kodi: {code}"
         message = (
             f"Assalomu alaykum!\n\n"
@@ -108,25 +128,10 @@ class SendVerificationCodeView(APIView):
                 html_message=html_message,
                 fail_silently=False,
             )
-        except Exception:
+        except Exception as e:
+            logger.error("Failed to send verification email to %s: %s", email, e)
             EmailVerificationCode.objects.filter(email=email, purpose=purpose, code=code, is_verified=False).delete()
             return Response({"message": "Tasdiqlash xatini yuborib bo'lmadi. Keyinroq qayta urinib ko'ring."}, status=503)
-
-        # Telegram bot / admin guruhga ham qo'shimcha tezkor xabar yuborish
-        try:
-            from apps.alumni.telegram_bot import send_telegram_raw
-            admin_chat_id = getattr(settings, "TELEGRAM_ADMIN_CHAT_ID", None)
-            if admin_chat_id:
-                tg_text = (
-                    f"🔐 <b>QarshiDU Alumni — Yangi tasdiqlash kodi</b>\n\n"
-                    f"📧 Email: <code>{html.escape(email)}</code>\n"
-                    f"🔑 Kod: <code>{code}</code>\n"
-                    f"🎯 Maqsad: {purpose}\n"
-                    f"⏰ Amal qilish muddati: 10 daqiqa"
-                )
-                send_telegram_raw(admin_chat_id, tg_text)
-        except Exception:
-            pass
 
         return Response({
             "success": True,
