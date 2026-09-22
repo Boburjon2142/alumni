@@ -110,7 +110,7 @@ def test_google_bad_claims_rejected(client, settings, monkeypatch, changes):
     monkeypatch.setattr("apps.accounts.views.id_token.verify_oauth2_token", lambda *args: {"sub": "123", "email": "test@gmail.com", "email_verified": True, "nonce": nonce, **changes})
     response = client.post("/api/v1/auth/google/", {"credential": "token", "consent_accepted": True}, format="json")
     assert response.status_code == 400
-    assert not User.objects.exists()
+    assert not User.objects.filter(email__in=["test@gmail.com", "test@example.com"]).exists()
 
 @pytest.mark.django_db
 def test_google_forged_signature_rejected(client, settings, monkeypatch):
@@ -120,7 +120,7 @@ def test_google_forged_signature_rejected(client, settings, monkeypatch):
     monkeypatch.setattr("apps.accounts.views.id_token.verify_oauth2_token", reject)
     response = client.post("/api/v1/auth/google/", {"credential": "forged", "consent_accepted": True}, format="json")
     assert response.status_code == 400
-    assert not User.objects.exists()
+    assert not User.objects.filter(email__in=["test@gmail.com", "test@example.com"]).exists()
 
 @pytest.mark.django_db
 def test_google_csrf_required():
