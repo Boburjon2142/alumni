@@ -1,0 +1,624 @@
+/* ==========================================================================
+   Alumni E’tirof (Recognition) - Clean Vanilla CSS
+   ========================================================================== */
+
+.page {
+  background-color: #f8f9fc;
+  min-height: 100vh;
+  color: #182037;
+  padding-bottom: 64px;
+}
+
+.container {
+  max-width: 1420px;
+  margin: 0 auto;
+  padding: 32px 24px 0;
+}
+
+/* 1. Header */
+.headerCard {
+  background-color: #ffffff;
+  border: 1px solid #e3e6ef;
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 768px) {
+  .headerCard {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.headerLeft {
+  max-width: 720px;
+}
+
+.headerBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #d38e4f;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.headerTitle {
+  font-size: clamp(24px, 3vw, 32px);
+  font-weight: 700;
+  color: #1a247e;
+  line-height: 1.2;
+  margin: 0 0 8px;
+  letter-spacing: -0.02em;
+}
+
+.headerSubtitle {
+  font-size: 14.5px;
+  color: #667085;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.headerActions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background-color: #1a247e;
+  color: #ffffff;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+.primaryBtn:hover {
+  background-color: #131b5c;
+}
+
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  background-color: #ffffff;
+  color: #182037;
+  border: 1px solid #e3e6ef;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.secondaryBtn:hover {
+  background-color: #f8f9fc;
+  border-color: #cbd5e1;
+}
+
+/* 2. Filters Bar */
+.filterCard {
+  background-color: #ffffff;
+  border: 1px solid #e3e6ef;
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.02);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.filterTopRow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .filterTopRow {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.searchWrapper {
+  position: relative;
+  flex: 1;
+  max-width: 620px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #98a2b3;
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  padding: 9px 12px 9px 36px;
+  font-size: 13.5px;
+  background-color: #f8f9fc;
+  border: 1px solid #e3e6ef;
+  border-radius: 9px;
+  color: #182037;
+  outline: none;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.searchInput:focus {
+  border-color: #1a247e;
+  background-color: #ffffff;
+}
+
+.dropdownGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.customDropdown {
+  position: relative;
+}
+
+.customDropdownTrigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #344054;
+  background-color: #f8f9fc;
+  border: 1px solid #e3e6ef;
+  border-radius: 9px;
+  cursor: pointer;
+  outline: none;
+  min-height: 38px;
+  min-width: 140px;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.customDropdownTrigger:hover {
+  background-color: #f0f3fa;
+  border-color: #d0d5dd;
+}
+
+.customDropdownTriggerActive {
+  background-color: #ffffff;
+  border-color: #1a247e;
+  color: #1a247e;
+  font-weight: 600;
+}
+
+.customDropdownLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 170px;
+}
+
+.customDropdownChevron {
+  color: #667085;
+  transition: transform 0.2s ease, color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.customDropdownChevronOpen {
+  transform: rotate(180deg);
+  color: #1a247e;
+}
+
+.customDropdownMenu {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 200;
+  min-width: 220px;
+  max-width: 280px;
+  max-height: 280px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  border: 1px solid #e4e7ec;
+  border-radius: 12px;
+  padding: 6px;
+  box-shadow: 0 12px 32px rgba(16, 24, 40, 0.12), 0 2px 6px rgba(16, 24, 40, 0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  animation: dropdownFade 0.15s ease-out;
+}
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.customDropdownItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #344054;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.customDropdownItem:hover {
+  background-color: #f2f4f9;
+  color: #1a247e;
+}
+
+.customDropdownItemActive {
+  background-color: #eff3ff;
+  color: #1a247e;
+  font-weight: 600;
+}
+
+.checkIcon {
+  color: #1a247e;
+  flex-shrink: 0;
+}
+
+.filterBottomRow {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-top: 12px;
+  border-top: 1px solid #f1f3f9;
+}
+
+.categoryPills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.catPill {
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid #e3e6ef;
+  background-color: #f8f9fc;
+  color: #667085;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.catPill:hover {
+  background-color: #eff1fa;
+  color: #1a247e;
+}
+
+.catPillActive {
+  background-color: #1a247e;
+  color: #ffffff;
+  border-color: #1a247e;
+}
+
+/* 3. Two-Column Main Layout (Left: Table, Right: Explanation) */
+.mainLayout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 350px;
+  gap: 28px;
+  align-items: start;
+}
+
+@media (max-width: 992px) {
+  .mainLayout {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* Left Column: Rankings Table */
+.rankingsCard {
+  background-color: #ffffff;
+  border: 1px solid #e3e6ef;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.03);
+}
+
+.rankingsHeader {
+  padding: 16px 20px;
+  border-bottom: 1px solid #e3e6ef;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #fafbfc;
+}
+
+.rankingsTitle {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1a247e;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.rankingsCount {
+  font-size: 12px;
+  color: #667085;
+  font-weight: 500;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.rankingTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.rankingTable th {
+  padding: 12px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #667085;
+  border-bottom: 1px solid #e3e6ef;
+  background-color: #ffffff;
+}
+
+.rankingTable td {
+  padding: 13px 16px;
+  font-size: 13.5px;
+  border-bottom: 1px solid #f1f3f9;
+  vertical-align: middle;
+}
+
+.rankingTable tr:last-child td {
+  border-bottom: none;
+}
+
+.rankingTable tr:hover td {
+  background-color: #fbfcfe;
+}
+
+/* Rank Badge */
+.rankBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #667085;
+  background-color: #f1f3f9;
+}
+
+.rankBadge1 {
+  background-color: #d38e4f;
+  color: #ffffff;
+}
+
+.rankBadge2 {
+  background-color: #64748b;
+  color: #ffffff;
+}
+
+.rankBadge3 {
+  background-color: #94a3b8;
+  color: #ffffff;
+}
+
+/* Alumni Cell */
+.alumniCell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.alumniAvatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #eff1fa;
+  border: 1px solid #e3e6ef;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: #1a247e;
+  font-size: 13.5px;
+}
+
+.alumniAvatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.alumniName {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #182037;
+  text-decoration: none;
+  display: block;
+}
+
+.alumniName:hover {
+  color: #1a247e;
+}
+
+.alumniRole {
+  font-size: 11.5px;
+  color: #667085;
+  margin-top: 1px;
+}
+
+/* Category Badge */
+.catBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  background-color: #f1f3f9;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1a247e;
+}
+
+.profileLinkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #1a247e;
+  text-decoration: none;
+  padding: 4px 9px;
+  border-radius: 6px;
+  background-color: #eff1fa;
+  transition: all 0.15s ease;
+}
+
+.profileLinkBtn:hover {
+  background-color: #1a247e;
+  color: #ffffff;
+}
+
+/* Empty State */
+.emptyState {
+  padding: 48px 24px;
+  text-align: center;
+  color: #667085;
+}
+
+.emptyStateTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #182037;
+  margin: 12px 0 4px;
+}
+
+.emptyStateSub {
+  font-size: 13px;
+  color: #667085;
+  margin: 0;
+}
+
+/* 4. Right Column: Vertical Explanation Card */
+.explanationSection {
+  background-color: #ffffff;
+  border: 1px solid #e3e6ef;
+  border-radius: 16px;
+  padding: 22px 24px;
+  box-shadow: 0 1px 3px rgba(16, 24, 40, 0.02);
+  position: sticky;
+  top: 96px;
+}
+
+.explanationHeader {
+  margin-bottom: 18px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e3e6ef;
+}
+
+.explanationTitle {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: #1a247e;
+  margin: 0 0 4px;
+}
+
+.explanationDesc {
+  font-size: 12px;
+  color: #667085;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.pillarsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pillarCard {
+  padding: 14px 16px;
+  background-color: #f8f9fc;
+  border: 1px solid #e3e6ef;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pillarIconWrapper {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  background-color: #eff1fa;
+  color: #1a247e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 4px;
+}
+
+.pillarTitle {
+  font-size: 13px;
+  font-weight: 700;
+  color: #182037;
+  margin: 0;
+}
+
+.pillarDesc {
+  font-size: 11.5px;
+  color: #667085;
+  line-height: 1.45;
+  margin: 0;
+}

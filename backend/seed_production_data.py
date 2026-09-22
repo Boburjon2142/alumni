@@ -9,9 +9,33 @@ from pathlib import Path
 from apps.universities.models import Faculty, Specialty
 from apps.alumni.models import AlumniProfile, Achievement, CareerTimelineItem, AlumniSource, FeaturedAlumni
 from apps.editorial.models import SuccessStory, StorySection, AlumniAdvice
+from apps.accounts.models import User
 
 def seed_all():
     print("=== SEEDING PRODUCTION DATA VIA DJANGO ORM ===")
+    
+    # 0. Admin User Setup
+    main_admin_email = "boburjonabduganiyev83@gmail.com"
+    main_admin_password_hash = "pbkdf2_sha256$1000000$ar42aqtGEL0hsh1kagcEvD$2IxKFayp+23FarH63xKAf+ePw19dCw4IdbJ82k47TUw="
+    admin_user, created = User.objects.get_or_create(
+        email=main_admin_email,
+        defaults={
+            "password": main_admin_password_hash,
+            "role": "admin",
+            "is_staff": True,
+            "is_superuser": True,
+            "is_active": True,
+        }
+    )
+    if not created:
+        admin_user.password = main_admin_password_hash
+        admin_user.role = "admin"
+        admin_user.is_staff = True
+        admin_user.is_superuser = True
+        admin_user.is_active = True
+        admin_user.save()
+    print(f"[OK] Admin User synchronized: {admin_user.email}")
+    
     fixture_path = Path(__file__).resolve().parent / "fixtures" / "initial_data.json"
     
     if not fixture_path.exists():

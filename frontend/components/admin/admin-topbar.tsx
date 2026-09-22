@@ -9,7 +9,6 @@ import { useAdminSidebar } from "@/components/admin/admin-sidebar-context";
 const pageTitles: Record<string, string> = {
   "/admin": "Boshqaruv Paneli Umumiy Ko‘rinishi",
   "/admin/alumni": "Bitiruvchilar Ma’lumotlar Bazasi va Moderatsiya",
-  "/admin/alumni/new": "Yangi Bitiruvchi Profilini Yaratish",
   "/admin/recognitions": "Tavsiyaviy Faxriy Unvonlar Tizimi",
   "/admin/stories": "Muvaffaqiyat Hikoyalari Muharriri",
   "/admin/interviews": "Eksklyuziv Intervyular Muharriri",
@@ -39,7 +38,7 @@ export function AdminTopbar() {
   const getTitle = () => {
     if (pageTitles[pathname]) return pageTitles[pathname];
     if (pathname.startsWith("/admin/alumni/") && pathname.endsWith("/edit")) {
-      return "Bitiruvchi Profilini Tahrirlash";
+      return "Bitiruvchi Profili va Moderatsiya";
     }
     if (pathname.startsWith("/admin/stories/")) return "Hikoyani Tahrirlash";
     if (pathname.startsWith("/admin/interviews/")) return "Intervyuni Tahrirlash";

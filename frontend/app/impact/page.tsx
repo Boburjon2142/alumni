@@ -2,11 +2,12 @@ import { getFaculties, getImpactRankings } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import { ImpactView } from "@/components/impact/impact-view";
 import type { Faculty, ImpactRankingEntry } from "@/types/alumni";
+import styles from "./impact.module.css";
 
 export const metadata = {
-  title: "Hissa va E’tirof (Alumni Impact) — Qarshi davlat universiteti",
+  title: "E’tirof — Qarshi davlat universiteti",
   description:
-    "Universitet va bitiruvchilar hamjamiyatiga qo‘shilgan tasdiqlangan hissalar reytingi va nufuzli e’tirofi.",
+    "Universitet va bitiruvchilar hamjamiyatiga munosib hissa qo‘shgan nufuzli bitiruvchilar e’tirofi.",
 };
 
 export default async function ImpactPage({
@@ -44,7 +45,7 @@ export default async function ImpactPage({
   }
 
   return (
-    <main className="min-h-screen bg-slate-50/50 dark:bg-slate-950">
+    <main className={styles.page}>
       <ImpactView
         t={t}
         initialRankings={initialRankings}

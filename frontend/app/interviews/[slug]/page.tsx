@@ -1,9 +1,10 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, MessageSquare, Quote, Sparkles, UserCheck } from "lucide-react";
+import { ArrowLeft, Play, Quote, Sparkles, UserCheck } from "lucide-react";
 import { getInterviewBySlug } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import { RemoteImage } from "@/components/ui/remote-image";
+import { getYouTubeEmbedUrl } from "@/lib/video";
 
 export default async function InterviewDetailPage({
   params,
@@ -109,6 +110,28 @@ export default async function InterviewDetailPage({
           </div>
         </header>
 
+        {/* Video Player */}
+        {(() => {
+          const embedUrl = getYouTubeEmbedUrl(interview.video_url);
+          if (embedUrl) {
+            return (
+              <div className="interview-video-player-wrap mb-8">
+                <div className="video-modal-player-box">
+                  <iframe
+                    src={embedUrl}
+                    title={title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    className="video-modal-iframe"
+                  />
+                </div>
+              </div>
+            );
+          }
+          return null;
+        })()}
+
         {/* Pull quote highlight */}
         {pullQuote && (
           <div className="interview-pullquote-box">
@@ -124,48 +147,6 @@ export default async function InterviewDetailPage({
             <p>{intro}</p>
           </div>
         )}
-
-        {/* Q&A Items */}
-        <section className="interview-qa-section" aria-label={t.questionsAndAnswers}>
-          <div className="interview-qa-header">
-            <MessageSquare size={20} aria-hidden="true" />
-            <h2>{t.questionsAndAnswers}</h2>
-          </div>
-
-          <div className="interview-qa-list">
-            {items.map((item, index) => {
-              const question =
-                (locale === "en" && item.question_en) ||
-                (locale === "ru" && item.question_ru) ||
-                item.question_uz;
-
-              const answer =
-                (locale === "en" && item.answer_en) ||
-                (locale === "ru" && item.answer_ru) ||
-                item.answer_uz;
-
-              return (
-                <div key={item.id || index} className="interview-qa-item">
-                  <div className="interview-q-bubble">
-                    <span className="interview-q-label">
-                      {locale === "en" ? "Question" : locale === "ru" ? "Вопрос" : "Savol"} {index + 1}
-                    </span>
-                    <h3>{question}</h3>
-                  </div>
-
-                  <div className="interview-a-bubble">
-                    <div className="interview-a-author-mini">
-                      <strong>{alumnus.full_name}</strong>
-                    </div>
-                    <div className="interview-a-content">
-                      <p>{answer}</p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
 
         {/* Footer Navigation */}
         <div className="interview-detail-bottom">

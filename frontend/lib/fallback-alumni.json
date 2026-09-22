@@ -1,0 +1,426 @@
+[
+  {
+    "id": 31,
+    "slug": "ashurova-sharofat-toshpolatovna",
+    "avatar": "http://127.0.0.1:8000/media/alumni/sayyora-ashurova/sayyora-ashurova.png",
+    "image_url": "/images/faxriylar/ashurova-sharofat-toshpolatovna.png",
+    "image_alt": "Sayyora Ashurova portreti",
+    "full_name": "Ashurova Sharofat Toshpo‘latovna",
+    "position": "Xalqaro “Oltin meros” fondi viloyat bo‘limi raisi, O‘zbekiston Yozuvchilar uyushmasi aʼzosi",
+    "current_company": "Xalqaro “Oltin meros” xayriya jamoat fondi",
+    "current_activity": "Xalqaro “Oltin meros” fondi viloyat bo‘limi raisi, O‘zbekiston Yozuvchilar uyushmasi aʼzosi — Xalqaro “Oltin meros” xayriya jamoat fondi",
+    "faculty": "O‘zbek filologiyasi",
+    "specialty": "Filologiya / Adabiyotshunoslik (O‘zbek tili va adabiyoti mutaxassisi, yozuvchi va publitsist)",
+    "graduation_year": 1979,
+    "is_featured": true,
+    "is_honorary": true,
+    "recognitions": [
+      {
+        "id": 1,
+        "name": "Faxriy ustoz",
+        "slug": "faxriy-ustoz",
+        "icon": "graduation-cap",
+        "description": "Ta’lim va murabbiylik sohasida yuksak natijalarga erishgan bitiruvchilar",
+        "year": 2024
+      },
+      {
+        "id": 4,
+        "name": "Universitet fidoyisi",
+        "slug": "universitet-fidoyisi",
+        "icon": "users",
+        "description": "Universitet nufuzi va taraqqiyotiga ulkan hissa qo‘shgan bitiruvchilar",
+        "year": 2024
+      }
+    ]
+  },
+  {
+    "id": 35,
+    "slug": "xusan-temirov",
+    "avatar": "http://127.0.0.1:8000/media/alumni/xurshid-temirov/xurshid-temirov.png",
+    "image_url": "/images/faxriylar/xusan-temirov.png",
+    "image_alt": "Xurshid Temirov portreti",
+    "full_name": "Xusan Temirov",
+    "position": "Taniqli teleradiojurnalist, faxriy media sohasi namoyandasi va publitsist",
+    "current_company": "O‘zbekiston milliy teleradiokompaniyasi tizimi",
+    "current_activity": "Taniqli teleradiojurnalist, faxriy media sohasi namoyandasi va publitsist — O‘zbekiston milliy teleradiokompaniyasi tizimi",
+    "faculty": "Filologiya",
+    "specialty": "Filologiya (Teleradiojurnalist / Filolog)",
+    "graduation_year": 1982,
+    "is_featured": true,
+    "is_honorary": true,
+    "recognitions": [
+      {
+        "id": 1,
+        "name": "Faxriy ustoz",
+        "slug": "faxriy-ustoz",
+        "icon": "graduation-cap",
+        "description": "Ta’lim va murabbiylik sohasida yuksak natijalarga erishgan bitiruvchilar",
+        "year": 2024
+      },
+      {
+        "id": 4,
+        "name": "Universitet fidoyisi",
+        "slug": "universitet-fidoyisi",
+        "icon": "users",
+        "description": "Universitet nufuzi va taraqqiyotiga ulkan hissa qo‘shgan bitiruvchilar",
+        "year": 2024
+      }
+    ]
+  },
+  {
+    "id": 25,
+    "slug": "allayev-dolli-hakimovich",
+    "avatar": "http://127.0.0.1:8000/media/alumni/allayev-dolli-hakimovich/allayev-dolli-hakimovich.png",
+    "image_url": "/images/faxriylar/allayev-dolli-hakimovich.png",
+    "image_alt": "Dilshod Allayev portreti",
+    "full_name": "Allayev Dolli Hakimovich",
+    "position": "Oliy taʼlim tizimida pedagogik, ilmiy-tadqiqot va rahbarlik faoliyati (professor / rahbarlik lavozimlarida)",
+    "current_company": "",
+    "current_activity": "Oliy taʼlim tizimida pedagogik, ilmiy-tadqiqot va rahbarlik faoliyati (professor / rahbarlik lavozimlarida)",
+    "faculty": "Kimyo-biologiya",
+    "specialty": "Biologiya va kimyo fani o‘qituvchisi (Biologiya/qishloq xo‘jaligi fanlari doktori, professor)",
+    "graduation_year": 1993,
+    "is_featured": true,
+    "is_honorary": true,
+    "recognitions": [
+      {
+        "id": 1,
+        "name": "Faxriy ustoz",
+        "slug": "faxriy-ustoz",
+        "icon": "graduation-cap",
+        "description": "Ta’lim va murabbiylik sohasida yuksak natijalarga erishgan bitiruvchilar",
+        "year": 2024
+      },
+      {
+        "id": 4,
+        "name": "Universitet fidoyisi",
+        "slug": "universitet-fidoyisi",
+        "icon": "users",
+        "description": "Universitet nufuzi va taraqqiyotiga ulkan hissa qo‘shgan bitiruvchilar",
+        "year": 2024
+      },
+      {
+        "id": 5,
+        "name": "Ilm-fan fidoyisi",
+        "slug": "ilm-fan-fidoyisi",
+        "icon": "book-open",
+        "description": "Ilmiy izlanishlar va tadqiqotlarda yetakchi olim bitiruvchilar",
+        "year": 2024
+      }
+    ]
+  },
+  {
+    "id": 34,
+    "slug": "nusurov-usmon-nusratovich",
+    "avatar": "http://127.0.0.1:8000/media/alumni/umid-nusratov/umid-nusratov.png",
+    "image_url": "/images/faxriylar/nusurov-usmon-nusratovich.png",
+    "image_alt": "Umid Nusratov portreti",
+    "full_name": "Nusurov Usmon Nusratovich",
+    "position": "Jurnalistika va ommaviy axborot vositalari sohasida rahbarlik/ijodiy faoliyat",
+    "current_company": "Ommaviy axborot vositalari va matbuot xizmati",
+    "current_activity": "Jurnalistika va ommaviy axborot vositalari sohasida rahbarlik/ijodiy faoliyat — Ommaviy axborot vositalari va matbuot xizmati",
+    "faculty": "Filologiya",
+    "specialty": "Jurnalist / Filolog (Matbuot va tahririyat ishi mutaxassisi)",
+    "graduation_year": 1995,
+    "is_featured": true,
+    "is_honorary": true,
+    "recognitions": [
+      {
+        "id": 2,
+        "name": "Karyera ko‘prigi",
+        "slug": "karyera-koprigi",
+        "icon": "briefcase",
+        "description": "Yosh mutaxassislar bandligiga va karyerasiga ko‘maklashuvchi bitiruvchilar",
+        "year": 2024
+      },
+      {
+        "id": 3,
+        "name": "Faol bitiruvchi",
+        "slug": "faol-bitiruvchi",
+        "icon": "activity",
+        "description": "Universitet va jamiyat hayotida faol ishtirok etuvchi bitiruvchilar",
+        "year": 2024
+      }
+    ]
+  },
+  {
+    "id": 36,
+    "slug": "xolmurodov-abdulhamid-erkinovich",
+    "avatar": "http://127.0.0.1:8000/media/alumni/xolmurodov-abdulhamid-erkinovich/xolmurodov-abdulhamid-erkinovich.png",
+    "image_url": "/images/faxriylar/xolmurodov-abdulhamid-erkinovich.png",
+    "image_alt": "Abdulla Xolmurodov portreti",
+    "full_name": "Xolmurodov Abdulhamid Erkinovich",
+    "position": "Qarshi davlat universiteti Amaliy matematika kafedrasi professori",
+    "current_company": "Qarshi davlat universiteti",
+    "current_activity": "Qarshi davlat universiteti Amaliy matematika kafedrasi professori — Qarshi davlat universiteti",
+    "faculty": "Matematika",
+    "specialty": "Amaliy matematika va informatika (Fizika-matematika fanlari doktori — DSc, professor)",
+    "graduation_year": 1996,
+    "is_featured": true,
+    "is_honorary": true,
+    "recognitions": [
+      {
+        "id": 4,
+        "name": "Universitet fidoyisi",
+        "slug": "universitet-fidoyisi",
+        "icon": "users",
+        "description": "Universitet nufuzi va taraqqiyotiga ulkan hissa qo‘shgan bitiruvchilar",
+        "year": 2024
+      },
+      {
+        "id": 5,
+        "name": "Ilm-fan fidoyisi",
+        "slug": "ilm-fan-fidoyisi",
+        "icon": "book-open",
+        "description": "Ilmiy izlanishlar va tadqiqotlarda yetakchi olim bitiruvchilar",
+        "year": 2024
+      }
+    ]
+  },
+  {
+    "id": 29,
+    "slug": "rajabov-alisher-hazratovich",
+    "avatar": "http://127.0.0.1:8000/media/alumni/anvar-rajabov/anvar-rajabov.png",
+    "image_url": "/images/faxriylar/rajabov-alisher-hazratovich.png",
+    "image_alt": "Anvar Rajabov portreti",
+    "full_name": "Rajabov Alisher Hazratovich",
+    "position": "O‘zbekiston Respublikasi huquq-tartibot (prokuratura / adliya) organlari tizimida masʼul rahbarlik faoliyati",
+    "current_company": "O‘zbekiston Respublikasi huquq-tartibot organlari",
+    "current_activity": "O‘zbekiston Respublikasi huquq-tartibot (prokuratura / adliya) organlari tizimida masʼul rahbarlik faoliyati — O‘zbekiston Respublikasi huquq-tartibot organlari",
+    "faculty": "Huquqshunoslik",
+    "specialty": "Yurist / Huquqshunoslik (Huquq-tartibot organlari sohasidagi mutaxassis)",
+    "graduation_year": 1998,
+    "is_featured": true,
+    "is_honorary": true,
+    "recognitions": [
+      {
+        "id": 3,
+        "name": "Faol bitiruvchi",
+        "slug": "faol-bitiruvchi",
+        "icon": "activity",
+        "description": "Universitet va jamiyat hayotida faol ishtirok etuvchi bitiruvchilar",
+        "year": 2024
+      },
+      {
+        "id": 4,
+        "name": "Universitet fidoyisi",
+        "slug": "universitet-fidoyisi",
+        "icon": "users",
+        "description": "Universitet nufuzi va taraqqiyotiga ulkan hissa qo‘shgan bitiruvchilar",
+        "year": 2024
+      }
+    ]
+  },
+  {
+    "id": 32,
+    "slug": "muratov-shuxrat-kaxarovich",
+    "avatar": "http://127.0.0.1:8000/media/alumni/sardor-muratov/sardor-muratov.png",
+    "image_url": "/images/faxriylar/muratov-shuxrat-kaxarovich.png",
+    "image_alt": "Sardor Muratov portreti",
+    "full_name": "Muratov Shuxrat Kaxarovich",
+    "position": "Yirik tadbirkor va ishlab chiqaruvchi, “Alp Texno Servis” XK rahbari / asoschisi",
+    "current_company": "“Alp Texno Servis” XK",
+    "current_activity": "Yirik tadbirkor va ishlab chiqaruvchi, “Alp Texno Servis” XK rahbari / asoschisi — “Alp Texno Servis” XK",
+    "faculty": "Matematika",
+    "specialty": "Matematika (Matematika fani mutaxassisi / o‘qituvchisi)",
+    "graduation_year": 2000,
+    "is_featured": true,
+    "is_honorary": true,
+    "recognitions": [
+      {
+        "id": 2,
+        "name": "Karyera ko‘prigi",
+        "slug": "karyera-koprigi",
+        "icon": "briefcase",
+        "description": "Yosh mutaxassislar bandligiga va karyerasiga ko‘maklashuvchi bitiruvchilar",
+        "year": 2024
+      },
+      {
+        "id": 7,
+        "name": "Tadbirkor bitiruvchi",
+        "slug": "tadbirkor-bitiruvchi",
+        "icon": "trending-up",
+        "description": "Biznes va ishlab chiqarishda yetakchi bitiruvchilar",
+        "year": 2024
+      }
+    ]
+  },
+  {
+    "id": 27,
+    "slug": "markayev-zafar-aliqulovich",
+    "avatar": "http://127.0.0.1:8000/media/alumni/markayev-zafar-aliqulovich/markayev-zafar-aliqulovich.png",
+    "image_url": "/images/faxriylar/markayev-zafar-aliqulovich.png",
+    "image_alt": "Zafar Makayev portreti",
+    "full_name": "Markayev Zafar Aliqulovich",
+    "position": "O‘zbekiston Respublikasi Ichki ishlar vazirligi tizimida masʼul rahbarlik faoliyati (podpolkovnik unvonida)",
+    "current_company": "",
+    "current_activity": "O‘zbekiston Respublikasi Ichki ishlar vazirligi tizimida masʼul rahbarlik faoliyati (podpolkovnik unvonida)",
+    "faculty": "Jismoniy madaniyat",
+    "specialty": "Jismoniy madaniyat o‘qituvchisi (Jismoniy madaniyat fakulteti bitiruvchisi)",
+    "graduation_year": 2002,
+    "is_featured": true,
+    "is_honorary": true,
+    "recognitions": [
+      {
+        "id": 3,
+        "name": "Faol bitiruvchi",
+        "slug": "faol-bitiruvchi",
+        "icon": "activity",
+        "description": "Universitet va jamiyat hayotida faol ishtirok etuvchi bitiruvchilar",
+        "year": 2024
+      },
+      {
+        "id": 4,
+        "name": "Universitet fidoyisi",
+        "slug": "universitet-fidoyisi",
+        "icon": "users",
+        "description": "Universitet nufuzi va taraqqiyotiga ulkan hissa qo‘shgan bitiruvchilar",
+        "year": 2024
+      }
+    ]
+  },
+  {
+    "id": 26,
+    "slug": "panjiyev-maqsud-aliqulovich",
+    "avatar": "http://127.0.0.1:8000/media/alumni/panjiyev-maqsud-aliqulovich/panjiyev-maqsud-aliqulovich.png",
+    "image_url": "/images/faxriylar/panjiyev-maqsud-aliqulovich.png",
+    "image_alt": "Murod Panjiyev portreti",
+    "full_name": "Panjiyev Maqsud Aliqulovich",
+    "position": "Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi boshlig‘i o‘rinbosari",
+    "current_company": "Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi",
+    "current_activity": "Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi boshlig‘i o‘rinbosari — Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi",
+    "faculty": "Matematika",
+    "specialty": "Matematika va informatika o‘qituvchisi (pedagogika fanlari bo‘yicha falsafa doktori — PhD)",
+    "graduation_year": 2003,
+    "is_featured": true,
+    "is_honorary": true,
+    "recognitions": [
+      {
+        "id": 1,
+        "name": "Faxriy ustoz",
+        "slug": "faxriy-ustoz",
+        "icon": "graduation-cap",
+        "description": "Ta’lim va murabbiylik sohasida yuksak natijalarga erishgan bitiruvchilar",
+        "year": 2024
+      },
+      {
+        "id": 3,
+        "name": "Faol bitiruvchi",
+        "slug": "faol-bitiruvchi",
+        "icon": "activity",
+        "description": "Universitet va jamiyat hayotida faol ishtirok etuvchi bitiruvchilar",
+        "year": 2024
+      }
+    ]
+  },
+  {
+    "id": 30,
+    "slug": "ravshanov-olim-poyonovich",
+    "avatar": "http://127.0.0.1:8000/media/alumni/olim-ravshanov/olim-ravshanov.png",
+    "image_url": "/images/faxriylar/ravshanov-olim-poyonovich.png",
+    "image_alt": "Olim Ravshanov portreti",
+    "full_name": "Ravshanov Olim Poyonovich",
+    "position": "O‘zbekiston mahallalari uyushmasining Qashqadaryo viloyati boshqarmasi boshlig‘i, Xalq deputatlari viloyat Kengashi deputati",
+    "current_company": "O‘zbekiston mahallalari uyushmasi",
+    "current_activity": "O‘zbekiston mahallalari uyushmasining Qashqadaryo viloyati boshqarmasi boshlig‘i, Xalq deputatlari viloyat Kengashi deputati — O‘zbekiston mahallalari uyushmasi",
+    "faculty": "O‘zbek filologiyasi",
+    "specialty": "O‘zbek filologiyasi / Filologiya (Filologiya fanlari bo‘yicha falsafa doktori — PhD)",
+    "graduation_year": 2004,
+    "is_featured": true,
+    "is_honorary": true,
+    "recognitions": [
+      {
+        "id": 1,
+        "name": "Faxriy ustoz",
+        "slug": "faxriy-ustoz",
+        "icon": "graduation-cap",
+        "description": "Ta’lim va murabbiylik sohasida yuksak natijalarga erishgan bitiruvchilar",
+        "year": 2024
+      },
+      {
+        "id": 5,
+        "name": "Ilm-fan fidoyisi",
+        "slug": "ilm-fan-fidoyisi",
+        "icon": "book-open",
+        "description": "Ilmiy izlanishlar va tadqiqotlarda yetakchi olim bitiruvchilar",
+        "year": 2024
+      }
+    ]
+  },
+  {
+    "id": 33,
+    "slug": "nematov-sherzod-qalandarovich",
+    "avatar": "http://127.0.0.1:8000/media/alumni/sirojiddin-nematov/sirojiddin-nematov.png",
+    "image_url": "/images/faxriylar/nematov-sherzod-qalandarovich.png",
+    "image_alt": "Sirojiddin Ne'matov portreti",
+    "full_name": "Nematov Sherzod Qalandarovich",
+    "position": "Qarshi davlat texnika universiteti (Qarshi muhandislik-iqtisodiyot instituti) rektori, professor",
+    "current_company": "Qarshi davlat texnika universiteti",
+    "current_activity": "Qarshi davlat texnika universiteti (Qarshi muhandislik-iqtisodiyot instituti) rektori, professor — Qarshi davlat texnika universiteti",
+    "faculty": "Fizika-texnika",
+    "specialty": "Fizika (Texnika fanlari doktori — DSc, professor)",
+    "graduation_year": 2005,
+    "is_featured": true,
+    "is_honorary": true,
+    "recognitions": [
+      {
+        "id": 5,
+        "name": "Ilm-fan fidoyisi",
+        "slug": "ilm-fan-fidoyisi",
+        "icon": "book-open",
+        "description": "Ilmiy izlanishlar va tadqiqotlarda yetakchi olim bitiruvchilar",
+        "year": 2024
+      },
+      {
+        "id": 6,
+        "name": "Innovatsiya yetakchisi",
+        "slug": "innovatsiya-yetakchisi",
+        "icon": "lightbulb",
+        "description": "Innovatsion loyihalar va ilg‘or texnologiyalar yaratuvchilari",
+        "year": 2024
+      },
+      {
+        "id": 8,
+        "name": "Yil bitiruvchisi",
+        "slug": "yil-bitiruvchisi",
+        "icon": "trophy",
+        "description": "Yil davomida eng yuqori e’tirofga sazovor bo‘lgan bitiruvchi",
+        "year": 2024
+      }
+    ]
+  },
+  {
+    "id": 28,
+    "slug": "qurbonov-oybek-abdusattorovich",
+    "avatar": "http://127.0.0.1:8000/media/alumni/qurbonov-oybek-abdusattorovich/qurbonov-oybek-abdusattorovich.png",
+    "image_url": "/images/faxriylar/qurbonov-oybek-abdusattorovich.png",
+    "image_alt": "Otabek Qurbonov portreti",
+    "full_name": "Qurbonov Oybek Abdusattorovich",
+    "position": "Qashqadaryo viloyati hokimligi huzuridagi «Sanoatni rivojlantirish loyiha ofisi» rahbari (direktori)",
+    "current_company": "Qashqadaryo viloyati hokimligi",
+    "current_activity": "Qashqadaryo viloyati hokimligi huzuridagi «Sanoatni rivojlantirish loyiha ofisi» rahbari (direktori) — Qashqadaryo viloyati hokimligi",
+    "faculty": "Iqtisodiyot",
+    "specialty": "Iqtisodiyot / Sanoat boshqaruvi yo‘nalishi",
+    "graduation_year": 2006,
+    "is_featured": true,
+    "is_honorary": true,
+    "recognitions": [
+      {
+        "id": 6,
+        "name": "Innovatsiya yetakchisi",
+        "slug": "innovatsiya-yetakchisi",
+        "icon": "lightbulb",
+        "description": "Innovatsion loyihalar va ilg‘or texnologiyalar yaratuvchilari",
+        "year": 2024
+      },
+      {
+        "id": 7,
+        "name": "Tadbirkor bitiruvchi",
+        "slug": "tadbirkor-bitiruvchi",
+        "icon": "trending-up",
+        "description": "Biznes va ishlab chiqarishda yetakchi bitiruvchilar",
+        "year": 2024
+      }
+    ]
+  }
+]

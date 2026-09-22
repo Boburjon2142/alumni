@@ -52,7 +52,6 @@ export function AlumniQuickProfile({open,onOpenChange,profile,loading,error,onRe
             <header className="quick-profile-header">
               <RemoteImage className="quick-profile-photo" src={profile.image_url || profile.avatar || `/images/faxriylar/${profile.slug}.png`} alt={profile.image_alt||`${profile.full_name} portreti`} fallback={initials} sizes="(max-width: 640px) 100vw, 280px"/>
               <div>
-                {profile.verified && <span className="quick-verified"><BadgeCheck aria-hidden="true"/>{t.verified}</span>}
                 <Dialog.Title>{profile.full_name}</Dialog.Title>
                 <Dialog.Description id="quick-profile-description">{profile.position||t.graduate}{profile.current_company&&` — ${profile.current_company}`}</Dialog.Description>
                 <div className="quick-profile-facts">

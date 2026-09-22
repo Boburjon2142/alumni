@@ -1,35 +1,47 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowLeft,
   Save,
-  Plus,
-  Trash2,
   Award,
   CheckCircle2,
+  XCircle,
   AlertCircle,
   Loader2,
   Sparkles,
-  Upload,
-  Image as ImageIcon,
-  X,
-  Link as LinkIcon,
-  User,
+  ExternalLink,
+  ShieldCheck,
+  ShieldAlert,
+  Lock,
+  Mail,
+  Phone,
+  MapPin,
+  Building,
+  Briefcase,
+  GraduationCap,
+  Globe,
+  Trash2,
+  Clock,
+  Eye,
+  Calendar,
+  Layers,
+  BookOpen,
+  HelpCircle,
 } from "lucide-react";
 import {
-  createAdminAlumni,
   getAdminAlumniById,
   getAdminRecognitions,
-  getFaculties,
   updateAdminAlumni,
+  deleteAdminAlumni,
 } from "@/lib/api";
 import { RecognitionIcon } from "@/components/alumni/recognition-icon";
 import { getRecognitionTitle } from "@/lib/i18n";
 import type { AdminRecognition } from "@/types/admin";
-import type { Alumni, Faculty } from "@/types/alumni";
+import type { Alumni } from "@/types/alumni";
 
 interface AlumniFormEditorProps {
   initialId?: string;
@@ -37,268 +49,69 @@ interface AlumniFormEditorProps {
 
 export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
   const router = useRouter();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const isEditing = Boolean(initialId);
 
-  const [loading, setLoading] = useState(isEditing);
+  const [loading, setLoading] = useState(Boolean(initialId));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
 
-  const [faculties, setFaculties] = useState<Faculty[]>([]);
+  const [alumnus, setAlumnus] = useState<Alumni | null>(null);
   const [recognitionsList, setRecognitionsList] = useState<AdminRecognition[]>([]);
 
-  // Form Fields
-  const [fullName, setFullName] = useState("");
-  const [facultyName, setFacultyName] = useState("");
-  const [specialtyName, setSpecialtyName] = useState("");
-  const [graduationYear, setGraduationYear] = useState<string>("");
-  const [degree, setDegree] = useState("");
-  const [academicDegree, setAcademicDegree] = useState("");
-  const [academicTitle, setAcademicTitle] = useState("");
-  const [currentCompany, setCurrentCompany] = useState("");
-  const [position, setPosition] = useState("");
-  const [currentActivity, setCurrentActivity] = useState("");
-  const [industry, setIndustry] = useState("");
-  const [city, setCity] = useState("Qarshi");
-  const [country, setCountry] = useState("O‘zbekiston");
-  const [skillsStr, setSkillsStr] = useState("");
-  const [bio, setBio] = useState("");
-  const [biographyUz, setBiographyUz] = useState("");
-  const [biographyEn, setBiographyEn] = useState("");
-  const [careerStoryUz, setCareerStoryUz] = useState("");
-  const [careerStoryEn, setCareerStoryEn] = useState("");
-  const [linkedinUrl, setLinkedinUrl] = useState("");
-  const [githubUrl, setGithubUrl] = useState("");
-  const [websiteUrl, setWebsiteUrl] = useState("");
-  const [phone, setPhone] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-
-  // Photo & Avatar State
-  const [avatarPreview, setAvatarPreview] = useState<string>("");
-  const [avatarBase64, setAvatarBase64] = useState<string>("");
-  const [imageTab, setImageTab] = useState<"upload" | "url">("upload");
-  const [imageUrl, setImageUrl] = useState("");
-  const [imageAlt, setImageAlt] = useState("");
-  const [imageCredit, setImageCredit] = useState("");
-  const [imageSourceUrl, setImageSourceUrl] = useState("");
-
+  // Moderation state (these are the ONLY fields editable by admin)
   const [isHonorary, setIsHonorary] = useState(false);
   const [isFeatured, setIsFeatured] = useState(false);
   const [isPublished, setIsPublished] = useState(true);
   const [approvalStatus, setApprovalStatus] = useState<"pending" | "approved" | "rejected">("approved");
-
   const [selectedRecognitionIds, setSelectedRecognitionIds] = useState<number[]>([]);
 
-  const [achievements, setAchievements] = useState<
-    { title: string; description?: string; year?: number | null; category?: string }[]
-  >([]);
-
-  const [timeline, setTimeline] = useState<
-    { year: number; title: string; organization?: string; description?: string; type?: string }[]
-  >([]);
-
   useEffect(() => {
-    Promise.all([
-      getFaculties().then(setFaculties),
-      getAdminRecognitions().then((res) => setRecognitionsList(res.results || [])),
-    ]).catch(console.error);
+    getAdminRecognitions()
+      .then((res) => setRecognitionsList(res.results || []))
+      .catch(console.error);
 
     if (initialId) {
       getAdminAlumniById(initialId)
         .then((data: Alumni) => {
-          setFullName(data.full_name || "");
-          setFacultyName(data.faculty || data.faculty_name || "");
-          setSpecialtyName(data.specialty || "");
-          setGraduationYear(data.graduation_year ? data.graduation_year.toString() : "");
-          setDegree(data.degree || "");
-          setAcademicDegree(data.academic_degree || "");
-          setAcademicTitle(data.academic_title || "");
-          setCurrentCompany(data.current_company || "");
-          setPosition(data.position || "");
-          setCurrentActivity(data.current_activity || "");
-          setIndustry(data.industry || "");
-          setCity(data.city || "Qarshi");
-          setCountry(data.country || "O‘zbekiston");
-          setSkillsStr(data.skills?.join(", ") || "");
-          setBio(data.bio || "");
-          setBiographyUz(data.biography_uz || "");
-          setBiographyEn(data.biography_en || "");
-          setCareerStoryUz(data.career_story_uz || "");
-          setCareerStoryEn(data.career_story_en || "");
-          setLinkedinUrl(data.linkedin_url || "");
-          setGithubUrl(data.github_url || "");
-          setWebsiteUrl(data.website_url || "");
-          setPhone(data.phone || "");
-          setContactEmail(data.contact_email || "");
-
-          if (data.avatar) {
-            setAvatarPreview(data.avatar);
-          }
-          setImageUrl(data.image_url || "");
-          setImageAlt(data.image_alt || "");
-          setImageCredit(data.image_credit || "");
-          setImageSourceUrl(data.image_source_url || "");
-
+          setAlumnus(data);
           setIsHonorary(Boolean(data.is_honorary));
           setIsFeatured(Boolean(data.is_featured));
           setIsPublished(data.is_published !== false);
           setApprovalStatus((data.approval_status as any) || "approved");
 
           if (data.recognitions && Array.isArray(data.recognitions)) {
-            setSelectedRecognitionIds(data.recognitions.map((r: any) => r.id));
-          }
-
-          if (data.achievements) {
-            setAchievements(
-              data.achievements.map((a) => ({
-                title: a.title,
-                description: a.description,
-                year: a.year,
-                category: a.category,
-              }))
-            );
-          }
-
-          if (data.timeline) {
-            setTimeline(
-              data.timeline.map((t) => ({
-                year: t.year,
-                title: t.title,
-                organization: t.organization,
-                description: t.description,
-                type: t.type,
-              }))
-            );
+            setSelectedRecognitionIds(data.recognitions.map((r: any) => r.id || r.title?.id || r));
           }
         })
-        .catch((err) => setError(err.message || "Profilni yuklab bo‘lmadi"))
+        .catch((err) => {
+          console.error("Failed to load alumni profile:", err);
+          setError("Bitiruvchi profilini yuklashda xatolik yuz berdi.");
+        })
         .finally(() => setLoading(false));
     }
   }, [initialId]);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    if (file.size > 5 * 1024 * 1024) {
-      setError("Rasm hajmi 5MB dan oshmasligi kerak.");
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result as string;
-      setAvatarPreview(result);
-      setAvatarBase64(result);
-      setError("");
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleRemovePhoto = () => {
-    setAvatarPreview("");
-    setAvatarBase64("");
-    setImageUrl("");
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
-  };
-
-  const handleToggleRecognition = (id: number) => {
-    setSelectedRecognitionIds((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
-
-  const handleAddAchievement = () => {
-    setAchievements((prev) => [
-      ...prev,
-      { title: "", description: "", year: new Date().getFullYear(), category: "professional" },
-    ]);
-  };
-
-  const handleRemoveAchievement = (index: number) => {
-    setAchievements((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleAddTimeline = () => {
-    setTimeline((prev) => [
-      ...prev,
-      { year: new Date().getFullYear(), title: "", organization: "", description: "", type: "career" },
-    ]);
-  };
-
-  const handleRemoveTimeline = (index: number) => {
-    setTimeline((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!fullName.trim()) {
-      setError("F.I.SH. majburiy maydon.");
-      return;
-    }
+  const handleSaveModeration = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!initialId || !alumnus) return;
 
     setSaving(true);
     setError("");
     setSuccessMsg("");
 
-    const payload: any = {
-      full_name: fullName.trim(),
-      faculty_name: facultyName.trim() || undefined,
-      specialty_name: specialtyName.trim() || undefined,
-      graduation_year: graduationYear ? parseInt(graduationYear, 10) : null,
-      degree: degree.trim(),
-      academic_degree: academicDegree,
-      academic_title: academicTitle,
-      current_company: currentCompany.trim(),
-      position: position.trim(),
-      current_activity: currentActivity.trim(),
-      industry: industry.trim(),
-      city: city.trim(),
-      country: country.trim(),
-      skills: skillsStr ? skillsStr.split(",").map((s) => s.trim()).filter(Boolean) : [],
-      bio: bio.trim(),
-      biography_uz: biographyUz.trim(),
-      biography_en: biographyEn.trim(),
-      career_story_uz: careerStoryUz.trim(),
-      career_story_en: careerStoryEn.trim(),
-      linkedin_url: linkedinUrl.trim(),
-      github_url: githubUrl.trim(),
-      website_url: websiteUrl.trim(),
-      phone: phone.trim(),
-      contact_email: contactEmail.trim().toLowerCase(),
-      image_url: imageUrl.trim(),
-      image_alt: imageAlt.trim() || fullName.trim(),
-      image_credit: imageCredit.trim(),
-      image_source_url: imageSourceUrl.trim(),
-      is_honorary: isHonorary,
-      is_featured: isFeatured,
-      is_published: isPublished,
-      approval_status: approvalStatus,
-      recognition_ids: selectedRecognitionIds,
-      achievements: achievements.filter((a) => a.title.trim()),
-      timeline: timeline.filter((t) => t.title.trim() && t.year),
-    };
-
-    if (avatarBase64) {
-      payload.avatar = avatarBase64;
-    } else if (!avatarPreview && isEditing) {
-      payload.remove_avatar = true;
-    }
-
     try {
-      if (isEditing && initialId) {
-        await updateAdminAlumni(initialId, payload);
-        setSuccessMsg("Bitiruvchi profili muvaffaqiyatli yangilandi.");
-      } else {
-        const created = await createAdminAlumni(payload);
-        setSuccessMsg("Yangi bitiruvchi profili muvaffaqiyatli yaratildi.");
-        setTimeout(() => {
-          router.push(`/admin/alumni/${created.slug || created.id}/edit`);
-        }, 600);
-      }
+      const payload = {
+        is_honorary: isHonorary,
+        is_featured: isFeatured,
+        is_published: isPublished,
+        approval_status: approvalStatus,
+        recognition_ids: selectedRecognitionIds,
+      };
+
+      const updated = await updateAdminAlumni(initialId, payload);
+      setAlumnus(updated);
+      setSuccessMsg("Moderatsiya va unvonlar muvaffaqiyatli saqlandi!");
+      setTimeout(() => setSuccessMsg(""), 4000);
     } catch (err: any) {
       setError(err.message || "Saqlashda xatolik yuz berdi");
     } finally {
@@ -306,601 +119,568 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
     }
   };
 
+  const handleDelete = async () => {
+    if (!alumnus) return;
+    if (
+      !confirm(
+        `Haqiqatan ham "${alumnus.full_name}" profilini o‘chirmoqchimisiz? Ushbu amalni ortga qaytarib bo‘lmaydi.`
+      )
+    ) {
+      return;
+    }
+
+    try {
+      setSaving(true);
+      await deleteAdminAlumni(alumnus.id.toString());
+      router.push("/admin/alumni");
+    } catch (err: any) {
+      setError(err.message || "Profilni o‘chirishda xatolik");
+      setSaving(false);
+    }
+  };
+
+  const toggleRecognition = (id: number) => {
+    setSelectedRecognitionIds((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center py-20">
-        <Loader2 className="w-8 h-8 animate-spin text-[#0D1667] mb-3" />
-        <p className="text-sm text-slate-500">Profil ma’lumotlari yuklanmoqda...</p>
+      <div className="min-h-[400px] flex flex-col items-center justify-center gap-3 text-slate-500">
+        <Loader2 className="w-8 h-8 animate-spin text-[#0D1667]" />
+        <p className="text-sm font-medium">Bitiruvchi profili yuklanmoqda...</p>
       </div>
     );
   }
 
-  const currentDisplayPhoto = avatarPreview || imageUrl;
+  if (!alumnus && initialId) {
+    return (
+      <div className="bg-white p-8 rounded-2xl border border-slate-200 text-center space-y-4">
+        <AlertCircle className="w-12 h-12 text-rose-500 mx-auto" />
+        <h2 className="text-lg font-bold text-slate-800">Bitiruvchi profili topilmadi</h2>
+        <p className="text-sm text-slate-500">Bunday ID yoki slugga ega bitiruvchi mavjud emas.</p>
+        <Link
+          href="/admin/alumni"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-[#0D1667] text-white text-sm font-semibold rounded-xl"
+        >
+          <ArrowLeft className="w-4 h-4" /> Bitiruvchilar ro‘yxatiga qaytish
+        </Link>
+      </div>
+    );
+  }
 
-  return (
-    <form onSubmit={handleSubmit} className="space-y-8 pb-12">
-      {/* Top Action Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-4">
+  // If user navigated directly to /admin/alumni/new
+  if (!initialId) {
+    return (
+      <div className="space-y-6">
         <div className="flex items-center gap-3">
           <Link
             href="/admin/alumni"
-            className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 text-slate-600 transition"
+            className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm"
           >
-            <ArrowLeft className="w-5 h-5" />
+            <ArrowLeft className="w-5 h-5 text-slate-700" />
           </Link>
           <div>
             <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
-              {isEditing ? "Profilni Tahrirlash" : "Yangi Bitiruvchi Qo‘shish"}
+              Bitiruvchi Ma’lumotlari Xavfsizligi
             </h2>
-            <p className="text-xs text-slate-500">
-              {isEditing ? `ID: ${initialId}` : "QarDU ALUMNI Ma’lumotlar Bazasi"}
+            <p className="text-xs md:text-sm text-slate-500 mt-0.5">
+              Profil yaratish va tahrirlash siyosati
             </p>
           </div>
         </div>
 
+        <div className="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm max-w-2xl space-y-5">
+          <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-center text-amber-700">
+            <ShieldAlert className="w-6 h-6" />
+          </div>
+          <h3 className="text-lg font-bold text-slate-900">
+            Bitiruvchilar o‘z profillarini rasmiy anketa orqali shakllantiradilar
+          </h3>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Qarshi davlat universiteti ALUMNI platformasida bitiruvchilarning shaxsiy ma’lumotlari daxlsizdir.
+            Adminlar bitiruvchilar nomidan ma’lumotlarni to‘g‘ridan-to‘g‘ri kiritishi yoki o‘zgartirishi cheklangan.
+          </p>
+          <p className="text-sm text-slate-600 leading-relaxed">
+            Yangi bitiruvchilar portalda ro‘yxatdan o‘tish yoki rasmiy anketa sahifasi (<strong>/anketa</strong>) orqali ma’lumot yuboradilar.
+            Adminlar yuborilgan anketalarni tekshiradi, tasdiqlaydi va faxriy unvonlar biriktiradi.
+          </p>
+          <div className="flex flex-wrap gap-3 pt-2">
+            <Link
+              href="/admin/alumni"
+              className="px-4 py-2.5 bg-[#0D1667] text-white text-sm font-semibold rounded-xl hover:bg-[#1a2580] transition"
+            >
+              Bitiruvchilar ro‘yxatiga qaytish
+            </Link>
+            <a
+              href="/anketa"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2.5 bg-slate-100 text-slate-800 text-sm font-semibold rounded-xl hover:bg-slate-200 transition inline-flex items-center gap-2"
+            >
+              <ExternalLink className="w-4 h-4" /> Anketa sahifasini ko‘rish
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const hasPhoto = Boolean(alumnus?.avatar || alumnus?.image_url);
+
+  return (
+    <div className="space-y-6 pb-12">
+      {/* Header Bar */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Link
             href="/admin/alumni"
-            className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-semibold transition"
+            className="p-2 bg-white border border-slate-200 rounded-xl hover:bg-slate-50 transition shadow-sm"
           >
-            Bekor qilish
+            <ArrowLeft className="w-5 h-5 text-slate-700" />
           </Link>
-          <button
-            type="submit"
-            disabled={saving}
-            className="px-5 py-2.5 bg-[#0D1667] hover:bg-[#1a2580] text-white rounded-xl text-sm font-bold flex items-center gap-2 shadow-md transition active:scale-95 disabled:opacity-50"
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
+                {alumnus?.full_name}
+              </h2>
+              {isHonorary && (
+                <span className="px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 text-[11px] font-bold inline-flex items-center gap-1 border border-amber-200">
+                  <Award className="w-3 h-3 text-amber-600" /> Faxriy
+                </span>
+              )}
+            </div>
+            <p className="text-xs md:text-sm text-slate-500 mt-0.5">
+              Profil auditi, moderatsiya va unvonlar boshqaruvi
+            </p>
+          </div>
+        </div>
+
+        {alumnus?.slug && (
+          <a
+            href={`/alumni/${alumnus.slug}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3.5 py-2 bg-white border border-slate-200 hover:border-slate-300 text-slate-700 text-xs font-semibold rounded-xl shadow-sm transition inline-flex items-center gap-2 shrink-0 self-start sm:self-auto"
           >
-            {saving ? (
-              <>
-                <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Saqlanmoqda...</span>
-              </>
-            ) : (
-              <>
-                <Save className="w-4 h-4 text-[#D38E4F]" />
-                <span>Saqlash</span>
-              </>
-            )}
-          </button>
+            <Eye className="w-4 h-4 text-slate-500" />
+            <span>Ommaviy sahifani ko‘rish</span>
+            <ExternalLink className="w-3.5 h-3.5 text-slate-400" />
+          </a>
+        )}
+      </div>
+
+      {/* Security & Integrity Banner */}
+      <div className="bg-gradient-to-r from-blue-50 to-indigo-50/60 border border-blue-200/80 p-4 sm:p-5 rounded-2xl flex items-start gap-3.5 shadow-sm">
+        <div className="p-2 rounded-xl bg-blue-600 text-white shrink-0 mt-0.5">
+          <Lock className="w-4 h-4" />
+        </div>
+        <div className="text-xs sm:text-sm text-blue-950 leading-relaxed">
+          <strong className="font-bold block text-blue-900 mb-0.5">
+            Bitiruvchi ma’lumotlari daxlsizligi himoyalangan (Read-Only)
+          </strong>
+          Ushbu sahifada bitiruvchining shaxsiy biografiyasi, kasbiy faoliyati va aloqa ma’lumotlari faqat ko‘rish rejimida taqdim etiladi. Admin profil ma’lumotlarini o‘zboshimchalik bilan o‘zgartira olmaydi — faqat moderatsiya holati, verifikatsiya va faxriy unvonlarni boshqara oladi.
         </div>
       </div>
 
-      {/* Alerts */}
+      {/* Notifications */}
       {error && (
-        <div className="p-4 bg-red-50 border border-red-200 rounded-2xl flex items-start gap-3 text-xs text-red-700">
-          <AlertCircle className="w-4 h-4 text-red-500 shrink-0 mt-0.5" />
+        <div className="p-4 bg-rose-50 border border-rose-200 text-rose-800 text-sm rounded-xl flex items-center gap-2.5">
+          <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />
           <span>{error}</span>
         </div>
       )}
 
       {successMsg && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-start gap-3 text-xs text-emerald-700">
-          <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0 mt-0.5" />
+        <div className="p-4 bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm rounded-xl flex items-center gap-2.5">
+          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
           <span>{successMsg}</span>
         </div>
       )}
 
-      {/* 1. Asosiy Shaxsiy & Ta’lim Ma’lumotlari */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-[#0D1667] flex items-center gap-2">
-          <span>1. Asosiy va Akademik Ma’lumotlar</span>
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="md:col-span-2">
-            <label className="block text-xs font-bold text-slate-700 mb-1">
-              To‘liq F.I.SH. <span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              placeholder="Masalan: Azizov Sardor Bahodirovich"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Bitirgan Yili</label>
-            <input
-              type="number"
-              value={graduationYear}
-              onChange={(e) => setGraduationYear(e.target.value)}
-              placeholder="Masalan: 2018"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Fakultet</label>
-            <input
-              type="text"
-              list="faculty-list"
-              value={facultyName}
-              onChange={(e) => setFacultyName(e.target.value)}
-              placeholder="Masalan: Fizika-matematika fakulteti"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-            <datalist id="faculty-list">
-              {faculties.map((f) => (
-                <option key={f.id} value={f.name} />
-              ))}
-            </datalist>
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Mutaxassislik / Yo‘nalish</label>
-            <input
-              type="text"
-              value={specialtyName}
-              onChange={(e) => setSpecialtyName(e.target.value)}
-              placeholder="Masalan: Amaliy matematika va informatika"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Ta’lim Darajasi</label>
-            <input
-              type="text"
-              value={degree}
-              onChange={(e) => setDegree(e.target.value)}
-              placeholder="Bakalavr / Magistr"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Ilmiy Daraja</label>
-            <select
-              value={academicDegree}
-              onChange={(e) => setAcademicDegree(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            >
-              <option value="">Ilmiy darajasi yo‘q</option>
-              <option value="phd">Falsafa doktori (PhD)</option>
-              <option value="dsc">Fan doktori (DSc)</option>
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Ilmiy Unvon</label>
-            <select
-              value={academicTitle}
-              onChange={(e) => setAcademicTitle(e.target.value)}
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            >
-              <option value="">Ilmiy unvoni yo‘q</option>
-              <option value="docent">Dotsent</option>
-              <option value="professor">Professor</option>
-              <option value="senior_researcher">Katta ilmiy xodim</option>
-              <option value="academician">Akademik</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Kasbiy Faoliyat & Manzil */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-[#0D1667]">
-          2. Kasbiy Faoliyat va Aloqa
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Hozirgi Ish Joyi / Tashkilot</label>
-            <input
-              type="text"
-              value={currentCompany}
-              onChange={(e) => setCurrentCompany(e.target.value)}
-              placeholder="Masalan: EPAM Systems / QarDU"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Lavozim</label>
-            <input
-              type="text"
-              value={position}
-              onChange={(e) => setPosition(e.target.value)}
-              placeholder="Masalan: Bosh dasturchi / Kafedra mudiri"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Soha / Industriyalik</label>
-            <input
-              type="text"
-              value={industry}
-              onChange={(e) => setIndustry(e.target.value)}
-              placeholder="Axborot texnologiyalari, Ta’lim, Moliya"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Hozirgi Faoliyati Tavsifi</label>
-            <input
-              type="text"
-              value={currentActivity}
-              onChange={(e) => setCurrentActivity(e.target.value)}
-              placeholder="Masalan: IT sohasida arxitektor"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Shahar</label>
-            <input
-              type="text"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              placeholder="Toshkent / Qarshi"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Davlat</label>
-            <input
-              type="text"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              placeholder="O‘zbekiston"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div className="md:col-span-3">
-            <label className="block text-xs font-bold text-slate-700 mb-1">Ko‘nikmalar (vergul bilan ajratilgan)</label>
-            <input
-              type="text"
-              value={skillsStr}
-              onChange={(e) => setSkillsStr(e.target.value)}
-              placeholder="Python, AI, Ilmiy tadqiqot, Menejment"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Email Manzil</label>
-            <input
-              type="email"
-              value={contactEmail}
-              onChange={(e) => setContactEmail(e.target.value)}
-              placeholder="alumnus@qarshidu.uz"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Telefon Raqami</label>
-            <input
-              type="text"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              placeholder="+998 90 123 45 67"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">LinkedIn Havolasi</label>
-            <input
-              type="url"
-              value={linkedinUrl}
-              onChange={(e) => setLinkedinUrl(e.target.value)}
-              placeholder="https://linkedin.com/in/..."
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-        </div>
-      </div>
-
-      {/* 3. Portret Rasmi (Upload & URL) */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-        <div className="flex items-center justify-between border-b border-slate-100 pb-3">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-[#0D1667] flex items-center gap-2">
-            <ImageIcon className="w-4 h-4 text-[#D38E4F]" />
-            <span>3. Portret Rasmi</span>
-          </h3>
-
-          <div className="flex bg-slate-100 p-1 rounded-xl gap-1">
-            <button
-              type="button"
-              onClick={() => setImageTab("upload")}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
-                imageTab === "upload" ? "bg-white text-[#0D1667] shadow-sm" : "text-slate-500 hover:text-slate-900"
-              }`}
-            >
-              <Upload className="w-3.5 h-3.5 inline mr-1" />
-              Fayl yuklash
-            </button>
-            <button
-              type="button"
-              onClick={() => setImageTab("url")}
-              className={`px-3 py-1 rounded-lg text-xs font-semibold transition ${
-                imageTab === "url" ? "bg-white text-[#0D1667] shadow-sm" : "text-slate-500 hover:text-slate-900"
-              }`}
-            >
-              <LinkIcon className="w-3.5 h-3.5 inline mr-1" />
-              URL havola
-            </button>
-          </div>
-        </div>
-
-        <div className="flex flex-col md:flex-row items-start gap-6">
-          {/* Avatar Preview Box */}
-          <div className="flex flex-col items-center gap-2 shrink-0">
-            <div className="w-32 h-36 rounded-2xl border-2 border-dashed border-slate-300 bg-slate-50 flex items-center justify-center overflow-hidden relative group shadow-sm">
-              {currentDisplayPhoto ? (
-                <>
-                  <img
-                    src={currentDisplayPhoto}
-                    alt={fullName || "Portret"}
-                    className="w-full h-full object-cover"
+      {/* Two Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Column: Read-only Profile Information (7 cols) */}
+        <div className="lg:col-span-7 space-y-5">
+          {/* Main Profile Card */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <div className="flex flex-col sm:flex-row items-start gap-4 pb-5 border-b border-slate-100">
+              <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-slate-100 border-2 border-slate-200 shrink-0">
+                {hasPhoto ? (
+                  <Image
+                    src={alumnus?.avatar || alumnus?.image_url || ""}
+                    alt={alumnus?.full_name || "Alumni"}
+                    fill
+                    sizes="80px"
+                    className="object-cover"
                   />
-                  <button
-                    type="button"
-                    onClick={handleRemovePhoto}
-                    className="absolute top-1.5 right-1.5 p-1 bg-red-600 text-white rounded-lg opacity-0 group-hover:opacity-100 transition shadow"
-                    title="Rasmni o‘chirish"
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center font-black text-2xl text-[#0D1667]">
+                    {alumnus?.full_name?.charAt(0) || "A"}
+                  </div>
+                )}
+              </div>
+
+              <div className="space-y-1">
+                <h3 className="text-lg font-bold text-slate-900 leading-tight">
+                  {alumnus?.full_name}
+                </h3>
+                <p className="text-xs text-slate-500 flex items-center gap-1.5">
+                  <GraduationCap className="w-3.5 h-3.5 text-slate-400" />
+                  <span>{alumnus?.faculty || "Fakultet ko‘rsatilmagan"}</span>
+                  {alumnus?.graduation_year && (
+                    <span className="font-semibold text-slate-700">
+                      ({alumnus.graduation_year}-yil)
+                    </span>
+                  )}
+                </p>
+                {alumnus?.specialty && (
+                  <p className="text-xs text-slate-500">
+                    Mutaxassislik: <span className="text-slate-700">{alumnus.specialty}</span>
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Career & Position */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                <span className="text-slate-400 flex items-center gap-1 font-medium">
+                  <Briefcase className="w-3.5 h-3.5" /> Hozirgi lavozim
+                </span>
+                <p className="font-bold text-slate-800 text-sm">
+                  {alumnus?.position || alumnus?.current_activity || "Ko‘rsatilmagan"}
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                <span className="text-slate-400 flex items-center gap-1 font-medium">
+                  <Building className="w-3.5 h-3.5" /> Tashkilot / Kompaniya
+                </span>
+                <p className="font-bold text-slate-800 text-sm">
+                  {alumnus?.current_company || "Ko‘rsatilmagan"}
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                <span className="text-slate-400 flex items-center gap-1 font-medium">
+                  <MapPin className="w-3.5 h-3.5" /> Joylashuv
+                </span>
+                <p className="font-semibold text-slate-700">
+                  {[alumnus?.city, alumnus?.country].filter(Boolean).join(", ") || "Ko‘rsatilmagan"}
+                </p>
+              </div>
+
+              <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 space-y-1">
+                <span className="text-slate-400 flex items-center gap-1 font-medium">
+                  <Layers className="w-3.5 h-3.5" /> Faoliyat sohasi
+                </span>
+                <p className="font-semibold text-slate-700">
+                  {alumnus?.industry || "Umumiy"}
+                </p>
+              </div>
+            </div>
+
+            {/* Academic Degrees & Titles */}
+            {(alumnus?.academic_degree || alumnus?.academic_title || alumnus?.degree) && (
+              <div className="p-4 rounded-xl bg-amber-50/50 border border-amber-100 space-y-1 text-xs">
+                <span className="font-bold text-amber-900 block">Ilmiy salohiyat:</span>
+                <p className="text-slate-700">
+                  {[alumnus?.academic_degree, alumnus?.academic_title, alumnus?.degree]
+                    .filter(Boolean)
+                    .join(" • ")}
+                </p>
+              </div>
+            )}
+
+            {/* Contact Details (Admin only) */}
+            <div className="space-y-2 pt-2 border-t border-slate-100">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                Aloqa va Bog‘lanish
+              </h4>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                <div className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 text-slate-700 border border-slate-100 truncate">
+                  <Mail className="w-4 h-4 text-slate-400 shrink-0" />
+                  <span className="truncate">{alumnus?.email || alumnus?.contact_email || "Email yo‘q"}</span>
+                </div>
+                <div className="flex items-center gap-2 p-2.5 rounded-lg bg-slate-50 text-slate-700 border border-slate-100 truncate">
+                  <Phone className="w-4 h-4 text-slate-400 shrink-0" />
+                  <span className="truncate">{alumnus?.phone || "Telefon kiritilmagan"}</span>
+                </div>
+              </div>
+
+              {/* Social links */}
+              <div className="flex flex-wrap gap-2 pt-1">
+                {alumnus?.linkedin_url && (
+                  <a
+                    href={alumnus.linkedin_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-blue-50 text-blue-700 text-xs font-semibold hover:bg-blue-100 transition"
                   >
-                    <X className="w-4 h-4" />
-                  </button>
-                </>
-              ) : (
-                <div className="text-center p-3">
-                  <User className="w-10 h-10 text-slate-300 mx-auto mb-1" />
-                  <span className="text-[11px] text-slate-400 font-medium">Rasm yo‘q</span>
-                </div>
-              )}
-            </div>
-            {currentDisplayPhoto && (
-              <button
-                type="button"
-                onClick={handleRemovePhoto}
-                className="text-xs text-red-600 hover:underline font-semibold"
-              >
-                Rasmni olib tashlash
-              </button>
-            )}
-          </div>
-
-          {/* Upload Dropzone / URL inputs */}
-          <div className="flex-1 w-full space-y-4">
-            {imageTab === "upload" ? (
-              <div
-                onClick={() => fileInputRef.current?.click()}
-                className="border-2 border-dashed border-slate-300 hover:border-[#0D1667] rounded-2xl p-6 text-center cursor-pointer bg-slate-50 hover:bg-slate-100/60 transition group"
-              >
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileChange}
-                  accept="image/png, image/jpeg, image/jpg, image/webp"
-                  className="hidden"
-                />
-                <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-[#0D1667] flex items-center justify-center mx-auto mb-2 group-hover:scale-105 transition shadow-sm">
-                  <Upload className="w-6 h-6 text-[#D38E4F]" />
-                </div>
-                <p className="text-sm font-bold text-slate-800">
-                  Kompyuterdan rasm faylini tanlang yoki shu yerga tashlang
-                </p>
-                <p className="text-xs text-slate-500 mt-1">
-                  Formatlar: JPG, PNG, WEBP &bull; Maksimal hajm: 5 MB
-                </p>
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    fileInputRef.current?.click();
-                  }}
-                  className="mt-3 px-4 py-1.5 bg-[#0D1667] text-white text-xs font-semibold rounded-xl hover:bg-[#1a2580] transition shadow-sm"
-                >
-                  Faylni tanlash
-                </button>
+                    <Globe className="w-3.5 h-3.5" /> LinkedIn
+                  </a>
+                )}
+                {alumnus?.github_url && (
+                  <a
+                    href={alumnus.github_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-slate-100 text-slate-800 text-xs font-semibold hover:bg-slate-200 transition"
+                  >
+                    <Globe className="w-3.5 h-3.5" /> GitHub
+                  </a>
+                )}
+                {alumnus?.website_url && (
+                  <a
+                    href={alumnus.website_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-3 py-1 rounded-lg bg-emerald-50 text-emerald-800 text-xs font-semibold hover:bg-emerald-100 transition"
+                  >
+                    <Globe className="w-3.5 h-3.5" /> Veb-sayt
+                  </a>
+                )}
               </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="md:col-span-2">
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Rasm URL Havolasi</label>
-                  <input
-                    type="url"
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    placeholder="https://images.unsplash.com/photo-..."
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Rasm Muallifi (Credit)</label>
-                  <input
-                    type="text"
-                    value={imageCredit}
-                    onChange={(e) => setImageCredit(e.target.value)}
-                    placeholder="Fotograf ismi / Unsplash"
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1">Rasm Manba Sahifasi</label>
-                  <input
-                    type="url"
-                    value={imageSourceUrl}
-                    onChange={(e) => setImageSourceUrl(e.target.value)}
-                    placeholder="https://unsplash.com/photos/..."
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-                  />
+            </div>
+
+            {/* Biography & Story */}
+            {(alumnus?.bio || alumnus?.biography_uz || alumnus?.career_story_uz) && (
+              <div className="space-y-3 pt-4 border-t border-slate-100">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Tarjimai hol & Karyera yo‘li
+                </h4>
+                {alumnus.bio && (
+                  <p className="text-xs text-slate-600 leading-relaxed italic bg-slate-50 p-3 rounded-xl border border-slate-100">
+                    "{alumnus.bio}"
+                  </p>
+                )}
+                {alumnus.biography_uz && (
+                  <div className="text-xs text-slate-700 leading-relaxed space-y-2 whitespace-pre-line">
+                    {alumnus.biography_uz}
+                  </div>
+                )}
+                {alumnus.career_story_uz && (
+                  <div className="p-3.5 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-700 space-y-1">
+                    <strong className="font-bold text-slate-900 block">Karyera tajribasi:</strong>
+                    <p className="leading-relaxed whitespace-pre-line">{alumnus.career_story_uz}</p>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Skills */}
+            {alumnus?.skills && Array.isArray(alumnus.skills) && alumnus.skills.length > 0 && (
+              <div className="space-y-2 pt-4 border-t border-slate-100">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  Ko‘nikmalar va Mutaxassisliklar
+                </h4>
+                <div className="flex flex-wrap gap-1.5">
+                  {alumnus.skills.map((s, idx) => (
+                    <span
+                      key={idx}
+                      className="px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-medium"
+                    >
+                      {s}
+                    </span>
+                  ))}
                 </div>
               </div>
             )}
           </div>
         </div>
-      </div>
 
-      {/* 4. Biografiya & Karyera Hikoyasi */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-[#0D1667]">
-          4. Biografiya va Karyera Tarixi
-        </h3>
-
-        <div className="space-y-4">
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Qisqa Bio (Kartochka uchun)</label>
-            <textarea
-              rows={2}
-              value={bio}
-              onChange={(e) => setBio(e.target.value)}
-              placeholder="Bitiruvchi haqida 1-2 jumlali qisqacha ma’lumot..."
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-            />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Batafsil Biografiya (O‘zbekcha)</label>
-              <textarea
-                rows={5}
-                value={biographyUz}
-                onChange={(e) => setBiographyUz(e.target.value)}
-                placeholder="Bitiruvchining to‘liq hayot va faoliyat yo‘li..."
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-              />
+        {/* Right Column: Admin Moderation Controls (5 cols) */}
+        <div className="lg:col-span-5 space-y-5">
+          {/* Moderation Controls Card */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+            <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
+              <ShieldCheck className="w-5 h-5 text-[#0D1667]" />
+              <h3 className="font-bold text-slate-900 text-base">
+                Moderatsiya va Boshqaruv
+              </h3>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1">Biography (English)</label>
-              <textarea
-                rows={5}
-                value={biographyEn}
-                onChange={(e) => setBiographyEn(e.target.value)}
-                placeholder="Alumni detailed biography in English..."
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 5. Faxriy Unvonlar & Status */}
-      <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-        <h3 className="text-sm font-bold uppercase tracking-wider text-[#0D1667] flex items-center gap-2">
-          <Award className="w-4 h-4 text-[#D38E4F]" />
-          <span>5. Moderatsiya va Faxriy Unvonlar</span>
-        </h3>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 bg-slate-50 rounded-xl border border-slate-200">
-          <div>
-            <label className="block text-xs font-bold text-slate-700 mb-1">Moderatsiya Holati</label>
-            <select
-              value={approvalStatus}
-              onChange={(e) => setApprovalStatus(e.target.value as any)}
-              className="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-[#0D1667]"
-            >
-              <option value="approved">✅ Tasdiqlangan (Approved)</option>
-              <option value="pending">⏳ Kutilmoqda (Pending)</option>
-              <option value="rejected">❌ Rad etilgan (Rejected)</option>
-            </select>
-          </div>
-
-          <div className="flex items-center gap-2 pt-5">
-            <input
-              type="checkbox"
-              id="is-honorary-check"
-              checked={isHonorary}
-              onChange={(e) => setIsHonorary(e.target.checked)}
-              className="w-4 h-4 rounded text-[#0D1667] focus:ring-[#0D1667]"
-            />
-            <label htmlFor="is-honorary-check" className="text-xs font-bold text-slate-900 cursor-pointer">
-              🏅 Faxriy Bitiruvchi
-            </label>
-          </div>
-
-          <div className="flex items-center gap-2 pt-5">
-            <input
-              type="checkbox"
-              id="is-featured-check"
-              checked={isFeatured}
-              onChange={(e) => setIsFeatured(e.target.checked)}
-              className="w-4 h-4 rounded text-[#0D1667] focus:ring-[#0D1667]"
-            />
-            <label htmlFor="is-featured-check" className="text-xs font-bold text-slate-900 cursor-pointer">
-              ⭐ Bosh sahifada (Featured)
-            </label>
-          </div>
-
-          <div className="flex items-center gap-2 pt-5">
-            <input
-              type="checkbox"
-              id="is-published-check"
-              checked={isPublished}
-              onChange={(e) => setIsPublished(e.target.checked)}
-              className="w-4 h-4 rounded text-[#0D1667] focus:ring-[#0D1667]"
-            />
-            <label htmlFor="is-published-check" className="text-xs font-bold text-slate-900 cursor-pointer">
-              🌐 Saytda ommaviy ko‘rinsin
-            </label>
-          </div>
-        </div>
-
-        {/* Recognitions Multi-Select Badges */}
-        <div>
-          <label className="block text-xs font-bold text-slate-700 mb-2">
-            Biriktirilgan Faxriy Unvonlar (Tavsiyaviy unvon belgisini tanlang):
-          </label>
-          <div className="flex flex-wrap gap-2.5">
-            {recognitionsList.map((rec) => {
-              const isSelected = selectedRecognitionIds.includes(rec.id);
-              return (
+            {/* Approval Status Selector */}
+            <div className="space-y-2">
+              <label className="text-xs font-bold text-slate-700">
+                Moderatsiya holati:
+              </label>
+              <div className="grid grid-cols-3 gap-2">
                 <button
                   type="button"
-                  key={rec.id}
-                  onClick={() => handleToggleRecognition(rec.id)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-2 border transition ${
-                    isSelected
-                      ? "bg-[#0D1667] text-white border-[#0D1667] shadow-sm"
-                      : "bg-white text-slate-700 border-slate-200 hover:border-slate-400"
+                  onClick={() => setApprovalStatus("approved")}
+                  className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition ${
+                    approvalStatus === "approved"
+                      ? "bg-emerald-50 border-emerald-500 text-emerald-800 ring-2 ring-emerald-200"
+                      : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
                   }`}
                 >
-                  <RecognitionIcon icon={rec.icon} className="w-3.5 h-3.5 text-[#D38E4F]" />
-                  <span>{getRecognitionTitle(rec.name, "uz")}</span>
+                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                  <span>Tasdiqlangan</span>
                 </button>
-              );
-            })}
+
+                <button
+                  type="button"
+                  onClick={() => setApprovalStatus("pending")}
+                  className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition ${
+                    approvalStatus === "pending"
+                      ? "bg-amber-50 border-amber-500 text-amber-800 ring-2 ring-amber-200"
+                      : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  <Clock className="w-4 h-4 text-amber-600" />
+                  <span>Kutilmoqda</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setApprovalStatus("rejected")}
+                  className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition ${
+                    approvalStatus === "rejected"
+                      ? "bg-rose-50 border-rose-500 text-rose-800 ring-2 ring-rose-200"
+                      : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  <XCircle className="w-4 h-4 text-rose-600" />
+                  <span>Rad etilgan</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Toggles */}
+            <div className="space-y-3 pt-2">
+              {/* Published Toggle */}
+              <label className="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50/50 cursor-pointer transition">
+                <div className="space-y-0.5">
+                  <span className="text-xs font-bold text-slate-900 block">
+                    Saytda e’lon qilish (Nashr)
+                  </span>
+                  <span className="text-[11px] text-slate-500 block">
+                    Bitiruvchi profili ommaviy katalogda ko‘rinishi
+                  </span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={isPublished}
+                  onChange={(e) => setIsPublished(e.target.checked)}
+                  className="w-4 h-4 rounded text-[#0D1667] focus:ring-[#0D1667] cursor-pointer"
+                />
+              </label>
+
+              {/* Featured Toggle */}
+              <label className="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:bg-slate-50/50 cursor-pointer transition">
+                <div className="space-y-0.5">
+                  <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-amber-500" /> Bosh sahifada tavsiya etish
+                  </span>
+                  <span className="text-[11px] text-slate-500 block">
+                    Bosh sahifa va maxsus bloklarda ko‘rsatish
+                  </span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={isFeatured}
+                  onChange={(e) => setIsFeatured(e.target.checked)}
+                  className="w-4 h-4 rounded text-[#0D1667] focus:ring-[#0D1667] cursor-pointer"
+                />
+              </label>
+
+              {/* Honorary Toggle */}
+              <label className="flex items-center justify-between p-3 rounded-xl border border-amber-200 bg-amber-50/40 hover:bg-amber-50 cursor-pointer transition">
+                <div className="space-y-0.5">
+                  <span className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+                    <Award className="w-3.5 h-3.5 text-amber-600" /> Faxriy Bitiruvchi maqomi
+                  </span>
+                  <span className="text-[11px] text-amber-700/80 block">
+                    Oltin faxriy nishon va faxriylar ro‘yxatiga kiritish
+                  </span>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={isHonorary}
+                  onChange={(e) => setIsHonorary(e.target.checked)}
+                  className="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 cursor-pointer"
+                />
+              </label>
+            </div>
+
+            {/* Honorary Recognitions Multi-Select */}
+            <div className="space-y-2.5 pt-2 border-t border-slate-100">
+              <div className="flex items-center justify-between">
+                <label className="text-xs font-bold text-slate-800 flex items-center gap-1.5">
+                  <Award className="w-3.5 h-3.5 text-purple-600" />
+                  <span>Faxriy Unvonlar & Nishonlar</span>
+                </label>
+                <span className="text-[11px] text-slate-400">
+                  {selectedRecognitionIds.length} ta tanlandi
+                </span>
+              </div>
+
+              <div className="space-y-1.5 max-h-[220px] overflow-y-auto pr-1">
+                {recognitionsList.map((rec) => {
+                  const isChecked = selectedRecognitionIds.includes(rec.id);
+                  return (
+                    <div
+                      key={rec.id}
+                      onClick={() => toggleRecognition(rec.id)}
+                      className={`p-2.5 rounded-xl border text-xs cursor-pointer flex items-center justify-between transition ${
+                        isChecked
+                          ? "bg-purple-50 border-purple-300 text-purple-900 font-semibold"
+                          : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <RecognitionIcon icon={rec.icon} size={14} className="text-purple-600" />
+                        <span>{getRecognitionTitle(rec.slug, "uz", rec.name)}</span>
+                      </div>
+                      <input
+                        type="checkbox"
+                        checked={isChecked}
+                        onChange={() => {}}
+                        className="w-3.5 h-3.5 rounded text-purple-600 pointer-events-none"
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="pt-4 border-t border-slate-100 space-y-2.5">
+              <button
+                type="button"
+                onClick={handleSaveModeration}
+                disabled={saving}
+                className="w-full py-2.5 px-4 bg-[#0D1667] hover:bg-[#1a2580] text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition active:scale-[0.98] disabled:opacity-50"
+              >
+                {saving ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" />
+                    <span>Saqlanmoqda...</span>
+                  </>
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" />
+                    <span>Moderatsiyani Saqlash</span>
+                  </>
+                )}
+              </button>
+
+              <button
+                type="button"
+                onClick={handleDelete}
+                disabled={saving}
+                className="w-full py-2 px-4 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition disabled:opacity-50"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Soxta / Spamer profilni o‘chirish</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Bottom Floating Save Button */}
-      <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-200">
-        <Link
-          href="/admin/alumni"
-          className="px-5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-sm font-semibold transition"
-        >
-          Bekor qilish
-        </Link>
-        <button
-          type="submit"
-          disabled={saving}
-          className="px-6 py-2.5 bg-[#0D1667] hover:bg-[#1a2580] text-white rounded-xl text-sm font-bold flex items-center gap-2 shadow-md transition active:scale-95 disabled:opacity-50"
-        >
-          {saving ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Saqlanmoqda...</span>
-            </>
-          ) : (
-            <>
-              <Save className="w-4 h-4 text-[#D38E4F]" />
-              <span>{isEditing ? "O‘zgarishlarni Saqlash" : "Bitiruvchini Yaratish"}</span>
-            </>
-          )}
-        </button>
-      </div>
-    </form>
+    </div>
   );
 }

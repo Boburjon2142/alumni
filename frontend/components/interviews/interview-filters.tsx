@@ -1,16 +1,20 @@
 "use client";
 
-import { Search, Sparkles, X } from "lucide-react";
+import { Lock, Search, Sparkles, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useState, useTransition } from "react";
-import type { Locale } from "@/lib/i18n";
+import { useEffect, useState, useTransition } from "react";
+import { authSession } from "@/lib/auth";
+import { getDictionary, type Dictionary, type Locale } from "@/lib/i18n";
+import { AuthModal } from "@/components/auth/auth-modal";
 
 export function InterviewFilters({
   locale,
+  t,
   totalCount,
   translations,
 }: {
   locale: Locale;
+  t?: Dictionary;
   totalCount: number;
   translations: {
     search: string;
@@ -24,6 +28,28 @@ export function InterviewFilters({
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const dict = t || getDictionary(locale);
+
+  useEffect(() => {
+    let mounted = true;
+    const sync = () => {
+      authSession()
+        .then((session) => {
+          if (mounted) setIsAuthenticated(Boolean(session?.authenticated));
+        })
+        .catch(() => {
+          if (mounted) setIsAuthenticated(false);
+        });
+    };
+    sync();
+    window.addEventListener("auth-changed", sync);
+    return () => {
+      mounted = false;
+      window.removeEventListener("auth-changed", sync);
+    };
+  }, []);
 
   const currentSearch = searchParams.get("search") || "";
   const currentFeatured = searchParams.get("featured") === "true";
@@ -102,14 +128,37 @@ export function InterviewFilters({
           {translations.allInterviews}
         </button>
 
-        <button
-          type="button"
-          className={`interview-pill ${currentFeatured ? "active" : ""}`}
-          onClick={() => applyParams({ featured: "true" })}
-        >
-          <Sparkles size={13} aria-hidden="true" />
-          <span>{translations.featuredInterviews}</span>
-        </button>
+        {isAuthenticated ? (
+          <button
+            type="button"
+            className={`interview-pill ${currentFeatured ? "active" : ""}`}
+            onClick={() => applyParams({ featured: currentFeatured ? null : "true" })}
+          >
+            <Sparkles size={13} aria-hidden="true" />
+            <span>{translations.featuredInterviews}</span>
+          </button>
+        ) : (
+          <AuthModal
+            locale={locale}
+            t={dict}
+            trigger={
+              <button
+                type="button"
+                className="interview-pill interview-pill-locked"
+                title={
+                  locale === "ru"
+                    ? "Доступно только для зарегистрированных пользователей"
+                    : locale === "en"
+                    ? "Available for registered users only"
+                    : "Faqat ro‘yxatdan o‘tgan foydalanuvchilar uchun"
+                }
+              >
+                <Lock size={12} className="interview-lock-icon" aria-hidden="true" />
+                <span>{translations.featuredInterviews}</span>
+              </button>
+            }
+          />
+        )}
 
         {hasActiveFilters && (
           <button

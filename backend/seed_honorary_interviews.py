@@ -187,6 +187,31 @@ INTERVIEW_DATA = [
                 "question_en": "What are your hopes and guidance for young journalists and content creators today?",
                 "answer_uz": "Tezkorlik ortidan quvib, haqiqatni qurbon qilmang. Har doim manbani tekshiring, madaniyatli va hurmatli tilda muloqot qiling.",
                 "answer_en": "Do not sacrifice truth in the rush for speed. Always verify sources and communicate with dignity and respect.",
+    {
+        "alumnus_slug": "panjiyev-maqsud-aliqulovich",
+        "slug": "panjiyev-maqsud-aliqulovich-bilan-suhbat",
+        "title_uz": "Zamonaviy maktab taʼlimi, pedagogik innovatsiyalar va yosh avlod tarbiyasi",
+        "title_en": "Modern School Education, Pedagogical Innovations, and Youth Development",
+        "intro_uz": "Qashqadaryo viloyati Maktabgacha va maktab taʼlimi boshqarmasi boshlig‘i o‘rinbosari, pedagogika fanlari bo‘yicha falsafa doktori (PhD) Maqsud Panjiyev bilan umumiy o‘rta taʼlim sifatini oshirish, o‘qituvchilar salohiyati va zamonaviy darsliklar xususida eksklyuziv suhbat.",
+        "intro_en": "An exclusive interview with Maqsud Panjiyev, Deputy Head of the Department of Preschool and School Education of Kashkadarya Region, discussing education quality, teacher skills, and innovative pedagogical approaches.",
+        "pull_quote_uz": "Taʼlimga kiritilgan har bir investitsiya — millatimizning ertangi taraqqiyoti va ravnaqi uchun qo‘yilgan eng mustahkam poydevordir.",
+        "pull_quote_en": "Every investment in education is the strongest foundation for our nation's future development and prosperity.",
+        "video_url": "https://youtu.be/FfCZG9dGNlU",
+        "video_duration": "24:10",
+        "is_featured": True,
+        "items": [
+            {
+                "question_uz": "Qarshi davlat universitetidagi tahsil davri sizda qanday kasbiy va insoniy ko‘nikmalarni shakllantirdi?",
+                "question_en": "What professional and personal skills did your education at KarSU instill in you?",
+                "answer_uz": "Matematika fakultetidagi yillar menga chuqur mantiqiy fikrlash, har qanday murakkab vaziyatda tizimli yechim topish va o‘z ustimda to‘xtovsiz ishlash ko‘nikmasini berdi. Ustozlarimizning saboqlari va talabchanligi keyinchalik ham ilmiy tadqiqotlarimda, ham rahbarlik faoliyatimda doimiy mayoq bo‘ldi.",
+                "answer_en": "My years in the Faculty of Mathematics developed my deep analytical thinking, systematic problem-solving mindset, and dedication to continuous self-improvement.",
+                "order": 1
+            },
+            {
+                "question_uz": "Bugungi kunda maktabgacha va maktab taʼlimi tizimida qanday asosiy islohotlar amalga oshirilmoqda?",
+                "question_en": "What key reforms are currently being implemented in the preschool and school education system?",
+                "answer_uz": "Bugungi kunda asosiy eʼtiborimiz darslarning amaliy yo‘naltirilganligini oshirish, zamonaviy axborot texnologiyalarini o‘quv jarayoniga integratsiya qilish hamda pedagog kadrlarimizning metodik mahoratini doimiy oshirishga qaratilgan.",
+                "answer_en": "Our primary focus today is on increasing practical learning outcomes, integrating modern digital technologies into education, and consistently upgrading teachers' pedagogical expertise.",
                 "order": 2
             }
         ]
@@ -212,6 +237,8 @@ def seed_interviews():
                 "intro_en": data["intro_en"],
                 "pull_quote_uz": data["pull_quote_uz"],
                 "pull_quote_en": data["pull_quote_en"],
+                "video_url": data.get("video_url", "https://youtu.be/Paq4yBvGxm0"),
+                "video_duration": data.get("video_duration", "44:37"),
                 "is_featured": data["is_featured"],
                 "is_published": True,
             }

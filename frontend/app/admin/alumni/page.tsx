@@ -20,6 +20,8 @@ import {
   Sparkles,
   ChevronLeft,
   ChevronRight,
+  ExternalLink,
+  ShieldCheck,
 } from "lucide-react";
 import { actionAdminAlumni, deleteAdminAlumni, getAdminAlumni, getFaculties } from "@/lib/api";
 import { RecognitionIcon } from "@/components/alumni/recognition-icon";
@@ -104,19 +106,24 @@ export default function AdminAlumniListPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
-            Bitiruvchilar Boshqaruvi
+            Bitiruvchilar Boshqaruvi va Moderatsiya
           </h2>
           <p className="text-xs md:text-sm text-slate-500 mt-0.5">
-            Barcha bitiruvchilar profillari, unvonlar, moderatsiya va nashr holatlari
+            Bitiruvchilar profillarini tekshirish, verifikatsiya qilish, faxriy unvonlar berish va nashr holatini boshqarish
           </p>
         </div>
-        <Link
-          href="/admin/alumni/new"
-          className="px-4 py-2.5 bg-[#0D1667] hover:bg-[#1a2580] text-white rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition active:scale-95 shrink-0"
-        >
-          <Plus className="w-4 h-4 text-[#D38E4F]" />
-          <span>Yangi bitiruvchi qo‘shish</span>
-        </Link>
+        <div className="flex items-center gap-2 shrink-0">
+          <a
+            href="/anketa"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition"
+            title="Bitiruvchilar rasmiy anketa orqali ro‘yxatdan o‘tadilar"
+          >
+            <ExternalLink className="w-3.5 h-3.5 text-slate-600" />
+            <span>Rasmiy Anketa</span>
+          </a>
+        </div>
       </div>
 
       {/* Filter Toolbar */}
@@ -389,9 +396,9 @@ export default function AdminAlumniListPage() {
                           <Link
                             href={`/admin/alumni/${alumnus.slug || alumnus.id}/edit`}
                             className="admin-action-icon-btn"
-                            title="Tahrirlash"
+                            title="Profilni ko‘rish & Moderatsiya"
                           >
-                            <Edit className="w-4 h-4" />
+                            <Eye className="w-4 h-4" />
                           </Link>
 
                           <button

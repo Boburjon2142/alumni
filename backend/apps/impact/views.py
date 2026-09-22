@@ -157,6 +157,12 @@ class ImpactRankingView(APIView):
                 "mentorship_score": item.mentorship_score,
                 "university_score": item.university_score,
                 "community_score": item.community_score,
+                "category_breakdown": {
+                    "career": item.career_score,
+                    "mentorship": item.mentorship_score,
+                    "university": item.university_score,
+                    "community": item.community_score,
+                },
                 "verified_contributions_count": item.verified_contributions_count,
                 "top_category": top_cat_key,
                 "top_category_display": top_cat_display,

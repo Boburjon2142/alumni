@@ -182,107 +182,14 @@ class AdminAlumniListView(APIView):
         serializer = PublicAlumniSerializer(page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
-    @transaction.atomic
     def post(self, request):
-        data = request.data
-        full_name = data.get("full_name", "").strip()
-        if not full_name:
-            return Response({"message": "F.I.SH. majburiy"}, status=status.HTTP_400_BAD_REQUEST)
-
-        faculty_name = data.get("faculty_name") or data.get("faculty")
-        faculty_obj = None
-        if faculty_name:
-            faculty_obj, _ = Faculty.objects.get_or_create(name=faculty_name.strip())
-
-        specialty_name = data.get("specialty_name") or data.get("specialty")
-        specialty_obj = None
-        if specialty_name:
-            specialty_obj, _ = Specialty.objects.get_or_create(name=specialty_name.strip(), defaults={"faculty": faculty_obj})
-
-        graduation_year = data.get("graduation_year")
-        if graduation_year in ("", "null", None):
-            graduation_year = None
-        else:
-            graduation_year = int(graduation_year)
-
-        profile = AlumniProfile.objects.create(
-            full_name=full_name,
-            faculty=faculty_obj,
-            specialty=specialty_obj,
-            graduation_year=graduation_year,
-            degree=data.get("degree", "").strip(),
-            academic_degree=data.get("academic_degree", "").strip(),
-            academic_title=data.get("academic_title", "").strip(),
-            current_company=data.get("current_company", "").strip(),
-            position=data.get("position", "").strip(),
-            current_activity=data.get("current_activity", "").strip(),
-            industry=data.get("industry", "").strip(),
-            city=data.get("city", "").strip(),
-            country=data.get("country", "O‘zbekiston").strip() or "O‘zbekiston",
-            skills=data.get("skills", []),
-            bio=data.get("bio", "").strip(),
-            biography_uz=data.get("biography_uz", "").strip(),
-            biography_en=data.get("biography_en", "").strip(),
-            career_story_uz=data.get("career_story_uz", "").strip(),
-            career_story_en=data.get("career_story_en", "").strip(),
-            linkedin_url=data.get("linkedin_url", "").strip(),
-            github_url=data.get("github_url", "").strip(),
-            website_url=data.get("website_url", "").strip(),
-            phone=data.get("phone", "").strip(),
-            contact_email=data.get("contact_email", "").strip().lower(),
-            image_url=data.get("image_url", "").strip(),
-            image_alt=data.get("image_alt", "").strip(),
-            image_credit=data.get("image_credit", "").strip(),
-            image_source_url=data.get("image_source_url", "").strip(),
-            is_honorary=bool(data.get("is_honorary", False)),
-            is_featured=bool(data.get("is_featured", False)),
-            is_published=bool(data.get("is_published", True)),
-            approval_status=data.get("approval_status", AlumniProfile.ApprovalStatus.APPROVED),
-            approved_at=timezone.now(),
-            approved_by=request.user,
+        return Response(
+            {
+                "success": False,
+                "message": "Admin tomonidan bitiruvchi profili qo‘shish taqiqlangan. Bitiruvchilar faqat rasmiy anketa (/anketa) yoki ro‘yxatdan o‘tish orqali qo‘shiladi."
+            },
+            status=status.HTTP_403_FORBIDDEN
         )
-
-        apply_avatar(profile, data.get("avatar"), request.FILES)
-        if profile.avatar:
-            profile.save(update_fields=["avatar"])
-
-        # Process nested recognitions
-        recognition_ids = data.get("recognition_ids", [])
-        for title_id in recognition_ids:
-            try:
-                title = RecognitionTitle.objects.get(id=title_id)
-                AlumniRecognition.objects.create(alumnus=profile, title=title)
-            except RecognitionTitle.DoesNotExist:
-                pass
-
-        # Process nested achievements
-        achievements_data = data.get("achievements", [])
-        for idx, ach in enumerate(achievements_data):
-            if ach.get("title"):
-                Achievement.objects.create(
-                    alumnus=profile,
-                    title=ach.get("title").strip(),
-                    description=ach.get("description", "").strip(),
-                    year=ach.get("year"),
-                    category=ach.get("category", Achievement.Category.PROFESSIONAL),
-                    order=idx,
-                )
-
-        # Process nested timeline
-        timeline_data = data.get("timeline", [])
-        for idx, item in enumerate(timeline_data):
-            if item.get("title") and item.get("year"):
-                CareerTimelineItem.objects.create(
-                    alumnus=profile,
-                    year=int(item.get("year")),
-                    title=item.get("title").strip(),
-                    organization=item.get("organization", "").strip(),
-                    description=item.get("description", "").strip(),
-                    type=item.get("type", CareerTimelineItem.Type.CAREER),
-                    order=idx,
-                )
-
-        return Response(PublicAlumniDetailSerializer(profile).data, status=status.HTTP_201_CREATED)
 
 
 class AdminAlumniDetailView(APIView):
@@ -310,34 +217,11 @@ class AdminAlumniDetailView(APIView):
             return Response({"message": "Bitiruvchi profili topilmadi"}, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data
-        if "full_name" in data and data["full_name"].strip():
-            profile.full_name = data["full_name"].strip()
 
-        if "faculty_name" in data or "faculty" in data:
-            fac_name = data.get("faculty_name") or data.get("faculty")
-            if fac_name and isinstance(fac_name, str) and fac_name.strip():
-                fac_obj, _ = Faculty.objects.get_or_create(name=fac_name.strip())
-                profile.faculty = fac_obj
-            elif fac_name is None or fac_name == "":
-                profile.faculty = None
-
-        if "graduation_year" in data:
-            val = data["graduation_year"]
-            profile.graduation_year = int(val) if val not in (None, "", "null") else None
-
-        for field in [
-            "degree", "academic_degree", "academic_title", "current_company", "position",
-            "current_activity", "industry", "city", "country", "bio",
-            "biography_uz", "biography_en", "career_story_uz", "career_story_en",
-            "linkedin_url", "github_url", "website_url", "phone", "contact_email",
-            "image_url", "image_alt", "image_credit", "image_source_url",
-            "seo_title", "seo_description",
-        ]:
-            if field in data:
-                setattr(profile, field, data[field].strip() if isinstance(data[field], str) else data[field])
-
-        if "skills" in data and isinstance(data["skills"], list):
-            profile.skills = data["skills"]
+        # Xavfsizlik va ma'lumotlar daxlsizligi:
+        # Bitiruvchining shaxsiy ma'lumotlarini (F.I.SH., tarjimai hol, ish joyi, telefon, bio, email)
+        # faqat bitiruvchining o'zi tahrirlashi mumkin.
+        # Admin faqat moderatsiya holati, nashr, tavsiya va unvonlarni boshqarishi mumkin.
 
         if "is_honorary" in data:
             profile.is_honorary = bool(data["is_honorary"])
@@ -347,15 +231,14 @@ class AdminAlumniDetailView(APIView):
             profile.is_published = bool(data["is_published"])
         if "approval_status" in data:
             profile.approval_status = data["approval_status"]
-
-        if "avatar" in data or (request.FILES and "avatar" in request.FILES):
-            apply_avatar(profile, data.get("avatar"), request.FILES)
-        elif "remove_avatar" in data and data["remove_avatar"]:
-            profile.avatar = None
+            if profile.approval_status == AlumniProfile.ApprovalStatus.APPROVED:
+                profile.approved_at = timezone.now()
+                profile.approved_by = request.user
+                profile.verification_status = AlumniProfile.Verification.VERIFIED
 
         profile.save()
 
-        # Update recognitions
+        # Update recognitions (admin-assigned honorary awards)
         if "recognition_ids" in data:
             profile.recognitions.all().delete()
             for r_id in data["recognition_ids"]:

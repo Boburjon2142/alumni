@@ -1,0 +1,35 @@
+Sen Senior DevOps & Full-Stack Deployment muhandisi sifatida ishlaysan.
+
+Bizning loyihamiz — **QarDU ALUMNI Platformasi**.
+Arxitektura quyidagicha sozlangan:
+- Server: Ubuntu VPS (IP: 89.39.95.153, Foydalanuvchi: deploy, Loyiha papkasi: ~/alumni)
+- Docker Compose xizmatlari:
+  1. alumni-db-1 (PostgreSQL 15)
+  2. alumni-backend-1 (Django 5, Gunicorn, WhiteNoise, port 8005 -> 8000)
+  3. alumni-frontend-1 (Next.js 15 App Router, port 3005 -> 3000)
+- Host Nginx: Reverse Proxy (Port 80/443 -> Frontend: 3005, Backend API: 8005, Django Admin: /django-admin/, Static/Media: 8005).
+
+Oxirgi qilingan barcha o‘zgarishlar GitHub repozitoriyasining `main` tarmog‘iga push qilindi. Menga ushbu o‘zgarishlarni PRODUCTION SERVERDA to‘liq, xavfsiz, ma’lumotlar yo‘qolmasdan va xatosiz deploy qilish (yangilash) bo‘yicha aniq qo‘llanma tuzib ber.
+
+Qo‘llanma quyidagi qat’iy standartlarga javob bersin:
+
+1. O‘zgarishlar Xulosasi (Changelog):
+   - Ushbu yangilanishda nimalar o‘zgarganini aniq qismlarga ajratib ko‘rsat:
+     * Backend (yangi modellar, DB migratsiyalari, API endpointlar, yangi kutubxonalar);
+     * Frontend (yangi sahifalar, UI o‘zgarishlari, Next.js build va resurslar);
+     * Nginx / Environment / Xavfsizlik sozlamalari.
+
+2. Bitta Blokda Nusxalanadigan (Copy-Paste) Xavfsiz Buyruqlar:
+   - Terminalda -bash: !: event not found kabi xatoliklar chiqmasligi uchun buyruqlar ichida xavfli belgilar ishlatilmasin.
+   - Barcha zarur qadamlar (git pull, docker compose up -d --build, migrate, collectstatic, kesh tozalash) bitta mantiqiy zanjirda (&&) berilsin.
+   - Agar modellar yoki statuslar o‘zgargan bo‘lsa, ma’lumotlar yaxlitligini ta’minlovchi Python shell buyrug‘i qo‘shilsin.
+
+3. Nginx va Domen Sozlamalari (Zarur bo‘lsa):
+   - Yangi marshrutlar (routing) yoki statik fayllar uchun Nginx sozlamasida o‘zgarish kerak bo‘lsa, aniq konfiguratsiya va uni qayta yuklash buyrug‘ini ber.
+
+4. Tekshirish va Monitoring (Verification):
+   - Deploy muvaffaqiyatli yakunlanganini tekshiruvchi 1 qatorli buyruq (masalan, docker compose ps, API curl tekshiruvi, loglarni ko‘rish).
+
+5. Rollback (Favqulodda ortga qaytish) rejasi:
+   - Agar yangi versiyada xatolik yuz bersa, avvalgi ishchi commitga tezkor qaytish buyrug‘i.
+

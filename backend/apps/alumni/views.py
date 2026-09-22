@@ -92,6 +92,8 @@ class AlumniListView(generics.ListAPIView):
         allowed = {
             "name": ("full_name",),
             "graduation_year": ("-graduation_year", "full_name"),
+            "graduation_year_asc": ("graduation_year", "full_name"),
+            "year_asc": ("graduation_year", "full_name"),
             "newest": ("-published_at", "full_name"),
             "featured": ("-is_honorary", "-is_featured", "featured_order", "full_name"),
         }

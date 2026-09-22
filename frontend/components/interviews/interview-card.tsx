@@ -2,10 +2,11 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowRight, FileText, HelpCircle, MessageCircle, Play, Sparkles, Volume2, X } from "lucide-react";
+import { ExternalLink, Play, Sparkles, Volume2, X } from "lucide-react";
 import type { Interview } from "@/types/alumni";
 import type { Locale } from "@/lib/i18n";
 import { RemoteImage } from "@/components/ui/remote-image";
+import { getYouTubeEmbedUrl, getYouTubeThumbnailUrl, getYouTubeWatchUrl } from "@/lib/video";
 
 export function InterviewCard({
   interview,
@@ -21,16 +22,6 @@ export function InterviewCard({
     (locale === "ru" && interview.title_ru) ||
     interview.title_uz;
 
-  const intro =
-    (locale === "en" && interview.intro_en) ||
-    (locale === "ru" && interview.intro_ru) ||
-    interview.intro_uz;
-
-  const pullQuote =
-    (locale === "en" && interview.pull_quote_en) ||
-    (locale === "ru" && interview.pull_quote_ru) ||
-    interview.pull_quote_uz;
-
   const alumnus = interview.alumnus;
   const initials = alumnus.full_name
     .split(" ")
@@ -38,28 +29,12 @@ export function InterviewCard({
     .slice(0, 2)
     .join("");
 
-  const readText =
-    locale === "en"
-      ? "Read Transcript"
-      : locale === "ru"
-      ? "Текст интервью"
-      : "Suhbat matni";
-
   const watchText =
     locale === "en"
       ? "Watch Video"
       : locale === "ru"
       ? "Смотреть видео"
       : "Videoni ko‘rish";
-
-  const countText =
-    interview.items_count !== undefined
-      ? locale === "en"
-        ? `${interview.items_count} questions`
-        : locale === "ru"
-        ? `${interview.items_count} вопросов`
-        : `${interview.items_count} ta savol`
-      : null;
 
   const featuredBadge =
     locale === "en"
@@ -75,11 +50,25 @@ export function InterviewCard({
       ? "Видеоинтервью"
       : "Video suhbat";
 
+  const openInYouTubeText =
+    locale === "en"
+      ? "Open in YouTube"
+      : locale === "ru"
+      ? "Открыть в YouTube"
+      : "YouTube’da ochish";
+
   // Deterministic sample video duration based on interview id
   const durations = ["14:20", "18:45", "22:10", "16:30", "19:15", "12:50"];
   const duration = interview.video_duration || durations[(interview.id || 0) % durations.length];
 
-  const avatarSrc = alumnus.image_url || alumnus.avatar || `/images/faxriylar/${alumnus.slug}.png`;
+  const ytThumbnail = getYouTubeThumbnailUrl(interview.video_url);
+  const ytWatchUrl = getYouTubeWatchUrl(interview.video_url);
+
+  // Alumnus avatar source: ONLY for author profile avatar
+  const avatarSrc = `/images/faxriylar/${alumnus.slug}.png` || alumnus.image_url || alumnus.avatar;
+  
+  // Video thumbnail: ONLY use official video thumbnail, never graduate portrait
+  const thumbnailSrc = ytThumbnail || undefined;
 
   return (
     <>
@@ -96,18 +85,21 @@ export function InterviewCard({
               setIsVideoModalOpen(true);
             }
           }}
-          aria-label={`${alumnus.full_name} video intervyusini ko‘rish`}
+          aria-label={`${title} video intervyusini ko‘rish`}
         >
-          {/* Background Alumnus Image */}
+          {/* Background Video Image */}
           <div className="video-card-bg-image">
-            <RemoteImage
-              className="video-thumbnail-img"
-              src={avatarSrc}
-              slug={alumnus.slug}
-              alt={`${alumnus.full_name} video suhbati`}
-              fallback={initials}
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 380px"
-            />
+            {thumbnailSrc ? (
+              <RemoteImage
+                className="video-thumbnail-img"
+                src={thumbnailSrc}
+                alt={`${title} video suhbati`}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 380px"
+                priority={interview.is_featured}
+              />
+            ) : (
+              <div className="video-card-default-cover" />
+            )}
           </div>
 
           {/* Dark Cinematic Gradient Overlay */}
@@ -168,8 +160,19 @@ export function InterviewCard({
             </div>
           </div>
 
-          <h3 className="interview-card-title">
-            <Link href={`/interviews/${interview.slug}`}>{title}</Link>
+          <h3
+            className="interview-card-title"
+            onClick={() => setIsVideoModalOpen(true)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                setIsVideoModalOpen(true);
+              }
+            }}
+          >
+            <span>{title}</span>
           </h3>
         </div>
 
@@ -184,12 +187,6 @@ export function InterviewCard({
             <Play size={14} fill="currentColor" />
             <span>{watchText}</span>
           </button>
-
-          <Link href={`/interviews/${interview.slug}`} className="interview-card-cta">
-            <FileText size={14} />
-            <span>{readText}</span>
-            <ArrowRight size={13} aria-hidden="true" />
-          </Link>
         </div>
       </article>
 
@@ -223,64 +220,65 @@ export function InterviewCard({
 
             {/* Video Player Frame */}
             <div className="video-modal-player-box">
-              {interview.video_url && interview.video_url.includes("youtube.com") ? (
-                <iframe
-                  src={interview.video_url}
-                  title={title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="video-modal-iframe"
-                />
-              ) : (
-                <div className="video-placeholder-player">
-                  <div className="video-player-ambient-bg">
-                    <RemoteImage
-                      className="video-ambient-poster"
-                      src={avatarSrc}
-                      slug={alumnus.slug}
-                      alt={alumnus.full_name}
-                      fallback={initials}
-                      sizes="800px"
+              {(() => {
+                const embedUrl = getYouTubeEmbedUrl(interview.video_url);
+
+                if (embedUrl) {
+                  return (
+                    <iframe
+                      src={embedUrl}
+                      title={title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      className="video-modal-iframe"
                     />
-                  </div>
-                  <div className="video-player-center-overlay">
-                    <div className="video-player-big-play">
-                      <Play size={36} fill="currentColor" />
+                  );
+                }
+
+                return (
+                  <div className="video-placeholder-player">
+                    <div className="video-player-ambient-bg">
+                      {thumbnailSrc ? (
+                        <RemoteImage
+                          className="video-ambient-poster"
+                          src={thumbnailSrc}
+                          alt={title}
+                          sizes="800px"
+                        />
+                      ) : (
+                        <div className="video-card-default-cover" />
+                      )}
                     </div>
-                    <h4>QarshiDU Eksklyuziv Video Intervyusi</h4>
-                    <p>Davomiyligi: {duration} • 1080p Full HD</p>
-                    <Link
-                      href={`/interviews/${interview.slug}`}
-                      className="video-player-full-cta"
-                    >
-                      <span>To‘liq savol-javob matnini o‘qish</span>
-                      <ArrowRight size={15} />
-                    </Link>
                   </div>
-                </div>
-              )}
+                );
+              })()}
             </div>
 
-            {/* Modal Footer with Questions summary */}
+            {/* Modal Footer with Video Details */}
             <div className="video-modal-footer">
               <div className="video-modal-tags">
-                {countText && (
-                  <span className="video-modal-q-count">
-                    <HelpCircle size={14} />
-                    <span>{countText}</span>
-                  </span>
-                )}
                 <span className="video-modal-duration-pill">{duration}</span>
+                {ytWatchUrl && (
+                  <a
+                    href={ytWatchUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="video-modal-youtube-link"
+                  >
+                    <span>{openInYouTubeText}</span>
+                    <ExternalLink size={13} />
+                  </a>
+                )}
               </div>
 
-              <Link
-                href={`/interviews/${interview.slug}`}
+              <button
+                type="button"
                 className="video-modal-view-full-btn"
                 onClick={() => setIsVideoModalOpen(false)}
               >
-                <span>Batafsil sahifaga o‘tish</span>
-                <ArrowRight size={15} />
-              </Link>
+                <span>Yopish</span>
+              </button>
             </div>
           </div>
         </div>

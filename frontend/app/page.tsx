@@ -6,6 +6,7 @@ import { HeroCarousel } from "@/components/hero/hero-carousel";
 import { getAlumni } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import type { Alumni } from "@/types/alumni";
+import fallbackAlumni from "@/lib/fallback-alumni.json";
 
 export default async function Home() {
   const locale = await getLocale();
@@ -14,12 +15,18 @@ export default async function Home() {
   let alumniList: Alumni[] = [];
 
   try {
-    const alumniRes = await getAlumni("limit=12&ordering=featured");
-    alumniList = Array.isArray(alumniRes)
+    const alumniRes = await getAlumni("limit=12&ordering=graduation_year_asc");
+    const fetched = Array.isArray(alumniRes)
       ? alumniRes
-      : (alumniRes as any)?.data ?? [];
+      : (alumniRes as any)?.data ?? (alumniRes as any)?.results ?? [];
+    if (fetched && fetched.length > 0) {
+      alumniList = [...fetched].sort((a, b) => (a.graduation_year ?? 9999) - (b.graduation_year ?? 9999));
+    } else {
+      alumniList = [...(fallbackAlumni as unknown as Alumni[])].sort((a, b) => (a.graduation_year ?? 9999) - (b.graduation_year ?? 9999));
+    }
   } catch (err) {
-    console.error("Failed to load alumni for home:", err);
+    console.error("Failed to load alumni for home, using fallback:", err);
+    alumniList = [...(fallbackAlumni as unknown as Alumni[])].sort((a, b) => (a.graduation_year ?? 9999) - (b.graduation_year ?? 9999));
   }
 
   return (
@@ -32,17 +39,16 @@ export default async function Home() {
             <div className="hero-message">
               <span className="hero-eyebrow-badge">{t.heroEyebrow}</span>
               <h1>
-                <span>{t.heroTitle}</span>{" "}
-                <span>{t.heroLine2}</span>{" "}
+                <span>
+                  {t.heroTitle}
+                  {t.heroLine2 ? ` ${t.heroLine2}` : ""}
+                </span>
                 <em>{t.heroAccent}</em>
               </h1>
               <p>{t.heroDescription}</p>
               <div className="hero-actions">
                 <Button href="/alumni">
                   {t.heroCtaPrimary} <ArrowRight aria-hidden="true" />
-                </Button>
-                <Button href="/advice" variant="secondary">
-                  {t.heroCtaSecondary}
                 </Button>
               </div>
             </div>

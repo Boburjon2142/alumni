@@ -6,9 +6,6 @@ import {
   Lock,
   UserCheck,
   Server,
-  HelpCircle,
-  Mail,
-  Building,
 } from "lucide-react";
 
 export const metadata = {
@@ -298,47 +295,6 @@ export default async function Privacy() {
               </p>
             </div>
           </section>
-        </div>
-
-        {/* Aloqa va Murojaat bloki */}
-        <div className="privacy-contact-box">
-          <div className="privacy-contact-info">
-            <div className="privacy-contact-icon">
-              <HelpCircle size={28} />
-            </div>
-            <div>
-              <h3>
-                {locale === "en"
-                  ? "Questions or Data Inquiries?"
-                  : locale === "ru"
-                  ? "Вопросы по защите данных или обращения?"
-                  : "Savollar yoki ma’lumotlarni yangilash bo‘yicha murojaat"}
-              </h3>
-              <p>
-                {locale === "en"
-                  ? "For legal inquiries, data verification, or profile modifications, please contact the platform administration."
-                  : locale === "ru"
-                  ? "По вопросам защиты данных, подтверждения или изменения информации обращайтесь к администрации платформы."
-                  : "Shaxsiy ma’lumotlarni tahrirlash, qo‘shimcha kiritish yoki maxfiylik bo‘yicha murojaatlar uchun universitet mas’ul bo‘limi bilan bog‘lanishingiz mumkin."}
-              </p>
-            </div>
-          </div>
-          <div className="privacy-contact-actions">
-            <a href="mailto:alumni@qarshidu.uz" className="privacy-email-btn">
-              <Mail size={16} />
-              <span>alumni@qarshidu.uz</span>
-            </a>
-            <div className="privacy-address">
-              <Building size={16} />
-              <span>
-                {locale === "en"
-                  ? "17 Kuchabag St, Karshi, Uzbekistan"
-                  : locale === "ru"
-                  ? "г. Карши, ул. Кучабог, 17"
-                  : "Qarshi sh., Ko‘chabog‘ ko‘chasi, 17-uy"}
-              </span>
-            </div>
-          </div>
         </div>
       </div>
     </article>

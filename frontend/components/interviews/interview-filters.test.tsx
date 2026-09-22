@@ -9,6 +9,14 @@ vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(),
 }));
 
+vi.mock("@/lib/auth", () => ({
+  authSession: vi.fn(() => Promise.resolve({ authenticated: false })),
+}));
+
+vi.mock("@/components/auth/auth-modal", () => ({
+  AuthModal: ({ trigger }: any) => trigger || <button type="button">Auth</button>,
+}));
+
 const mockTranslations = {
   search: "Qidirish",
   searchPlaceholder: "Intervyu qidiring...",

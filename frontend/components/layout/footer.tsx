@@ -26,7 +26,6 @@ export function Footer({ t, locale }: { t: Dictionary; locale?: Locale }) {
           <h3>{t.brand}</h3>
           <Link href="/stories">{t.navStories}</Link>
           <Link href="/interviews">{t.navInterviews}</Link>
-          <Link href="/impact">{t.navImpact}</Link>
           <Link href="/feedback">{t.navFeedback}</Link>
           {locale ? (
             <AboutModal

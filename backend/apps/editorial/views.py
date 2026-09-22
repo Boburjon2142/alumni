@@ -1,10 +1,21 @@
-from django.db.models import Q
+from django.db.models import F, Q
 from django.utils import timezone
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
 
-from .models import AlumniAdvice, AlumniInterview, Event, SuccessStory
-from .serializers import AdviceSerializer, EventDetailSerializer, EventListSerializer, InterviewDetailSerializer, InterviewListSerializer, SuccessStoryDetailSerializer, SuccessStoryListSerializer
+from .models import AlumniAdvice, AlumniInterview, Event, News, SuccessStory
+from .serializers import (
+    AdviceSerializer,
+    EventDetailSerializer,
+    EventListSerializer,
+    InterviewDetailSerializer,
+    InterviewListSerializer,
+    NewsDetailSerializer,
+    NewsListSerializer,
+    SuccessStoryDetailSerializer,
+    SuccessStoryListSerializer,
+)
 
 
 class PublishedListMixin:
@@ -22,7 +33,11 @@ class StoryListView(PublishedListMixin, generics.ListAPIView):
 
 class StoryDetailView(generics.RetrieveAPIView):
     permission_classes = (AllowAny,); serializer_class = SuccessStoryDetailSerializer; lookup_field = "slug"
-    queryset = SuccessStory.objects.filter(is_published=True, alumnus__is_published=True).select_related("alumnus").prefetch_related("sections")
+    queryset = (
+        SuccessStory.objects.filter(is_published=True, alumnus__is_published=True)
+        .select_related("alumnus", "alumnus__faculty", "alumnus__specialty")
+        .prefetch_related("sections", "alumnus__achievements", "alumnus__timeline")
+    )
 
 
 class InterviewListView(PublishedListMixin, generics.ListAPIView):
@@ -81,3 +96,44 @@ class EventListView(PublishedListMixin, generics.ListAPIView):
 class EventDetailView(generics.RetrieveAPIView):
     permission_classes = (AllowAny,); serializer_class = EventDetailSerializer; lookup_field = "slug"
     queryset = Event.objects.filter(is_published=True).prefetch_related("speaker_links__alumnus")
+
+
+class NewsListView(PublishedListMixin, generics.ListAPIView):
+    serializer_class = NewsListSerializer
+
+    def get_queryset(self):
+        qs = News.objects.filter(is_published=True)
+        search = self.request.query_params.get("search")
+        if search:
+            search = search.strip()
+            qs = qs.filter(
+                Q(title_uz__icontains=search)
+                | Q(title_ru__icontains=search)
+                | Q(title_en__icontains=search)
+                | Q(summary_uz__icontains=search)
+                | Q(summary_ru__icontains=search)
+                | Q(summary_en__icontains=search)
+                | Q(content_uz__icontains=search)
+                | Q(author_name__icontains=search)
+            )
+        category = self.request.query_params.get("category")
+        if category:
+            qs = qs.filter(category=category)
+        if self.request.query_params.get("featured") == "true":
+            qs = qs.filter(is_featured=True)
+        return qs
+
+
+class NewsDetailView(generics.RetrieveAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = NewsDetailSerializer
+    lookup_field = "slug"
+    queryset = News.objects.filter(is_published=True)
+
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        News.objects.filter(pk=instance.pk).update(views_count=F("views_count") + 1)
+        instance.views_count += 1
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+

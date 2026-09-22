@@ -56,6 +56,7 @@ export type Advice = {
     position?: string;
     current_company?: string;
     faculty?: string;
+    graduation_year?: number;
   };
 };
 
@@ -211,9 +212,21 @@ export type Page<T> = {
   };
 };
 
+export type FeedbackType =
+  | "proposal"
+  | "question"
+  | "error_report"
+  | "data_correction"
+  | "alumni_nomination"
+  | "additional_info"
+  | "other";
+
 export type FeedbackPayload = {
-  type: "proposal" | "question" | "error_report" | "additional_info" | "other";
+  type: FeedbackType;
+  subject?: string;
   name?: string;
+  email?: string;
+  phone?: string;
   contact?: string;
   message: string;
   page_url?: string;
@@ -228,7 +241,10 @@ export type FeedbackResponse = {
   data: {
     id: number;
     type: string;
+    subject?: string;
     name: string;
+    email?: string;
+    phone?: string;
     contact: string;
     message: string;
     page_type: string;
@@ -276,11 +292,22 @@ export type SuccessStory = {
     slug: string;
     avatar?: string;
     image_url?: string;
+    image_alt?: string;
     position?: string;
     current_company?: string;
     faculty?: string;
+    specialty?: string;
     graduation_year?: number;
+    degree?: string;
+    academic_degree?: string;
+    academic_degree_display?: string;
+    academic_title?: string;
+    academic_title_display?: string;
+    bio?: string;
+    achievements?: Achievement[];
+    timeline?: TimelineItem[];
   };
+  related_stories?: SuccessStory[];
 };
 
 export type InterviewItem = {
@@ -373,16 +400,21 @@ export type ImpactRankingEntry = {
     current_company?: string;
   };
   total_score: number;
-  annual_score: number;
-  lifetime_score: number;
-  top_category: ImpactCategory;
-  category_breakdown: {
-    career: number;
-    mentorship: number;
-    university: number;
-    community: number;
+  annual_score?: number;
+  lifetime_score?: number;
+  career_score?: number;
+  mentorship_score?: number;
+  university_score?: number;
+  community_score?: number;
+  top_category: ImpactCategory | string;
+  top_category_display?: string;
+  category_breakdown?: {
+    career?: number;
+    mentorship?: number;
+    university?: number;
+    community?: number;
   };
-  badges_count: number;
+  badges_count?: number;
   verified_contributions_count: number;
   top_badge?: {
     title_uz: string;

@@ -55,7 +55,7 @@ export default async function AlumniPage({
   }
 
   const hasActiveFilters = Boolean(
-    params.search || params.recognition || params.faculty || params.graduation_year
+    params.search || params.industry || params.recognition || params.faculty || params.graduation_year
   );
 
   return (
@@ -79,6 +79,7 @@ export default async function AlumniPage({
             allFaculties: t.allFaculties,
             year: t.year,
             clearFilters: t.clearFilters,
+            allIndustries: t.allIndustries,
             allRecognitions: t.allRecognitions,
             filterBy: t.filterBy,
             clearAll: t.clearAll,

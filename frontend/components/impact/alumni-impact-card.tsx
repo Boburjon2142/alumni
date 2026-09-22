@@ -45,7 +45,7 @@ export function AlumniImpactCard({ slug, t, initialData }: AlumniImpactCardProps
     );
   }
 
-  if (!impact || impact.total_score === 0) {
+  if (!impact || impact.verified_count === 0) {
     return null;
   }
 
@@ -68,30 +68,23 @@ export function AlumniImpactCard({ slug, t, initialData }: AlumniImpactCardProps
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-100 dark:border-slate-700/60">
         <div>
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#612175]/10 dark:bg-[#612175]/30 text-[#612175] dark:text-purple-300 border border-[#612175]/20 mb-2">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[#1A247E]/10 text-[#1A247E] border border-[#1A247E]/20 mb-2">
             <ShieldCheck className="w-3.5 h-3.5 text-[#D38E4F]" />
-            <span>{t.impactTitle}</span>
+            <span>{t.impactTitle || "E’tirof"}</span>
           </div>
           <h3 className="text-xl font-bold text-slate-900 dark:text-white font-serif">
-            {t.impactTitle}
+            {t.impactTitle || "E’tirof"}
           </h3>
         </div>
 
-        <div className="flex items-center gap-4 bg-slate-50 dark:bg-slate-900/60 px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
+        <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-900/60 px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
+          <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
           <div>
-            <span className="text-[11px] text-slate-400 block uppercase font-medium">Jami hissa</span>
-            <span className="text-xl font-extrabold text-[#0D1667] dark:text-[#D38E4F]">
-              {impact.total_score} <span className="text-xs font-normal text-slate-500">ball</span>
+            <span className="text-[11px] text-slate-400 block uppercase font-medium">Tasdiqlangan amallar</span>
+            <span className="text-base font-bold text-[#1A247E]">
+              {impact.verified_count} ta hissa
             </span>
           </div>
-          {impact.annual_rank && (
-            <div className="border-l border-slate-200 dark:border-slate-700 pl-4">
-              <span className="text-[11px] text-slate-400 block uppercase font-medium">Yillik o‘rni</span>
-              <span className="text-xl font-bold text-slate-700 dark:text-slate-200">
-                #{impact.annual_rank}
-              </span>
-            </div>
-          )}
         </div>
       </div>
 
@@ -118,33 +111,6 @@ export function AlumniImpactCard({ slug, t, initialData }: AlumniImpactCardProps
           </div>
         </div>
       )}
-
-      {/* Category Breakdown */}
-      <div className="py-6 border-b border-slate-100 dark:border-slate-700/60">
-        <h4 className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400 mb-4">
-          Yo‘nalishlar bo‘yicha taqsimot
-        </h4>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          {(["career", "mentorship", "university", "community"] as const).map((catKey) => {
-            const Icon = categoryIcons[catKey];
-            const score = impact.category_breakdown[catKey] || 0;
-            return (
-              <div
-                key={catKey}
-                className="p-3 rounded-xl bg-slate-50 dark:bg-slate-900/40 border border-slate-100 dark:border-slate-800"
-              >
-                <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400 mb-1">
-                  <Icon className="w-3.5 h-3.5 text-[#0D1667] dark:text-[#D38E4F]" />
-                  <span className="truncate">{categoryLabels[catKey]}</span>
-                </div>
-                <div className="text-base font-bold text-slate-900 dark:text-white">
-                  {score} <span className="text-[10px] font-normal text-slate-400">ball</span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
 
       {/* Verified Contributions List */}
       {impact.recent_contributions && impact.recent_contributions.length > 0 && (
@@ -178,8 +144,8 @@ export function AlumniImpactCard({ slug, t, initialData }: AlumniImpactCardProps
                 </div>
 
                 <div className="shrink-0 text-right">
-                  <span className="inline-flex items-center px-2 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 font-bold text-xs border border-emerald-200/60 dark:border-emerald-800/60">
-                    +{item.points_awarded} ball
+                  <span className="inline-flex items-center px-2 py-1 rounded-lg bg-emerald-50 text-emerald-700 font-semibold text-xs border border-emerald-200">
+                    Tasdiqlangan
                   </span>
                 </div>
               </div>

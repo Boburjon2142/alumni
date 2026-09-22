@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import AlumniAdvice, AlumniInterview, Event, EventSpeaker, InterviewItem, StorySection, SuccessStory
+from .models import AlumniAdvice, AlumniInterview, Event, EventSpeaker, InterviewItem, News, StorySection, SuccessStory
 
 
 class StorySectionInline(admin.StackedInline):
@@ -90,3 +90,21 @@ class EventAdmin(admin.ModelAdmin):
         ("Nashr", {"fields": ("is_featured", "is_published", "published_at")}),
         ("Tizim", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
     )
+
+
+@admin.register(News)
+class NewsAdmin(admin.ModelAdmin):
+    list_display = ("title_uz", "category", "author_name", "views_count", "is_featured", "is_published", "published_at")
+    list_filter = ("category", "is_published", "is_featured", "published_at")
+    search_fields = ("title_uz", "title_ru", "title_en", "summary_uz", "content_uz", "author_name")
+    prepopulated_fields = {"slug": ("title_uz",)}
+    readonly_fields = ("views_count", "published_at", "created_at", "updated_at")
+    date_hierarchy = "published_at"
+    fieldsets = (
+        ("Asosiy", {"fields": ("slug", "category", "title_uz", "title_ru", "title_en", "summary_uz", "summary_ru", "summary_en", "author_name")}),
+        ("Rasm", {"fields": ("cover_image", "cover_image_url", "cover_image_alt", "cover_image_credit", "cover_image_source_url")}),
+        ("To‘liq matn", {"fields": ("content_uz", "content_ru", "content_en")}),
+        ("Nashr", {"fields": ("is_featured", "is_published", "published_at", "views_count")}),
+        ("Tizim", {"fields": ("created_at", "updated_at"), "classes": ("collapse",)}),
+    )
+

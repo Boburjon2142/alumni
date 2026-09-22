@@ -4,6 +4,8 @@ from .admin_views import (
     AdminAdviceListView,
     AdminInterviewDetailView,
     AdminInterviewListView,
+    AdminNewsDetailView,
+    AdminNewsListView,
     AdminSuccessStoryDetailView,
     AdminSuccessStoryListView,
 )
@@ -13,6 +15,8 @@ from .views import (
     EventListView,
     InterviewDetailView,
     InterviewListView,
+    NewsDetailView,
+    NewsListView,
     StoryDetailView,
     StoryListView,
 )
@@ -25,6 +29,8 @@ urlpatterns = [
     path("admin/interviews/<int:pk>/", AdminInterviewDetailView.as_view(), name="admin-interviews-detail"),
     path("admin/advice/", AdminAdviceListView.as_view(), name="admin-advice-list"),
     path("admin/advice/<int:pk>/", AdminAdviceDetailView.as_view(), name="admin-advice-detail"),
+    path("admin/news/", AdminNewsListView.as_view(), name="admin-news-list"),
+    path("admin/news/<int:pk>/", AdminNewsDetailView.as_view(), name="admin-news-detail"),
 
     # Public APIs
     path("advice/", AdviceListView.as_view(), name="advice-list"),
@@ -34,4 +40,7 @@ urlpatterns = [
     path("interviews/<slug:slug>/", InterviewDetailView.as_view(), name="interview-detail"),
     path("events/", EventListView.as_view(), name="event-list"),
     path("events/<slug:slug>/", EventDetailView.as_view(), name="event-detail"),
+    path("news/", NewsListView.as_view(), name="news-list"),
+    path("news/<slug:slug>/", NewsDetailView.as_view(), name="news-detail"),
 ]
+

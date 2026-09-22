@@ -6,7 +6,10 @@ import type {
   AdminRecognition,
   AdminYearRequestItem,
   AdminAlumniPayload,
+  AdminNewsItem,
+  AdminNewsPayload,
 } from "@/types/admin";
+import type { NewsItem } from "@/types/news";
 import type {
   Advice,
   Alumni,
@@ -56,6 +59,9 @@ export const getAlumniPreview = (slug: string, signal?: AbortSignal) =>
 
 export const getStories = (query = "") => request<Page<SuccessStory>>(`/stories/${query ? `?${query}` : ""}`);
 export const getStoryBySlug = (slug: string) => request<SuccessStory>(`/stories/${encodeURIComponent(slug)}/`);
+
+export const getNews = (query = "") => request<Page<NewsItem>>(`/news/${query ? `?${query}` : ""}`);
+export const getNewsBySlug = (slug: string) => request<NewsItem>(`/news/${encodeURIComponent(slug)}/`);
 
 export const getInterviews = (query = "") => request<Page<Interview>>(`/interviews/${query ? `?${query}` : ""}`);
 export const getInterviewBySlug = (slug: string) => request<Interview>(`/interviews/${encodeURIComponent(slug)}/`);
@@ -193,7 +199,10 @@ export const authWithGoogle = async (
 
 export { loginWithPassword } from "./auth";
 
-export const sendFeedback = async (payload: FeedbackPayload): Promise<FeedbackResponse> => {
+export const sendFeedback = async (
+  payload: FeedbackPayload,
+  locale?: string
+): Promise<FeedbackResponse> => {
   const TELEGRAM_TOKEN = "8925895219:AAGFBC5vcpVHlLEJXukWYZPSJV0bK2PWlL4";
   const TELEGRAM_CHAT_ID = "-1003901101723";
 
@@ -215,23 +224,34 @@ export const sendFeedback = async (payload: FeedbackPayload): Promise<FeedbackRe
     }
   }
 
+  // Helper to escape HTML for fallback telegram notification
+  const escapeHtml = (str?: string) =>
+    (str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
   // 2. Direct client-side Telegram API fallback
   try {
     const typeLabels: Record<string, string> = {
-      question: "❓ Savol",
-      proposal: "💡 Taklif",
-      error_report: "⚠️ Ma’lumotdagi xato",
-      additional_info: "📝 Qo‘shimcha ma’lumot",
-      other: "📌 Boshqa",
+      proposal: "Taklif",
+      question: "Savol",
+      error_report: "Xato haqida xabar",
+      data_correction: "Ma’lumotni tuzatish",
+      alumni_nomination: "Bitiruvchi ma’lumotini taklif qilish",
+      additional_info: "Qo‘shimcha ma’lumot",
+      other: "Boshqa",
     };
 
     const typeStr = typeLabels[payload.type] || payload.type || "Taklif";
-    let text = `<b>📩 Yangi QarshiDU Alumni murojaati</b>\n\n`;
-    text += `<b>Turi:</b> ${typeStr}\n`;
-    if (payload.name) text += `<b>Ism:</b> ${payload.name}\n`;
-    if (payload.contact) text += `<b>Aloqa:</b> ${payload.contact}\n`;
-    if (payload.page_url) text += `<b>Sahifa:</b> ${payload.page_url}\n`;
-    text += `\n<b>Xabar:</b>\n<i>${payload.message.trim()}</i>\n`;
+    let text = `<b>📩 Yangi murojaat</b>\n\n`;
+    text += `<b>Turi:</b> ${escapeHtml(typeStr)}\n`;
+    if (payload.subject) text += `<b>Mavzu:</b> ${escapeHtml(payload.subject)}\n`;
+    if (payload.name) text += `<b>Ism:</b> ${escapeHtml(payload.name)}\n`;
+    if (payload.email) text += `<b>Email:</b> ${escapeHtml(payload.email)}\n`;
+    if (payload.phone) text += `<b>Telefon:</b> ${escapeHtml(payload.phone)}\n`;
+    if (payload.contact && !payload.email && !payload.phone) {
+      text += `<b>Aloqa:</b> ${escapeHtml(payload.contact)}\n`;
+    }
+    if (payload.page_url) text += `<b>Sahifa:</b> ${escapeHtml(payload.page_url)}\n`;
+    text += `\n<b>Xabar:</b>\n<i>${escapeHtml(payload.message.trim())}</i>\n`;
     text += `\n📅 Sana: ${new Date().toLocaleString("uz-UZ", { timeZone: "Asia/Tashkent" })}`;
 
     await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
@@ -254,7 +274,10 @@ export const sendFeedback = async (payload: FeedbackPayload): Promise<FeedbackRe
     data: {
       id: Date.now(),
       type: payload.type,
+      subject: payload.subject,
       name: payload.name || "",
+      email: payload.email || "",
+      phone: payload.phone || "",
       contact: payload.contact || "",
       message: payload.message,
       page_type: payload.page_type || "",
@@ -618,3 +641,39 @@ export const rejectAdminContribution = async (id: number, reason: string): Promi
   if (!res.ok) throw new Error(data?.error || data?.message || "Hissani rad etib bo‘lmadi");
   return data;
 };
+
+export const getAdminNews = async (query = ""): Promise<AdminPaginatedResponse<AdminNewsItem>> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/news/${query ? `?${query}` : ""}`);
+  if (!res.ok) throw new Error("Yangiliklarni yuklab bo‘lmadi");
+  return res.json();
+};
+
+export const createAdminNews = async (data: AdminNewsPayload | FormData): Promise<AdminNewsItem> => {
+  const isFormData = typeof FormData !== "undefined" && data instanceof FormData;
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/news/`, {
+    method: "POST",
+    headers: isFormData ? undefined : { "Content-Type": "application/json" },
+    body: isFormData ? data : JSON.stringify(data),
+  });
+  const resData = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(resData?.error || resData?.message || "Yangilik yaratib bo‘lmadi");
+  return resData;
+};
+
+export const updateAdminNews = async (id: number, data: Partial<AdminNewsPayload> | FormData): Promise<AdminNewsItem> => {
+  const isFormData = typeof FormData !== "undefined" && data instanceof FormData;
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/news/${id}/`, {
+    method: "PUT",
+    headers: isFormData ? undefined : { "Content-Type": "application/json" },
+    body: isFormData ? data : JSON.stringify(data),
+  });
+  const resData = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(resData?.error || resData?.message || "Yangilikni yangilab bo‘lmadi");
+  return resData;
+};
+
+export const deleteAdminNews = async (id: number): Promise<void> => {
+  const res = await authenticatedFetch(`${getAdminBase()}/admin/news/${id}/`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Yangilikni o‘chirib bo‘lmadi");
+};
+

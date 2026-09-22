@@ -176,6 +176,7 @@ class RankingEntrySerializer(serializers.Serializer):
     mentorship_score = serializers.IntegerField()
     university_score = serializers.IntegerField()
     community_score = serializers.IntegerField()
+    category_breakdown = serializers.DictField(required=False)
     verified_contributions_count = serializers.IntegerField()
     top_category = serializers.CharField()
     top_category_display = serializers.CharField()

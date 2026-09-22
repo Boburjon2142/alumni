@@ -63,9 +63,6 @@ class SendVerificationCodeView(APIView):
                 f"Tasdiqlash kodi allaqachon yuborilgan. Iltimos, {max(1, remaining)} soniyadan so‘ng qayta urinib ko‘ring."
             )
 
-        if settings.EMAIL_BACKEND == "django.core.mail.backends.console.EmailBackend":
-            return Response({"message": "Email yuborish xizmati hali sozlanmagan. Administrator bilan bog'laning."}, status=503)
-
         # Generate 6-digit code
         code = f"{secrets.randbelow(1000000):06d}"
         expires_at = timezone.now() + timedelta(minutes=10)

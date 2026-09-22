@@ -49,6 +49,15 @@ export function RemoteImage({
     }
   };
 
+  const isLocalOrUnoptimized = Boolean(
+    activeSrc &&
+      (activeSrc.startsWith("http://localhost") ||
+        activeSrc.startsWith("http://127.0.0.1") ||
+        activeSrc.startsWith("/images/") ||
+        activeSrc.startsWith("https://i.ytimg.com") ||
+        activeSrc.startsWith("https://img.youtube.com"))
+  );
+
   return (
     <div className={`remote-image ${className}`}>
       {activeSrc && !failed ? (
@@ -58,6 +67,7 @@ export function RemoteImage({
           fill
           sizes={sizes}
           priority={priority}
+          unoptimized={isLocalOrUnoptimized ? true : undefined}
           onError={handleError}
         />
       ) : (

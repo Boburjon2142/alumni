@@ -4,9 +4,11 @@ from apps.editorial.models import SuccessStory
 
 class Feedback(models.Model):
     class Type(models.TextChoices):
-        QUESTION = "question", "Savol"
         PROPOSAL = "proposal", "Taklif"
-        ERROR_REPORT = "error_report", "Ma’lumotdagi xato"
+        QUESTION = "question", "Savol"
+        ERROR_REPORT = "error_report", "Xato haqida xabar"
+        DATA_CORRECTION = "data_correction", "Ma’lumotni tuzatish"
+        ALUMNI_NOMINATION = "alumni_nomination", "Bitiruvchi ma’lumotini taklif qilish"
         ADDITIONAL_INFO = "additional_info", "Qo‘shimcha ma’lumot"
         OTHER = "other", "Boshqa"
 
@@ -22,7 +24,10 @@ class Feedback(models.Model):
         FAILED = "failed", "Yuborilmadi"
 
     type = models.CharField(max_length=32, choices=Type.choices, default=Type.PROPOSAL)
+    subject = models.CharField(max_length=200, blank=True, default="")
     name = models.CharField(max_length=160, blank=True)
+    email = models.EmailField(max_length=160, blank=True, default="")
+    phone = models.CharField(max_length=40, blank=True, default="")
     contact = models.CharField(max_length=160, blank=True)
     message = models.TextField(max_length=3000)
     page_type = models.CharField(max_length=64, blank=True)
@@ -43,4 +48,5 @@ class Feedback(models.Model):
         verbose_name_plural = "Murojaatlar va Takliflar"
 
     def __str__(self):
-        return f"{self.get_type_display()} — {self.name or 'Anonim'} ({self.created_at:%d.%m.%Y %H:%M})"
+        subj = f" ({self.subject})" if self.subject else ""
+        return f"{self.get_type_display()}{subj} — {self.name or 'Anonim'} ({self.created_at:%d.%m.%Y %H:%M})"

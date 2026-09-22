@@ -6,6 +6,9 @@ import { InterviewFilters } from "@/components/interviews/interview-filters";
 import { InterviewGrid } from "@/components/interviews/interview-grid";
 import type { Interview, Page } from "@/types/alumni";
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
 export const metadata = {
   title: "Bitiruvchilar bilan intervyular — Qarshi davlat universiteti",
   description: "Qarshi davlat universiteti faxriy va yetuk bitiruvchilari bilan eksklyuziv suhbatlar, hayotiy tajriba va kasbiy saboqlar.",
@@ -55,6 +58,7 @@ export default async function InterviewsPage({
           <div className="interviews-header-right">
             <InterviewFilters
               locale={locale}
+              t={t}
               totalCount={totalCount}
               translations={{
                 search: t.search,

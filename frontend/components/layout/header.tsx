@@ -5,6 +5,7 @@ import { Menu, Search, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { LanguageSwitcher } from "./language-switcher";
+import { PublicNavDropdowns } from "./public-nav-dropdowns";
 import { AuthModal } from "@/components/auth/auth-modal";
 import { authSession } from "@/lib/auth";
 import type { Dictionary, Locale } from "@/lib/i18n";
@@ -96,44 +97,7 @@ export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
           aria-label="Asosiy navigatsiya"
         >
           <div className="nav-menu-grid">
-            <Link href="/" className={`nav-item-link nav-home-link ${pathname === "/" ? "active" : ""}`} onClick={close}>
-              {t.navHome}
-            </Link>
-            <Link
-              href="/alumni"
-              className={`nav-item-link ${pathname === "/alumni" || pathname.startsWith("/directory") ? "active" : ""}`}
-              onClick={close}
-            >
-              {t.navAlumni}
-            </Link>
-            <Link
-              href="/groups"
-              className={`nav-item-link ${pathname.startsWith("/groups") ? "active" : ""}`}
-              onClick={close}
-            >
-              {t.navGroups}
-            </Link>
-            <Link
-              href="/interviews"
-              className={`nav-item-link ${pathname.startsWith("/interviews") ? "active" : ""}`}
-              onClick={close}
-            >
-              {t.navInterviews}
-            </Link>
-            <Link
-              href="/advice"
-              className={`nav-item-link ${pathname.startsWith("/advice") ? "active" : ""}`}
-              onClick={close}
-            >
-              {t.navAdvice}
-            </Link>
-            <Link
-              href="/impact"
-              className={`nav-item-link ${pathname.startsWith("/impact") ? "active" : ""}`}
-              onClick={close}
-            >
-              {t.navImpact}
-            </Link>
+            <PublicNavDropdowns t={t} pathname={pathname} mobileMenuOpen={open} onNavigate={close} />
             {!isAuthenticated && (
               <Link
                 href="/join"
@@ -143,13 +107,6 @@ export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
                 {t.navJoin}
               </Link>
             )}
-            <Link
-              href="/feedback"
-              className={`nav-item-link mobile-only-nav ${pathname === "/feedback" ? "active" : ""}`}
-              onClick={close}
-            >
-              {t.navFeedback}
-            </Link>
             <div className="mobile-only-auth-item">
               <AuthModal locale={locale} t={t} />
             </div>

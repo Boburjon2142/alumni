@@ -14,6 +14,7 @@ import {
   Lightbulb,
   LogOut,
   Mic,
+  Newspaper,
   Users,
 } from "lucide-react";
 import { signOut } from "@/lib/auth";
@@ -22,6 +23,7 @@ import { useAdminSidebar } from "@/components/admin/admin-sidebar-context";
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { href: "/admin/alumni", label: "Bitiruvchilar", icon: Users },
+  { href: "/admin/news", label: "Yangiliklar", icon: Newspaper },
   { href: "/admin/recognitions", label: "Faxriy unvonlar", icon: Award },
   { href: "/admin/stories", label: "Muvaffaqiyat hikoyalari", icon: BookOpen },
   { href: "/admin/interviews", label: "Intervyular", icon: Mic },

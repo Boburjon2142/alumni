@@ -15,16 +15,20 @@ from apps.editorial.models import (
     Event,
     EventSpeaker,
     InterviewItem,
+    News,
     StorySection,
     SuccessStory,
 )
 from apps.editorial.serializers import (
+    AdminNewsSerializer,
     AdviceSerializer,
     EventDetailSerializer,
     EventListSerializer,
     InterviewDetailSerializer,
     InterviewItemSerializer,
     InterviewListSerializer,
+    NewsDetailSerializer,
+    NewsListSerializer,
     StorySectionSerializer,
     SuccessStoryDetailSerializer,
     SuccessStoryListSerializer,
@@ -390,4 +394,124 @@ class AdminAdviceDetailView(APIView):
             return Response({"message": "Maslahat topilmadi"}, status=status.HTTP_404_NOT_FOUND)
         advice.delete()
         return Response({"success": True, "message": "Maslahat o‘chirildi"}, status=status.HTTP_204_NO_CONTENT)
+
+
+# --- News ---
+class AdminNewsListView(APIView):
+    permission_classes = [IsAdminOrStaffUser]
+    pagination_class = AdminStandardPagination
+
+    def get(self, request):
+        qs = News.objects.all().order_by("-created_at")
+        search = request.query_params.get("search", "").strip()
+        if search:
+            qs = qs.filter(
+                Q(title_uz__icontains=search)
+                | Q(title_ru__icontains=search)
+                | Q(title_en__icontains=search)
+                | Q(summary_uz__icontains=search)
+            )
+        category = request.query_params.get("category")
+        if category:
+            qs = qs.filter(category=category)
+        is_published = request.query_params.get("is_published")
+        if is_published is not None and is_published != "":
+            qs = qs.filter(is_published=is_published.lower() in ("true", "1"))
+
+        paginator = self.pagination_class()
+        page = paginator.paginate_queryset(qs, request)
+        serializer = AdminNewsSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
+
+    def post(self, request):
+        data = request.data
+        title_uz = data.get("title_uz", "").strip()
+        if not title_uz:
+            return Response({"error": "Sarlavha (UZ) majburiy"}, status=status.HTTP_400_BAD_REQUEST)
+
+        slug = data.get("slug", "").strip() or slugify(title_uz)
+        orig_slug = slug
+        counter = 1
+        while News.objects.filter(slug=slug).exists():
+            slug = f"{orig_slug}-{counter}"
+            counter += 1
+
+        news = News.objects.create(
+            slug=slug,
+            title_uz=title_uz,
+            title_ru=data.get("title_ru", "").strip(),
+            title_en=data.get("title_en", "").strip(),
+            summary_uz=data.get("summary_uz", "").strip(),
+            summary_ru=data.get("summary_ru", "").strip(),
+            summary_en=data.get("summary_en", "").strip(),
+            content_uz=data.get("content_uz", "").strip(),
+            content_ru=data.get("content_ru", "").strip(),
+            content_en=data.get("content_en", "").strip(),
+            category=data.get("category", News.Category.GENERAL),
+            cover_image_url=data.get("cover_image_url", "").strip(),
+            cover_image_alt=data.get("cover_image_alt", "").strip(),
+            cover_image_credit=data.get("cover_image_credit", "").strip(),
+            cover_image_source_url=data.get("cover_image_source_url", "").strip(),
+            author_name=data.get("author_name", "").strip(),
+            is_featured=bool(data.get("is_featured", False)),
+            is_published=bool(data.get("is_published", False)),
+        )
+        if "cover_image" in request.FILES:
+            news.cover_image = request.FILES["cover_image"]
+            news.save()
+
+        return Response(AdminNewsSerializer(news).data, status=status.HTTP_201_CREATED)
+
+
+class AdminNewsDetailView(APIView):
+    permission_classes = [IsAdminOrStaffUser]
+
+    def get_object(self, pk):
+        return News.objects.filter(pk=pk).first()
+
+    def get(self, request, pk):
+        news = self.get_object(pk)
+        if not news:
+            return Response({"message": "Yangilik topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+        return Response(AdminNewsSerializer(news).data)
+
+    def put(self, request, pk):
+        news = self.get_object(pk)
+        if not news:
+            return Response({"message": "Yangilik topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+
+        data = request.data
+        for field in [
+            "title_uz", "title_ru", "title_en",
+            "summary_uz", "summary_ru", "summary_en",
+            "content_uz", "content_ru", "content_en",
+            "category", "cover_image_url", "cover_image_alt",
+            "cover_image_credit", "cover_image_source_url", "author_name"
+        ]:
+            if field in data:
+                setattr(news, field, data[field].strip() if isinstance(data[field], str) else data[field])
+
+        if "slug" in data and data["slug"].strip() and data["slug"].strip() != news.slug:
+            slug = data["slug"].strip()
+            if News.objects.filter(slug=slug).exclude(pk=pk).exists():
+                return Response({"error": "Bunday slug mavjud"}, status=status.HTTP_400_BAD_REQUEST)
+            news.slug = slug
+
+        if "is_featured" in data:
+            news.is_featured = bool(data["is_featured"])
+        if "is_published" in data:
+            news.is_published = bool(data["is_published"])
+        if "cover_image" in request.FILES:
+            news.cover_image = request.FILES["cover_image"]
+
+        news.save()
+        return Response(AdminNewsSerializer(news).data)
+
+    def delete(self, request, pk):
+        news = self.get_object(pk)
+        if not news:
+            return Response({"message": "Yangilik topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+        news.delete()
+        return Response({"success": True, "message": "Yangilik o‘chirildi"}, status=status.HTTP_204_NO_CONTENT)
+
 

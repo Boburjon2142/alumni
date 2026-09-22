@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Calendar, Search, X } from "lucide-react";
+import { BookOpen, Briefcase, Calendar, Search, X } from "lucide-react";
 import type { Recognition } from "@/types/alumni";
 import type { Locale } from "@/lib/i18n";
 import { getRecognitionTitle } from "@/lib/i18n";
@@ -8,15 +8,17 @@ import { RecognitionIcon } from "./recognition-icon";
 
 interface ActiveFilterChipsProps {
   search?: string;
+  industry?: string;
   recognition?: string;
-  recognitions: Recognition[];
+  recognitions?: Recognition[];
   faculty?: string;
   gradYear?: string;
   locale?: Locale;
   filterByLabel?: string;
   clearAllLabel?: string;
   onRemoveSearch: () => void;
-  onRemoveRecognition: () => void;
+  onRemoveIndustry?: () => void;
+  onRemoveRecognition?: () => void;
   onRemoveFaculty: () => void;
   onRemoveGradYear: () => void;
   onClearAll: () => void;
@@ -24,14 +26,16 @@ interface ActiveFilterChipsProps {
 
 export function ActiveFilterChips({
   search,
+  industry,
   recognition,
-  recognitions,
+  recognitions = [],
   faculty,
   gradYear,
   locale = "uz",
   filterByLabel = "Filtrlangan:",
   clearAllLabel = "Barchasini tozalash",
   onRemoveSearch,
+  onRemoveIndustry,
   onRemoveRecognition,
   onRemoveFaculty,
   onRemoveGradYear,
@@ -42,7 +46,7 @@ export function ActiveFilterChips({
     ? getRecognitionTitle(recognition, locale, activeRecognition?.name)
     : "";
 
-  const hasAnyFilter = Boolean(search || recognition || faculty || gradYear);
+  const hasAnyFilter = Boolean(search || industry || recognition || faculty || gradYear);
 
   if (!hasAnyFilter) {
     return null;
@@ -73,6 +77,25 @@ export function ActiveFilterChips({
             >
               <X size={13} />
             </button>
+          </span>
+        )}
+
+        {industry && (
+          <span className="filter-chip chip-industry">
+            <Briefcase size={13} className="chip-icon" aria-hidden="true" />
+            <span className="chip-text">
+              {industry}
+            </span>
+            {onRemoveIndustry && (
+              <button
+                type="button"
+                className="chip-remove-btn"
+                onClick={onRemoveIndustry}
+                aria-label={`Soha filtrini o‘chirish: ${industry}`}
+              >
+                <X size={13} />
+              </button>
+            )}
           </span>
         )}
 

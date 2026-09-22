@@ -17,7 +17,6 @@ export function AlumniCard({ alumni, featured = false, t }: { alumni: Alumni; fe
     />
     <div className="card-top">
       <span />
-      {alumni.verified && <span className="verified"><BadgeCheck size={17}/> {t.verified}</span>}
     </div>
     <div>
       {featured && <span className="featured-label"><Award size={14}/> {t.featuredBadge || t.graduate}</span>}

@@ -84,6 +84,8 @@ class AlumniInterview(PublishableModel):
     intro_en = models.TextField(blank=True, max_length=1800)
     pull_quote_uz = models.CharField(max_length=420, blank=True)
     pull_quote_en = models.CharField(max_length=420, blank=True)
+    video_url = models.URLField(max_length=500, blank=True)
+    video_duration = models.CharField(max_length=50, blank=True)
 
     class Meta:
         ordering = ("-is_featured", "-published_at", "-created_at")
@@ -222,3 +224,42 @@ class EventSpeaker(models.Model):
             raise ValidationError("Platformadagi bitiruvchi yoki tashqi spiker nomidan faqat bittasini tanlang.")
 
     def __str__(self): return str(self.alumnus or self.external_name)
+
+
+class News(PublishableModel):
+    class Category(models.TextChoices):
+        UNIVERSITY = "university", "University"
+        ALUMNI = "alumni", "Alumni"
+        EVENT = "event", "Event"
+        ACHIEVEMENT = "achievement", "Achievement"
+        GENERAL = "general", "General"
+
+    slug = models.SlugField(max_length=190, unique=True)
+    title_uz = models.CharField(max_length=240)
+    title_ru = models.CharField(max_length=240, blank=True)
+    title_en = models.CharField(max_length=240, blank=True)
+    summary_uz = models.CharField(max_length=450)
+    summary_ru = models.CharField(max_length=450, blank=True)
+    summary_en = models.CharField(max_length=450, blank=True)
+    content_uz = models.TextField(max_length=12000)
+    content_ru = models.TextField(blank=True, max_length=12000)
+    content_en = models.TextField(blank=True, max_length=12000)
+    category = models.CharField(max_length=24, choices=Category.choices, default=Category.GENERAL, db_index=True)
+    cover_image = models.ImageField(upload_to=editorial_image_path, blank=True, validators=image_validators)
+    cover_image_url = models.URLField(max_length=700, blank=True, validators=[validate_unsplash_image_url])
+    cover_image_alt = models.CharField(max_length=220, blank=True)
+    cover_image_credit = models.CharField(max_length=120, blank=True)
+    cover_image_source_url = models.URLField(max_length=500, blank=True, validators=[validate_unsplash_source_url])
+    views_count = models.PositiveIntegerField(default=0)
+    author_name = models.CharField(max_length=160, blank=True)
+
+    class Meta:
+        ordering = ("-is_featured", "-published_at", "-created_at")
+        indexes = [
+            models.Index(fields=("is_published", "published_at"), name="news_pub_date_idx"),
+            models.Index(fields=("is_published", "category"), name="news_pub_cat_idx"),
+        ]
+
+    def __str__(self):
+        return self.title_uz
+

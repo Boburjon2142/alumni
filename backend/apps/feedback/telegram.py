@@ -30,9 +30,11 @@ def send_telegram_notification(feedback):
         return False
 
     type_labels = {
-        "question": "❓ Savol",
         "proposal": "💡 Taklif",
-        "error_report": "⚠️ Ma’lumotdagi xato",
+        "question": "❓ Savol",
+        "error_report": "⚠️ Xato haqida xabar",
+        "data_correction": "✏️ Ma’lumotni tuzatish",
+        "alumni_nomination": "🎓 Bitiruvchi ma’lumotini taklif qilish",
         "additional_info": "📝 Qo‘shimcha ma’lumot",
         "other": "📌 Boshqa",
     }
@@ -40,13 +42,19 @@ def send_telegram_notification(feedback):
     type_text = type_labels.get(feedback.type, feedback.get_type_display())
     
     text = (
-        f"<b>📩 Yangi QarshiDU Alumni murojaati</b>\n\n"
+        f"<b>📩 Yangi murojaat</b>\n\n"
         f"<b>Turi:</b> {html.escape(type_text)}\n"
     )
 
+    if feedback.subject:
+        text += f"<b>Mavzu:</b> {html.escape(feedback.subject)}\n"
     if feedback.name:
         text += f"<b>Ism:</b> {html.escape(feedback.name)}\n"
-    if feedback.contact:
+    if feedback.email:
+        text += f"<b>Email:</b> {html.escape(feedback.email)}\n"
+    if feedback.phone:
+        text += f"<b>Telefon:</b> {html.escape(feedback.phone)}\n"
+    elif feedback.contact and not feedback.email and not feedback.phone:
         text += f"<b>Aloqa:</b> {html.escape(feedback.contact)}\n"
     if feedback.page_url:
         text += f"<b>Sahifa:</b> {html.escape(feedback.page_url)}\n"

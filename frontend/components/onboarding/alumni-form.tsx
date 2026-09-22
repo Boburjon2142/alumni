@@ -338,12 +338,6 @@ export function AlumniForm({
   // ANKETA FORM
   return (
     <div className="onboarding-card form-card">
-      <div className="form-card-header">
-        <span className="eyebrow gold">{t.brand}</span>
-        <h2>{t.joinPageTitle}</h2>
-        <p className="form-sublead">{locale === "en" ? "Enter your full name and email. Complete the rest (including graduation year) in your profile later." : locale === "ru" ? "Укажите Ф.И.О. и email. Остальные сведения (включая год выпуска) можно добавить в профиле." : "F.I.Sh. va emailingizni kiriting. Qolgan ma'lumotlarni (jumladan bitirgan yilingizni) keyin profilingizda to'ldirishingiz mumkin."}</p>
-      </div>
-
       {/* MANDATORY CONSENT WARNING BANNER */}
       {consentAlert && (
         <div className="form-warning-banner" role="alert">
@@ -380,24 +374,33 @@ export function AlumniForm({
       )}
 
       <form onSubmit={handleSubmit} className="alumni-anketa-form" noValidate>
-        {/* 1. Full Name & Email side by side */}
-        <div className="form-row">
-          <div className="form-group flex-1">
-            <label htmlFor="full-name-input" className="form-label required">
-              {t.formFullNameLabel}
-            </label>
-            <input
-              id="full-name-input"
-              type="text"
-              className={`form-input ${fieldErrors.fullName ? "input-error" : ""}`}
-              placeholder={t.formFullNamePlaceholder}
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-              required
-              maxLength={160}
-            />
-            {fieldErrors.fullName && <p className="field-error" role="alert">{fieldErrors.fullName}</p>}
-          </div>
+        {/* 1. BITIRUVCHI HAQIDA */}
+        <div className="join-form-section">
+          <h3 className="join-section-title">
+            {locale === "en"
+              ? "1. Alumni Information"
+              : locale === "ru"
+              ? "1. Сведения о выпускнике"
+              : "1. Bitiruvchi haqida"}
+          </h3>
+
+          <div className="form-row">
+            <div className="form-group flex-1">
+              <label htmlFor="full-name-input" className="form-label required">
+                {t.formFullNameLabel}
+              </label>
+              <input
+                id="full-name-input"
+                type="text"
+                className={`form-input ${fieldErrors.fullName ? "input-error" : ""}`}
+                placeholder={t.formFullNamePlaceholder}
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+                maxLength={160}
+              />
+              {fieldErrors.fullName && <p className="field-error" role="alert">{fieldErrors.fullName}</p>}
+            </div>
 
           <div className="form-group flex-1">
             <label htmlFor="contact-email-input" className="form-label required">
@@ -456,6 +459,17 @@ export function AlumniForm({
             {codeError && <p id="email-code-error" className="field-error" role="alert">{codeError}</p>}
           </div>
         </div>
+      </div>
+
+      {/* 2. EMAIL TASDIG'I VA ROZILIK */}
+      <div className="join-form-section">
+        <h3 className="join-section-title">
+          {locale === "en"
+            ? "2. Verification & Consent"
+            : locale === "ru"
+            ? "2. Подтверждение и согласие"
+            : "2. Email tasdig‘i va rozilik"}
+        </h3>
 
         {/* OTP Verification Box (shown if code was sent and email not yet verified) */}
         {codeSent && !isEmailVerified && (
@@ -624,9 +638,10 @@ export function AlumniForm({
             </p>
           )}
         </div>
+      </div>
 
-        {/* Submit Actions */}
-        <div className="form-actions-row">
+      {/* Submit Actions */}
+      <div className="form-actions-row">
           <button
             type="submit"
             className="button button-primary submit-anketa-btn"

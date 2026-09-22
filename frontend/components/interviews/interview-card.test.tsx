@@ -43,21 +43,25 @@ describe("InterviewCard", () => {
     expect(screen.getAllByText("Videoni ko‘rish")[0]).toBeInTheDocument();
   });
 
-  it("opens video modal when clicking watch button", () => {
-    render(<InterviewCard interview={mockInterview} locale="uz" />);
+  it("opens video modal with iframe when clicking watch button", () => {
+    render(
+      <InterviewCard
+        interview={{ ...mockInterview, video_url: "https://youtu.be/Paq4yBvGxm0" }}
+        locale="uz"
+      />
+    );
 
     const watchBtn = screen.getAllByText("Videoni ko‘rish")[0];
     fireEvent.click(watchBtn);
 
     expect(screen.getByRole("dialog")).toBeInTheDocument();
-    expect(screen.getByText(/QarshiDU Eksklyuziv Video Intervyusi/i)).toBeInTheDocument();
+    expect(screen.getByTitle("Test Intervyu Sarlavhasi")).toBeInTheDocument();
   });
 
   it("renders english locale when locale is en", () => {
     render(<InterviewCard interview={mockInterview} locale="en" />);
 
     expect(screen.getByText("Test Interview Title")).toBeInTheDocument();
-    expect(screen.getByText("Read Transcript")).toBeInTheDocument();
     expect(screen.getAllByText("Watch Video")[0]).toBeInTheDocument();
   });
 });

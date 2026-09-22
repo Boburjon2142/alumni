@@ -1,6 +1,5 @@
-import { AlumniFormEditor } from "@/components/admin/alumni-form-editor";
+import { redirect } from "next/navigation";
 
 export default function NewAlumniPage() {
-  return <AlumniFormEditor />;
+  redirect("/admin/alumni");
 }
-

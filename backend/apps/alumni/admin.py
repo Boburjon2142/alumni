@@ -74,8 +74,14 @@ class AlumniProfileAdmin(admin.ModelAdmin):
         "position",
         "faculty__name",
     )
-    prepopulated_fields = {"slug": ("full_name",)}
-    readonly_fields = ("created_at", "updated_at", "published_at", "approved_at", "approved_by")
+    readonly_fields = (
+        "created_at", "updated_at", "published_at", "approved_at", "approved_by",
+        "user", "full_name", "slug", "avatar", "faculty", "specialty", "graduation_year",
+        "academic_degree", "academic_title", "degree", "contact_email", "phone",
+        "current_activity", "position", "current_company", "industry", "city", "country",
+        "bio", "biography_uz", "biography_en", "career_story_uz", "career_story_en",
+        "linkedin_url", "github_url", "website_url", "image_url", "image_alt", "image_credit", "image_source_url"
+    )
     list_select_related = ("faculty", "specialty")
     inlines = (AlumniConsentInline, EducationExperienceInline, WorkExperienceInline, AchievementInline, CareerTimelineInline, AlumniSourceInline)
     actions = (
@@ -84,6 +90,9 @@ class AlumniProfileAdmin(admin.ModelAdmin):
         "feature_selected_homepage",
         "unfeature_selected_homepage",
     )
+
+    def has_add_permission(self, request):
+        return False
 
     fieldsets = (
         ("Moderatsiya va Holat", {

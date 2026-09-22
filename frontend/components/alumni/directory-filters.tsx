@@ -5,12 +5,13 @@ import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { Filter, Loader2, Search, SlidersHorizontal, X } from "lucide-react";
 import type { Faculty, Recognition } from "@/types/alumni";
 import type { Locale } from "@/lib/i18n";
-import { RecognitionCombobox } from "./recognition-combobox";
+import { IndustryCombobox } from "./industry-combobox";
 import { ActiveFilterChips } from "./active-filter-chips";
 
 interface DirectoryFiltersProps {
   faculties: Faculty[];
-  recognitions: Recognition[];
+  recognitions?: Recognition[];
+  industries?: string[];
   locale: Locale;
   translations: {
     search: string;
@@ -20,6 +21,7 @@ interface DirectoryFiltersProps {
     allFaculties: string;
     year: string;
     clearFilters: string;
+    allIndustries?: string;
     allRecognitions?: string;
     filterBy?: string;
     clearAll?: string;
@@ -29,6 +31,7 @@ interface DirectoryFiltersProps {
 export function DirectoryFilters({
   faculties,
   recognitions = [],
+  industries,
   locale,
   translations: t,
 }: DirectoryFiltersProps) {
@@ -38,11 +41,13 @@ export function DirectoryFilters({
   const [isPending, startTransition] = useTransition();
 
   const currentSearch = searchParams.get("search") || "";
+  const currentIndustry = searchParams.get("industry") || "";
   const currentRecognition = searchParams.get("recognition") || "";
   const currentFaculty = searchParams.get("faculty") || "";
   const currentGradYear = searchParams.get("graduation_year") || "";
 
   const [searchValue, setSearchValue] = useState(currentSearch);
+  const [industryValue, setIndustryValue] = useState(currentIndustry);
   const [recognitionValue, setRecognitionValue] = useState(currentRecognition);
   const [facultyValue, setFacultyValue] = useState(currentFaculty);
   const [gradYearValue, setGradYearValue] = useState(currentGradYear);
@@ -54,6 +59,10 @@ export function DirectoryFilters({
   useEffect(() => {
     setSearchValue(currentSearch);
   }, [currentSearch]);
+
+  useEffect(() => {
+    setIndustryValue(currentIndustry);
+  }, [currentIndustry]);
 
   useEffect(() => {
     setRecognitionValue(currentRecognition);
@@ -77,9 +86,10 @@ export function DirectoryFilters({
   const pushFilters = useCallback(
     (
       newSearch: string,
-      newRecognition: string,
+      newIndustry: string,
       newFaculty: string,
-      newGradYear: string
+      newGradYear: string,
+      newRecognition: string = recognitionValue
     ) => {
       const params = new URLSearchParams(searchParams.toString());
 
@@ -90,6 +100,12 @@ export function DirectoryFilters({
         params.set("search", newSearch.trim());
       } else {
         params.delete("search");
+      }
+
+      if (newIndustry) {
+        params.set("industry", newIndustry);
+      } else {
+        params.delete("industry");
       }
 
       if (newRecognition) {
@@ -117,7 +133,7 @@ export function DirectoryFilters({
         router.replace(targetUrl, { scroll: false });
       });
     },
-    [pathname, router, searchParams]
+    [pathname, recognitionValue, router, searchParams]
   );
 
   const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -131,25 +147,25 @@ export function DirectoryFilters({
     }
 
     debounceTimerRef.current = setTimeout(() => {
-      pushFilters(val, recognitionValue, facultyValue, gradYearValue);
+      pushFilters(val, industryValue, facultyValue, gradYearValue);
     }, 300);
   };
 
   const handleClearSearch = () => {
     setSearchValue("");
     if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
-    pushFilters("", recognitionValue, facultyValue, gradYearValue);
+    pushFilters("", industryValue, facultyValue, gradYearValue);
   };
 
-  const handleRecognitionChange = (slug: string) => {
-    setRecognitionValue(slug);
-    pushFilters(searchValue, slug, facultyValue, gradYearValue);
+  const handleIndustryChange = (ind: string) => {
+    setIndustryValue(ind);
+    pushFilters(searchValue, ind, facultyValue, gradYearValue);
   };
 
   const handleFacultyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const val = e.target.value;
     setFacultyValue(val);
-    pushFilters(searchValue, recognitionValue, val, gradYearValue);
+    pushFilters(searchValue, industryValue, val, gradYearValue);
   };
 
   const handleGradYearChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,12 +177,13 @@ export function DirectoryFilters({
     }
 
     debounceTimerRef.current = setTimeout(() => {
-      pushFilters(searchValue, recognitionValue, facultyValue, val);
+      pushFilters(searchValue, industryValue, facultyValue, val);
     }, 350);
   };
 
   const handleClearAll = () => {
     setSearchValue("");
+    setIndustryValue("");
     setRecognitionValue("");
     setFacultyValue("");
     setGradYearValue("");
@@ -181,7 +198,7 @@ export function DirectoryFilters({
 
   return (
     <div className="directory-controls-container">
-      {/* 3-Element Toolbar: [ Search Input ] [ Recognition Combobox ] [ Filtrlar Button ] */}
+      {/* 3-Element Toolbar: [ Search Input ] [ Industry Combobox ] [ Filtrlar Button ] */}
       <div className="directory-main-toolbar">
         {/* 1. Primary Text Search */}
         <div className="directory-search-wrapper">
@@ -215,14 +232,14 @@ export function DirectoryFilters({
           )}
         </div>
 
-        {/* 2. Honorary Title Single-Select Combobox */}
+        {/* 2. Industry Single-Select Combobox */}
         <div className="directory-recognition-wrapper">
-          <RecognitionCombobox
-            recognitions={recognitions}
-            value={recognitionValue}
-            onChange={handleRecognitionChange}
+          <IndustryCombobox
+            industries={industries}
+            value={industryValue}
+            onChange={handleIndustryChange}
             locale={locale}
-            allLabel={t.allRecognitions || "Barcha unvonlar"}
+            allLabel={t.allIndustries || "Barcha sohalar"}
           />
         </div>
 
@@ -287,6 +304,7 @@ export function DirectoryFilters({
       {/* Active Filter Chips */}
       <ActiveFilterChips
         search={currentSearch}
+        industry={currentIndustry}
         recognition={currentRecognition}
         recognitions={recognitions}
         faculty={currentFaculty}
@@ -296,19 +314,23 @@ export function DirectoryFilters({
         clearAllLabel={t.clearAll || t.clearFilters || "Barchasini tozalash"}
         onRemoveSearch={() => {
           setSearchValue("");
-          pushFilters("", recognitionValue, facultyValue, gradYearValue);
+          pushFilters("", industryValue, facultyValue, gradYearValue);
+        }}
+        onRemoveIndustry={() => {
+          setIndustryValue("");
+          pushFilters(searchValue, "", facultyValue, gradYearValue);
         }}
         onRemoveRecognition={() => {
           setRecognitionValue("");
-          pushFilters(searchValue, "", facultyValue, gradYearValue);
+          pushFilters(searchValue, industryValue, facultyValue, gradYearValue, "");
         }}
         onRemoveFaculty={() => {
           setFacultyValue("");
-          pushFilters(searchValue, recognitionValue, "", gradYearValue);
+          pushFilters(searchValue, industryValue, "", gradYearValue);
         }}
         onRemoveGradYear={() => {
           setGradYearValue("");
-          pushFilters(searchValue, recognitionValue, facultyValue, "");
+          pushFilters(searchValue, industryValue, facultyValue, "");
         }}
         onClearAll={handleClearAll}
       />

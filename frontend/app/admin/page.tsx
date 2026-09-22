@@ -16,6 +16,7 @@ import {
   XCircle,
   Plus,
   Loader2,
+  Newspaper,
   Sparkles,
 } from "lucide-react";
 import { getAdminStats, actionAdminAlumni, actionAdminYearRequest } from "@/lib/api";
@@ -94,11 +95,11 @@ export default function AdminDashboardPage() {
         </div>
         <div className="flex flex-wrap items-center gap-3 shrink-0">
           <Link
-            href="/admin/alumni/new"
+            href="/admin/alumni"
             className="px-4 py-2.5 bg-[#D38E4F] hover:bg-[#c27f42] text-[#0D1667] rounded-xl text-sm font-bold flex items-center gap-2 shadow-sm transition active:scale-95"
           >
-            <Plus className="w-4 h-4" />
-            <span>Yangi bitiruvchi</span>
+            <Users className="w-4 h-4" />
+            <span>Bitiruvchilar Moderatsiyasi</span>
           </Link>
           <Link
             href="/admin/feedback"
@@ -296,7 +297,20 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Editorial & Impact Quick Summary */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Link
+          href="/admin/news"
+          className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-[#0D1667] transition group flex items-center justify-between"
+        >
+          <div>
+            <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">So‘nggi Yangiliklar</p>
+            <p className="text-xl font-bold text-slate-900 mt-1">Yangiliklar boshqaruvi</p>
+          </div>
+          <div className="w-10 h-10 rounded-xl bg-slate-50 group-hover:bg-[#0D1667] group-hover:text-white text-slate-600 flex items-center justify-center transition">
+            <Newspaper className="w-5 h-5" />
+          </div>
+        </Link>
+
         <Link
           href="/admin/stories"
           className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-[#0D1667] transition group flex items-center justify-between"

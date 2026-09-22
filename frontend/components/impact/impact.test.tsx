@@ -16,10 +16,10 @@ vi.mock("next/link", () => ({
 }));
 
 const mockT = {
-  impactTitle: "Alumni Hissa va E’tirof",
+  impactTitle: "E’tirof",
   impactSubtitle: "Universitet va bitiruvchilar hamjamiyatiga qo‘shilgan tasdiqlangan hissalar",
-  impactSubmitCta: "Hissa qo‘shganingiz haqida xabar bering",
-  impactHowItWorksTitle: "Hissa qanday baholanadi va e’tirof etiladi?",
+  impactSubmitCta: "Tashabbus haqida xabar bering",
+  impactHowItWorksTitle: "E’tirof qanday beriladi?",
   impactHowItWorksDesc: "ALUMNI reytingi tasdiqlangan foydali ishlarga asoslanadi.",
   impactPillar1Title: "Karyera va amaliyot",
   impactPillar1Desc: "Talabalarni ishga qabul qilish",
@@ -38,12 +38,12 @@ const mockT = {
   impactCommunity: "Hamjamiyat tadbirlari",
   impactFilterFaculty: "Barcha fakultetlar",
   impactFilterYear: "Barcha yillar",
-  impactTopContributors: "Yetakchi hissa qo‘shuvchilar",
-  impactFullList: "Tasdiqlangan hissa egalari ro‘yxati",
+  impactTopContributors: "Yetakchi bitiruvchilar",
+  impactFullList: "E’tirof etilgan bitiruvchilar ro‘yxati",
   impactVerifiedCount: "ta tasdiqlangan hissa",
   impactBadgesCount: "ta nishon",
   impactRank: "O‘rni",
-  impactScore: "Hissa bali",
+  impactScore: "Faoliyat",
   impactEmptyRankings: "Hozircha tanlangan parametrlar bo‘yicha ma’lumotlar mavjud emas",
   impactEmptyRankingsSub: "Moderatsiya yangi tasdiqlangan hissalarni kiritmoqda",
 } as any;
@@ -89,8 +89,8 @@ describe("Impact & Recognition Module", () => {
     const handleOpen = vi.fn();
     render(<ImpactHeader t={mockT} onOpenSubmitModal={handleOpen} />);
 
-    expect(screen.getByRole("heading", { name: /Alumni Hissa va E’tirof/i })).toBeInTheDocument();
-    const btn = screen.getByText(/Hissa qo‘shganingiz haqida xabar bering/i);
+    expect(screen.getByRole("heading", { name: /E’tirof/i })).toBeInTheDocument();
+    const btn = screen.getByText(/Tashabbus haqida xabar bering/i);
     fireEvent.click(btn);
     expect(handleOpen).toHaveBeenCalledTimes(1);
   });
@@ -115,7 +115,7 @@ describe("Impact & Recognition Module", () => {
   it("renders ImpactRankingTable with ranking rows", () => {
     render(<ImpactRankingTable t={mockT} entries={mockEntries} />);
 
-    expect(screen.getByText(/Tasdiqlangan hissa egalari ro‘yxati/i)).toBeInTheDocument();
+    expect(screen.getByText(/E’tirof etilgan bitiruvchilar ro‘yxati/i)).toBeInTheDocument();
     expect(screen.getAllByText(/Alim Qodirov/i)[0]).toBeInTheDocument();
     expect(screen.getByText(/Fizika-matematika/i)).toBeInTheDocument();
   });
@@ -127,7 +127,6 @@ describe("Impact & Recognition Module", () => {
   });
 
   it("triggers filter callbacks in ImpactFilters", () => {
-    const handlePeriod = vi.fn();
     const handleCategory = vi.fn();
     const handleFaculty = vi.fn();
     const handleYear = vi.fn();
@@ -136,23 +135,17 @@ describe("Impact & Recognition Module", () => {
     render(
       <ImpactFilters
         t={mockT}
-        period="year"
         category=""
         faculty=""
         year=""
         search=""
         faculties={[{ id: 1, name: "Fizika-matematika" }]}
-        onPeriodChange={handlePeriod}
         onCategoryChange={handleCategory}
         onFacultyChange={handleFaculty}
         onYearChange={handleYear}
         onSearchChange={handleSearch}
       />
     );
-
-    const lifetimeBtn = screen.getByText(/Butun davr/i);
-    fireEvent.click(lifetimeBtn);
-    expect(handlePeriod).toHaveBeenCalledWith("lifetime");
 
     const careerBtn = screen.getByText(/Karyera ko‘magi/i);
     fireEvent.click(careerBtn);
