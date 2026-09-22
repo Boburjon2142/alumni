@@ -15,4 +15,4 @@ urlpatterns = [
     path("api/feedback/", include("apps.feedback.urls")),
     path("api/", include("apps.feedback.urls")),
     path("api/v1/", include("apps.universities.urls")),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
