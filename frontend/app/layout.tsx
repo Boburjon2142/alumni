@@ -12,12 +12,12 @@ export const metadata: Metadata = {
     default: "Hamjamiyat — Qarshi davlat universiteti",
     template: "%s | Hamjamiyat",
   },
-  description: "QarshiDU bitiruvchilari uchun professional hamjamiyat va imkoniyatlar platformasi.",
+  description: "Qarshi davlat universiteti bitiruvchilari uchun professional hamjamiyat va imkoniyatlar platformasi.",
   openGraph: {
     title: "Hamjamiyat — Qarshi davlat universiteti",
-    description: "QarshiDU bitiruvchilari uchun professional hamjamiyat va imkoniyatlar platformasi.",
+    description: "Qarshi davlat universiteti bitiruvchilari uchun professional hamjamiyat va imkoniyatlar platformasi.",
     url: "https://alumni.qarshidu.uz",
-    siteName: "QarDU Alumni",
+    siteName: "Qarshi davlat universiteti",
     images: [
       {
         url: "https://alumni.qarshidu.uz/brand/Logo.png",
@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Hamjamiyat — Qarshi davlat universiteti",
-    description: "QarshiDU bitiruvchilari uchun professional hamjamiyat va imkoniyatlar platformasi.",
+    description: "Qarshi davlat universiteti bitiruvchilari uchun professional hamjamiyat va imkoniyatlar platformasi.",
     images: ["https://alumni.qarshidu.uz/brand/Logo.png"],
   },
 };

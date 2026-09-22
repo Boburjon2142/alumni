@@ -154,7 +154,7 @@ export function InterviewCard({
                 {alumnus.full_name}
               </Link>
               <span className="interview-author-position">
-                {alumnus.position || alumnus.faculty || "QarshiDU bitiruvchisi"}
+                {alumnus.position || alumnus.faculty || "Qarshi davlat universiteti bitiruvchisi"}
                 {alumnus.faculty && ` · ${alumnus.faculty}`}
               </span>
             </div>
@@ -205,7 +205,7 @@ export function InterviewCard({
                 <span className="video-modal-badge">{videoBadge}</span>
                 <h3 className="video-modal-title">{title}</h3>
                 <p className="video-modal-author">
-                  {alumnus.full_name} — {alumnus.position || alumnus.faculty || "QarshiDU bitiruvchisi"}
+                  {alumnus.full_name} — {alumnus.position || alumnus.faculty || "Qarshi davlat universiteti bitiruvchisi"}
                 </p>
               </div>
               <button

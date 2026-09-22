@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   try {
     const alumnus = await getAlumniById(id);
-    const title = alumnus.seo_title || `${alumnus.full_name} — QarshiDU bitiruvchisi`;
+    const title = alumnus.seo_title || `${alumnus.full_name} — Qarshi davlat universiteti bitiruvchisi`;
     const description = alumnus.seo_description || alumnus.biography_uz || alumnus.bio || `${alumnus.full_name} haqida to‘liq ma’lumot, hayot yo‘li va erishgan yutuqlari.`;
     
     // Resolve absolute image URL for Telegram preview
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
         title,
         description,
         url: `https://alumni.qarshidu.uz/alumni/${alumnus.slug}`,
-        siteName: "QarDU Alumni",
+        siteName: "Qarshi davlat universiteti",
         images: [
           {
             url: imageUrl,

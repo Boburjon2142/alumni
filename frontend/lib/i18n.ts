@@ -202,7 +202,7 @@ const dictionaries = {
     verifiedSources: "Tasdiqlangan manbalar",
     fullProfile: "Batafsil profil",
     quickView: "Profilni ko‘rish",
-    graduate: "QarshiDU bitiruvchisi",
+    graduate: "Qarshi davlat universiteti bitiruvchisi",
     verified: "Tasdiqlangan",
     backToDirectory: "Faxriy bitiruvchilarga qaytish",
     profileNotFound: "Bitiruvchi profili topilmadi",

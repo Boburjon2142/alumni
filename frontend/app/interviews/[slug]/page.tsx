@@ -90,7 +90,7 @@ export default async function InterviewDetailPage({
                 {alumnus.full_name}
               </Link>
               <p className="interview-detail-author-pos">
-                {alumnus.position || (locale === "ru" ? "Выпускник КарГУ" : locale === "en" ? "KarSU Alumnus" : "QarshiDU bitiruvchisi")}
+                {alumnus.position || (locale === "ru" ? "Выпускник КарГУ" : locale === "en" ? "KarSU Alumnus" : "Qarshi davlat universiteti bitiruvchisi")}
               </p>
               {alumnus.current_company && (
                 <p className="interview-detail-author-company">

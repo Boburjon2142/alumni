@@ -137,7 +137,7 @@ export function EditProfileModal({
           {/* Header */}
           <div className="about-dialog-heading">
             <div className="about-dialog-heading-content">
-              <span className="eyebrow gold">QARSHIDU BITIRUVCHISI</span>
+              <span className="eyebrow gold">QARSHI DAVLAT UNIVERSITETI BITIRUVCHISI</span>
               <Dialog.Title style={{ fontSize: "1.35rem", fontWeight: 700, color: "#002B49" }}>
                 {locale === "en" ? "Edit Profile" : locale === "ru" ? "Редактирование профиля" : "Profilni tahrirlash"}
               </Dialog.Title>

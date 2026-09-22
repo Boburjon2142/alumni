@@ -31,13 +31,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       : `https://alumni.qarshidu.uz${rawImage.startsWith("/") ? "" : "/"}${rawImage}`;
 
     return {
-      title: `${title} — QarDU ALUMNI`,
+      title: `${title} — Qarshi davlat universiteti`,
       description: desc,
       openGraph: {
-        title: `${title} — QarDU ALUMNI`,
+        title: `${title} — Qarshi davlat universiteti`,
         description: desc,
         url: `https://alumni.qarshidu.uz/stories/${story.slug}`,
-        siteName: "QarDU Alumni",
+        siteName: "Qarshi davlat universiteti",
         images: [
           {
             url: imageUrl,

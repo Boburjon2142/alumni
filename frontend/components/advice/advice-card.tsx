@@ -44,7 +44,7 @@ export function AdviceCard({ advice, locale }: { advice: Advice; locale: Locale 
           <div className="advice-author-meta">
             <h4 className="advice-author-name">{alumnus.full_name}</h4>
             <p className="advice-author-role">
-              {alumnus.position || alumnus.faculty || "QarshiDU bitiruvchisi"}
+              {alumnus.position || alumnus.faculty || "Qarshi davlat universiteti bitiruvchisi"}
               {alumnus.graduation_year && ` · ${alumnus.graduation_year}-yil`}
             </p>
           </div>
