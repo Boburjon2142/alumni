@@ -9,6 +9,7 @@ from rest_framework.exceptions import NotFound, ValidationError
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from common.cache_utils import cache_api_response
 from .models import AlumniProfile, AlumniRecognition, FeaturedAlumni, GraduationYearChangeRequest, RecognitionTitle
 from .notifications import get_approver_display_name, notify_new_alumni_confirmed
 
@@ -34,6 +35,10 @@ class RecognitionTitleListView(generics.ListAPIView):
     serializer_class = RecognitionTitleSerializer
     pagination_class = None
 
+    @cache_api_response("recognition_titles", timeout=1800)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
     def get_queryset(self):
         return RecognitionTitle.objects.filter(is_active=True).order_by("order", "name")
 
@@ -42,6 +47,11 @@ class AlumniListView(generics.ListAPIView):
     serializer_class = PublicAlumniListSerializer
     filterset_fields = {"graduation_year": ["exact"]}
     search_fields = ["full_name", "current_company", "position", "current_activity", "city", "country", "specialty__name", "faculty__name"]
+
+    @cache_api_response("alumni_list", timeout=300)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
 
     def get_queryset(self):
         qs = visible_profiles(self.request)
@@ -152,6 +162,7 @@ class AlumniSubmissionCreateView(generics.CreateAPIView):
 class GraduationGroupListView(APIView):
     permission_classes = [AllowAny]
 
+    @cache_api_response("graduation_groups", timeout=600)
     def get(self, request):
         search = request.query_params.get("search", "").strip()
         qs = (
@@ -187,6 +198,7 @@ class GraduationGroupDetailView(generics.ListAPIView):
             raise ValidationError({"year": f"Bitiruv yili 1956 va {current_year + 1} oralig‘ida bo‘lishi kerak."})
         return visible_profiles(self.request).filter(graduation_year=year).order_by("-is_honorary", "-is_featured", "featured_order", "full_name")
 
+    @cache_api_response("graduation_group_detail", timeout=600)
     def list(self, request, *args, **kwargs):
         year = self.kwargs.get("year")
         response = super().list(request, *args, **kwargs)
@@ -262,12 +274,17 @@ class FeaturedListView(generics.ListAPIView):
     serializer_class = FeaturedSerializer
     pagination_class = None
 
+    @cache_api_response("featured_alumni", timeout=600)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
     def get_queryset(self):
         return FeaturedAlumni.objects.filter(
             is_active=True,
             alumni__is_published=True,
             alumni__approval_status=AlumniProfile.ApprovalStatus.APPROVED,
         ).select_related("alumni", "alumni__faculty", "alumni__specialty")[:12]
+
 
 
 class AlumniConfirmView(APIView):

@@ -9,6 +9,7 @@ from rest_framework.views import APIView
 from apps.alumni.models import AlumniProfile
 from common.pagination import StandardPagination
 from .models import Achievement, AlumniAchievement, Contribution, ScoreTransaction
+from common.cache_utils import cache_api_response
 from .permissions import IsStaffOrAdmin
 from .serializers import (
     AchievementSerializer,
@@ -34,7 +35,9 @@ class ImpactRankingView(APIView):
     permission_classes = (permissions.AllowAny,)
     pagination_class = StandardPagination
 
+    @cache_api_response("impact_rankings", timeout=300)
     def get(self, request):
+
         period = request.query_params.get("period", "year")
         category_filter = request.query_params.get("category", "all")
         faculty_id = request.query_params.get("faculty")

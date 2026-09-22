@@ -76,6 +76,35 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 LANGUAGE_CODE = "uz"; TIME_ZONE = "Asia/Tashkent"; USE_I18N = True; USE_TZ = True
+# --- Caching Configuration (Redis with LocMem fallback) ---
+REDIS_URL = os.getenv("REDIS_URL", "redis://127.0.0.1:6379/1")
+USE_REDIS = os.getenv("USE_REDIS", "false").lower() in ("true", "1", "yes")
+
+if USE_REDIS or not DEBUG:
+    CACHES = {
+        "default": {
+            "BACKEND": "django_redis.cache.RedisCache",
+            "LOCATION": REDIS_URL,
+            "OPTIONS": {
+                "CLIENT_CLASS": "django_redis.client.DefaultClient",
+                "IGNORE_EXCEPTIONS": True,
+                "SOCKET_CONNECT_TIMEOUT": 3,
+                "SOCKET_TIMEOUT": 3,
+            },
+            "KEY_PREFIX": "alumni",
+            "TIMEOUT": 600,
+        }
+    }
+else:
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+            "LOCATION": "alumni_locmem_cache",
+            "TIMEOUT": 600,
+            "KEY_PREFIX": "alumni",
+        }
+    }
+
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "static"
 STATICFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"

@@ -28,11 +28,22 @@ class PublishableModel(models.Model):
         abstract = True
 
     def save(self, *args, **kwargs):
+        for field_name in ("cover_image", "hero_image"):
+            if hasattr(self, field_name):
+                img = getattr(self, field_name)
+                if img and hasattr(img, "file") and not str(img.name).lower().endswith(".webp"):
+                    try:
+                        from common.image_optimizer import optimize_image_field
+                        optimize_image_field(img, max_dimension=1920, quality=82)
+                    except Exception:
+                        pass
+
         if self.is_published and self.published_at is None:
             self.published_at = timezone.now()
         if not self.is_published:
             self.published_at = None
         super().save(*args, **kwargs)
+
 
 
 class SuccessStory(PublishableModel):
@@ -262,4 +273,22 @@ class News(PublishableModel):
 
     def __str__(self):
         return self.title_uz
+
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+
+@receiver([post_save, post_delete], sender=News)
+@receiver([post_save, post_delete], sender=SuccessStory)
+@receiver([post_save, post_delete], sender=AlumniInterview)
+@receiver([post_save, post_delete], sender=AlumniAdvice)
+@receiver([post_save, post_delete], sender=Event)
+def clear_editorial_cache(sender, **kwargs):
+    from common.cache_utils import invalidate_cache_prefix
+    invalidate_cache_prefix("api:news")
+    invalidate_cache_prefix("api:stories")
+    invalidate_cache_prefix("api:interviews")
+    invalidate_cache_prefix("api:advice")
+    invalidate_cache_prefix("api:events")
+    invalidate_cache_prefix("api:stats")
+
 

@@ -4,6 +4,7 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
+from common.cache_utils import cache_api_response
 from .models import AlumniAdvice, AlumniInterview, Event, News, SuccessStory
 from .serializers import (
     AdviceSerializer,
@@ -25,10 +26,16 @@ class PublishedListMixin:
 class StoryListView(PublishedListMixin, generics.ListAPIView):
     serializer_class = SuccessStoryListSerializer
     search_fields = ("title_uz", "title_en", "summary_uz", "summary_en", "alumnus__full_name")
+
+    @cache_api_response("stories_list", timeout=600)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
     def get_queryset(self):
         qs = SuccessStory.objects.filter(is_published=True, alumnus__is_published=True).select_related("alumnus")
         if self.request.query_params.get("featured") == "true": qs = qs.filter(is_featured=True)
         return qs
+
 
 
 class StoryDetailView(generics.RetrieveAPIView):
@@ -42,6 +49,11 @@ class StoryDetailView(generics.RetrieveAPIView):
 
 class InterviewListView(PublishedListMixin, generics.ListAPIView):
     serializer_class = InterviewListSerializer
+
+    @cache_api_response("interviews_list", timeout=600)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
     def get_queryset(self):
         qs = AlumniInterview.objects.filter(is_published=True, alumnus__is_published=True, items__isnull=False).select_related("alumnus", "alumnus__faculty").distinct()
         search = self.request.query_params.get("search")
@@ -71,6 +83,11 @@ class InterviewDetailView(generics.RetrieveAPIView):
 
 class AdviceListView(PublishedListMixin, generics.ListAPIView):
     serializer_class = AdviceSerializer
+
+    @cache_api_response("advice_list", timeout=600)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
     def get_queryset(self):
         qs = AlumniAdvice.objects.filter(is_published=True, alumnus__is_published=True).select_related("alumnus", "source_interview_item")
         category = self.request.query_params.get("category")
@@ -79,6 +96,11 @@ class AdviceListView(PublishedListMixin, generics.ListAPIView):
 
 class EventListView(PublishedListMixin, generics.ListAPIView):
     serializer_class = EventListSerializer
+
+    @cache_api_response("events_list", timeout=600)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
     def get_queryset(self):
         qs = Event.objects.filter(is_published=True)
         event_type = self.request.query_params.get("event_type")
@@ -101,6 +123,10 @@ class EventDetailView(generics.RetrieveAPIView):
 class NewsListView(PublishedListMixin, generics.ListAPIView):
     serializer_class = NewsListSerializer
 
+    @cache_api_response("news_list", timeout=600)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
+
     def get_queryset(self):
         qs = News.objects.filter(is_published=True)
         search = self.request.query_params.get("search")
@@ -122,6 +148,7 @@ class NewsListView(PublishedListMixin, generics.ListAPIView):
         if self.request.query_params.get("featured") == "true":
             qs = qs.filter(is_featured=True)
         return qs
+
 
 
 class NewsDetailView(generics.RetrieveAPIView):

@@ -97,6 +97,13 @@ class AlumniProfile(models.Model):
             models.Index(fields=("approval_status", "is_honorary"), name="alumni_appr_hon_idx"),
         ]
     def save(self, *args, **kwargs):
+        if self.avatar and hasattr(self.avatar, "file") and not str(self.avatar.name).lower().endswith(".webp"):
+            try:
+                from common.image_optimizer import optimize_image_field
+                optimize_image_field(self.avatar, max_dimension=800, quality=82)
+            except Exception:
+                pass
+
         if not self.slug:
             base = slugify(self.full_name) or uuid.uuid4().hex[:10]
             candidate, suffix = base, 2
@@ -109,6 +116,17 @@ class AlumniProfile(models.Model):
             self.published_at = None
         super().save(*args, **kwargs)
     def __str__(self): return self.full_name
+
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
+
+@receiver([post_save, post_delete], sender=AlumniProfile)
+def clear_alumni_cache(sender, **kwargs):
+    from common.cache_utils import invalidate_cache_prefix
+    invalidate_cache_prefix("api:alumni")
+    invalidate_cache_prefix("api:stats")
+    invalidate_cache_prefix("api:impact")
+
 
 class Achievement(models.Model):
     class Category(models.TextChoices):
