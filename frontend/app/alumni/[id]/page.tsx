@@ -5,7 +5,9 @@ import { ArrowLeft, Award, BadgeCheck, BookOpen, ExternalLink, GraduationCap, Ma
 import { RemoteImage } from "@/components/ui/remote-image";
 import { EditProfileModal } from "@/components/alumni/edit-profile-modal";
 import { PeerConfirmation } from "@/components/alumni/peer-confirmation";
+import { ProfileShareButtons } from "@/components/alumni/profile-share-buttons";
 import { AlumniImpactCard } from "@/components/impact/alumni-impact-card";
+
 import { getAlumniById } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
 
@@ -105,10 +107,19 @@ export default async function Profile({ params }: Props) {
 
             <div style={{ marginTop: "1.25rem", display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
               <EditProfileModal alumnus={a} locale={locale} />
+              <ProfileShareButtons
+                fullName={a.full_name}
+                position={a.position || a.current_activity}
+                faculty={a.faculty}
+                graduationYear={a.graduation_year}
+                slug={a.slug}
+                locale={locale}
+              />
             </div>
           </div>
         </div>
       </header>
+
 
       {/* Profile Body: 2-Column Responsive Layout */}
       <div className="container honorary-profile-body">
