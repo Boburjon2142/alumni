@@ -1,6 +1,7 @@
 ================================================================================
-          QARDU ALUMNI PORTALI - KELGUSI YANGILANISHLAR VA SERVER BO'YICHA
-                            TO'LIQ QO'LLANMA (YO'RIQNOMA)
+          QARSHI DAVLAT UNIVERSITETI BITIRUVCHILAR PORTALI
+                  SERVERNI YANGILASH VA SOZLASh BO'YICHA
+                       TO'LIQ QO'LLANMA (YO'RIQNOMA)
 ================================================================================
 Domen:           https://alumni.qarshidu.uz
 Server IP:       213.230.96.104
@@ -11,36 +12,28 @@ GitHub Repo:     https://github.com/Boburjon2142/alumni.git (branch: main)
 
 
 --------------------------------------------------------------------------------
-1. LOKALDA O'ZGARISHLAR QILISH VA GITHUBGA YUKLASH TARTIBI
+1. SERVERNI 1 TA BUYRUQ BILAN TEZKOR YANGILASH (ENG ISHONCHLI VA TEZ USUL)
 --------------------------------------------------------------------------------
-Lokal kompyuteringizda (VS Code / Antigravity IDE) kodni o'zgartirgandan so'ng:
-
-A) Agar ma'lumotlar bazasida (DB) yangi ma'lumotlar qo'shilgan bo'lsa, avval dump oling:
-   (Lokal backend terminalida):
-   cd backend
-   python -Xutf8 manage.py dumpdata --natural-foreign --natural-primary --exclude contenttypes --exclude auth.Permission --indent 2 -o fixtures/production_data_dump.json
-   cd ..
-
-B) O'zgarishlarni GitHub'ga push qilish:
-   git add .
-   git commit -m "Yangi xususiyatlar va yangilanishlar"
-   git push origin main
-
-
---------------------------------------------------------------------------------
-2. PRODUCTION SERVERDA YANGILANISHLARNI QABUL QILIB OLISH
---------------------------------------------------------------------------------
-Serverga kiring:
+Serverga SSH orqali kiring:
    ssh -p 24050 root@213.230.96.104
 
-A) FAQAT FRONTEND (DIZAYN/SAHIFALAR) O'ZGARGAN BO'LSA:
+Va quyidagi bir qatorlik to'liq buyruqni ishga tushiring:
+
+cd /var/www/alumni && git pull origin main && cd backend && source venv/bin/activate && pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput && cd ../frontend && npm run build && pm2 restart alumni-backend alumni-frontend && pm2 save
+
+
+--------------------------------------------------------------------------------
+2. BOSQICHMA-BOSQICH YANGILASH (KERAKLI BO'LIMLAR BO'YICHA)
+--------------------------------------------------------------------------------
+
+A) FAQAT FRONTEND (DIZAYN, SAHIFALAR, FILTRLAR) O'ZGARGAN BO'LSA:
    cd /var/www/alumni
    git pull origin main
    cd frontend
    npm run build
    pm2 restart alumni-frontend
 
-B) FAQAT BACKEND (DJANGO / MODELLAR / API) O'ZGARGAN BO'LSA:
+B) FAQAT BACKEND (DJANGO, API, ADMIN PANEL) O'ZGARGAN BO'LSA:
    cd /var/www/alumni
    git pull origin main
    cd backend
@@ -50,65 +43,84 @@ B) FAQAT BACKEND (DJANGO / MODELLAR / API) O'ZGARGAN BO'LSA:
    python manage.py collectstatic --noinput
    pm2 restart alumni-backend
 
-C) MA'LUMOTLAR BAZASINI YANGILASH (Lokal bazani serverga to'liq ko'chirish):
+C) MA'LUMOTLAR BAZASINI (DB) YANGILASH:
    cd /var/www/alumni/backend
    source venv/bin/activate
    python manage.py loaddata fixtures/production_data_dump.json
    pm2 restart alumni-backend
 
-D) BARCHASINI BIR YO'LA TO'LIQ YANGILASH (ENG TEZ VA ISHONCHLI BUYRUQ):
-   cd /var/www/alumni && git pull origin main && cd /var/www/alumni/backend && source venv/bin/activate && pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput && cd /var/www/alumni/frontend && npm run build && pm2 restart all && pm2 save
+
+--------------------------------------------------------------------------------
+3. SERVER .ENV FAYLI SOZLAMALARI (GMAIL SMTP VA GOOGLE AUTH)
+--------------------------------------------------------------------------------
+Serverdagi maxfiy kalitlar fayli: /var/www/alumni/backend/.env
+
+Faylga kiritilishi shart bo'lgan to'liq parametrlar:
+
+GOOGLE_CLIENT_ID=602673887823-8mjpg7jbbbmc3ik08olq930m7a7t7cqo.apps.googleusercontent.com
+
+# Gmail SMTP orqali tasdiqlash kodlarini yuborish:
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+EMAIL_HOST_USER=boburjonabduganiyev83@gmail.com
+EMAIL_HOST_PASSWORD=vsgedohvosoowqjx
+DEFAULT_FROM_EMAIL=QarshiDU Alumni <boburjonabduganiyev83@gmail.com>
+
+# Telegram Bot sozlamalari (Murojaat va kodlar dublyaji):
+TELEGRAM_BOT_TOKEN=8925895219:AAGFBC5vcpVHlLEJXukWYZPSJV0bK2PWlL4
+TELEGRAM_ADMIN_CHAT_ID=-1003901101723
+TELEGRAM_BOT_USERNAME=qarshidu_alumni_bot
 
 
 --------------------------------------------------------------------------------
-3. SERVERNI NAZORAT QILISH VA LOGLARNI KO'RISH
+4. MUAMMOLAR VA ULARNING TEZKOR YECHIMI (TROUBLESHOOTING)
 --------------------------------------------------------------------------------
-- Jarayonlar holatini ko'rish:
+
+1. Django Admin paneli (/admin/) dizayni buzilsa yoki CSS yuklanmasa:
+   - Sababi: Statik fayllar yig'ilmagan yoki Next.js proxy ulanmagan.
+   - Yechim:
+     cd /var/www/alumni/backend && source venv/bin/activate && python manage.py collectstatic --noinput
+     cd /var/www/alumni/frontend && npm run build && pm2 restart all
+
+2. Google orqali kirishda "Ошибка 400: origin_mismatch" chiqsa:
+   - Sababi: Google Cloud Console'da sayt domeni kiritilmagan.
+   - Yechim:
+     console.cloud.google.com/apis/credentials ga kirib, OAuth 2.0 Client ID sozlamalarida:
+     * "Authorized JavaScript origins" bo'limiga: https://alumni.qarshidu.uz
+     * "Authorized redirect URIs" bo'limiga: https://alumni.qarshidu.uz va https://alumni.qarshidu.uz/api/v1/auth/google/
+     domenlarini qo'shib, "Saqlash" (Save) tugmasini bosing.
+
+3. Sayt yuklanish tezligi yoki keshni tozalash:
+   - Brauzer keshini tozalash: Ctrl + Shift + R (yoki Ctrl + F5)
+   - PM2 xizmatlarini qayta ishga tushirish: pm2 restart all
+
+
+--------------------------------------------------------------------------------
+5. SERVER HOLATINI VA LOGLARINI TEKSHIRISH
+--------------------------------------------------------------------------------
+- Barcha jarayonlar holati:
   pm2 status
 
-- Xatoliklar va jonli loglarni kuzatish:
+- Jonli xatoliklar va loglar:
   pm2 logs
-  (yoki alohida: pm2 logs alumni-frontend  yoki  pm2 logs alumni-backend)
+  pm2 logs alumni-frontend
+  pm2 logs alumni-backend
 
-- Nginx holatini tekshirish:
+- Nginx holati:
   systemctl status nginx
   nginx -t && systemctl reload nginx
 
 
 ================================================================================
-4. KELGUSI ISHLAR VA AI AGENT UCHUN TAYYOR PROMPTLAR (NUSXA KO'CHIRIB ISHLATING)
+6. AI AGENT UCHUN TAYYOR BUYRUQ VA PROMPTLAR
 ================================================================================
 
+PROMPT 1: Yangi sahifa yoki funksiya qo'shishda
 --------------------------------------------------------------------------------
-PROMPT 1: Yangi sahifa yoki komponent yaratishda
---------------------------------------------------------------------------------
-"QarDU Alumni portaliga [SAHIFA_NOMI, masalan: Tadbirlar / Mentorlik / Karyera] sahifasini qo'shish kerak. Dizayni mavjud loyiha uslubi (Tailwind/globals.css, Yashil va Oltin ranglar, dark mode qo'llab-quvvatlashi) bilan 100% mos bo'lsin. Backend uchun tegishli Django model va API endpointlarni yarating, frontendda esa to'liq responsiv UI va filtrlash imkoniyatlarini taqdim eting. Testlarni yurgizib tekshiring."
+"Qarshi davlat universiteti bitiruvchilar portaliga [SAHIFA_NOMI, masalan: Tadbirlar / Mentorlik / Vakansiyalar] bo'limini qo'shing. Mavjud dizayn tizimi (universitet ko'k/oltin ranglari, to'liq responsivlik)ga 100% mos bo'lsin. Backend uchun model va API, frontend uchun komponentlar yarating va testlarni yurgizib tekshiring."
 
-
+PROMPT 2: Yangilanishlarni GitHub'ga yuklashda
 --------------------------------------------------------------------------------
-PROMPT 2: Telegram kanaldan yangiliklar olishni yangilash yoki kengaytirish
---------------------------------------------------------------------------------
-"Telegram kanalimiz (@qarduuz)dan yangiliklarni avtomatik tortib oluvchi skriptni takomillashtiring. Yangi postlar yuklanganda ularning rasmlari, matni va sanasini bazaga avtomatik qo'shsin, eskilari takrorlanmasin. Backend admin panelidan bir tugma bilan yangiliklarni sinxronlash imkoniyati ham bo'lsin."
-
-
---------------------------------------------------------------------------------
-PROMPT 3: Yangilanishlarni GitHub va Serverga avtomat yuklash
---------------------------------------------------------------------------------
-"Lokalda qilingan so'nggi barcha o'zgarishlarni tekshirib, ma'lumotlar bazasi fixture'larini eksport qil va GitHub'ga 'main' branchga push qil. Shuningdek, production serverda yangilanishni qo'llash uchun kerak bo'ladigan buyruqlarni taqdim et."
-
-
---------------------------------------------------------------------------------
-PROMPT 4: Bitiruvchilar uchun yangi xizmat yoki so'rovnoma qo'shish
---------------------------------------------------------------------------------
-"Bitiruvchilar o'rtasida yangi so'rovnoma (survey/feedback) moduli qo'shilsin. Formada [KERAKLI_MAYDONLAR] bo'lsin. /join va /feedback sahifalari kabi chap tomonda forma, o'ng tomonda QarDU logotipi va ma'lumot paneli bo'lgan split-layout dizaynidan foydalanilsin. Natijalar admin panelda chiroyli jadval va eksport (Excel/CSV) ko'rinishida ko'rinsin."
-
-
---------------------------------------------------------------------------------
-PROMPT 5: Serverda xatolik yuz berganda diagnostika qilish
---------------------------------------------------------------------------------
-"Serverda [XATOLIK_MATNI_YOKI_KODI, masalan: 502 Bad Gateway / CORS xatosi] yuz berdi. Nginx konfiguratsiyasi (/etc/nginx/sites-available/alumni.qarshidu.uz), PM2 jarayonlari va Django sozlamalarini (ALLOWED_HOSTS, CORS_ALLOWED_ORIGINS, CSRF_TRUSTED_ORIGINS) tekshirib, muammoni to'liq bartaraf etuvchi aniq ko'rsatma ber."
-
-================================================================================
-Fayl yaratildi: 2026-09-22
-Loyiha: Qarshi Davlat Universiteti (QarDU) Bitiruvchilar Assotsiatsiyasi Portali
+"Lokalda qilingan o'zgarishlarni tekshirib, barcha testlarni yurgiz va GitHub main branchiga commit/push qil. Serverda qo'llash buyruqlarini ber."
 ================================================================================
