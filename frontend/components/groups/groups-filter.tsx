@@ -67,14 +67,14 @@ export function GroupsFilter({ t, locale = "uz" }: { t: Dictionary; locale?: Loc
     : currentRegion;
 
   return (
-    <div className="groups-filter-wrapper mb-8">
-      <div className="groups-filter-bar flex flex-col md:flex-row items-stretch md:items-center gap-3 bg-white p-3.5 rounded-2xl border border-slate-200/80 shadow-sm">
+    <div className="groups-filter-wrapper">
+      <div className="groups-filter-bar">
         {/* Left: Search input */}
-        <form onSubmit={handleSearch} className="groups-search-form flex-1 relative flex items-center" role="search">
-          <Search className="absolute left-3.5 text-slate-400 pointer-events-none" size={18} aria-hidden="true" />
+        <form onSubmit={handleSearch} className="groups-search-form" role="search">
+          <Search className="groups-search-icon" size={18} aria-hidden="true" />
           <input
             type="search"
-            className="w-full pl-10 pr-24 py-2.5 bg-slate-50 hover:bg-slate-100/60 focus:bg-white text-slate-800 placeholder:text-slate-400 border border-slate-200/90 rounded-xl text-sm transition-all focus:outline-none focus:ring-2 focus:ring-[#002B49]/15 focus:border-[#002B49]"
+            className="groups-search-input"
             placeholder={t.groupsSearchPlaceholder || "Yil bo‘yicha qidirish (masalan: 2012)..."}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
@@ -83,7 +83,7 @@ export function GroupsFilter({ t, locale = "uz" }: { t: Dictionary; locale?: Loc
           {query && (
             <button
               type="button"
-              className="absolute right-20 text-slate-400 hover:text-slate-600 p-1"
+              className="groups-clear-btn"
               onClick={handleClearSearch}
               aria-label="Tozalash"
             >
@@ -92,21 +92,21 @@ export function GroupsFilter({ t, locale = "uz" }: { t: Dictionary; locale?: Loc
           )}
           <button
             type="submit"
-            className="button button-primary absolute right-1.5 top-1.5 bottom-1.5 px-4 !min-h-0 !h-auto text-xs font-semibold rounded-lg shadow-none"
+            className="button button-primary groups-submit-btn"
             disabled={isPending}
           >
             {isPending ? "..." : t.search || "Qidirish"}
           </button>
         </form>
 
-        {/* Right: Region Dropdown */}
-        <div className="groups-region-filter relative flex items-center min-w-[240px]">
-          <MapPin className="absolute left-3.5 text-amber-600 pointer-events-none z-10" size={17} aria-hidden="true" />
+        {/* Right: Region Dropdown (O'ng chetda) */}
+        <div className="groups-region-filter">
+          <MapPin className="groups-region-icon" size={17} aria-hidden="true" />
           <select
             value={currentRegion}
             onChange={handleRegionChange}
             aria-label="Faoliyat hududi bo‘yicha saralash"
-            className="w-full pl-10 pr-8 py-2.5 bg-slate-50 hover:bg-slate-100/70 focus:bg-white text-slate-800 border border-slate-200/90 rounded-xl text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-[#002B49]/15 focus:border-[#002B49] cursor-pointer appearance-none"
+            className="groups-region-select"
           >
             {REGIONS.map((r) => (
               <option key={r.value} value={r.value}>
@@ -114,47 +114,49 @@ export function GroupsFilter({ t, locale = "uz" }: { t: Dictionary; locale?: Loc
               </option>
             ))}
           </select>
-          <div className="absolute right-3.5 pointer-events-none text-slate-400 text-xs">
-            ▼
+          <div className="groups-region-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
           </div>
         </div>
       </div>
 
       {/* Active Filter Chips */}
       {(query || currentRegion) && (
-        <div className="groups-active-chips flex flex-wrap items-center gap-2 mt-3 text-xs">
-          <span className="text-slate-500 font-medium">Faol filtrlar:</span>
+        <div className="groups-active-chips">
+          <span style={{ color: "#64748b", fontWeight: 600 }}>Faol filtrlar:</span>
           {query && (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 border border-blue-200/80 text-blue-900 rounded-full font-medium">
+            <span className="groups-chip groups-chip-search">
               <span>Qidiruv: &ldquo;{query}&rdquo;</span>
               <button
                 type="button"
                 onClick={handleClearSearch}
-                className="hover:text-red-600 ml-0.5"
+                className="groups-chip-clear"
                 title="Qidiruvni o‘chirish"
               >
-                <X size={13} />
+                <X size={12} />
               </button>
             </span>
           )}
           {currentRegion && (
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-200/80 text-amber-900 rounded-full font-medium">
-              <MapPin size={12} className="text-amber-600" />
+            <span className="groups-chip groups-chip-region">
+              <MapPin size={12} />
               <span>Hudud: {activeRegionLabel}</span>
               <button
                 type="button"
                 onClick={() => updateFilters(query, "")}
-                className="hover:text-red-600 ml-0.5"
+                className="groups-chip-clear"
                 title="Hududni o‘chirish"
               >
-                <X size={13} />
+                <X size={12} />
               </button>
             </span>
           )}
           <button
             type="button"
             onClick={handleClearAll}
-            className="text-slate-500 hover:text-red-600 underline underline-offset-2 ml-2 transition-colors"
+            className="groups-clear-all-btn"
           >
             Barchasini tozalash
           </button>
