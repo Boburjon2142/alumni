@@ -54,30 +54,13 @@ export function PeerConfirmation({ alumnus, locale = "uz" }: PeerConfirmationPro
     }
   };
 
+  if (isApproved && !open && !successMsg) {
+    return null;
+  }
+
   return (
     <div className="peer-confirmation-wrapper">
-      {/* 1. Tasdiqlanganlik holati va kim tasdiqlaganligi */}
-      {isApproved ? (
-        <div className="alumni-endorsement-status">
-          <span className="endorsement-pill verified">
-            <BadgeCheck size={16} className="text-emerald-500" />
-            <span>
-              {approvedBy
-                ? `Tasdiqlagan: ${approvedBy}`
-                : "Rasman tasdiqlangan bitiruvchi"}
-            </span>
-          </span>
-          <a
-            href="https://t.me/qarshidu_alumni_bot"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bot-directory-link"
-            title="Telegram botning «Tasdiqlanganlar» bo‘limida ko‘rish"
-          >
-            <Send size={14} /> Botda «Tasdiqlanganlar»
-          </a>
-        </div>
-      ) : (
+      {!isApproved && (
         <div className="alumni-endorsement-status pending">
           <span className="endorsement-pill pending">
             <ShieldCheck size={16} />
@@ -97,6 +80,8 @@ export function PeerConfirmation({ alumnus, locale = "uz" }: PeerConfirmationPro
           </button>
         </div>
       )}
+
+
 
       {/* Tasdiqlash modal oynasi */}
       <Dialog.Root open={open} onOpenChange={setOpen}>

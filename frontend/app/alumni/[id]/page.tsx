@@ -200,20 +200,32 @@ export default async function Profile({ params }: Props) {
             {!!a.timeline?.length && (
               <section className="profile-section timeline-card-section" aria-labelledby="timeline-title">
                 <h2 id="timeline-title">{t.timeline}</h2>
-                <ol className="career-timeline">
-                  {a.timeline.map((item) => (
-                    <li key={item.id}>
-                      <time>{item.year}</time>
-                      <div>
-                        <h3>{item.title}</h3>
-                        {item.organization && <strong>{item.organization}</strong>}
-                        {item.description && <p>{item.description}</p>}
-                      </div>
-                    </li>
-                  ))}
-                </ol>
+                <div className="career-timeline-container">
+                  <ol className="career-timeline">
+                    {a.timeline.map((item) => (
+                      <li key={item.id} className="timeline-entry">
+                        <div className="timeline-year-col">
+                          <time className="timeline-year-badge">{item.year}</time>
+                        </div>
+                        <div className="timeline-line-node" aria-hidden="true">
+                          <span className="timeline-dot" />
+                        </div>
+                        <div className="timeline-content-card">
+                          <h3>{item.title}</h3>
+                          {item.organization && (
+                            <strong className="timeline-org">{item.organization}</strong>
+                          )}
+                          {item.description && item.description.trim() !== item.title.trim() && (
+                            <p className="timeline-desc">{item.description}</p>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                </div>
               </section>
             )}
+
 
             {/* 04. Career Story */}
             {careerStory && (

@@ -56,14 +56,11 @@ describe("PeerConfirmation Component", () => {
     cleanup();
   });
 
-  it("renders verified status and approver name for approved alumnus", () => {
-    render(<PeerConfirmation alumnus={mockApprovedAlumnus} locale="uz" />);
-
-    expect(screen.getByText(/Tasdiqlagan: Aziz Rahmonov/i)).toBeInTheDocument();
-    const botLink = screen.getByRole("link", { name: /Botda «Tasdiqlanganlar»/i });
-    expect(botLink).toBeInTheDocument();
-    expect(botLink).toHaveAttribute("href", "https://t.me/qarshidu_alumni_bot");
+  it("does not render banner for already approved alumnus", () => {
+    const { container } = render(<PeerConfirmation alumnus={mockApprovedAlumnus} locale="uz" />);
+    expect(container.firstChild).toBeNull();
   });
+
 
   it("renders pending status and confirm button for unapproved alumnus", async () => {
     mockConfirmAlumnus.mockResolvedValueOnce({
