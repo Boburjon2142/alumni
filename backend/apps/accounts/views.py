@@ -112,12 +112,29 @@ class SendVerificationCodeView(APIView):
             EmailVerificationCode.objects.filter(email=email, purpose=purpose, code=code, is_verified=False).delete()
             return Response({"message": "Tasdiqlash xatini yuborib bo'lmadi. Keyinroq qayta urinib ko'ring."}, status=503)
 
+        # Telegram bot / admin guruhga ham qo'shimcha tezkor xabar yuborish
+        try:
+            from apps.alumni.telegram_bot import send_telegram_raw
+            admin_chat_id = getattr(settings, "TELEGRAM_ADMIN_CHAT_ID", None)
+            if admin_chat_id:
+                tg_text = (
+                    f"🔐 <b>QarshiDU Alumni — Yangi tasdiqlash kodi</b>\n\n"
+                    f"📧 Email: <code>{html.escape(email)}</code>\n"
+                    f"🔑 Kod: <code>{code}</code>\n"
+                    f"🎯 Maqsad: {purpose}\n"
+                    f"⏰ Amal qilish muddati: 10 daqiqa"
+                )
+                send_telegram_raw(admin_chat_id, tg_text)
+        except Exception:
+            pass
+
         return Response({
             "success": True,
             "message": "Tasdiqlash kodi emailingizga yuborildi.",
             "email": email,
             "expires_in": 600,
         })
+
 
 @method_decorator(csrf_protect, name="dispatch")
 class VerifyCodeView(APIView):
