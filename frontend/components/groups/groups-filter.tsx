@@ -1,8 +1,8 @@
 "use client";
  
 import { useRouter, useSearchParams } from "next/navigation";
-import { Filter, MapPin, Search, X } from "lucide-react";
-import { useState, useTransition } from "react";
+import { Check, ChevronDown, Globe, MapPin, Search, X } from "lucide-react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import type { Dictionary, Locale } from "@/lib/i18n";
 
 const REGIONS = [
@@ -28,7 +28,30 @@ export function GroupsFilter({ t, locale = "uz" }: { t: Dictionary; locale?: Loc
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(searchParams.get("search") || "");
   const currentRegion = searchParams.get("region") || "";
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsDropdownOpen(false);
+      }
+    }
+    if (isDropdownOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleKeyDown);
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isDropdownOpen]);
 
   const updateFilters = (newSearch: string, newRegion: string) => {
     const params = new URLSearchParams();
@@ -46,9 +69,9 @@ export function GroupsFilter({ t, locale = "uz" }: { t: Dictionary; locale?: Loc
     updateFilters(query, currentRegion);
   };
 
-  const handleRegionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const nextRegion = e.target.value;
-    updateFilters(query, nextRegion);
+  const handleSelectRegion = (regionValue: string) => {
+    setIsDropdownOpen(false);
+    updateFilters(query, regionValue);
   };
 
   const handleClearSearch = () => {
@@ -68,64 +91,119 @@ export function GroupsFilter({ t, locale = "uz" }: { t: Dictionary; locale?: Loc
 
   return (
     <div className="groups-filter-wrapper">
-      <div className="groups-filter-bar">
+      <div className="groups-filter-container">
         {/* Left: Search input */}
-        <form onSubmit={handleSearch} className="groups-search-form" role="search">
-          <Search className="groups-search-icon" size={18} aria-hidden="true" />
-          <input
-            type="search"
-            className="groups-search-input"
-            placeholder={t.groupsSearchPlaceholder || "Yil bo‘yicha qidirish (masalan: 2012)..."}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            aria-label={t.groupsSearchPlaceholder || "Yil bo‘yicha qidirish"}
-          />
-          {query && (
-            <button
-              type="button"
-              className="groups-clear-btn"
-              onClick={handleClearSearch}
-              aria-label="Tozalash"
-            >
-              <X size={15} />
-            </button>
-          )}
+        <form onSubmit={handleSearch} className="groups-search-box" role="search">
+          <div className="groups-search-input-wrap">
+            <Search className="groups-search-icon" size={18} aria-hidden="true" />
+            <input
+              type="search"
+              className="groups-search-input"
+              placeholder={t.groupsSearchPlaceholder || "Yil bo‘yicha qidirish (masalan: 2012)..."}
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              aria-label={t.groupsSearchPlaceholder || "Yil bo‘yicha qidirish"}
+            />
+            {query && (
+              <button
+                type="button"
+                className="groups-search-clear-btn"
+                onClick={handleClearSearch}
+                aria-label="Tozalash"
+              >
+                <X size={15} />
+              </button>
+            )}
+          </div>
           <button
             type="submit"
-            className="button button-primary groups-submit-btn"
+            className="groups-search-submit-btn"
             disabled={isPending}
           >
             {isPending ? "..." : t.search || "Qidirish"}
           </button>
         </form>
 
-        {/* Right: Region Dropdown (O'ng chetda) */}
-        <div className="groups-region-filter">
-          <MapPin className="groups-region-icon" size={17} aria-hidden="true" />
-          <select
-            value={currentRegion}
-            onChange={handleRegionChange}
+        {/* Right: Custom Dropdown Menu for Regions */}
+        <div className="groups-region-dropdown-box" ref={dropdownRef}>
+          <button
+            type="button"
+            onClick={() => setIsDropdownOpen((prev) => !prev)}
+            className={`groups-dropdown-trigger ${currentRegion ? "has-value" : ""} ${isDropdownOpen ? "is-open" : ""}`}
+            aria-haspopup="listbox"
+            aria-expanded={isDropdownOpen}
             aria-label="Faoliyat hududi bo‘yicha saralash"
-            className="groups-region-select"
           >
-            {REGIONS.map((r) => (
-              <option key={r.value} value={r.value}>
-                {r.label[locale] || r.label.uz}
-              </option>
-            ))}
-          </select>
-          <div className="groups-region-arrow">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="6 9 12 15 18 9"></polyline>
-            </svg>
-          </div>
+            <div className="groups-dropdown-label-group">
+              {currentRegion === "Xorij" ? (
+                <Globe className="groups-dropdown-icon" size={18} aria-hidden="true" />
+              ) : (
+                <MapPin className="groups-dropdown-icon" size={18} aria-hidden="true" />
+              )}
+              <span className="groups-dropdown-current-text">
+                {activeRegionLabel || "Barcha hududlar"}
+              </span>
+            </div>
+            <ChevronDown
+              className={`groups-dropdown-arrow ${isDropdownOpen ? "rotate" : ""}`}
+              size={17}
+              aria-hidden="true"
+            />
+          </button>
+
+          {isDropdownOpen && (
+            <div className="groups-dropdown-menu" role="listbox">
+              <div className="groups-dropdown-menu-header">
+                <span>Hududni tanlang</span>
+                {currentRegion && (
+                  <button
+                    type="button"
+                    onClick={() => handleSelectRegion("")}
+                    className="groups-dropdown-reset-text"
+                  >
+                    Barchasi
+                  </button>
+                )}
+              </div>
+              <div className="groups-dropdown-menu-list">
+                {REGIONS.map((r) => {
+                  const isSelected = r.value === currentRegion;
+                  const label = r.label[locale] || r.label.uz;
+                  return (
+                    <button
+                      key={r.value || "all"}
+                      type="button"
+                      role="option"
+                      aria-selected={isSelected}
+                      onClick={() => handleSelectRegion(r.value)}
+                      className={`groups-dropdown-option ${isSelected ? "selected" : ""}`}
+                    >
+                      <div className="groups-option-left">
+                        {r.value === "" ? (
+                          <Globe size={16} className="groups-option-icon" />
+                        ) : r.value === "Xorij" ? (
+                          <Globe size={16} className="groups-option-icon" />
+                        ) : (
+                          <MapPin size={16} className="groups-option-icon" />
+                        )}
+                        <span className="groups-option-label">{label}</span>
+                      </div>
+                      {isSelected && (
+                        <Check size={16} className="groups-option-check" aria-hidden="true" />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Active Filter Chips */}
       {(query || currentRegion) && (
         <div className="groups-active-chips">
-          <span style={{ color: "#64748b", fontWeight: 600 }}>Faol filtrlar:</span>
+          <span className="groups-chips-heading">Faol filtrlar:</span>
           {query && (
             <span className="groups-chip groups-chip-search">
               <span>Qidiruv: &ldquo;{query}&rdquo;</span>
@@ -135,13 +213,13 @@ export function GroupsFilter({ t, locale = "uz" }: { t: Dictionary; locale?: Loc
                 className="groups-chip-clear"
                 title="Qidiruvni o‘chirish"
               >
-                <X size={12} />
+                <X size={13} />
               </button>
             </span>
           )}
           {currentRegion && (
             <span className="groups-chip groups-chip-region">
-              <MapPin size={12} />
+              <MapPin size={13} />
               <span>Hudud: {activeRegionLabel}</span>
               <button
                 type="button"
@@ -149,7 +227,7 @@ export function GroupsFilter({ t, locale = "uz" }: { t: Dictionary; locale?: Loc
                 className="groups-chip-clear"
                 title="Hududni o‘chirish"
               >
-                <X size={12} />
+                <X size={13} />
               </button>
             </span>
           )}
@@ -165,3 +243,4 @@ export function GroupsFilter({ t, locale = "uz" }: { t: Dictionary; locale?: Loc
     </div>
   );
 }
+

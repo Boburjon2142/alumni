@@ -17,9 +17,10 @@ GitHub Repo:     https://github.com/Boburjon2142/alumni.git (branch: main)
 Serverga SSH orqali kiring:
    ssh -p 24050 root@213.230.96.104
 
-Va quyidagi bir qatorlik to'liq buyruqni ishga tushiring:
+Va quyidagi bir qatorlik to'liq buyruqni nusxalab terminalga tashlang va Enter bosing:
 
-cd /var/www/alumni && git pull origin main && cd backend && source venv/bin/activate && pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput && cd ../frontend && npm run build && pm2 restart alumni-backend alumni-frontend && pm2 save
+cd /var/www/alumni && git fetch origin main && git reset --hard origin/main && cd backend && source venv/bin/activate && pip install -r requirements.txt && python manage.py migrate && python manage.py collectstatic --noinput && cd ../frontend && npm run build && pm2 restart all && pm2 save
+
 
 
 --------------------------------------------------------------------------------
