@@ -13,6 +13,10 @@ import { getDictionary, getLocale } from "@/lib/i18n";
 
 type Props = { params: Promise<{ id: string }> };
 
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   try {
