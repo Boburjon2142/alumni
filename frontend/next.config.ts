@@ -78,8 +78,8 @@ const nextConfig: NextConfig = {
         destination: `${backendUrl}/static/:path*`,
       },
       {
-        source: "/admin/:path*",
-        destination: `${backendUrl}/admin/:path*`,
+        source: "/django-admin/:path*",
+        destination: `${backendUrl}/django-admin/:path*`,
       },
       {
         source: "/api/v1/:path*",

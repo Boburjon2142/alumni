@@ -5,6 +5,7 @@ from django.urls import include, path, re_path
 from django.views.static import serve
 
 urlpatterns = [
+    path("django-admin/", admin.site.urls),
     path("admin/", admin.site.urls),
     path("api/v1/auth/", include("apps.accounts.urls")),
     path("api/v1/", include("apps.alumni.urls")),
