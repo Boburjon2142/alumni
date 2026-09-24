@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ExternalLink, Play, Sparkles, Volume2, X } from "lucide-react";
+import { ExternalLink, Heart, Play, Volume2, X } from "lucide-react";
 import type { Interview } from "@/types/alumni";
 import type { Locale } from "@/lib/i18n";
 import { RemoteImage } from "@/components/ui/remote-image";
@@ -16,6 +16,7 @@ export function InterviewCard({
   locale: Locale;
 }) {
   const [isVideoModalOpen, setIsVideoModalOpen] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
 
   const title =
     (locale === "en" && interview.title_en) ||
@@ -65,7 +66,7 @@ export function InterviewCard({
   const ytWatchUrl = getYouTubeWatchUrl(interview.video_url);
 
   // Alumnus avatar source: ONLY for author profile avatar
-  const avatarSrc = `/images/faxriylar/${alumnus.slug}.png` || alumnus.image_url || alumnus.avatar;
+  const avatarSrc = alumnus.avatar || alumnus.image_url || (alumnus.slug ? `/images/faxriylar/${alumnus.slug}.webp` : undefined);
   
   // Video thumbnail: ONLY use official video thumbnail, never graduate portrait
   const thumbnailSrc = ytThumbnail || undefined;
@@ -111,12 +112,6 @@ export function InterviewCard({
               <Volume2 size={12} className="video-badge-icon" />
               <span>{interview.is_featured ? featuredBadge : videoBadge}</span>
             </span>
-
-            {interview.is_featured && (
-              <span className="video-featured-star" title="Tanlangan suhbat">
-                <Sparkles size={13} />
-              </span>
-            )}
           </div>
 
           {/* Center Glowing Play Button */}
@@ -186,6 +181,20 @@ export function InterviewCard({
           >
             <Play size={14} fill="currentColor" />
             <span>{watchText}</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsLiked((prev) => !prev)}
+            className={`video-card-like-btn ${isLiked ? "liked" : ""}`}
+            aria-label={isLiked ? "Yoqtirganlardan olib tashlash" : "Yoqtirganlarni saqlash"}
+            title={isLiked ? "Yoqtirganlardan olib tashlash" : "Yoqtirganlarni saqlash"}
+          >
+            <Heart
+              size={16}
+              className="like-heart-icon"
+              fill={isLiked ? "currentColor" : "none"}
+              strokeWidth={isLiked ? 0 : 2}
+            />
           </button>
         </div>
       </article>

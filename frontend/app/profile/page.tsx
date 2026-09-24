@@ -9,7 +9,7 @@ export default async function ProfilePage() {
 
   return (
     <section className="profile-viewport-section">
-      <div className="container">
+      <div className="profile-wide-container">
         <AccountProfile locale={locale} t={t} />
       </div>
     </section>

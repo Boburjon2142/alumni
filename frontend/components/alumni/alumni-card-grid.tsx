@@ -8,7 +8,7 @@ import { RemoteImage } from "@/components/ui/remote-image";
 import { RecognitionIcon } from "./recognition-icon";
 
 export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: Locale }) {
-  const hint = locale === "ru" ? "Просмотр профиля" : locale === "en" ? "View Profile" : "Profilni ko‘rish";
+  const hint = locale === "ru" ? "Подробнее" : locale === "en" ? "Details" : "Batafsil";
 
   return (
     <div className="cards-grid directory-grid">
@@ -35,7 +35,8 @@ export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: L
             <div className="alumni-card-media">
               <RemoteImage
                 className="alumni-card-image-full"
-                src={item.image_url || item.avatar || `/images/faxriylar/${item.slug}.png`}
+                src={item.avatar || item.image_url || (item.slug ? `/images/faxriylar/${item.slug}.webp` : undefined)}
+                slug={item.slug}
                 alt={item.image_alt || `${item.full_name} portreti`}
                 fallback={initials}
                 sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, 300px"

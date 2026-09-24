@@ -83,6 +83,15 @@ export default async function Profile({ params }: Props) {
   const biography = (locale === "en" ? a.biography_en : a.biography_uz) || a.bio;
   const careerStory = locale === "en" ? a.career_story_en : a.career_story_uz;
 
+  const cleanPos = (a.position || "").trim();
+  const cleanComp = (a.current_company || "").trim();
+  const normPos = cleanPos.toLowerCase().replace(/['`ʻʼ’]/g, "'");
+  const normComp = cleanComp.toLowerCase().replace(/['`ʻʼ]/g, "'");
+  const isCompanyInPosition =
+    Boolean(cleanPos && cleanComp && (normPos.includes(normComp) || normComp.includes(normPos)));
+  const displayPosition = cleanPos || t.graduate;
+  const displayCompany = cleanComp && !isCompanyInPosition ? cleanComp : null;
+
   return (
     <article className="honorary-profile">
       <div className="container profile-back-nav">
@@ -97,7 +106,7 @@ export default async function Profile({ params }: Props) {
           <div className="honorary-profile-photo-wrapper">
             <RemoteImage
               className="honorary-profile-photo-img"
-              src={a.image_url || a.avatar || `/images/faxriylar/${a.slug}.png`}
+              src={a.avatar || a.image_url || (a.slug ? `/images/faxriylar/${a.slug}.webp` : undefined)}
               slug={a.slug}
               alt={a.image_alt || `${a.full_name} portreti`}
               fallback={initials}
@@ -114,31 +123,53 @@ export default async function Profile({ params }: Props) {
             )}
             <h1>{a.full_name}</h1>
             <p className="honorary-role">
-              {a.position || t.graduate}
-              {a.current_company && ` — ${a.current_company}`}
+              <span className="honorary-role-title">{displayPosition}</span>
+              {displayCompany && (
+                <>
+                  <span className="honorary-role-sep" aria-hidden="true">—</span>
+                  <span className="honorary-role-company">{displayCompany}</span>
+                </>
+              )}
             </p>
 
             <div style={{ margin: "0.85rem 0" }}>
               <PeerConfirmation alumnus={a} locale={locale} />
             </div>
 
-            <div className="honorary-meta">
-              {a.faculty && (
-                <span>
-                  <GraduationCap size={18} /> {a.faculty}
-                  {a.graduation_year && ` · ${a.graduation_year}`}
-                </span>
+            <div className="honorary-meta" aria-label="Alumni metadata">
+              {(a.faculty || a.graduation_year) && (
+                <div className="honorary-meta-item honorary-meta-edu">
+                  <span className="honorary-meta-icon-wrapper" aria-hidden="true">
+                    <GraduationCap size={15} />
+                  </span>
+                  <span className="honorary-meta-text">
+                    {a.faculty && <span>{a.faculty}</span>}
+                    {a.faculty && a.graduation_year && (
+                      <span className="honorary-meta-year"> · {a.graduation_year}</span>
+                    )}
+                    {!a.faculty && a.graduation_year && (
+                      <span className="honorary-meta-year">{a.graduation_year}</span>
+                    )}
+                  </span>
+                </div>
               )}
               {a.specialty && (
-                <span>
-                  <BookOpen size={18} /> {a.specialty}
-                </span>
+                <div className="honorary-meta-item honorary-meta-spec" title={a.specialty}>
+                  <span className="honorary-meta-icon-wrapper" aria-hidden="true">
+                    <BookOpen size={15} />
+                  </span>
+                  <span className="honorary-meta-text">{a.specialty}</span>
+                </div>
               )}
-              {a.city && (
-                <span>
-                  <MapPin size={18} /> {a.city}
-                  {a.country && `, ${a.country}`}
-                </span>
+              {(a.city || a.country) && (
+                <div className="honorary-meta-item honorary-meta-loc">
+                  <span className="honorary-meta-icon-wrapper" aria-hidden="true">
+                    <MapPin size={15} />
+                  </span>
+                  <span className="honorary-meta-text">
+                    {[a.city, a.country].filter(Boolean).join(", ")}
+                  </span>
+                </div>
               )}
             </div>
 

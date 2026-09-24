@@ -2,11 +2,14 @@
 
 import Image from "next/image";
 import { ImageIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function formatSrc(src?: string): string | undefined {
   if (!src) return undefined;
-  const s = src.trim();
+  let s = src.trim();
+  if (!s) return undefined;
+  // Convert full backend URLs for media into relative URLs so Next.js rewrites proxy them cleanly
+  s = s.replace(/^https?:\/\/(?:127\.0\.0\.1|localhost)(?::\d+)?\/media\//i, "/media/");
   if (s.startsWith("http://") || s.startsWith("https://") || s.startsWith("/")) {
     return s;
   }
@@ -30,20 +33,41 @@ export function RemoteImage({
   slug?: string;
   priority?: boolean;
 }) {
-  const [failed, setFailed] = useState(false);
-  const [usingFallback, setUsingFallback] = useState(false);
-
   const directSrc = formatSrc(src);
-  const localSlugSrc = slug ? `/images/faxriylar/${slug}.png` : undefined;
 
-  let activeSrc = directSrc;
-  if (!activeSrc || usingFallback) {
-    activeSrc = localSlugSrc;
+  // Build candidate sources in order of preference:
+  const candidates: string[] = [];
+
+  if (directSrc) {
+    if (directSrc.endsWith(".png") && directSrc.includes("/faxriylar/")) {
+      const webpVersion = directSrc.replace(/\.png$/, ".webp");
+      candidates.push(webpVersion);
+      candidates.push(directSrc);
+    } else {
+      candidates.push(directSrc);
+    }
   }
 
+  if (slug) {
+    const webpSlug = `/images/faxriylar/${slug}.webp`;
+    const pngSlug = `/images/faxriylar/${slug}.png`;
+    if (!candidates.includes(webpSlug)) candidates.push(webpSlug);
+    if (!candidates.includes(pngSlug)) candidates.push(pngSlug);
+  }
+
+  const [attemptIndex, setAttemptIndex] = useState(0);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    setAttemptIndex(0);
+    setFailed(false);
+  }, [src, slug]);
+
+  const activeSrc = candidates[attemptIndex];
+
   const handleError = () => {
-    if (!usingFallback && localSlugSrc && directSrc !== localSlugSrc) {
-      setUsingFallback(true);
+    if (attemptIndex + 1 < candidates.length) {
+      setAttemptIndex((prev) => prev + 1);
     } else {
       setFailed(true);
     }
@@ -54,6 +78,7 @@ export function RemoteImage({
       (activeSrc.startsWith("http://localhost") ||
         activeSrc.startsWith("http://127.0.0.1") ||
         activeSrc.startsWith("/images/") ||
+        activeSrc.startsWith("/media/") ||
         activeSrc.startsWith("https://i.ytimg.com") ||
         activeSrc.startsWith("https://img.youtube.com"))
   );

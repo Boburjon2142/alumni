@@ -151,30 +151,6 @@ describe("Header", () => {
     expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("renders Platforma dropdown without icons and with 3 items", () => {
-    render(<Header locale="uz" t={getDictionary("uz")} />);
-    const trigger = screen.getByRole("button", { name: "Platforma" });
-    expect(trigger).toHaveAttribute("aria-expanded", "false");
-    fireEvent.click(trigger);
-    const menu = screen.getByRole("menu", { name: "Platforma" });
-    const items = within(menu).getAllByRole("menuitem");
-    expect(items).toHaveLength(3);
-    expect(items[0]).toHaveAttribute("href", "/");
-    expect(items[0]).toHaveTextContent("Bosh sahifa");
-    expect(items[0]).toHaveTextContent("ALUMNI platformasining asosiy sahifasi");
-    expect(items[1]).toHaveAttribute("href", "/about");
-    expect(items[1]).toHaveTextContent("Platforma haqida");
-    expect(items[1]).toHaveTextContent("ALUMNI maqsadi, imkoniyatlari va ishlash tamoyillari");
-    expect(items[2]).toHaveAttribute("href", "/feedback");
-    expect(items[2]).toHaveTextContent("Murojaat");
-    expect(items[2]).toHaveTextContent("Savol, taklif yoki murojaat yuborish");
-
-    // Ensure no icons inside Platforma menu items
-    items.forEach(item => {
-      expect(within(item).queryByTestId("icon")).toBeNull();
-    });
-  });
-
   it("renders Yangiliklar dropdown without icons and with 3 items", () => {
     render(<Header locale="uz" t={getDictionary("uz")} />);
     const trigger = screen.getByRole("button", { name: "Yangiliklar" });
@@ -203,7 +179,7 @@ describe("Header", () => {
 
   it("ensures all dropdown groups have zero icons", () => {
     render(<Header locale="uz" t={getDictionary("uz")} />);
-    ["Platforma", "Alumni", "Imkoniyatlar", "Yangiliklar"].forEach(name => {
+    ["Alumni", "Imkoniyatlar", "Yangiliklar"].forEach(name => {
       const trigger = screen.getByRole("button", { name });
       fireEvent.click(trigger);
       const menu = screen.getByRole("menu", { name });
@@ -215,9 +191,6 @@ describe("Header", () => {
   });
 
   it.each([
-    ["/", "Platforma", "/"],
-    ["/about", "Platforma", "/about"],
-    ["/feedback", "Platforma", "/feedback"],
     ["/groups", "Alumni", "/groups"], ["/groups/42", "Alumni", "/groups"],
     ["/alumni/person", "Alumni", "/alumni"], ["/directory/person", "Alumni", "/alumni"],
     ["/impact", "Alumni", "/impact"], ["/interviews/person", "Imkoniyatlar", "/interviews"],
@@ -255,7 +228,7 @@ describe("Header", () => {
     fireEvent.click(screen.getByRole("button", { name: "Alumni" }));
     fireEvent.click(screen.getAllByRole("menuitem")[0]);
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
-    expect(screen.getByRole("button", { name: "Platforma" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Alumni" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: getDictionary("uz").navJoin })).toHaveAttribute("href", "/join");
     fireEvent.change(screen.getByRole("searchbox"), { target: { value: "Ali Vali" } });
     fireEvent.submit(screen.getByRole("search"));

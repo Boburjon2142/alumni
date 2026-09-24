@@ -4,7 +4,10 @@ import { render, screen, fireEvent, cleanup, waitFor } from "@testing-library/re
 import { EditProfileModal } from "./edit-profile-modal";
 import type { Alumni } from "@/types/alumni";
 
-vi.mock("@/lib/auth", () => ({ authenticatedFetch: vi.fn() }));
+vi.mock("@/lib/auth", () => ({
+  authenticatedFetch: vi.fn(),
+  authSession: vi.fn(() => Promise.resolve({ authenticated: true, user: { role: "admin", slug: "sherzod-nematov" } })),
+}));
 beforeEach(() => { vi.mocked(authenticatedFetch).mockResolvedValue({ ok: true, json: async () => ({ data: {} }) } as Response); });
 
 afterEach(() => {
@@ -107,4 +110,25 @@ describe("EditProfileModal - One-time Graduation Year Selection", () => {
       );
     });
   });
+
+  it("hides edit button when canEdit is false (unauthenticated or another user)", () => {
+    render(
+      <EditProfileModal
+        alumnus={mockAlumniWithYear}
+        canEdit={false}
+      />
+    );
+    expect(screen.queryByText(/Profilni tahrirlash/i)).toBeNull();
+  });
+
+  it("shows edit button when canEdit is true (profile owner or admin)", () => {
+    render(
+      <EditProfileModal
+        alumnus={mockAlumniWithYear}
+        canEdit={true}
+      />
+    );
+    expect(screen.getByText(/Profilni tahrirlash/i)).toBeInTheDocument();
+  });
 });
+

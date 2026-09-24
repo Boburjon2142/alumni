@@ -1,7 +1,7 @@
 "use client";
 
-import { authenticatedFetch } from "@/lib/auth";
-import { useState } from "react";
+import { authenticatedFetch, authSession } from "@/lib/auth";
+import { useEffect, useState } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { Lock, AlertCircle, CheckCircle2, Edit3, X } from "lucide-react";
 import type { Alumni } from "@/types/alumni";
@@ -10,6 +10,7 @@ interface EditProfileModalProps {
   alumnus: Alumni;
   locale?: string;
   trigger?: React.ReactNode;
+  canEdit?: boolean;
   onProfileUpdated?: (updated: Partial<Alumni>) => void;
 }
 
@@ -17,9 +18,45 @@ export function EditProfileModal({
   alumnus,
   locale = "uz",
   trigger,
+  canEdit: canEditProp,
   onProfileUpdated,
 }: EditProfileModalProps) {
   const [open, setOpen] = useState(false);
+  const [canEditState, setCanEditState] = useState<boolean | null>(canEditProp ?? null);
+
+  useEffect(() => {
+    if (canEditProp !== undefined) {
+      setCanEditState(canEditProp);
+      return;
+    }
+
+    let active = true;
+    authSession()
+      .then((session) => {
+        if (!active) return;
+        if (!session?.authenticated || !session?.user) {
+          setCanEditState(false);
+          return;
+        }
+        const user = session.user;
+        const isOwner =
+          user.slug === alumnus.slug ||
+          (alumnus.contact_email && user.email && user.email.toLowerCase() === alumnus.contact_email.toLowerCase()) ||
+          user.role === "admin" ||
+          user.role === "staff" ||
+          Boolean(user.is_staff) ||
+          Boolean(user.is_superuser);
+
+        setCanEditState(Boolean(isOwner));
+      })
+      .catch(() => {
+        if (active) setCanEditState(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [canEditProp, alumnus.slug, alumnus.contact_email]);
 
   // Profile fields
   const [fullName, setFullName] = useState(alumnus.full_name || "");
@@ -119,6 +156,13 @@ export function EditProfileModal({
       setSaving(false);
     }
   };
+
+  if (canEditState === false) {
+    return null;
+  }
+  if (canEditState === null && !trigger) {
+    return null;
+  }
 
   return (
     <Dialog.Root open={open} onOpenChange={setOpen}>

@@ -10,7 +10,7 @@ describe("HeroCarousel", () => {
     const img = screen.getByRole("img", {
       name: /qarshi davlat universiteti faxriy bitiruvchilari/i,
     });
-    expect(img).toHaveAttribute("src", "/images/hero/profiles/hero-360x800.png");
+    expect(img.getAttribute("src")).toMatch(/\/images\/hero\/profiles\/hero-360x800\.(webp|png)/);
     expect(img).toHaveAttribute("width", "360");
     expect(img).toHaveAttribute("height", "800");
     expect(img).toHaveAttribute("fetchpriority", "high");
@@ -30,7 +30,7 @@ describe("HeroCarousel", () => {
       });
       const image = source ?? container.querySelector("img")!;
       expect(image.getAttribute(source ? "srcset" : "src"))
-        .toBe(`/images/hero/profiles/hero-${width}x${height}.png`);
+        .toMatch(new RegExp(`/images/hero/profiles/hero-${width}x${height}\\.(webp|png)`));
       expect(image).toHaveAttribute("width", String(width));
       expect(image).toHaveAttribute("height", String(height));
     }

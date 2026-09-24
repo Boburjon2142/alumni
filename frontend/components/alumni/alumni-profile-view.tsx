@@ -23,7 +23,6 @@ import {
   GraduationCap,
   HeartHandshake,
   Layers,
-  Lock,
   LogOut,
   Mail,
   MapPin,
@@ -60,8 +59,6 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
   const [activeTab, setActiveTab] = useState<TabType>("all");
   const [bioExpanded, setBioExpanded] = useState(false);
   const [shareToast, setShareToast] = useState(false);
-  const [emailCopiedToast, setEmailCopiedToast] = useState(false);
-  const [privacyModalOpen, setPrivacyModalOpen] = useState(false);
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
 
   // Real profile data extraction
@@ -126,19 +123,20 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
   const completedCount = checklist.filter((item) => item.done).length;
   const completionPercent = Math.round((completedCount / checklist.length) * 100);
 
+  // Calculate initials for fallback avatar
+  const initials = fullName
+    .split(" ")
+    .filter(Boolean)
+    .map((n) => n[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase() || "B";
+
   const handleShare = () => {
     if (typeof window !== "undefined") {
       navigator.clipboard?.writeText(window.location.href);
       setShareToast(true);
       setTimeout(() => setShareToast(false), 3000);
-    }
-  };
-
-  const handleCopyEmail = () => {
-    if (typeof window !== "undefined" && email) {
-      navigator.clipboard?.writeText(email);
-      setEmailCopiedToast(true);
-      setTimeout(() => setEmailCopiedToast(false), 3000);
     }
   };
 
@@ -151,47 +149,22 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
           <span>Profil havolasi nusxalandi!</span>
         </div>
       )}
-      {emailCopiedToast && (
-        <div className="profile-toast-notice" role="status">
-          <CheckCircle2 size={18} className="text-emerald-400" />
-          <span>Email manzili nusxalandi!</span>
-        </div>
-      )}
 
       {/* ---------------------------------------------------- */}
-      {/* 1. PROFILE HERO / HEADER                             */}
+      {/* 1. PROFILE HERO / HEADER WITH COVER BANNER           */}
       {/* ---------------------------------------------------- */}
       <header className="profile-hero-card">
-        {/* Subtle geometric motif background */}
-        <div className="profile-hero-watermark" aria-hidden="true">
-          <svg width="340" height="220" viewBox="0 0 340 220" fill="none">
-            <path
-              d="M340 0L240 220H340V0Z"
-              fill="url(#qardu-hero-grad1)"
-              fillOpacity="0.04"
-            />
-            <path
-              d="M260 0L160 220H210L310 0H260Z"
-              fill="url(#qardu-hero-grad2)"
-              fillOpacity="0.03"
-            />
-            <circle cx="280" cy="50" r="90" stroke="url(#qardu-hero-grad1)" strokeWidth="1.5" strokeOpacity="0.05" />
-            <defs>
-              <linearGradient id="qardu-hero-grad1" x1="0" y1="0" x2="340" y2="220" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#0D1667" />
-                <stop offset="0.5" stopColor="#612175" />
-                <stop offset="1" stopColor="#D38E4F" />
-              </linearGradient>
-              <linearGradient id="qardu-hero-grad2" x1="160" y1="0" x2="310" y2="220" gradientUnits="userSpaceOnUse">
-                <stop stopColor="#612175" />
-                <stop offset="1" stopColor="#892376" />
-              </linearGradient>
-            </defs>
-          </svg>
+        {/* Cover Banner */}
+        <div className="profile-hero-banner">
+          <div className="profile-hero-banner-overlay" />
+          <div className="profile-hero-banner-badge">
+            <GraduationCap size={14} className="text-amber-300" />
+            <span>Qarshi davlat universiteti bitiruvchilar portali</span>
+          </div>
         </div>
 
         <div className="profile-hero-inner">
-          {/* LEFT: Avatar */}
+          {/* Avatar Section */}
           <div className="profile-hero-avatar-col">
             <div className="profile-avatar-ring">
               {profile.avatar || profile.image_url ? (
@@ -205,7 +178,7 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
                 />
               ) : (
                 <div className="profile-avatar-fallback">
-                  <User size={54} className="profile-avatar-icon" />
+                  <span className="profile-avatar-initials">{initials}</span>
                 </div>
               )}
               {/* Verified Badge */}
@@ -219,27 +192,36 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
             </div>
           </div>
 
-          {/* CENTER: Name, Role, Metadata */}
+          {/* Identity & Metadata */}
           <div className="profile-hero-info-col">
-            {/* Trust Status Badge */}
-            <div className="profile-trust-badge">
-              <ShieldCheck size={14} className="trust-shield-icon" />
-              <span>Universitet tomonidan tasdiqlangan</span>
-              {profile.graduation_year && (
-                <>
-                  <span className="trust-dot">•</span>
-                  <span className="trust-year">{profile.graduation_year}-yil bitiruvchisi</span>
-                </>
-              )}
+            <div className="profile-hero-tags-row">
+              <div className="profile-trust-badge">
+                <ShieldCheck size={14} className="trust-shield-icon" />
+                <span>Universitet tomonidan tasdiqlangan</span>
+                {profile.graduation_year && (
+                  <>
+                    <span className="trust-dot">•</span>
+                    <span className="trust-year">{profile.graduation_year}-yil bitiruvchisi</span>
+                  </>
+                )}
+              </div>
             </div>
 
             <h1 className="profile-hero-name">{fullName}</h1>
 
-            {(position || currentCompany) && (
+            {(position || currentCompany) ? (
               <div className="profile-hero-role-row">
                 {position && <span className="profile-role-title">{position}</span>}
                 {position && currentCompany && <span className="profile-role-sep">•</span>}
                 {currentCompany && <span className="profile-role-company">{currentCompany}</span>}
+              </div>
+            ) : (
+              <div className="profile-hero-role-row profile-hero-role-empty">
+                <span>Kasbiy faoliyat yoki lavozim hali ko‘rsatilmagan</span>
+                <Link href="/profile/edit" className="profile-hero-add-chip">
+                  <Plus size={12} />
+                  <span>Kiritish</span>
+                </Link>
               </div>
             )}
 
@@ -266,7 +248,7 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
             </div>
           </div>
 
-          {/* RIGHT: Completion Indicator & Actions */}
+          {/* Actions & Completion */}
           <div className="profile-hero-actions-col">
             <div className="profile-completion-mini-card">
               <div className="completion-mini-header">
@@ -274,7 +256,10 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
                 <span className="completion-mini-percent">{completionPercent}%</span>
               </div>
               <div className="completion-mini-bar-track">
-                <div className="completion-mini-bar-fill" style={{ width: `${completionPercent}%` }} />
+                <div
+                  className="completion-mini-bar-fill"
+                  style={{ width: `${completionPercent}%` }}
+                />
               </div>
             </div>
 
@@ -324,7 +309,7 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
       </header>
 
       {/* ---------------------------------------------------- */}
-      {/* 2. REAL TABS SYSTEM (Only fillable sections)         */}
+      {/* 2. REAL TABS SYSTEM                                  */}
       {/* ---------------------------------------------------- */}
       <nav className="profile-tabs-nav" aria-label="Profil bo'limlari">
         <div className="profile-tabs-scroll-container">
@@ -367,21 +352,28 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
       </nav>
 
       {/* ---------------------------------------------------- */}
-      {/* 3. MAIN 12-COLUMN LAYOUT (8 cols main, 4 cols side) */}
+      {/* 3. MAIN 12-COLUMN LAYOUT                             */}
       {/* ---------------------------------------------------- */}
       <div className="profile-layout-grid">
         {/* =================================================== */}
-        {/* MAIN CONTENT (8 columns)                           */}
+        {/* MAIN CONTENT                                       */}
         {/* =================================================== */}
         <main className="profile-main-col">
-          {/* ABOUT SECTION */}
-          {(activeTab === "all" || activeTab === "about") && (
-            <section className="profile-card profile-section-card" id="about-section">
+          <div className={`profile-sections-wrapper ${activeTab === "all" ? "tri-cards-grid" : "single-card-view"}`}>
+            {/* ABOUT SECTION */}
+            {(activeTab === "all" || activeTab === "about") && (
+              <section className="profile-card profile-section-card" id="about-section">
               <div className="profile-card-header">
                 <div className="profile-card-title-wrap">
-                  <User size={18} className="profile-card-icon" />
+                  <div className="profile-card-icon-bubble">
+                    <User size={18} />
+                  </div>
                   <h2 className="profile-card-title">Men haqimda</h2>
                 </div>
+                <Link href="/profile/edit" className="profile-section-edit-btn flex-shrink-0" title="Tahrirlash">
+                  <Edit3 size={13} />
+                  <span>Tahrirlash</span>
+                </Link>
               </div>
               <div className="profile-card-body">
                 {rawBio ? (
@@ -411,9 +403,20 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
                   </>
                 ) : (
                   <div className="profile-section-empty-box">
-                    <p className="text-slate-500 text-sm m-0">
-                      Hozircha o‘zingiz haqingizda qisqacha ma’lumot (BIO) kiritilmagan.
-                    </p>
+                    <div className="empty-box-icon-wrap">
+                      <User size={24} />
+                    </div>
+                    <div className="empty-box-text-wrap">
+                      <h4 className="empty-box-title">O‘zingiz haqingizda ma’lumot kiriting</h4>
+                      <p className="empty-box-desc">
+                        Hozircha o‘zingiz haqingizda qisqacha ma’lumot (BIO) kiritilmagan.
+                        Qisqacha tavsif boshqa bitiruvchilarga sizning kasbiy yo‘nalishingizni bilishga yordam beradi.
+                      </p>
+                    </div>
+                    <Link href="/profile/edit" className="empty-box-cta-btn">
+                      <Plus size={14} />
+                      <span>BIO qo‘shish</span>
+                    </Link>
                   </div>
                 )}
               </div>
@@ -425,16 +428,24 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
             <section className="profile-card profile-section-card" id="education-section">
               <div className="profile-card-header">
                 <div className="profile-card-title-wrap">
-                  <GraduationCap size={18} className="profile-card-icon" />
+                  <div className="profile-card-icon-bubble">
+                    <GraduationCap size={18} />
+                  </div>
                   <h2 className="profile-card-title">Ta’lim</h2>
                 </div>
-                <span className="profile-card-tag">
-                  {educationList.length > 0
-                    ? `${educationList.length} ta bosqich`
-                    : graduationYear
-                    ? "1 ta bosqich"
-                    : "QarDU"}
-                </span>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className="profile-card-tag">
+                    {educationList.length > 0
+                      ? `${educationList.length} ta bosqich`
+                      : graduationYear
+                      ? "1 ta bosqich"
+                      : "QarDU"}
+                  </span>
+                  <Link href="/profile/edit" className="profile-section-edit-btn" title="Tahrirlash">
+                    <Edit3 size={13} />
+                    <span>Tahrirlash</span>
+                  </Link>
+                </div>
               </div>
               <div className="profile-card-body">
                 <div className="education-timeline-list">
@@ -490,9 +501,20 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
                     </article>
                   ) : (
                     <div className="profile-section-empty-box">
-                      <p className="text-slate-500 text-sm m-0">
-                        Hozircha ta’lim ma’lumotlari kiritilmagan.
-                      </p>
+                      <div className="empty-box-icon-wrap">
+                        <GraduationCap size={24} />
+                      </div>
+                      <div className="empty-box-text-wrap">
+                        <h4 className="empty-box-title">Ta’lim ma’lumotlarini kiriting</h4>
+                        <p className="empty-box-desc">
+                          Hozircha ta’lim ma’lumotlari kiritilmagan.
+                          Fakultet, mutaxassislik va bitirgan yilingizni belgilab, o‘z ma’lumotingizni tasdiqlang.
+                        </p>
+                      </div>
+                      <Link href="/profile/edit" className="empty-box-cta-btn">
+                        <Plus size={14} />
+                        <span>Ta’lim qo‘shish</span>
+                      </Link>
                     </div>
                   )}
                 </div>
@@ -505,10 +527,18 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
             <section className="profile-card profile-section-card" id="experience-section">
               <div className="profile-card-header">
                 <div className="profile-card-title-wrap">
-                  <Briefcase size={18} className="profile-card-icon" />
+                  <div className="profile-card-icon-bubble">
+                    <Briefcase size={18} />
+                  </div>
                   <h2 className="profile-card-title">Ish tajribasi va faoliyat</h2>
                 </div>
-                {industry && <span className="profile-card-tag">{industry}</span>}
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  {industry && <span className="profile-card-tag">{industry}</span>}
+                  <Link href="/profile/edit" className="profile-section-edit-btn" title="Tahrirlash">
+                    <Edit3 size={13} />
+                    <span>Tahrirlash</span>
+                  </Link>
+                </div>
               </div>
 
               <div className="profile-card-body">
@@ -578,10 +608,20 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
                             </span>
                           </div>
 
-                          {item.region && (
-                            <div className="timeline-location-row">
-                              <MapPin size={13} />
-                              <span>{item.region}</span>
+                          {(item.industry || item.region) && (
+                            <div className="timeline-location-row flex items-center gap-2 flex-wrap mt-1">
+                              {item.industry && (
+                                <span className="inline-flex items-center gap-1 font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded text-xs">
+                                  <Briefcase size={12} className="text-slate-500" />
+                                  <span>{item.industry}</span>
+                                </span>
+                              )}
+                              {item.region && (
+                                <span className="inline-flex items-center gap-1 text-slate-500 text-xs">
+                                  <MapPin size={12} />
+                                  <span>{item.region}</span>
+                                </span>
+                              )}
                             </div>
                           )}
                         </div>
@@ -591,57 +631,55 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
                 ) : (
                   !currentCompany && !position && (
                     <div className="profile-section-empty-box">
-                      <p className="text-slate-500 text-sm m-0">
-                        Hozircha ish tajribasi va faoliyat ma’lumotlari kiritilmagan.
-                      </p>
+                      <div className="empty-box-icon-wrap">
+                        <Briefcase size={24} />
+                      </div>
+                      <div className="empty-box-text-wrap">
+                        <h4 className="empty-box-title">Ish tajribangizni qo‘shing</h4>
+                        <p className="empty-box-desc">
+                          Hozircha ish tajribasi va faoliyat ma’lumotlari kiritilmagan.
+                          Ish joyingiz va lavozimingizni ko‘rsatib, nufuzingizni oshiring.
+                        </p>
+                      </div>
+                      <Link href="/profile/edit" className="empty-box-cta-btn">
+                        <Plus size={14} />
+                        <span>Ish joyini qo‘shish</span>
+                      </Link>
                     </div>
                   )
                 )}
               </div>
             </section>
           )}
+          </div>
         </main>
 
         {/* =================================================== */}
-        {/* RIGHT SIDEBAR (4 columns)                          */}
+        {/* RIGHT SIDEBAR                                      */}
         {/* =================================================== */}
         <aside className="profile-sidebar-col">
-          {/* ALUMNI IMPACT & RECOGNITION CARD */}
-          <div className="profile-card sidebar-card" style={{ borderColor: "rgba(211, 142, 79, 0.4)", background: "linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(211, 142, 79, 0.05) 100%)" }}>
-            <div className="sidebar-card-header" style={{ borderBottomColor: "rgba(211, 142, 79, 0.2)" }}>
-              <Award size={16} className="sidebar-header-icon" style={{ color: "#D38E4F" }} />
-              <h3 className="sidebar-card-title">{t.impactTitle}</h3>
-            </div>
-            <div className="sidebar-card-body">
-              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
-                Universitet va bitiruvchilar hamjamiyatiga qo‘shgan tasdiqlangan hissangiz orqali platformada e’tirof etiling.
-              </p>
-              <div className="flex flex-col gap-2">
-                <Link
-                  href="/impact"
-                  className="profile-btn profile-btn-primary w-full justify-center text-xs"
-                  style={{ background: "#0D1667" }}
-                >
-                  <Award size={14} style={{ color: "#D38E4F" }} />
-                  <span>Reyting va hissalarni ko‘rish</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-
           {/* PROFILE COMPLETION CARD */}
           <div className="profile-card sidebar-card completion-card">
             <div className="sidebar-card-header">
-              <CheckCircle2 size={16} className="sidebar-header-icon text-indigo-600" />
+              <div className="sidebar-icon-box-navy">
+                <CheckCircle2 size={16} />
+              </div>
               <h3 className="sidebar-card-title">Profil to‘ldirilish darajasi</h3>
             </div>
             <div className="sidebar-card-body">
               <div className="completion-visual-row">
-                <div className="completion-ring-box">
+                <div
+                  className="completion-ring-box"
+                  style={{
+                    background: `conic-gradient(#0D1667 0% ${completionPercent}%, #E2E8F0 ${completionPercent}% 100%)`,
+                  }}
+                >
                   <span className="completion-big-percent">{completionPercent}%</span>
                 </div>
                 <div className="completion-summary-text">
-                  <strong>{completionPercent >= 80 ? "Yuqori daraja" : completionPercent >= 50 ? "O‘rta daraja" : "Boshlang‘ich daraja"}</strong>
+                  <strong className={completionPercent >= 80 ? "level-high" : completionPercent >= 40 ? "level-mid" : "level-low"}>
+                    {completionPercent >= 80 ? "Yuqori daraja" : completionPercent >= 50 ? "O‘rta daraja" : "Boshlang‘ich daraja"}
+                  </strong>
                   <p>Profilingiz qanchalik to‘liq bo‘lsa, bitiruvchilar tarmog‘idagi nufuzingiz shunchalik yuqori bo‘ladi.</p>
                 </div>
               </div>
@@ -650,7 +688,9 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
                 {checklist.map((item) => (
                   <div key={item.id} className={`checklist-item ${item.done ? "done" : "pending"}`}>
                     {item.done ? (
-                      <Check size={14} className="check-icon" />
+                      <div className="checklist-check-circle">
+                        <Check size={12} className="check-icon" />
+                      </div>
                     ) : (
                       <div className="pending-circle" />
                     )}
@@ -658,76 +698,13 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
                   </div>
                 ))}
               </div>
-            </div>
-          </div>
 
-          {/* PRIVACY & SECURITY CARD */}
-          <div className="profile-card sidebar-card privacy-card">
-            <div className="sidebar-card-header">
-              <Lock size={16} className="sidebar-header-icon" />
-              <h3 className="sidebar-card-title">Maxfiylik va ko‘rinish</h3>
-            </div>
-            <div className="sidebar-card-body">
-              <div className="privacy-status-box">
-                <div className="privacy-badge">
-                  <ShieldCheck size={14} />
-                  <span>Bitiruvchilar uchun ochiq</span>
-                </div>
-                <p className="privacy-desc">
-                  Shaxsiy telefon raqami, pasport va yashash manzili ma’lumotlari xavfsizlik maqsadida ommaga
-                  ko‘rsatilmaydi.
-                </p>
-              </div>
-
-              <button
-                type="button"
-                className="profile-btn profile-btn-ghost w-full justify-center"
-                onClick={() => setPrivacyModalOpen(true)}
-              >
-                <span>Ko‘rinish sozlamalari</span>
-              </button>
-            </div>
-          </div>
-
-          {/* CONTACT / EMAIL CARD */}
-          <div className="profile-card sidebar-card networking-card">
-            <div className="sidebar-card-header">
-              <Mail size={16} className="sidebar-header-icon text-brand-navy" />
-              <h3 className="sidebar-card-title">Bog‘lanish (Email)</h3>
-            </div>
-            <div className="sidebar-card-body">
-              <p className="networking-desc">
-                Rasmiy va kasbiy muloqot uchun elektron pochta manzili:
-              </p>
-
-              {email ? (
-                <div className="email-card-body-stack">
-                  <a
-                    href={`mailto:${email}`}
-                    className="pro-link-item"
-                    title="Email orqali yozish"
-                  >
-                    <div className="pro-link-icon-box" style={{ background: "#0D1667" }}>
-                      <Mail size={14} />
-                    </div>
-                    <div className="pro-link-text">
-                      <span className="pro-link-label">Email</span>
-                      <span className="pro-link-val">{email}</span>
-                    </div>
-                    <Send size={13} className="pro-link-arrow" />
-                  </a>
-
-                  <button
-                    type="button"
-                    className="profile-btn profile-btn-ghost w-full justify-center text-xs"
-                    onClick={handleCopyEmail}
-                  >
-                    <span>Email manzilidan nusxa olish</span>
-                  </button>
-                </div>
-              ) : (
-                <div className="profile-empty-notice-box">
-                  Email manzili biriktirilmagan
+              {completionPercent < 100 && (
+                <div className="completion-action-row">
+                  <Link href="/profile/edit" className="profile-btn profile-btn-secondary w-full justify-center text-xs">
+                    <Edit3 size={13} />
+                    <span>Profilni to‘ldirish</span>
+                  </Link>
                 </div>
               )}
             </div>
@@ -735,60 +712,8 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
         </aside>
       </div>
 
-      {/* ---------------------------------------------------- */}
-      {/* MODALS & DIALOGS                                    */}
-      {/* ---------------------------------------------------- */}
-      {privacyModalOpen && (
-        <div className="profile-modal-overlay" onClick={() => setPrivacyModalOpen(false)}>
-          <div className="profile-modal-card" onClick={(e) => e.stopPropagation()}>
-            <div className="profile-modal-header">
-              <h3 className="profile-modal-title">Profil ko‘rinish sozlamalari</h3>
-              <button
-                type="button"
-                className="profile-modal-close"
-                onClick={() => setPrivacyModalOpen(false)}
-              >
-                <X size={18} />
-              </button>
-            </div>
-            <div className="profile-modal-body">
-              <div className="profile-modal-item">
-                <div className="profile-modal-item-header">
-                  <span className="profile-modal-item-title">Bitiruvchilar tarmog‘i</span>
-                  <span className="profile-modal-badge profile-modal-badge-open">
-                    Ochiq
-                  </span>
-                </div>
-                <p className="profile-modal-desc">
-                  Universitet bitiruvchilari katalogida ism, fakultet va ish joyingiz ko‘rinadi.
-                </p>
-              </div>
 
-              <div className="profile-modal-item">
-                <div className="profile-modal-item-header">
-                  <span className="profile-modal-item-title">Aloqa ma’lumotlari</span>
-                  <span className="profile-modal-badge profile-modal-badge-protected">
-                    Himoyalangan
-                  </span>
-                </div>
-                <p className="profile-modal-desc">
-                  Email va telefon raqamingiz faqat siz ruxsat bergan foydalanuvchilarga ko‘rinadi.
-                </p>
-              </div>
 
-              <div className="profile-modal-footer">
-                <button
-                  type="button"
-                  className="profile-btn profile-btn-primary"
-                  onClick={() => setPrivacyModalOpen(false)}
-                >
-                  Tushundim
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Preview Modal */}
       {previewModalOpen && (

@@ -204,6 +204,7 @@ class WorkExperience(models.Model):
     region = models.CharField(max_length=120, blank=True)
     company = models.CharField(max_length=200)
     position = models.CharField(max_length=200)
+    industry = models.CharField(max_length=160, blank=True, verbose_name="Faoliyat sohasi")
     start_year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1956), MaxValueValidator(date.today().year + 1)])
     end_year = models.PositiveSmallIntegerField(null=True, blank=True, validators=[MinValueValidator(1956), MaxValueValidator(date.today().year + 1)])
     is_current = models.BooleanField(default=False)

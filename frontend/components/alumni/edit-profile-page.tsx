@@ -254,6 +254,7 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
         region: "Toshkent shahri",
         company: "",
         position: "",
+        industry: "",
         start_year: CURRENT_YEAR,
         end_year: null,
         is_current: true,
@@ -390,6 +391,7 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
           region: w.region || "Toshkent shahri",
           company: w.company.trim(),
           position: w.position.trim(),
+          industry: (w.industry || "").trim(),
           start_year: Number(w.start_year) || CURRENT_YEAR,
           end_year: w.end_year ? Number(w.end_year) : null,
           is_current: !w.end_year,
@@ -657,33 +659,25 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
               </span>
             </div>
 
-            {/* Ilmiy daraja va unvoni */}
-            <div className="edit-profile-field">
-              <div className="edit-profile-label-row">
-                <label htmlFor="academic_credentials" className="edit-profile-label">
-                  Ilmiy daraja va unvoni
-                </label>
-                <span className="edit-profile-optional-badge">Ixtiyoriy</span>
-              </div>
-              <CustomSelect
-                id="academic_credentials"
-                value={academicCredentials}
-                onChange={(val) => setAcademicCredentials(val)}
-                options={ACADEMIC_CHOICES}
-                placeholder="Ilmiy daraja yoki unvoningizni tanlang"
-                icon={Award}
-              />
-            </div>
 
-            {/* Qo‘shimcha ta’lim bosqichlari (Magistratura, PhD, DSc...) */}
-            <div className="edit-profile-work-history-section">
-              <div className="edit-profile-work-history-header">
+
+          </section>
+
+          {/* ================================================================= */}
+          {/* 2. BLOK: TA'LIM BOSQICHLARI                                       */}
+          {/* ================================================================= */}
+          <section className="edit-profile-card">
+            <div className="edit-profile-card-header">
+              <div className="edit-profile-card-badge-wrap">
+                <span className="edit-profile-card-number">2</span>
                 <div>
-                  <h3 className="edit-profile-subheading">Qo‘shimcha ta’lim bosqichlari</h3>
-                  <p className="edit-profile-subheading-desc">
-                    Bakalavrdan tashqari Magistratura, PhD, DSc va boshqa oliy ta’lim ma’lumotlari ({educations.length}/10)
-                  </p>
+                  <h2 className="edit-profile-card-title">Ta’lim bosqichlari</h2>
+                  <span className="edit-profile-card-subtitle">
+                    Magistratura, PhD, DSc va boshqa oliy ta’lim ({educations.length}/10)
+                  </span>
                 </div>
+              </div>
+              <div className="flex items-center gap-2">
                 {educations.length < 10 && (
                   <button
                     type="button"
@@ -694,135 +688,150 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
                     <span>Ta’lim qo‘shish</span>
                   </button>
                 )}
+                <GraduationCap size={20} className="text-brand-navy opacity-40" />
               </div>
+            </div>
 
-              {educations.length === 0 ? (
-                <div className="edit-profile-empty-experiences">
-                  <div className="empty-exp-icon-wrap">
-                    <GraduationCap size={24} className="text-brand-navy" />
-                  </div>
-                  <h4 className="empty-exp-title">Hozircha qo‘shimcha ta’lim bosqichlari qo‘shilmagan</h4>
-                  <p className="empty-exp-desc">
-                    Magistratura, Falsafa doktori (PhD), Fan doktori (DSc) yoki ikkinchi oliy ta’limingizni qo‘shing.
-                  </p>
-                  <button
-                    type="button"
-                    onClick={handleAddEducation}
-                    className="edit-profile-empty-add-btn"
-                  >
-                    <Plus size={15} />
-                    <span>Magistratura / PhD qo‘shish</span>
-                  </button>
+            {educations.length === 0 ? (
+              <div className="edit-profile-empty-experiences">
+                <div className="empty-exp-icon-wrap">
+                  <GraduationCap size={24} className="text-brand-navy" />
                 </div>
-              ) : (
-                <div className="edit-profile-experiences-list">
-                  {educations.map((edu, idx) => (
-                    <div key={idx} className="edit-profile-exp-card">
-                      <div className="edit-profile-exp-card-top">
-                        <div className="flex items-center gap-2">
-                          <span className="edit-profile-exp-badge">#{idx + 1}</span>
-                          <span className="edit-profile-exp-title">
-                            {DEGREE_LEVEL_OPTIONS.find((o) => o.value === edu.degree_level)?.label || "Ta’lim bosqichi"}
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveEducation(idx)}
-                          className="edit-profile-exp-del-btn"
-                          title="Ushbu ta’lim ma’lumotini o‘chirish"
-                        >
-                          <Trash2 size={15} />
-                        </button>
+                <h4 className="empty-exp-title">Hozircha qo‘shimcha ta’lim bosqichlari qo‘shilmagan</h4>
+                <p className="empty-exp-desc">
+                  Magistratura, Falsafa doktori (PhD), Fan doktori (DSc) yoki ikkinchi oliy ta’limingizni qo‘shing.
+                </p>
+                <button
+                  type="button"
+                  onClick={handleAddEducation}
+                  className="edit-profile-empty-add-btn"
+                >
+                  <Plus size={15} />
+                  <span>+ Magistratura / PhD qo‘shish</span>
+                </button>
+              </div>
+            ) : (
+              <div className="edit-profile-experiences-list">
+                {educations.map((edu, idx) => (
+                  <div key={idx} className="edit-profile-exp-card">
+                    <div className="edit-profile-exp-card-top">
+                      <div className="flex items-center gap-2">
+                        <span className="edit-profile-exp-badge">#{idx + 1}</span>
+                        <span className="edit-profile-exp-title">
+                          {DEGREE_LEVEL_OPTIONS.find((o) => o.value === edu.degree_level)?.label || "Ta’lim bosqichi"}
+                        </span>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveEducation(idx)}
+                        className="edit-profile-exp-del-btn"
+                        title="Ushbu ta’lim ma’lumotini o‘chirish"
+                      >
+                        <Trash2 size={15} />
+                      </button>
+                    </div>
 
-                      {/* Ta'lim darajasi & Bitirgan yili */}
-                      <div className="edit-profile-row-2col mb-3">
-                        <div className="edit-profile-field">
-                          <label className="edit-profile-label">Ta’lim darajasi / Bosqichi</label>
-                          <CustomSelect
-                            value={edu.degree_level}
-                            onChange={(val) => handleUpdateEducation(idx, { degree_level: val })}
-                            options={DEGREE_LEVEL_OPTIONS}
-                            placeholder="Darajani tanlang"
-                            icon={Award}
-                          />
-                        </div>
-                        <div className="edit-profile-field">
-                          <label className="edit-profile-label">Bitirgan yili</label>
-                          <CustomSelect
-                            value={edu.graduation_year}
-                            onChange={(val) => handleUpdateEducation(idx, { graduation_year: Number(val) })}
-                            options={YEARS.map((y) => ({ value: y, label: `${y}-yil` }))}
-                            placeholder="Bitirgan yilni tanlang"
-                            icon={GraduationCap}
-                          />
-                        </div>
-                      </div>
-
-                      {/* Muassasa nomi & Fakultet/Yo'nalish */}
-                      <div className="edit-profile-row-2col mb-3">
-                        <div className="edit-profile-field">
-                          <label className="edit-profile-label">OTM / Muassasa nomi</label>
-                          <div className="edit-profile-input-icon-wrap">
-                            <Building2 size={15} className="input-leading-icon" />
-                            <input
-                              type="text"
-                              value={edu.institution}
-                              onChange={(e) => handleUpdateEducation(idx, { institution: e.target.value })}
-                              placeholder="Masalan: Qarshi davlat universiteti"
-                              className="edit-profile-input with-leading-icon"
-                            />
-                          </div>
-                        </div>
-                        <div className="edit-profile-field">
-                          <label className="edit-profile-label">Fakultet / Yo‘nalish</label>
-                          <div className="edit-profile-input-icon-wrap">
-                            <BookOpen size={15} className="input-leading-icon" />
-                            <input
-                              type="text"
-                              value={edu.faculty || ""}
-                              onChange={(e) => handleUpdateEducation(idx, { faculty: e.target.value })}
-                              placeholder="Masalan: Axborot texnologiyalari"
-                              className="edit-profile-input with-leading-icon"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Mutaxassislik / Ixtisoslik */}
+                    {/* Ta'lim darajasi & Bitirgan yili */}
+                    <div className="edit-profile-row-2col mb-3">
                       <div className="edit-profile-field">
-                        <label className="edit-profile-label">Mutaxassislik / Ixtisoslik (Ixtiyoriy)</label>
+                        <label className="edit-profile-label">Ta’lim darajasi / Bosqichi</label>
+                        <CustomSelect
+                          value={edu.degree_level}
+                          onChange={(val) => handleUpdateEducation(idx, { degree_level: val })}
+                          options={DEGREE_LEVEL_OPTIONS}
+                          placeholder="Darajani tanlang"
+                          icon={Award}
+                        />
+                      </div>
+                      <div className="edit-profile-field">
+                        <label className="edit-profile-label">Bitirgan yili</label>
+                        <CustomSelect
+                          value={edu.graduation_year}
+                          onChange={(val) => handleUpdateEducation(idx, { graduation_year: Number(val) })}
+                          options={YEARS.map((y) => ({ value: y, label: `${y}-yil` }))}
+                          placeholder="Bitirgan yilni tanlang"
+                          icon={GraduationCap}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Muassasa nomi & Fakultet/Yo'nalish */}
+                    <div className="edit-profile-row-2col mb-3">
+                      <div className="edit-profile-field">
+                        <label className="edit-profile-label">OTM / Muassasa nomi</label>
+                        <div className="edit-profile-input-icon-wrap">
+                          <Building2 size={15} className="input-leading-icon" />
+                          <input
+                            type="text"
+                            value={edu.institution}
+                            onChange={(e) => handleUpdateEducation(idx, { institution: e.target.value })}
+                            placeholder="Masalan: Qarshi davlat universiteti"
+                            className="edit-profile-input with-leading-icon"
+                          />
+                        </div>
+                      </div>
+                      <div className="edit-profile-field">
+                        <label className="edit-profile-label">Fakultet / Yo‘nalish</label>
                         <div className="edit-profile-input-icon-wrap">
                           <BookOpen size={15} className="input-leading-icon" />
                           <input
                             type="text"
-                            value={edu.specialty || ""}
-                            onChange={(e) => handleUpdateEducation(idx, { specialty: e.target.value })}
-                            placeholder="Masalan: 70610101 - Kompyuter ilmlari va dasturlash texnologiyalari"
+                            value={edu.faculty || ""}
+                            onChange={(e) => handleUpdateEducation(idx, { faculty: e.target.value })}
+                            placeholder="Masalan: Axborot texnologiyalari"
                             className="edit-profile-input with-leading-icon"
                           />
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
+
+                    {/* Mutaxassislik / Ixtisoslik */}
+                    <div className="edit-profile-field">
+                      <label className="edit-profile-label">Mutaxassislik / Ixtisoslik (Ixtiyoriy)</label>
+                      <div className="edit-profile-input-icon-wrap">
+                        <BookOpen size={15} className="input-leading-icon" />
+                        <input
+                          type="text"
+                          value={edu.specialty || ""}
+                          onChange={(e) => handleUpdateEducation(idx, { specialty: e.target.value })}
+                          placeholder="Masalan: 70610101 - Kompyuter ilmlari va dasturlash texnologiyalari"
+                          className="edit-profile-input with-leading-icon"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </section>
 
           {/* ================================================================= */}
-          {/* 2. BLOK: FAOLIYAT VA MEHNAT TARIXI                                */}
+          {/* 3. BLOK: FAOLIYAT VA MEHNAT TARIXI                                */}
           {/* ================================================================= */}
           <section className="edit-profile-card">
             <div className="edit-profile-card-header">
               <div className="edit-profile-card-badge-wrap">
-                <span className="edit-profile-card-number">2</span>
+                <span className="edit-profile-card-number">3</span>
                 <div>
                   <h2 className="edit-profile-card-title">Faoliyat va Mehnat tarixi</h2>
-                  <span className="edit-profile-card-subtitle">Hozirgi soha va ishlagan tashkilotlar</span>
+                  <span className="edit-profile-card-subtitle">
+                    Hozirgi soha va ishlagan tashkilotlar ({workExperiences.length}/7)
+                  </span>
                 </div>
               </div>
-              <Briefcase size={20} className="text-brand-navy opacity-40" />
+              <div className="flex items-center gap-2">
+                {workExperiences.length < 7 && (
+                  <button
+                    type="button"
+                    onClick={handleAddWorkExperience}
+                    className="edit-profile-add-exp-btn"
+                  >
+                    <Plus size={14} />
+                    <span>Ish joyi qo‘shish</span>
+                  </button>
+                )}
+                <Briefcase size={20} className="text-brand-navy opacity-40" />
+              </div>
             </div>
 
             {/* Hozirgi soha (Industry) */}
@@ -910,11 +919,11 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
               />
             </div>
 
-            {/* Mehnat faoliyati (Dynamic list) */}
+            {/* Mehnat faoliyati tarixi */}
             <div className="edit-profile-work-history-section">
               <div className="edit-profile-work-history-header">
                 <div>
-                  <h3 className="edit-profile-subheading">Mehnat faoliyati</h3>
+                  <h3 className="edit-profile-subheading">Mehnat faoliyati tarixi</h3>
                   <p className="edit-profile-subheading-desc">
                     Ixtiyoriy, 7 tagacha ish joyi qo‘shishingiz mumkin ({workExperiences.length}/7)
                   </p>
@@ -970,16 +979,32 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
                         </button>
                       </div>
 
-                      {/* Hudud select */}
-                      <div className="edit-profile-field mb-3">
-                        <label className="edit-profile-label">Hudud (Shahar / Viloyat)</label>
-                        <CustomSelect
-                          value={exp.region}
-                          onChange={(val) => handleUpdateWorkExperience(idx, { region: val })}
-                          options={REGIONS}
-                          placeholder="Hududni tanlang"
-                          icon={MapPin}
-                        />
+                      {/* Hudud va Faoliyat sohasi */}
+                      <div className="edit-profile-row-2col mb-3">
+                        <div className="edit-profile-field">
+                          <label className="edit-profile-label">Hudud (Shahar / Viloyat)</label>
+                          <CustomSelect
+                            value={exp.region}
+                            onChange={(val) => handleUpdateWorkExperience(idx, { region: val })}
+                            options={REGIONS}
+                            placeholder="Hududni tanlang"
+                            icon={MapPin}
+                          />
+                        </div>
+                        <div className="edit-profile-field">
+                          <label className="edit-profile-label">Faoliyat sohasi (Soha)</label>
+                          <CustomSelect
+                            value={exp.industry || ""}
+                            onChange={(val) => handleUpdateWorkExperience(idx, { industry: val })}
+                            options={
+                              exp.industry && !INDUSTRIES.includes(exp.industry)
+                                ? [exp.industry, ...INDUSTRIES]
+                                : INDUSTRIES
+                            }
+                            placeholder="Sohani tanlang"
+                            icon={Briefcase}
+                          />
+                        </div>
                       </div>
 
                       {/* Tashkilot & Lavozim */}

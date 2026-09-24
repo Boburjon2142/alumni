@@ -18,7 +18,7 @@ describe("EditProfilePage", () => {
     vi.clearAllMocks();
   });
 
-  it("renders loaded profile with 2 blocks correctly", async () => {
+  it("renders loaded profile with 3 blocks correctly", async () => {
     global.fetch = vi.fn().mockImplementation(() =>
       Promise.resolve({
         ok: true,
@@ -44,8 +44,10 @@ describe("EditProfilePage", () => {
 
     await waitFor(() => {
       expect(screen.getByText("Asosiy ma’lumotlar")).toBeInTheDocument();
+      expect(screen.getByText("Ta’lim bosqichlari")).toBeInTheDocument();
       expect(screen.getByText("Faoliyat va Mehnat tarixi")).toBeInTheDocument();
       expect(screen.getByDisplayValue("Rustam Karimov")).toBeInTheDocument();
+      expect(screen.queryByText("Ilmiy daraja va unvoni")).not.toBeInTheDocument();
     });
   });
 
@@ -82,5 +84,7 @@ describe("EditProfilePage", () => {
     expect(screen.getByText("#1")).toBeInTheDocument();
     expect(screen.getByText("Yangi ish joyi")).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Masalan: IT Park")).toBeInTheDocument();
+    expect(screen.getByText("Faoliyat sohasi (Soha)")).toBeInTheDocument();
+    expect(screen.getByText("Sohani tanlang")).toBeInTheDocument();
   });
 });

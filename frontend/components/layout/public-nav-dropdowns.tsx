@@ -48,15 +48,6 @@ export function PublicNavDropdowns({ t, pathname, mobileMenuOpen, onNavigate }: 
 
   const groups: { id: string; title: string; items: Destination[] }[] = [
     {
-      id: "platform",
-      title: t.navPlatform,
-      items: [
-        { title: t.navHome, description: t.navHomeDesc, href: "/" },
-        { title: t.navAbout, description: t.navAboutDesc, href: "/about" },
-        { title: t.navFeedbackTitle, description: t.navFeedbackDesc, href: "/feedback" },
-      ],
-    },
-    {
       id: "alumni",
       title: "Alumni",
       items: [

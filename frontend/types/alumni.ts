@@ -77,6 +77,7 @@ export type WorkExperience = {
   region: string;
   company: string;
   position: string;
+  industry?: string;
   start_year: number;
   end_year?: number | null;
   is_current?: boolean;

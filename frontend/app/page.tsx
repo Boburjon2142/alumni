@@ -3,6 +3,7 @@ import { ArrowRight, GraduationCap } from "lucide-react";
 import { AlumniCardGrid } from "@/components/alumni/alumni-card-grid";
 import { Button } from "@/components/ui/button";
 import { HeroCarousel } from "@/components/hero/hero-carousel";
+import { FeaturedCriteriaModal } from "@/components/alumni/featured-criteria-modal";
 import { getAlumni } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import type { Alumni } from "@/types/alumni";
@@ -15,7 +16,7 @@ export default async function Home() {
   let alumniList: Alumni[] = [];
 
   try {
-    const alumniRes = await getAlumni("limit=12&ordering=graduation_year_asc");
+    const alumniRes = await getAlumni("featured=true&limit=12&ordering=graduation_year_asc");
     const fetched = Array.isArray(alumniRes)
       ? alumniRes
       : (alumniRes as any)?.data ?? (alumniRes as any)?.results ?? [];
@@ -65,9 +66,12 @@ export default async function Home() {
               <h2>{t.featuredTitle}</h2>
               <p className="section-sublead">{t.featuredSubtitle}</p>
             </div>
-            <Link href="/alumni" className="section-heading-link">
-              {t.viewAllAlumni} <ArrowRight />
-            </Link>
+            <div className="section-heading-actions">
+              <FeaturedCriteriaModal locale={locale} />
+              <Link href="/alumni" className="section-heading-link">
+                {t.viewAllAlumni} <ArrowRight />
+              </Link>
+            </div>
           </div>
 
           {alumniList.length > 0 ? (

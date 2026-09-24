@@ -30,7 +30,7 @@ class EducationExperienceInline(admin.TabularInline):
 class WorkExperienceInline(admin.TabularInline):
     model = WorkExperience
     extra = 0
-    fields = ("company", "position", "region", "start_year", "end_year", "is_current", "order")
+    fields = ("company", "position", "industry", "region", "start_year", "end_year", "is_current", "order")
 
 class AchievementInline(admin.TabularInline):
     model = Achievement
@@ -204,12 +204,16 @@ class AlumniProfileAdmin(admin.ModelAdmin):
 
     @admin.action(description="Bosh sahifada ko‘rsatish (Feature on Homepage)")
     def feature_selected_homepage(self, request, queryset):
+        from django.core.cache import cache
         count = queryset.update(is_featured=True)
+        cache.clear()
         self.message_user(request, f"{count} ta profil bosh sahifada ko‘rsatish uchun belgilandi.")
 
     @admin.action(description="Bosh sahifadan olish (Unfeature)")
     def unfeature_selected_homepage(self, request, queryset):
+        from django.core.cache import cache
         count = queryset.update(is_featured=False)
+        cache.clear()
         self.message_user(request, f"{count} ta profil bosh sahifadan olib tashlandi.")
 
 @admin.register(AlumniConsent)
@@ -226,6 +230,17 @@ class FeaturedAlumniAdmin(admin.ModelAdmin):
     list_editable = ("display_order", "is_active")
     list_filter = ("is_active",)
     search_fields = ("alumni__full_name", "title")
+    ordering = ("display_order", "id")
+
+    def save_model(self, request, obj, form, change):
+        from django.core.cache import cache
+        super().save_model(request, obj, form, change)
+        cache.clear()
+
+    def delete_model(self, request, obj):
+        from django.core.cache import cache
+        super().delete_model(request, obj)
+        cache.clear()
 
 @admin.register(Achievement)
 class AchievementAdmin(admin.ModelAdmin):
@@ -247,9 +262,9 @@ class AlumniSourceAdmin(admin.ModelAdmin):
 
 @admin.register(WorkExperience)
 class WorkExperienceAdmin(admin.ModelAdmin):
-    list_display = ("company", "position", "alumnus", "region", "start_year", "end_year", "is_current", "order")
-    list_filter = ("region", "start_year", "is_current")
-    search_fields = ("company", "position", "alumnus__full_name")
+    list_display = ("company", "position", "industry", "alumnus", "region", "start_year", "end_year", "is_current", "order")
+    list_filter = ("region", "industry", "start_year", "is_current")
+    search_fields = ("company", "position", "industry", "alumnus__full_name")
 
 @admin.register(GraduationYearChangeRequest)
 class GraduationYearChangeRequestAdmin(admin.ModelAdmin):

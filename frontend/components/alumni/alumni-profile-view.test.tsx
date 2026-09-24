@@ -82,8 +82,10 @@ describe("AlumniProfileView", () => {
     expect(screen.getByText("Hozirda ishlaydi")).toBeInTheDocument();
 
     // Sidebar items
-    expect(screen.getByText("Maxfiylik va ko‘rinish")).toBeInTheDocument();
-    expect(screen.getByText(/Bog‘lanish \(Email\)/)).toBeInTheDocument();
+    expect(screen.queryByText("Maxfiylik va ko‘rinish")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Bog‘lanish \(Email\)/)).not.toBeInTheDocument();
+    expect(screen.queryByText(t.impactTitle)).not.toBeInTheDocument();
+    expect(screen.getByText("Profil to‘ldirilish darajasi")).toBeInTheDocument();
   });
 
   it("allows switching tabs to filter sections", () => {
@@ -95,5 +97,24 @@ describe("AlumniProfileView", () => {
     expect(screen.getAllByText(/Ish tajribasi/).length).toBeGreaterThan(0);
     // In experience tab, about section heading is filtered out
     expect(screen.queryByRole("heading", { name: "Men haqimda" })).not.toBeInTheDocument();
+  });
+
+  it("renders about, education, and experience side-by-side inside tri-cards-grid", () => {
+    const { container } = render(<AlumniProfileView profile={mockProfile} locale="uz" t={t} />);
+
+    const grid = container.querySelector(".profile-sections-wrapper.tri-cards-grid");
+    expect(grid).toBeInTheDocument();
+
+    const about = container.querySelector("#about-section");
+    const edu = container.querySelector("#education-section");
+    const exp = container.querySelector("#experience-section");
+
+    expect(about).toBeInTheDocument();
+    expect(edu).toBeInTheDocument();
+    expect(exp).toBeInTheDocument();
+
+    expect(grid).toContainElement(about);
+    expect(grid).toContainElement(edu);
+    expect(grid).toContainElement(exp);
   });
 });

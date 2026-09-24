@@ -40,6 +40,16 @@ export function AlumniQuickProfile({open,onOpenChange,profile,loading,error,onRe
   const degreeLabel = profile?.academic_degree ? (degreeMap[profile.academic_degree]?.[locale] || profile.academic_degree) : "";
   const academicBadge = [titleLabel, degreeLabel].filter(Boolean).join(", ");
 
+  const cleanPos = (profile?.position || "").trim();
+  const cleanComp = (profile?.current_company || "").trim();
+  const normPos = cleanPos.toLowerCase().replace(/['`ʻʼ’]/g, "'");
+  const normComp = cleanComp.toLowerCase().replace(/['`ʻʼ]/g, "'");
+  const isCompanyInPosition =
+    Boolean(cleanPos && cleanComp && (normPos.includes(normComp) || normComp.includes(normPos)));
+  const roleDesc = cleanPos
+    ? (cleanComp && !isCompanyInPosition ? `${cleanPos} — ${cleanComp}` : cleanPos)
+    : (cleanComp || t.graduate);
+
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
       <Dialog.Portal>
@@ -50,10 +60,10 @@ export function AlumniQuickProfile({open,onOpenChange,profile,loading,error,onRe
           {!loading && error && <div className="quick-profile-error" role="alert"><p>{t.error}</p><button type="button" onClick={onRetry}>{t.retry}</button></div>}
           {!loading && !error && profile && <>
             <header className="quick-profile-header">
-              <RemoteImage className="quick-profile-photo" src={profile.image_url || profile.avatar || `/images/faxriylar/${profile.slug}.png`} alt={profile.image_alt||`${profile.full_name} portreti`} fallback={initials} sizes="(max-width: 640px) 100vw, 280px"/>
+              <RemoteImage className="quick-profile-photo" src={profile.avatar || profile.image_url || (profile.slug ? `/images/faxriylar/${profile.slug}.webp` : undefined)} slug={profile.slug} alt={profile.image_alt||`${profile.full_name} portreti`} fallback={initials} sizes="(max-width: 640px) 100vw, 280px"/>
               <div>
                 <Dialog.Title>{profile.full_name}</Dialog.Title>
-                <Dialog.Description id="quick-profile-description">{profile.position||t.graduate}{profile.current_company&&` — ${profile.current_company}`}</Dialog.Description>
+                <Dialog.Description id="quick-profile-description">{roleDesc}</Dialog.Description>
                 <div className="quick-profile-facts">
                   {academicBadge && <span><GraduationCap/><strong>{t.academic}:</strong> {academicBadge}</span>}
                   {profile.specialty && <span><GraduationCap/><strong>{t.specialty}:</strong> {profile.specialty}</span>}

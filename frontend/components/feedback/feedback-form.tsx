@@ -256,281 +256,289 @@ export function FeedbackForm({
       )}
 
       <form onSubmit={handleSubmit} className="feedback-structured-form" noValidate>
-        {/* 1. MUROJAAT HAQIDA */}
-        <section className="feedback-section" aria-labelledby="section-about-title">
-          <h2 id="section-about-title" className="feedback-section-title">
-            {t.feedbackSectionAbout || (isUz ? "Murojaat haqida" : isRu ? "О запросе" : "About the request")}
-          </h2>
+        <div className="feedback-form-grid-layout">
+          {/* Left Column: Sections 1 & 2 */}
+          <div className="feedback-form-col-left">
+            {/* 1. MUROJAAT HAQIDA */}
+            <section className="feedback-section" aria-labelledby="section-about-title">
+              <h2 id="section-about-title" className="feedback-section-title">
+                {t.feedbackSectionAbout || (isUz ? "Murojaat haqida" : isRu ? "О запросе" : "About the request")}
+              </h2>
 
-          <div className="feedback-fields-stack">
-            {/* Murojaat turi: Custom Text-First Select */}
-            <div className="feedback-form-group">
-              <label htmlFor="feedback-type" className="feedback-label">
-                <span>{t.feedbackType}</span>
-                <span className="required-mark" aria-hidden="true">*</span>
-              </label>
+              <div className="feedback-fields-stack">
+                {/* Murojaat turi: Custom Text-First Select */}
+                <div className="feedback-form-group">
+                  <label htmlFor="feedback-type" className="feedback-label">
+                    <span>{t.feedbackType}</span>
+                    <span className="required-mark" aria-hidden="true">*</span>
+                  </label>
 
-              {/* Accessible Native Select (visually syncs with custom trigger) */}
-              <div className="feedback-custom-select-container" ref={dropdownRef}>
-                <button
-                  type="button"
-                  id="feedback-type-trigger"
-                  aria-haspopup="listbox"
-                  aria-expanded={isDropdownOpen}
-                  aria-label={currentOption.label}
-                  onClick={() => setIsDropdownOpen((prev) => !prev)}
-                  className={`feedback-custom-select-trigger ${isDropdownOpen ? "is-open" : ""}`}
-                >
-                  <div className="feedback-select-text-block">
-                    <span className="feedback-select-main-title">{currentOption.label}</span>
-                    <span className="feedback-select-desc-text">{currentOption.desc}</span>
-                  </div>
-                  <ChevronDown
-                    size={18}
-                    className={`feedback-select-chevron ${isDropdownOpen ? "rotated" : ""}`}
-                    aria-hidden="true"
-                  />
-                </button>
-
-                {/* Dropdown Options List */}
-                {isDropdownOpen && (
-                  <div className="feedback-custom-dropdown-menu" role="listbox" tabIndex={-1}>
-                    {typeOptions.map((opt) => (
-                      <div
-                        key={opt.value}
-                        role="option"
-                        aria-selected={opt.value === type}
-                        onClick={() => {
-                          setType(opt.value);
-                          setIsDropdownOpen(false);
-                        }}
-                        className={`feedback-dropdown-option ${opt.value === type ? "is-selected" : ""}`}
-                      >
-                        <div className="feedback-option-title">{opt.label}</div>
-                        <div className="feedback-option-desc">{opt.desc}</div>
+                  {/* Accessible Native Select (visually syncs with custom trigger) */}
+                  <div className="feedback-custom-select-container" ref={dropdownRef}>
+                    <button
+                      type="button"
+                      id="feedback-type-trigger"
+                      aria-haspopup="listbox"
+                      aria-expanded={isDropdownOpen}
+                      aria-label={currentOption.label}
+                      onClick={() => setIsDropdownOpen((prev) => !prev)}
+                      className={`feedback-custom-select-trigger ${isDropdownOpen ? "is-open" : ""}`}
+                    >
+                      <div className="feedback-select-text-block">
+                        <span className="feedback-select-main-title">{currentOption.label}</span>
+                        <span className="feedback-select-desc-text">{currentOption.desc}</span>
                       </div>
-                    ))}
+                      <ChevronDown
+                        size={18}
+                        className={`feedback-select-chevron ${isDropdownOpen ? "rotated" : ""}`}
+                        aria-hidden="true"
+                      />
+                    </button>
+
+                    {/* Dropdown Options List */}
+                    {isDropdownOpen && (
+                      <div className="feedback-custom-dropdown-menu" role="listbox" tabIndex={-1}>
+                        {typeOptions.map((opt) => (
+                          <div
+                            key={opt.value}
+                            role="option"
+                            aria-selected={opt.value === type}
+                            onClick={() => {
+                              setType(opt.value);
+                              setIsDropdownOpen(false);
+                            }}
+                            className={`feedback-dropdown-option ${opt.value === type ? "is-selected" : ""}`}
+                          >
+                            <div className="feedback-option-title">{opt.label}</div>
+                            <div className="feedback-option-desc">{opt.desc}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Hidden Select for DOM & automated testing accessibility */}
+                    <select
+                      id="feedback-type"
+                      value={type}
+                      onChange={(e) => setType(e.target.value as FeedbackType)}
+                      className="feedback-hidden-accessible-select"
+                      tabIndex={-1}
+                      aria-hidden="true"
+                    >
+                      {typeOptions.map((opt) => (
+                        <option key={opt.value} value={opt.value}>
+                          {opt.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                )}
+                </div>
 
-                {/* Hidden Select for DOM & automated testing accessibility */}
-                <select
-                  id="feedback-type"
-                  value={type}
-                  onChange={(e) => setType(e.target.value as FeedbackType)}
-                  className="feedback-hidden-accessible-select"
-                  tabIndex={-1}
-                  aria-hidden="true"
-                >
-                  {typeOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                {/* Mavzu */}
+                <div className="feedback-form-group">
+                  <label htmlFor="feedback-subject" className="feedback-label">
+                    <span>{t.feedbackSubject || (isUz ? "Mavzu" : isRu ? "Тема" : "Subject")}</span>
+                    <span className="required-mark" aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    id="feedback-subject"
+                    type="text"
+                    value={subject}
+                    onChange={(e) => {
+                      setSubject(e.target.value);
+                      if (validationErrors.subject) {
+                        setValidationErrors((prev) => ({ ...prev, subject: "" }));
+                      }
+                    }}
+                    placeholder={t.feedbackSubjectPlaceholder || (isUz ? "Murojaat mavzusini qisqacha yozing" : isRu ? "Кратко укажите тему обращения" : "Briefly write the subject")}
+                    className={`feedback-input ${validationErrors.subject ? "has-error" : ""}`}
+                    maxLength={160}
+                    required
+                    aria-required="true"
+                    aria-invalid={Boolean(validationErrors.subject)}
+                    aria-describedby={validationErrors.subject ? "subject-error" : undefined}
+                  />
+                  {validationErrors.subject && (
+                    <span id="subject-error" className="feedback-field-error" role="alert">
+                      {validationErrors.subject}
+                    </span>
+                  )}
+                </div>
               </div>
-            </div>
+            </section>
 
-            {/* Mavzu */}
-            <div className="feedback-form-group">
-              <label htmlFor="feedback-subject" className="feedback-label">
-                <span>{t.feedbackSubject || (isUz ? "Mavzu" : isRu ? "Тема" : "Subject")}</span>
-                <span className="required-mark" aria-hidden="true">*</span>
-              </label>
-              <input
-                id="feedback-subject"
-                type="text"
-                value={subject}
-                onChange={(e) => {
-                  setSubject(e.target.value);
-                  if (validationErrors.subject) {
-                    setValidationErrors((prev) => ({ ...prev, subject: "" }));
-                  }
-                }}
-                placeholder={t.feedbackSubjectPlaceholder || (isUz ? "Murojaat mavzusini qisqacha yozing" : isRu ? "Кратко укажите тему обращения" : "Briefly write the subject")}
-                className={`feedback-input ${validationErrors.subject ? "has-error" : ""}`}
-                maxLength={160}
-                required
-                aria-required="true"
-                aria-invalid={Boolean(validationErrors.subject)}
-                aria-describedby={validationErrors.subject ? "subject-error" : undefined}
-              />
-              {validationErrors.subject && (
-                <span id="subject-error" className="feedback-field-error" role="alert">
-                  {validationErrors.subject}
-                </span>
-              )}
-            </div>
+            {/* 2. SIZ BILAN BOG‘LANISH */}
+            <section className="feedback-section" aria-labelledby="section-contact-title">
+              <h2 id="section-contact-title" className="feedback-section-title">
+                {t.feedbackSectionContact || (isUz ? "Siz bilan bog‘lanish" : isRu ? "Контактные данные" : "Contact details")}
+              </h2>
+
+              <div className="feedback-fields-stack">
+                {/* Ism */}
+                <div className="feedback-form-group">
+                  <label htmlFor="feedback-name" className="feedback-label">
+                    <span>{t.feedbackName || (isUz ? "Ismingiz" : isRu ? "Ваше имя" : "Your name")}</span>
+                    <span className="optional-tag">({t.feedbackOptional || "ixtiyoriy"})</span>
+                  </label>
+                  <input
+                    id="feedback-name"
+                    type="text"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder={t.feedbackNamePlaceholder || (isUz ? "Ism familiyangiz" : isRu ? "Имя и фамилия" : "Full name")}
+                    className="feedback-input"
+                    maxLength={160}
+                    autoComplete="name"
+                  />
+                </div>
+
+                {/* Email & Telefon Grid */}
+                <div className="feedback-row-grid">
+                  <div className="feedback-form-group">
+                    <label htmlFor="feedback-email" className="feedback-label">
+                      <span>{t.feedbackEmail || "Email"}</span>
+                    </label>
+                    <input
+                      id="feedback-email"
+                      type="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (validationErrors.email) {
+                          setValidationErrors((prev) => ({ ...prev, email: "" }));
+                        }
+                      }}
+                      placeholder={t.feedbackEmailPlaceholder || "name@example.com"}
+                      className={`feedback-input ${validationErrors.email ? "has-error" : ""}`}
+                      maxLength={160}
+                      autoComplete="email"
+                      aria-invalid={Boolean(validationErrors.email)}
+                      aria-describedby={validationErrors.email ? "email-error" : "contact-hint"}
+                    />
+                    {validationErrors.email && (
+                      <span id="email-error" className="feedback-field-error" role="alert">
+                        {validationErrors.email}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="feedback-form-group">
+                    <label htmlFor="feedback-phone" className="feedback-label">
+                      <span>{t.feedbackPhone || (isUz ? "Telefon" : isRu ? "Телефон" : "Phone")}</span>
+                    </label>
+                    <input
+                      id="feedback-phone"
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => setPhone(e.target.value)}
+                      placeholder={t.feedbackPhonePlaceholder || "+998 90 123 45 67"}
+                      className="feedback-input"
+                      maxLength={40}
+                      autoComplete="tel"
+                      aria-describedby="contact-hint"
+                    />
+                  </div>
+                </div>
+
+                <p id="contact-hint" className="feedback-supporting-text">
+                  {t.feedbackContactHint ||
+                    (isUz
+                      ? "Javob olishni istasangiz, email yoki telefon raqamingizdan kamida bittasini kiriting."
+                      : isRu
+                      ? "Если хотите получить ответ, укажите email или номер телефона."
+                      : "If you wish to receive a reply, please provide your email or phone number.")}
+                </p>
+              </div>
+            </section>
           </div>
-        </section>
 
-        {/* 2. SIZ BILAN BOG‘LANISH */}
-        <section className="feedback-section" aria-labelledby="section-contact-title">
-          <h2 id="section-contact-title" className="feedback-section-title">
-            {t.feedbackSectionContact || (isUz ? "Siz bilan bog‘lanish" : isRu ? "Контактные данные" : "Contact details")}
-          </h2>
+          {/* Right Column: Section 3 (Xabar) */}
+          <div className="feedback-form-col-right">
+            {/* 3. XABAR */}
+            <section className="feedback-section feedback-section-message" aria-labelledby="section-message-title">
+              <h2 id="section-message-title" className="feedback-section-title">
+                {t.feedbackSectionMessage || (isUz ? "Xabar" : isRu ? "Сообщение" : "Message")}
+              </h2>
 
-          <div className="feedback-fields-stack">
-            {/* Ism */}
-            <div className="feedback-form-group">
-              <label htmlFor="feedback-name" className="feedback-label">
-                <span>{t.feedbackName || (isUz ? "Ismingiz" : isRu ? "Ваше имя" : "Your name")}</span>
-                <span className="optional-tag">({t.feedbackOptional || "ixtiyoriy"})</span>
-              </label>
-              <input
-                id="feedback-name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                placeholder={t.feedbackNamePlaceholder || (isUz ? "Ism familiyangiz" : isRu ? "Имя и фамилия" : "Full name")}
-                className="feedback-input"
-                maxLength={160}
-                autoComplete="name"
-              />
-            </div>
+              <div className="feedback-fields-stack feedback-message-fields-stack">
+                {/* Xabar matni */}
+                <div className="feedback-form-group feedback-message-form-group">
+                  <label htmlFor="feedback-message" className="feedback-label">
+                    <span>{t.feedbackMessage || (isUz ? "Xabar matni" : isRu ? "Текст сообщения" : "Message text")}</span>
+                    <span className="required-mark" aria-hidden="true">*</span>
+                  </label>
+                  <textarea
+                    id="feedback-message"
+                    value={message}
+                    onChange={(e) => {
+                      setMessage(e.target.value);
+                      if (validationErrors.message) {
+                        setValidationErrors((prev) => ({ ...prev, message: "" }));
+                      }
+                    }}
+                    placeholder={t.feedbackMessagePlaceholder || (isUz ? "Savolingiz, taklifingiz yoki tuzatishingizni batafsil yozing..." : isRu ? "Подробно опишите вопрос, предложение или исправление..." : "Write your question, proposal, or correction in detail...")}
+                    className={`feedback-textarea ${validationErrors.message ? "has-error" : ""}`}
+                    rows={8}
+                    maxLength={3000}
+                    required
+                    aria-required="true"
+                    aria-invalid={Boolean(validationErrors.message)}
+                    aria-describedby="message-counter message-error"
+                  />
+                  <div className="feedback-textarea-footer">
+                    {validationErrors.message ? (
+                      <span id="message-error" className="feedback-field-error" role="alert">
+                        {validationErrors.message}
+                      </span>
+                    ) : (
+                      <span />
+                    )}
+                    <span id="message-counter" className="feedback-char-count">
+                      {message.length} / 3000
+                    </span>
+                  </div>
+                </div>
 
-            {/* Email & Telefon Grid */}
-            <div className="feedback-row-grid">
-              <div className="feedback-form-group">
-                <label htmlFor="feedback-email" className="feedback-label">
-                  <span>{t.feedbackEmail || "Email"}</span>
-                </label>
-                <input
-                  id="feedback-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => {
-                    setEmail(e.target.value);
-                    if (validationErrors.email) {
-                      setValidationErrors((prev) => ({ ...prev, email: "" }));
-                    }
-                  }}
-                  placeholder={t.feedbackEmailPlaceholder || "name@example.com"}
-                  className={`feedback-input ${validationErrors.email ? "has-error" : ""}`}
-                  maxLength={160}
-                  autoComplete="email"
-                  aria-invalid={Boolean(validationErrors.email)}
-                  aria-describedby={validationErrors.email ? "email-error" : "contact-hint"}
-                />
-                {validationErrors.email && (
-                  <span id="email-error" className="feedback-field-error" role="alert">
-                    {validationErrors.email}
-                  </span>
-                )}
+                {/* Privacy Note */}
+                <div className="feedback-privacy-note">
+                  <p>
+                    {t.feedbackPrivacyNote ||
+                      (isUz
+                        ? "Murojaatingiz universitet ma’muriyati tomonidan ko‘rib chiqiladi. Aloqa ma’lumotingiz faqat javob berish uchun ishlatiladi."
+                        : isRu
+                        ? "Ваше обращение будет рассмотрено администрацией университета. Контактные данные используются исключительно для ответа."
+                        : "Your request will be reviewed by the university administration. Contact details are used only to respond to your inquiry.")}{" "}
+                    <Link href="/privacy" className="feedback-privacy-link">
+                      {t.feedbackPrivacyLink || (isUz ? "Maxfiylik siyosati" : isRu ? "Политика конфиденциальности" : "Privacy Policy")}
+                    </Link>
+                    .
+                  </p>
+                </div>
+
+                {/* Submit Button */}
+                <div className="feedback-actions">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="feedback-submit-button"
+                  >
+                    {loading ? (
+                      <>
+                        <Loader2 size={18} className="spin-icon" aria-hidden="true" />
+                        <span>{t.feedbackSending || (isUz ? "Yuborilmoqda..." : isRu ? "Отправка..." : "Sending...")}</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send size={18} aria-hidden="true" />
+                        <span>{t.feedbackSubmit || (isUz ? "Murojaat yuborish" : isRu ? "Отправить обращение" : "Submit Request")}</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               </div>
-
-              <div className="feedback-form-group">
-                <label htmlFor="feedback-phone" className="feedback-label">
-                  <span>{t.feedbackPhone || (isUz ? "Telefon" : isRu ? "Телефон" : "Phone")}</span>
-                </label>
-                <input
-                  id="feedback-phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder={t.feedbackPhonePlaceholder || "+998 90 123 45 67"}
-                  className="feedback-input"
-                  maxLength={40}
-                  autoComplete="tel"
-                  aria-describedby="contact-hint"
-                />
-              </div>
-            </div>
-
-            <p id="contact-hint" className="feedback-supporting-text">
-              {t.feedbackContactHint ||
-                (isUz
-                  ? "Javob olishni istasangiz, email yoki telefon raqamingizdan kamida bittasini kiriting."
-                  : isRu
-                  ? "Если хотите получить ответ, укажите email или номер телефона."
-                  : "If you wish to receive a reply, please provide your email or phone number.")}
-            </p>
+            </section>
           </div>
-        </section>
-
-        {/* 3. XABAR */}
-        <section className="feedback-section" aria-labelledby="section-message-title">
-          <h2 id="section-message-title" className="feedback-section-title">
-            {t.feedbackSectionMessage || (isUz ? "Xabar" : isRu ? "Сообщение" : "Message")}
-          </h2>
-
-          <div className="feedback-fields-stack">
-            {/* Xabar matni */}
-            <div className="feedback-form-group">
-              <label htmlFor="feedback-message" className="feedback-label">
-                <span>{t.feedbackMessage || (isUz ? "Xabar matni" : isRu ? "Текст сообщения" : "Message text")}</span>
-                <span className="required-mark" aria-hidden="true">*</span>
-              </label>
-              <textarea
-                id="feedback-message"
-                value={message}
-                onChange={(e) => {
-                  setMessage(e.target.value);
-                  if (validationErrors.message) {
-                    setValidationErrors((prev) => ({ ...prev, message: "" }));
-                  }
-                }}
-                placeholder={t.feedbackMessagePlaceholder || (isUz ? "Savolingiz, taklifingiz yoki tuzatishingizni batafsil yozing..." : isRu ? "Подробно опишите вопрос, предложение или исправление..." : "Write your question, proposal, or correction in detail...")}
-                className={`feedback-textarea ${validationErrors.message ? "has-error" : ""}`}
-                rows={6}
-                maxLength={3000}
-                required
-                aria-required="true"
-                aria-invalid={Boolean(validationErrors.message)}
-                aria-describedby="message-counter message-error"
-              />
-              <div className="feedback-textarea-footer">
-                {validationErrors.message ? (
-                  <span id="message-error" className="feedback-field-error" role="alert">
-                    {validationErrors.message}
-                  </span>
-                ) : (
-                  <span />
-                )}
-                <span id="message-counter" className="feedback-char-count">
-                  {message.length} / 3000
-                </span>
-              </div>
-            </div>
-
-            {/* Privacy Note */}
-            <div className="feedback-privacy-note">
-              <p>
-                {t.feedbackPrivacyNote ||
-                  (isUz
-                    ? "Murojaatingiz universitet ma’muriyati tomonidan ko‘rib chiqiladi. Aloqa ma’lumotingiz faqat javob berish uchun ishlatiladi."
-                    : isRu
-                    ? "Ваше обращение будет рассмотрено администрацией университета. Контактные данные используются исключительно для ответа."
-                    : "Your request will be reviewed by the university administration. Contact details are used only to respond to your inquiry.")}{" "}
-                <Link href="/privacy" className="feedback-privacy-link">
-                  {t.feedbackPrivacyLink || (isUz ? "Maxfiylik siyosati" : isRu ? "Политика конфиденциальности" : "Privacy Policy")}
-                </Link>
-                .
-              </p>
-            </div>
-
-            {/* Submit Button */}
-            <div className="feedback-actions">
-              <button
-                type="submit"
-                disabled={loading}
-                className="feedback-submit-button"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 size={18} className="spin-icon" aria-hidden="true" />
-                    <span>{t.feedbackSending || (isUz ? "Yuborilmoqda..." : isRu ? "Отправка..." : "Sending...")}</span>
-                  </>
-                ) : (
-                  <>
-                    <Send size={18} aria-hidden="true" />
-                    <span>{t.feedbackSubmit || (isUz ? "Murojaat yuborish" : isRu ? "Отправить обращение" : "Submit Request")}</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </section>
+        </div>
       </form>
     </div>
   );

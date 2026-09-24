@@ -1,6 +1,6 @@
 "use client";
 
-import { Lock, Search, Sparkles, X } from "lucide-react";
+import { Heart, Lock, Search, X } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { authSession } from "@/lib/auth";
@@ -131,10 +131,10 @@ export function InterviewFilters({
         {isAuthenticated ? (
           <button
             type="button"
-            className={`interview-pill ${currentFeatured ? "active" : ""}`}
+            className={`interview-pill interview-pill-heart ${currentFeatured ? "active" : ""}`}
             onClick={() => applyParams({ featured: currentFeatured ? null : "true" })}
           >
-            <Sparkles size={13} aria-hidden="true" />
+            <Heart size={13} aria-hidden="true" className={`interview-heart-icon ${currentFeatured ? "filled" : ""}`} />
             <span>{translations.featuredInterviews}</span>
           </button>
         ) : (
@@ -153,7 +153,8 @@ export function InterviewFilters({
                     : "Faqat ro‘yxatdan o‘tgan foydalanuvchilar uchun"
                 }
               >
-                <Lock size={12} className="interview-lock-icon" aria-hidden="true" />
+                <Heart size={12} className="interview-heart-icon" aria-hidden="true" />
+                <Lock size={10} className="interview-lock-icon" aria-hidden="true" />
                 <span>{translations.featuredInterviews}</span>
               </button>
             }

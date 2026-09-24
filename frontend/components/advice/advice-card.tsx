@@ -17,7 +17,7 @@ export function AdviceCard({ advice, locale }: { advice: Advice; locale: Locale 
     .slice(0, 2)
     .join("");
 
-  const avatarSrc = `/images/faxriylar/${alumnus.slug}.png` || alumnus.image_url || alumnus.avatar;
+  const avatarSrc = alumnus.avatar || alumnus.image_url || (alumnus.slug ? `/images/faxriylar/${alumnus.slug}.webp` : undefined);
 
   const viewProfileText =
     locale === "en"

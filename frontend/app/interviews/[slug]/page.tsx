@@ -78,7 +78,7 @@ export default async function InterviewDetailPage({
             <Link href={`/alumni/${alumnus.slug}`} className="interview-detail-avatar-wrap">
               <RemoteImage
                 className="interview-detail-avatar"
-                src={alumnus.image_url || alumnus.avatar || `/images/faxriylar/${alumnus.slug}.png`}
+                src={alumnus.avatar || alumnus.image_url || (alumnus.slug ? `/images/faxriylar/${alumnus.slug}.webp` : undefined)}
                 slug={alumnus.slug}
                 alt={`${alumnus.full_name} portreti`}
                 fallback={initials}

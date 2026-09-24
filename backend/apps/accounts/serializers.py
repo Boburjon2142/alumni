@@ -10,7 +10,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ("id", "email", "role", "full_name", "avatar", "slug")
+        fields = ("id", "email", "role", "full_name", "avatar", "slug", "is_staff", "is_superuser")
 
     def get_full_name(self, obj):
         if hasattr(obj, "alumni_profile") and obj.alumni_profile:

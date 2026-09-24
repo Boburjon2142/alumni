@@ -10,7 +10,7 @@ export default async function Page() {
   const locale = await getLocale();
   return (
     <main className="min-h-screen bg-[#F8F9FC] py-8 md:py-12">
-      <div className="container max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="profile-edit-wide-container">
         <EditProfilePage locale={locale} />
       </div>
     </main>

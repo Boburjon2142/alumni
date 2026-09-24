@@ -255,14 +255,29 @@ class MeView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self, request):
-        try:
-            return (
-                AlumniProfile.objects.select_related("faculty", "specialty", "user")
-                .prefetch_related("educations", "work_experiences", "graduation_year_requests")
-                .get(user=request.user)
+        profile = (
+            AlumniProfile.objects.select_related("faculty", "specialty", "user")
+            .prefetch_related("educations", "work_experiences", "graduation_year_requests")
+            .filter(user=request.user)
+            .first()
+        )
+        if not profile:
+            if request.user.email:
+                profile = AlumniProfile.objects.filter(contact_email__iexact=request.user.email).first()
+                if profile:
+                    profile.user = request.user
+                    profile.save(update_fields=["user"])
+                    return profile
+
+            full_name = f"{request.user.first_name} {request.user.last_name}".strip() or request.user.email.split("@")[0].capitalize()
+            profile = AlumniProfile.objects.create(
+                user=request.user,
+                full_name=full_name,
+                contact_email=request.user.email,
+                approval_status=AlumniProfile.ApprovalStatus.PENDING,
+                is_published=False,
             )
-        except AlumniProfile.DoesNotExist:
-            raise NotFound("Bitiruvchi profili topilmadi.")
+        return profile
 
     def get(self, request):
         return Response({"success": True, "data": OwnAlumniSerializer(self.get_object(request)).data})
@@ -320,7 +335,7 @@ class FeaturedListView(generics.ListAPIView):
             is_active=True,
             alumni__is_published=True,
             alumni__approval_status=AlumniProfile.ApprovalStatus.APPROVED,
-        ).select_related("alumni", "alumni__faculty", "alumni__specialty")[:12]
+        ).select_related("alumni", "alumni__faculty", "alumni__specialty").order_by("display_order", "id")[:12]
 
 
 

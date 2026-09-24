@@ -49,7 +49,7 @@ class EducationExperienceSerializer(serializers.ModelSerializer):
 class WorkExperienceSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkExperience
-        fields = ("id", "region", "company", "position", "start_year", "end_year", "is_current", "order")
+        fields = ("id", "region", "company", "position", "industry", "start_year", "end_year", "is_current", "order")
 
 class GraduationYearChangeRequestSerializer(serializers.ModelSerializer):
     status_display = serializers.CharField(source="get_status_display", read_only=True)
@@ -254,6 +254,7 @@ class OwnAlumniSerializer(serializers.ModelSerializer):
                         region=exp_data.get("region", "").strip(),
                         company=exp_data.get("company", "").strip(),
                         position=exp_data.get("position", "").strip(),
+                        industry=exp_data.get("industry", "").strip(),
                         start_year=exp_data.get("start_year"),
                         end_year=exp_data.get("end_year"),
                         is_current=exp_data.get("is_current", False) or exp_data.get("end_year") is None,

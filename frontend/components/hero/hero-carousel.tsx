@@ -15,7 +15,18 @@ export function HeroCarousel() {
       <picture className="hero-responsive-picture">
         {heroVariants.map(({ minWidth, width, height }) => (
           <source
-            key={width}
+            key={`webp-${width}`}
+            type="image/webp"
+            media={`(min-width: ${minWidth}px)`}
+            srcSet={`/images/hero/profiles/hero-${width}x${height}.webp`}
+            width={width}
+            height={height}
+          />
+        ))}
+        {heroVariants.map(({ minWidth, width, height }) => (
+          <source
+            key={`png-${width}`}
+            type="image/png"
             media={`(min-width: ${minWidth}px)`}
             srcSet={`/images/hero/profiles/hero-${width}x${height}.png`}
             width={width}
@@ -23,12 +34,13 @@ export function HeroCarousel() {
           />
         ))}
         <img
-          src="/images/hero/profiles/hero-360x800.png"
+          src="/images/hero/profiles/hero-360x800.webp"
           width={360}
           height={800}
           alt="Qarshi davlat universiteti faxriy bitiruvchilari"
           fetchPriority="high"
           loading="eager"
+          decoding="async"
           className="hero-responsive-img"
         />
       </picture>
