@@ -47,7 +47,7 @@ class AlumniProfile(models.Model):
     class Visibility(models.TextChoices):
         PUBLIC="public", "Ommaviy"; ALUMNI="alumni", "Faqat bitiruvchilar"; UNIVERSITY="university", "Faqat universitet"; PRIVATE="private", "Yopiq"
     user = models.OneToOneField(settings.AUTH_USER_MODEL, null=True, blank=True, on_delete=models.SET_NULL, related_name="alumni_profile")
-    full_name = models.CharField(max_length=160)
+    full_name = models.CharField(max_length=160, unique=True)
     slug = models.SlugField(max_length=180, unique=True, blank=True)
     avatar = models.ImageField(upload_to=avatar_path, blank=True, validators=[FileExtensionValidator(["jpg", "jpeg", "png", "webp"]), validate_avatar_size])
     image_url = models.URLField(max_length=700, blank=True, validators=[validate_unsplash_image_url])
@@ -124,6 +124,7 @@ from django.dispatch import receiver
 def clear_alumni_cache(sender, **kwargs):
     from common.cache_utils import invalidate_cache_prefix
     invalidate_cache_prefix("api:alumni")
+    invalidate_cache_prefix("api:graduation_group")
     invalidate_cache_prefix("api:stats")
     invalidate_cache_prefix("api:impact")
 
@@ -309,5 +310,4 @@ class AlumniRecognition(models.Model):
 
     def __str__(self):
         return f"{self.alumnus.full_name} — {self.title.name}"
-
 

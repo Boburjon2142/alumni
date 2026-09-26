@@ -65,16 +65,13 @@ export function AlumniForm({
   const [countdown, setCountdown] = useState(0);
   const [codeError, setCodeError] = useState<string | null>(null);
   const [consentAlert, setConsentAlert] = useState<string | null>(null);
+  const [isVerifyModalOpen, setIsVerifyModalOpen] = useState(false);
 
   // Status & Error States
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [submitting, setSubmitting] = useState(false);
+  const [successData, setSuccessData] = useState<{ id: number; fullName: string; email: string } | null>(null);
   const [generalError, setGeneralError] = useState<string | null>(null);
-  const [successData, setSuccessData] = useState<{
-    id: number;
-    fullName: string;
-    email: string;
-  } | null>(null);
 
   // Countdown timer effect
   useEffect(() => {
@@ -90,30 +87,34 @@ export function AlumniForm({
     setGeneralError(null);
     setConsentAlert(null);
 
-    // Strict Consent Enforcement
-    if (!consentAccepted) {
-      setConsentAlert(
+    const errors: Record<string, string> = {};
+    if (!fullName.trim() || fullName.trim().length < 3) {
+      errors.fullName =
         locale === "en"
-          ? "Attention: You must agree to the terms of personal data processing before requesting a verification code!"
+          ? "Full name must be at least 3 characters."
           : locale === "ru"
-          ? "Внимание: Вы должны согласиться с условиями обработки персональных данных перед запросом кода подтверждения!"
-          : "Diqqat: Tasdiqlash kodini olishdan oldin shaxsiy ma’lumotlarni qayta ishlash shartlariga rozilik bildirishingiz shart!"
-      );
-      setFieldErrors((prev) => ({ ...prev, consent: t.consentRequiredError }));
-      return;
+          ? "Введите полное имя (не менее 3 символов)."
+          : "F.I.Sh. kamida 3 ta belgidan iborat bo‘lishi kerak.";
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!contactEmail.trim() || !emailRegex.test(contactEmail.trim())) {
-      setFieldErrors((prev) => ({
-        ...prev,
-        contactEmail:
-          locale === "en"
-            ? "Please enter a valid email address."
-            : locale === "ru"
-            ? "Введите корректный адрес электронной почты."
-            : "Iltimos, to‘g‘ri elektron pochta manzilini kiriting.",
-      }));
+      errors.contactEmail =
+        locale === "en"
+          ? "Please enter a valid email address."
+          : locale === "ru"
+          ? "Введите корректный адрес электронной почты."
+          : "Iltimos, to‘g‘ri elektron pochta manzilini kiriting.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors((prev) => ({ ...prev, ...errors }));
+      return;
+    }
+
+    setFieldErrors({});
+    if (!consentAccepted) {
+      setIsVerifyModalOpen(true);
       return;
     }
 
@@ -123,11 +124,14 @@ export function AlumniForm({
       if (res.success) {
         setCodeSent(true);
         setCountdown(res.cooldown_seconds || 60);
+        setIsVerifyModalOpen(true);
       } else {
         setCodeError(res.message || "Kodni yuborishda xatolik yuz berdi.");
+        setIsVerifyModalOpen(true);
       }
     } catch (err: any) {
       setCodeError(err.message || "Tasdiqlash kodini yuborishda xatolik yuz berdi.");
+      setIsVerifyModalOpen(true);
     } finally {
       setSendingCode(false);
     }
@@ -135,6 +139,16 @@ export function AlumniForm({
 
   const handleVerifyCode = async () => {
     setCodeError(null);
+    if (!consentAccepted) {
+      setCodeError(
+        locale === "en"
+          ? "Please accept the personal data processing terms."
+          : locale === "ru"
+          ? "Пожалуйста, подтвердите согласие на обработку персональных данных."
+          : "Iltimos, shaxsiy ma’lumotlarni qayta ishlash shartlariga rozilik bildiring."
+      );
+      return;
+    }
     if (!verificationCode.trim() || verificationCode.trim().length !== 6) {
       setCodeError(
         locale === "en"
@@ -148,14 +162,36 @@ export function AlumniForm({
 
     setVerifyingCode(true);
     try {
-      const res = await verifyEmailCode(
+      const res = isEmailVerified ? { verified: true, message: "" } : await verifyEmailCode(
         contactEmail.trim().toLowerCase(),
         verificationCode.trim(),
         "join"
       );
       if (res.verified) {
         setIsEmailVerified(true);
-        setCodeError(null);
+        // Avtomatik ro'yxatdan o'tish (anketani topshirish)
+        try {
+          const formData = new FormData();
+          formData.append("full_name", fullName.trim());
+          formData.append("contact_email", contactEmail.trim().toLowerCase());
+          formData.append("consent_accepted", "true");
+          formData.append("verification_code", verificationCode.trim());
+
+          const subRes = await submitAlumni(formData);
+          if (subRes.success && subRes.data) {
+            setIsVerifyModalOpen(false);
+            setSuccessData({
+              id: subRes.data.id,
+              fullName: subRes.data.full_name,
+              email: contactEmail.trim().toLowerCase(),
+            });
+            return;
+          } else {
+            setCodeError("Ro‘yxatdan o‘tishda xatolik yuz berdi.");
+          }
+        } catch (subErr: any) {
+          setCodeError(subErr.message || "Ro‘yxatdan o‘tishda xatolik yuz berdi.");
+        }
       } else {
         setCodeError(res.message || "Tasdiqlash kodi noto‘g‘ri.");
       }
@@ -169,20 +205,7 @@ export function AlumniForm({
   const handleGoogleAuth = () => {
     setConsentAlert(null);
     setGeneralError(null);
-
-    // Strict Consent Enforcement
-    if (!consentAccepted) {
-      setConsentAlert(
-        locale === "en"
-          ? "Attention: You must agree to the terms of personal data processing before continuing with Google!"
-          : locale === "ru"
-          ? "Внимание: Вы должны согласиться с условиями обработки персональных данных перед входом через Google!"
-          : "Diqqat: Google orqali davom etishdan oldin shaxsiy ma’lumotlarni qayta ishlash shartlariga rozilik bildirishingiz shart!"
-      );
-      setFieldErrors((prev) => ({ ...prev, consent: t.consentRequiredError }));
-      return;
-    }
-
+    setConsentAccepted(true);
   };
 
   const validate = () => {
@@ -206,22 +229,6 @@ export function AlumniForm({
           : "Iltimos, to‘g‘ri elektron pochta manzilini kiriting.";
     }
 
-    if (!consentAccepted) {
-      errors.consent = t.consentRequiredError;
-      setConsentAlert(
-        locale === "en"
-          ? "Attention: You must agree to the terms of personal data processing before submitting your application!"
-          : locale === "ru"
-          ? "Внимание: Вы должны согласиться с условиями обработки персональных данных для отправки анкеты!"
-          : "Diqqat: Anketani yuborishdan oldin shaxsiy ma’lumotlarni qayta ishlash shartlariga rozilik bildirishingiz shart!"
-      );
-    }
-
-    if (codeSent && !isEmailVerified && verificationCode.trim().length !== 6) {
-      errors.verificationCode = "Emailingizga yuborilgan 6 xonali tasdiqlash kodini kiriting.";
-    }
-
-    if (!isEmailVerified) errors.verificationCode = "Avval emailingizga yuborilgan kodni tasdiqlang.";
     setFieldErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -232,29 +239,39 @@ export function AlumniForm({
 
     if (!validate()) return;
 
-    setSubmitting(true);
-    try {
-      const formData = new FormData();
-      formData.append("full_name", fullName.trim());
-      formData.append("contact_email", contactEmail.trim().toLowerCase());
-      formData.append("consent_accepted", String(consentAccepted));
-      if (verificationCode) {
-        formData.append("verification_code", verificationCode.trim());
-      }
+    if (isEmailVerified) {
+      setSubmitting(true);
+      try {
+        const formData = new FormData();
+        formData.append("full_name", fullName.trim());
+        formData.append("contact_email", contactEmail.trim().toLowerCase());
+        formData.append("consent_accepted", "true");
+        if (verificationCode) {
+          formData.append("verification_code", verificationCode.trim());
+        }
 
-      const res = await submitAlumni(formData);
-      if (res.success && res.data) {
-        setSuccessData({
-          id: res.data.id,
-          fullName: res.data.full_name,
-          email: contactEmail.trim().toLowerCase(),
-        });
+        const res = await submitAlumni(formData);
+        if (res.success && res.data) {
+          setSuccessData({
+            id: res.data.id,
+            fullName: res.data.full_name,
+            email: contactEmail.trim().toLowerCase(),
+          });
+        }
+      } catch (err: any) {
+        setGeneralError(err.message || "Xatolik yuz berdi. Iltimos qaytadan urinib ko‘ring.");
+      } finally {
+        setSubmitting(false);
       }
-    } catch (err: any) {
-      setGeneralError(err.message || "Xatolik yuz berdi. Iltimos qaytadan urinib ko‘ring.");
-    } finally {
-      setSubmitting(false);
+      return;
     }
+
+    if (codeSent) {
+      setIsVerifyModalOpen(true);
+      return;
+    }
+
+    await handleSendCode();
   };
 
   // SUCCESS STATE
@@ -422,8 +439,15 @@ export function AlumniForm({
                 className={`button ${
                   isEmailVerified ? "button-verified" : "button-secondary"
                 } send-code-btn`}
-                onClick={handleSendCode}
-                disabled={sendingCode || countdown > 0 || isEmailVerified}
+                onClick={() => {
+                  if (isEmailVerified) return;
+                  if (codeSent && !isEmailVerified) {
+                    setIsVerifyModalOpen(true);
+                    return;
+                  }
+                  handleSendCode();
+                }}
+                disabled={sendingCode || isEmailVerified}
                 title={isEmailVerified ? "Email tasdiqlangan" : "Tasdiqlash kodini yuborish"}
               >
                 {sendingCode ? (
@@ -434,10 +458,12 @@ export function AlumniForm({
                   <>
                     <CheckCircle2 size={16} /> Tasdiqlangan
                   </>
-                ) : countdown > 0 ? (
-                  `${countdown}s qayta yuborish`
                 ) : codeSent ? (
-                  "Kodni qayta olish"
+                  countdown > 0 ? (
+                    `Kodni kiritish (${countdown}s)`
+                  ) : (
+                    "Kodni kiritish"
+                  )
                 ) : (
                   "Kodni olish"
                 )}
@@ -446,200 +472,242 @@ export function AlumniForm({
             {fieldErrors.contactEmail && (
               <p className="field-error" role="alert">{fieldErrors.contactEmail}</p>
             )}
-            {codeError && <p id="email-code-error" className="field-error" role="alert">{codeError}</p>}
+            {codeError && !isVerifyModalOpen && <p id="email-code-error" className="field-error" role="alert">{codeError}</p>}
           </div>
         </div>
       </div>
 
-      {/* 2. EMAIL TASDIG'I VA ROZILIK */}
-      <div className="join-form-section">
-        <h3 className="join-section-title">
-          {locale === "en"
-            ? "2. Verification & Consent"
-            : locale === "ru"
-            ? "2. Подтверждение и согласие"
-            : "2. Email tasdig‘i va rozilik"}
-        </h3>
-
-        {/* OTP Verification Box (shown if code was sent and email not yet verified) */}
-        {codeSent && !isEmailVerified && (
-          <div className="otp-verification-card" role="region" aria-label="Email tasdiqlash">
-            <div className="otp-card-header">
-              <KeyRound size={18} className="otp-card-icon" />
-              <div>
-                <h4 className="otp-card-title">Tasdiqlash kodini kiriting</h4>
-                <p className="otp-card-desc">
-                  <strong>{contactEmail}</strong> manziliga 6 xonali tasdiqlash kodi yuborildi.
+      {/* 2. EMAIL TASDIG'I VA ROZILIK MODAL OYNASI */}
+      <Dialog.Root open={isVerifyModalOpen} onOpenChange={setIsVerifyModalOpen}>
+        <Dialog.Portal>
+          <Dialog.Overlay className="terms-dialog-overlay" />
+          <Dialog.Content className="terms-dialog auth-modal-content" aria-describedby={undefined}>
+            <div className="terms-dialog-heading">
+              <div className="auth-dialog-title-wrapper">
+                <Dialog.Title className="auth-dialog-title">
+                  {locale === "en"
+                    ? "2. Verification & Consent"
+                    : locale === "ru"
+                    ? "2. Подтверждение и согласие"
+                    : "2. Email tasdig‘i va rozilik"}
+                </Dialog.Title>
+                <p className="auth-dialog-subtitle">
+                  {contactEmail && codeSent ? (
+                    <>
+                      <strong>{contactEmail}</strong> manziliga 6 xonali tasdiqlash kodi yuborildi.
+                    </>
+                  ) : (
+                    "Shartlarga rozilik bildiring va tasdiqlash kodini oling."
+                  )}
                 </p>
               </div>
-            </div>
-            <div className="otp-card-input-row">
-              <input
-                id="verification-code-input"
-                type="text"
-                inputMode="numeric"
-                pattern="[0-9]*"
-                maxLength={6}
-                className="form-input otp-code-input"
-                placeholder="123456"
-                value={verificationCode}
-                onChange={(e) => {
-                  setVerificationCode(e.target.value.replace(/\D/g, "").slice(0, 6));
-                  setCodeError(null);
-                }}
-                aria-label="Tasdiqlash kodi"
-              />
-              <button
-                type="button"
-                className="button button-primary otp-verify-button"
-                onClick={handleVerifyCode}
-                disabled={verifyingCode || verificationCode.length !== 6}
+              <Dialog.Close
+                className="terms-dialog-close"
+                aria-label={locale === "en" ? "Close" : locale === "ru" ? "Закрыть" : "Yopish"}
+                onClick={() => setIsVerifyModalOpen(false)}
               >
-                {verifyingCode ? (
-                  <>
-                    <span className="spinner" aria-hidden="true" /> Tekshirilmoqda...
-                  </>
-                ) : (
-                  "Kodni tasdiqlash"
-                )}
-              </button>
+                <X aria-hidden="true" />
+              </Dialog.Close>
             </div>
-            <div className="otp-resend-row">
-              {countdown > 0 ? (
-                <span className="otp-countdown-text">Kodni qayta yuborish: {countdown} soniya</span>
-              ) : (
+
+            <div className="auth-modal-body">
+              {codeError && (
+                <div
+                  className="auth-modal-error"
+                  role="alert"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    background: "#fef2f2",
+                    border: "1px solid #fee2e2",
+                    borderRadius: "8px",
+                    padding: "10px 14px",
+                    color: "#b91c1c",
+                    fontSize: "13.5px",
+                  }}
+                >
+                  <AlertCircle size={16} style={{ flexShrink: 0 }} />
+                  <span>{codeError}</span>
+                </div>
+              )}
+
+              {/* OTP Input and Verify Button */}
+              <div className="otp-card-input-row" style={{ display: "flex", gap: "10px", alignItems: "center", justifyContent: "center" }}>
+                {codeSent && <input
+                  id="modal-verification-code-input"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={6}
+                  className="form-input otp-code-input"
+                  placeholder="123456"
+                  value={verificationCode}
+                  autoFocus
+                  onChange={(e) => {
+                    const val = e.target.value.replace(/\D/g, "").slice(0, 6);
+                    setVerificationCode(val);
+                    setCodeError(null);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && verificationCode.length === 6 && !verifyingCode) {
+                      e.preventDefault();
+                      handleVerifyCode();
+                    }
+                  }}
+                  aria-label="Tasdiqlash kodi"
+                />}
                 <button
                   type="button"
-                  className="text-link-btn"
-                  onClick={handleSendCode}
-                  disabled={sendingCode}
+                  className="button button-primary otp-verify-button"
+                  onClick={codeSent ? handleVerifyCode : handleSendCode}
+                  disabled={verifyingCode || sendingCode || !consentAccepted || (codeSent && verificationCode.length !== 6)}
                 >
-                  <RotateCw size={13} /> Kodni qayta yuborish
+                  {verifyingCode ? (
+                    <>
+                      <span className="spinner" aria-hidden="true" /> Tekshirilmoqda...
+                    </>
+                  ) : (
+                    codeSent ? "Kodni tasdiqlash" : "Kodni olish"
+                  )}
                 </button>
-              )}
-            </div>
-          </div>
-        )}
+              </div>
 
-        {/* Email Verified Badge */}
-        {isEmailVerified && (
-          <div className="email-verified-badge" role="status">
-            <ShieldCheck size={18} className="text-emerald-600" />
-            <span>Email muvaffaqiyatli tasdiqlandi (shaxsiyatingiz tasdiqlangan).</span>
-          </div>
-        )}
-
-
-
-        {fieldErrors.verificationCode && <p role="alert" className="field-error">{fieldErrors.verificationCode}</p>}
-        <div className="anketa-consent">
-          <Dialog.Root>
-            <div className={`consent-checkbox-label ${fieldErrors.consent ? "has-error" : ""}`}>
-              <input
-                id="consent-checkbox-input"
-                type="checkbox"
-                checked={consentAccepted}
-                disabled={submitting}
-                aria-invalid={!!fieldErrors.consent}
-                aria-describedby={fieldErrors.consent ? "consent-error" : undefined}
-                onChange={(event) => {
-                  setConsentAccepted(event.target.checked);
-                  setFieldErrors((previous) => ({ ...previous, consent: "" }));
-                  if (event.target.checked) {
-                    setConsentAlert(null);
-                  }
-                }}
-              />
-              <span className="checkbox-text">
-                {locale === "en" ? (
-                  <>
-                    <label htmlFor="consent-checkbox-input" className="checkbox-label-text">
-                      I agree to the personal data processing{" "}
-                    </label>
-                    <Dialog.Trigger asChild>
-                      <button
-                        type="button"
-                        className="terms-inline-link"
-                      >
-                        terms
-                      </button>
-                    </Dialog.Trigger>
-                    <label htmlFor="consent-checkbox-input" className="checkbox-label-text">
-                      .
-                    </label>
-                  </>
-                ) : locale === "ru" ? (
-                  <>
-                    <label htmlFor="consent-checkbox-input" className="checkbox-label-text">
-                      Я даю согласие на обработку моих персональных данных на указанных{" "}
-                    </label>
-                    <Dialog.Trigger asChild>
-                      <button
-                        type="button"
-                        className="terms-inline-link"
-                      >
-                        условиях
-                      </button>
-                    </Dialog.Trigger>
-                    <label htmlFor="consent-checkbox-input" className="checkbox-label-text">
-                      .
-                    </label>
-                  </>
+              {codeSent && <div className="otp-resend-row" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: "13px" }}>
+                {countdown > 0 ? (
+                  <span className="otp-countdown-text" style={{ color: "#64748b" }}>
+                    Kodni qayta yuborish: <strong>{countdown} soniya</strong>
+                  </span>
                 ) : (
-                  <>
-                    <label htmlFor="consent-checkbox-input" className="checkbox-label-text">
-                      Shaxsiy ma’lumotlarimni{" "}
-                    </label>
-                    <Dialog.Trigger asChild>
-                      <button
-                        type="button"
-                        className="terms-inline-link"
-                      >
-                        shartlar
-                      </button>
-                    </Dialog.Trigger>
-                    <label htmlFor="consent-checkbox-input" className="checkbox-label-text">
-                      {" "}asosida qayta ishlanishiga rozilik bildiraman.
-                    </label>
-                  </>
+                  <button
+                    type="button"
+                    className="text-link-btn"
+                    onClick={handleSendCode}
+                    disabled={sendingCode}
+                    style={{
+                      background: "none",
+                      border: "none",
+                      color: "#0d1667",
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    <RotateCw size={13} /> Kodni qayta yuborish
+                  </button>
                 )}
-              </span>
+              </div>}
+
+              {/* Consent Section inside Modal */}
+              <div className="anketa-consent" style={{ marginTop: "6px", paddingTop: "14px", borderTop: "1px solid #e2e8f0" }}>
+                <div className={`consent-checkbox-label ${fieldErrors.consent ? "has-error" : ""}`}>
+                  <input
+                    id="modal-consent-checkbox-input"
+                    type="checkbox"
+                    checked={consentAccepted}
+                    disabled={submitting}
+                    aria-invalid={!!fieldErrors.consent}
+                    onChange={(event) => {
+                      setConsentAccepted(event.target.checked);
+                      setFieldErrors((previous) => ({ ...previous, consent: "" }));
+                    }}
+                  />
+                  <span className="checkbox-text" style={{ fontSize: "13px" }}>
+                    {locale === "en" ? (
+                      <>
+                        <label htmlFor="modal-consent-checkbox-input" className="checkbox-label-text">
+                          I agree to the personal data processing{" "}
+                        </label>
+                        <Dialog.Root>
+                          <Dialog.Trigger asChild>
+                            <button type="button" className="terms-inline-link">terms</button>
+                          </Dialog.Trigger>
+                          <Dialog.Portal>
+                            <Dialog.Overlay className="terms-dialog-overlay" />
+                            <Dialog.Content className="terms-dialog" aria-describedby={undefined}>
+                              <div className="terms-dialog-heading">
+                                <Dialog.Title>{t.consentTitle}</Dialog.Title>
+                                <Dialog.Close className="terms-dialog-close"><X aria-hidden="true" /></Dialog.Close>
+                              </div>
+                              <div className="terms-dialog-body"><TermsContent locale={locale} /></div>
+                            </Dialog.Content>
+                          </Dialog.Portal>
+                        </Dialog.Root>
+                        .
+                      </>
+                    ) : locale === "ru" ? (
+                      <>
+                        <label htmlFor="modal-consent-checkbox-input" className="checkbox-label-text">
+                          Я даю согласие на обработку моих персональных данных на указанных{" "}
+                        </label>
+                        <Dialog.Root>
+                          <Dialog.Trigger asChild>
+                            <button type="button" className="terms-inline-link">условиях</button>
+                          </Dialog.Trigger>
+                          <Dialog.Portal>
+                            <Dialog.Overlay className="terms-dialog-overlay" />
+                            <Dialog.Content className="terms-dialog" aria-describedby={undefined}>
+                              <div className="terms-dialog-heading">
+                                <Dialog.Title>{t.consentTitle}</Dialog.Title>
+                                <Dialog.Close className="terms-dialog-close"><X aria-hidden="true" /></Dialog.Close>
+                              </div>
+                              <div className="terms-dialog-body"><TermsContent locale={locale} /></div>
+                            </Dialog.Content>
+                          </Dialog.Portal>
+                        </Dialog.Root>
+                        .
+                      </>
+                    ) : (
+                      <>
+                        <label htmlFor="modal-consent-checkbox-input" className="checkbox-label-text">
+                          Shaxsiy ma’lumotlarimni{" "}
+                        </label>
+                        <Dialog.Root>
+                          <Dialog.Trigger asChild>
+                            <button type="button" className="terms-inline-link">shartlar</button>
+                          </Dialog.Trigger>
+                          <Dialog.Portal>
+                            <Dialog.Overlay className="terms-dialog-overlay" />
+                            <Dialog.Content className="terms-dialog" aria-describedby={undefined}>
+                              <div className="terms-dialog-heading">
+                                <Dialog.Title>{t.consentTitle}</Dialog.Title>
+                                <Dialog.Close className="terms-dialog-close"><X aria-hidden="true" /></Dialog.Close>
+                              </div>
+                              <div className="terms-dialog-body"><TermsContent locale={locale} /></div>
+                            </Dialog.Content>
+                          </Dialog.Portal>
+                        </Dialog.Root>
+                        {" "}asosida qayta ishlanishiga rozilik bildiraman.
+                      </>
+                    )}
+                  </span>
+                </div>
+              </div>
             </div>
-
-            <Dialog.Portal>
-              <Dialog.Overlay className="terms-dialog-overlay" />
-              <Dialog.Content className="terms-dialog" aria-describedby={undefined}>
-                <div className="terms-dialog-heading">
-                  <Dialog.Title>{t.consentTitle}</Dialog.Title>
-                  <Dialog.Close className="terms-dialog-close" aria-label={locale === "en" ? "Close" : locale === "ru" ? "Закрыть" : "Yopish"}>
-                    <X aria-hidden="true" />
-                  </Dialog.Close>
-                </div>
-                <div className="terms-dialog-body">
-                  <TermsContent locale={locale} />
-                </div>
-              </Dialog.Content>
-            </Dialog.Portal>
-          </Dialog.Root>
-
-          {fieldErrors.consent && (
-            <p id="consent-error" className="field-error-message" role="alert">
-              {fieldErrors.consent}
-            </p>
-          )}
-        </div>
-      </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Dialog.Root>
 
       {/* Submit Actions */}
       <div className="form-actions-row">
           <button
             type="submit"
             className="button button-primary submit-anketa-btn"
-            disabled={submitting}
+            disabled={submitting || sendingCode}
           >
             {submitting ? (
               <>
                 <span className="spinner" aria-hidden="true" /> {t.formSubmittingBtn}
+              </>
+            ) : sendingCode ? (
+              <>
+                <span className="spinner" aria-hidden="true" /> Yuborilmoqda...
+              </>
+            ) : codeSent && !isEmailVerified ? (
+              <>
+                Kodni kiritish va ro‘yxatdan o‘tish <ArrowRight size={16} />
               </>
             ) : (
               <>
@@ -654,25 +722,7 @@ export function AlumniForm({
             </span>
           </div>
 
-          {consentAccepted ? (
-            <GoogleSignInButton locale={locale} onSuccess={(userData) => setSuccessData(userData)} />
-          ) : (
-            <button
-              type="button"
-              className="google-auth-button google-auth-button-inline"
-              onClick={handleGoogleAuth}
-              disabled={submitting}
-            >
-              <GoogleIcon />
-              <span>
-                {locale === "en"
-                  ? "Continue with Google"
-                  : locale === "ru"
-                  ? "Войти через Google"
-                  : "Google orqali davom etish"}
-              </span>
-            </button>
-          )}
+          <GoogleSignInButton locale={locale} onSuccess={(userData) => setSuccessData(userData)} />
         </div>
       </form>
 

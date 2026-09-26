@@ -2,6 +2,7 @@ import { getStories } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import { StoryGrid } from "@/components/stories/story-grid";
 import { Button } from "@/components/ui/button";
+import styles from "./stories.module.css";
 
 export const metadata = {
   title: "Muvaffaqiyat hikoyalari — Qarshi davlat universiteti",
@@ -21,8 +22,8 @@ export default async function StoriesPage() {
   }
 
   return (
-    <div className="stories-page section">
-      <div className="container">
+    <div className={`stories-page ${styles.page}`}>
+      <div className={`container ${styles.content}`}>
         <div className="page-heading">
           <span className="eyebrow gold">{t.brand}</span>
           <h1>{t.storiesTitle}</h1>

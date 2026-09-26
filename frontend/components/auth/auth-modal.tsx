@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { authSession, signOut } from "@/lib/auth";
 import Link from "next/link";
 import * as Dialog from "@radix-ui/react-dialog";
@@ -53,6 +54,7 @@ export function AuthModal({
   t: Dictionary;
   trigger?: React.ReactNode;
 }) {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"otp" | "google">("otp");
 
@@ -126,8 +128,8 @@ export function AuthModal({
     }
   };
 
-  const handleVerifyCode = async () => {
-    if (!code.trim() || code.trim().length !== 6) {
+  const handleVerifyCode = async (codeOverride?: string) => {
+    const codeToVerify = (codeOverride ?? code).trim(); if (!codeToVerify || codeToVerify.length !== 6) {
       setError("Iltimos, 6 xonali tasdiqlash kodini to‘liq kiriting.");
       return;
     }
@@ -135,14 +137,11 @@ export function AuthModal({
     setVerifyingCode(true);
     setError(null);
     try {
-      const res = await verifyEmailCode(email.trim().toLowerCase(), code.trim(), "login");
+      const res = await verifyEmailCode(email.trim().toLowerCase(), codeToVerify, "login");
       if (res.verified && res.authenticated && res.user?.id) {
-        setLoggedInUser({
-          id: res.user.id,
-          email: email.trim().toLowerCase(),
-          fullName: res.user?.full_name || res.profile?.full_name || res.user?.username || email.split("@")[0],
-          avatar: res.user?.avatar || res.profile?.avatar,
-        });
+        window.dispatchEvent(new Event("auth-changed"));
+        setOpen(false);
+        router.push("/profile");
       }
     } catch (err: any) {
       setError(err.message || "Kod noto‘g‘ri yoki muddati o‘tgan.");
@@ -290,7 +289,7 @@ export function AuthModal({
                     <p className="auth-pane-desc">
                       Google profilingiz orqali bir bosqichda xavfsiz tizimga kiring.
                     </p>
-                    <GoogleSignInButton locale={locale} onSuccess={(userData) => setLoggedInUser(userData)} />
+                    <GoogleSignInButton locale={locale} onSuccess={() => { window.dispatchEvent(new Event("auth-changed")); setOpen(false); router.push("/profile"); }} />
                   </div>
                 ) : (
                   <div className="auth-tab-pane">
@@ -347,12 +346,19 @@ export function AuthModal({
                             className="form-input otp-code-input"
                             placeholder="123456"
                             value={code}
-                            onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
+                            onChange={(e) => {
+                              const val = e.target.value.replace(/\D/g, "").slice(0, 6);
+                              setCode(val);
+                              if (val.length === 6) {
+                                // Avtomatik kirish — tugma bosishga hojat yo'q
+                                handleVerifyCode(val);
+                              }
+                            }}
                           />
                           <button
                             type="button"
                             className="button button-primary otp-verify-button"
-                            onClick={handleVerifyCode}
+                            onClick={() => handleVerifyCode()}
                             disabled={verifyingCode || code.length !== 6}
                           >
                             {verifyingCode ? "Tekshirilmoqda..." : "Kirish"}

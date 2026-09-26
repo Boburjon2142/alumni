@@ -187,6 +187,17 @@ class OwnAlumniSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError(f"Bitirgan yil 1956 va {current_year + 1} oralig‘ida bo‘lishi kerak.")
         return value
 
+    def validate_full_name(self, value):
+        cleaned = value.strip()
+        qs = AlumniProfile.objects.filter(full_name__iexact=cleaned)
+        if self.instance:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise serializers.ValidationError(
+                f'"{cleaned}" ismi tizimda allaqachon mavjud. Bitiruvchilar orasida ismlar takrorlanmasligi kerak.'
+            )
+        return cleaned
+
     def validate_avatar(self, value):
         if not value:
             return value
@@ -209,6 +220,14 @@ class OwnAlumniSerializer(serializers.ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
+        # Completing a newly registered public profile also joins its year group.
+        year = validated_data.get("graduation_year", instance.graduation_year)
+        if (year and instance.user_id and
+                instance.approval_status == AlumniProfile.ApprovalStatus.PENDING and
+                instance.visibility == AlumniProfile.Visibility.PUBLIC):
+            validated_data["approval_status"] = AlumniProfile.ApprovalStatus.APPROVED
+            validated_data["is_published"] = True
+            validated_data["approved_at"] = timezone.now()
         educations_data = validated_data.pop("educations", None)
         work_experiences_data = validated_data.pop("work_experiences", None)
         validated_data.pop("faculty", None)
@@ -336,6 +355,14 @@ class AlumniSubmissionSerializer(serializers.ModelSerializer):
         if not value:
             raise serializers.ValidationError("Shaxsiy ma’lumotlarni qayta ishlash shartlariga rozilik bildirish majburiy.")
         return value
+
+    def validate_full_name(self, value):
+        cleaned = value.strip()
+        if AlumniProfile.objects.filter(full_name__iexact=cleaned).exists():
+            raise serializers.ValidationError(
+                f'"{cleaned}" ismi tizimda allaqachon mavjud. Bitiruvchilar orasida ismlar takrorlanmasligi kerak.'
+            )
+        return cleaned
 
     def validate_graduation_year(self, value):
         if value in (None, "", "null"):

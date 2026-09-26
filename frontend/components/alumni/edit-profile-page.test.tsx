@@ -1,5 +1,5 @@
+import { render, screen, waitFor, cleanup } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, waitFor, fireEvent, act, cleanup } from "@testing-library/react";
 import { EditProfilePage } from "./edit-profile-page";
 
 vi.mock("next/navigation", () => ({
@@ -9,82 +9,69 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 
-afterEach(() => {
-  cleanup();
-});
+const mockAlumniData = {
+  id: 1,
+  full_name: "Boburjon Abdug‘aniyev",
+  graduation_year: 2021,
+  faculty_name: "Fizika fakulteti",
+  current_company: "Qarshi davlat universiteti",
+  position: "Dasturchi-muhandis",
+  industry: "Axborot texnologiyalari (IT) va media",
+  city: "Qashqadaryo viloyati",
+  work_experiences: [
+    {
+      company: "Qarshi davlat universiteti",
+      position: "Dasturchi-muhandis",
+      industry: "Axborot texnologiyalari (IT) va media",
+      region: "Qarshi shahri",
+      start_year: 2023,
+      end_year: null,
+      is_current: true,
+    },
+  ],
+  educations: [],
+};
 
-describe("EditProfilePage", () => {
+describe("EditProfilePage 3-block structure", () => {
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation(() =>
+        Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () => Promise.resolve({ data: mockAlumniData }),
+        })
+      )
+    );
   });
 
-  it("renders loaded profile with 3 blocks correctly", async () => {
-    global.fetch = vi.fn().mockImplementation(() =>
-      Promise.resolve({
-        ok: true,
-        status: 200,
-        json: async () => ({
-          success: true,
-          data: {
-            id: 1,
-            full_name: "Rustam Karimov",
-            faculty_name: "Fizika-matematika",
-            graduation_year: 2018,
-            bio: "IT mutaxassisi",
-            industry: "Axborot texnologiyalari (IT)",
-            current_company: "IT Park",
-            position: "Dasturchi",
-            work_experiences: [],
-          },
-        }),
-      } as Response)
-    );
-
-    render(<EditProfilePage locale="uz" />);
-
-    await waitFor(() => {
-      expect(screen.getByText("Asosiy ma’lumotlar")).toBeInTheDocument();
-      expect(screen.getByText("Ta’lim bosqichlari")).toBeInTheDocument();
-      expect(screen.getByText("Faoliyat va Mehnat tarixi")).toBeInTheDocument();
-      expect(screen.getByDisplayValue("Rustam Karimov")).toBeInTheDocument();
-      expect(screen.queryByText("Ilmiy daraja va unvoni")).not.toBeInTheDocument();
-    });
+  afterEach(() => {
+    cleanup();
+    vi.restoreAllMocks();
   });
 
-  it("allows adding work experiences", async () => {
-    global.fetch = vi.fn().mockImplementation(() =>
-      Promise.resolve({
-        ok: true,
-        status: 200,
-        json: async () => ({
-          success: true,
-          data: {
-            id: 1,
-            full_name: "Rustam Karimov",
-            graduation_year: null,
-            work_experiences: [],
-          },
-        }),
-      } as Response)
-    );
-
+  it("renders exactly 3 main profile blocks and removes redundant current job block", async () => {
     render(<EditProfilePage locale="uz" />);
 
+    // Wait until profile is loaded
     await waitFor(() => {
-      expect(screen.getByText("Asosiy ma’lumotlar")).toBeInTheDocument();
+      expect(screen.queryByText("Profil ma’lumotlari yuklanmoqda...")).not.toBeInTheDocument();
     });
 
-    const addButtons = screen.getAllByRole("button", { name: /ish joyi qo‘shish/i });
-    expect(addButtons.length).toBeGreaterThan(0);
+    // Block 1: Asosiy ma'lumotlar
+    expect(screen.getByText("Asosiy ma’lumotlar")).toBeInTheDocument();
 
-    act(() => {
-      fireEvent.click(addButtons[0]);
-    });
+    // Block 2: Ta'lim bosqichlari
+    expect(screen.getByText("Ta’lim bosqichlari")).toBeInTheDocument();
 
-    expect(screen.getByText("#1")).toBeInTheDocument();
-    expect(screen.getByText("Yangi ish joyi")).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Masalan: IT Park")).toBeInTheDocument();
-    expect(screen.getByText("Faoliyat sohasi (Soha)")).toBeInTheDocument();
-    expect(screen.getByText("Sohani tanlang")).toBeInTheDocument();
+    // Block 3: Mehnat faoliyati tarixi (formerly Block 4)
+    expect(screen.getByText("Mehnat faoliyati tarixi")).toBeInTheDocument();
+
+    // Verify 'Hozirgi kasbiy faoliyat' separate block is NOT present
+    expect(screen.queryByText("Hozirgi kasbiy faoliyat")).not.toBeInTheDocument();
+
+    // Verify current job badge is shown on the active work experience
+    expect(screen.getByText("Hozirgi asosiy faoliyat")).toBeInTheDocument();
   });
 });

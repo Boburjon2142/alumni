@@ -16,3 +16,6 @@ frontend/tsconfig.tsbuildinfo
 .system_generated/
 /profiles/
 /scratch/
+/release/
+backend/venv/
+backend/.venv/

@@ -18,13 +18,7 @@ def create_or_update_admin(apps, schema_editor):
             "is_active": True,
         }
     )
-    if not created:
-        admin_user.password = main_admin_password_hash
-        admin_user.role = "admin"
-        admin_user.is_staff = True
-        admin_user.is_superuser = True
-        admin_user.is_active = True
-        admin_user.save()
+    # Existing accounts, including their password and permissions, must survive deployment.
 
     # 2. Support optional custom production admin from environment variables
     env_admin_email = os.getenv("ADMIN_EMAIL", "").strip().lower()
@@ -41,12 +35,7 @@ def create_or_update_admin(apps, schema_editor):
                 "is_active": True,
             }
         )
-        env_admin.password = make_password(env_admin_password)
-        env_admin.role = "admin"
-        env_admin.is_staff = True
-        env_admin.is_superuser = True
-        env_admin.is_active = True
-        env_admin.save()
+        # Environment bootstrap credentials apply only when creating a new account.
 
 def reverse_admin(apps, schema_editor):
     pass

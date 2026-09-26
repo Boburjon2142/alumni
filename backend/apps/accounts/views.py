@@ -55,6 +55,13 @@ class SendVerificationCodeView(APIView):
         email = serializer.validated_data["email"].strip().lower()
         purpose = serializer.validated_data["purpose"]
 
+        if settings.EMAIL_BACKEND in {
+            "django.core.mail.backends.console.EmailBackend",
+            "django.core.mail.backends.dummy.EmailBackend",
+            "django.core.mail.backends.filebased.EmailBackend",
+        }:
+            return Response({"message": "Email yuborish xizmati sozlanmagan. Google orqali kiring."}, status=503)
+
         # Rate limiting: 1 code per 60 seconds
         recent = EmailVerificationCode.objects.filter(
             email=email,
@@ -81,22 +88,6 @@ class SendVerificationCodeView(APIView):
             expires_at=expires_at,
         )
 
-        # 1. Telegram bot / admin guruhga tezkor bildirishnoma yuborish
-        try:
-            from apps.alumni.telegram_bot import send_telegram_raw
-            admin_chat_id = getattr(settings, "TELEGRAM_ADMIN_CHAT_ID", None)
-            if admin_chat_id:
-                tg_text = (
-                    f"🔐 <b>QarshiDU Alumni — Yangi tasdiqlash kodi</b>\n\n"
-                    f"📧 Email: <code>{html.escape(email)}</code>\n"
-                    f"🔑 Kod: <code>{code}</code>\n"
-                    f"🎯 Maqsad: {purpose}\n"
-                    f"⏰ Amal qilish muddati: 10 daqiqa"
-                )
-                send_telegram_raw(admin_chat_id, tg_text)
-        except Exception as e:
-            logger.warning("Telegram notification for verification code failed: %s", e)
-
         # 2. Send Email via Django send_mail
         subject = f"QarshiDU Alumni — Tasdiqlash kodi: {code}"
         message = (
@@ -120,7 +111,7 @@ class SendVerificationCodeView(APIView):
         """
 
         try:
-            send_mail(
+            sent = send_mail(
                 subject=subject,
                 message=message,
                 from_email=settings.DEFAULT_FROM_EMAIL,
@@ -128,10 +119,12 @@ class SendVerificationCodeView(APIView):
                 html_message=html_message,
                 fail_silently=False,
             )
+            if sent != 1:
+                raise OSError("Email backend did not accept the message")
         except Exception as e:
             logger.error("Failed to send verification email to %s: %s", email, e)
             EmailVerificationCode.objects.filter(email=email, purpose=purpose, code=code, is_verified=False).delete()
-            return Response({"message": "Tasdiqlash xatini yuborib bo'lmadi. Keyinroq qayta urinib ko'ring."}, status=503)
+            return Response({"message": "Tasdiqlash xatini yuborib bo‘lmadi. Keyinroq qayta urinib ko‘ring."}, status=503)
 
         return Response({
             "success": True,
@@ -279,7 +272,9 @@ class GoogleConfigView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        request.session["google_nonce"] = secrets.token_urlsafe(32)
+        # Reopening the dialog must not invalidate an already rendered Google button.
+        if not request.session.get("google_nonce"):
+            request.session["google_nonce"] = secrets.token_urlsafe(32)
         response = Response({"client_id": settings.GOOGLE_CLIENT_ID, "nonce": request.session["google_nonce"], "csrf_token": get_token(request)})
         response["Cache-Control"] = "no-store"
         return response

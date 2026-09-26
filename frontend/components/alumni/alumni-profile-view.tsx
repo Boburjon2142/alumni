@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -18,6 +18,7 @@ import {
   ChevronUp,
   Clock,
   Edit3,
+  ExternalLink,
   Eye,
   FileText,
   GraduationCap,
@@ -60,6 +61,13 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
   const [bioExpanded, setBioExpanded] = useState(false);
   const [shareToast, setShareToast] = useState(false);
   const [previewModalOpen, setPreviewModalOpen] = useState(false);
+  const previewScrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (previewModalOpen && previewScrollRef.current) {
+      previewScrollRef.current.scrollTop = 0;
+    }
+  }, [previewModalOpen]);
 
   // Real profile data extraction
   const fullName = profile.full_name || "Bitiruvchi";
@@ -194,18 +202,14 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
 
           {/* Identity & Metadata */}
           <div className="profile-hero-info-col">
-            <div className="profile-hero-tags-row">
-              <div className="profile-trust-badge">
-                <ShieldCheck size={14} className="trust-shield-icon" />
-                <span>Universitet tomonidan tasdiqlangan</span>
-                {profile.graduation_year && (
-                  <>
-                    <span className="trust-dot">•</span>
-                    <span className="trust-year">{profile.graduation_year}-yil bitiruvchisi</span>
-                  </>
-                )}
+            {profile.graduation_year && (
+              <div className="profile-hero-tags-row">
+                <div className="profile-trust-badge">
+                  <GraduationCap size={14} className="trust-shield-icon" />
+                  <span className="trust-year">{profile.graduation_year}-yil bitiruvchisi</span>
+                </div>
               </div>
-            </div>
+            )}
 
             <h1 className="profile-hero-name">{fullName}</h1>
 
@@ -530,10 +534,9 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
                   <div className="profile-card-icon-bubble">
                     <Briefcase size={18} />
                   </div>
-                  <h2 className="profile-card-title">Ish tajribasi va faoliyat</h2>
+                  <h2 className="profile-card-title">Ish tajribasi</h2>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  {industry && <span className="profile-card-tag">{industry}</span>}
                   <Link href="/profile/edit" className="profile-section-edit-btn" title="Tahrirlash">
                     <Edit3 size={13} />
                     <span>Tahrirlash</span>
@@ -549,18 +552,17 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
                       <Building2 size={20} className="text-brand-navy" />
                     </div>
                     <div className="current-job-content">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="current-job-status-chip">Hozirgi asosiy ish joyi</span>
-                        {industry && <span className="current-job-industry-chip">{industry}</span>}
-                        {city && (
-                          <span className="current-job-industry-chip flex items-center gap-1">
-                            <MapPin size={12} />
-                            <span>{city}</span>
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <span className="current-job-status-chip">Hozirgi ish joyi</span>
+                        {industry && (
+                          <span className="current-job-industry-chip">
+                            <Briefcase size={11} className="mr-1 text-brand-purple" />
+                            {industry}
                           </span>
                         )}
                       </div>
                       <h3 className="current-job-title">{position || "Lavozim kiritilmagan"}</h3>
-                      <div className="flex items-center gap-3 flex-wrap">
+                      <div className="flex items-center gap-3 flex-wrap mt-1">
                         <p className="current-job-company">{currentCompany || "Tashkilot kiritilmagan"}</p>
                         {city && (
                           <span className="text-xs text-slate-500 font-medium flex items-center gap-1">
@@ -653,63 +655,6 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
           )}
           </div>
         </main>
-
-        {/* =================================================== */}
-        {/* RIGHT SIDEBAR                                      */}
-        {/* =================================================== */}
-        <aside className="profile-sidebar-col">
-          {/* PROFILE COMPLETION CARD */}
-          <div className="profile-card sidebar-card completion-card">
-            <div className="sidebar-card-header">
-              <div className="sidebar-icon-box-navy">
-                <CheckCircle2 size={16} />
-              </div>
-              <h3 className="sidebar-card-title">Profil to‘ldirilish darajasi</h3>
-            </div>
-            <div className="sidebar-card-body">
-              <div className="completion-visual-row">
-                <div
-                  className="completion-ring-box"
-                  style={{
-                    background: `conic-gradient(#0D1667 0% ${completionPercent}%, #E2E8F0 ${completionPercent}% 100%)`,
-                  }}
-                >
-                  <span className="completion-big-percent">{completionPercent}%</span>
-                </div>
-                <div className="completion-summary-text">
-                  <strong className={completionPercent >= 80 ? "level-high" : completionPercent >= 40 ? "level-mid" : "level-low"}>
-                    {completionPercent >= 80 ? "Yuqori daraja" : completionPercent >= 50 ? "O‘rta daraja" : "Boshlang‘ich daraja"}
-                  </strong>
-                  <p>Profilingiz qanchalik to‘liq bo‘lsa, bitiruvchilar tarmog‘idagi nufuzingiz shunchalik yuqori bo‘ladi.</p>
-                </div>
-              </div>
-
-              <div className="completion-checklist">
-                {checklist.map((item) => (
-                  <div key={item.id} className={`checklist-item ${item.done ? "done" : "pending"}`}>
-                    {item.done ? (
-                      <div className="checklist-check-circle">
-                        <Check size={12} className="check-icon" />
-                      </div>
-                    ) : (
-                      <div className="pending-circle" />
-                    )}
-                    <span>{item.label}</span>
-                  </div>
-                ))}
-              </div>
-
-              {completionPercent < 100 && (
-                <div className="completion-action-row">
-                  <Link href="/profile/edit" className="profile-btn profile-btn-secondary w-full justify-center text-xs">
-                    <Edit3 size={13} />
-                    <span>Profilni to‘ldirish</span>
-                  </Link>
-                </div>
-              )}
-            </div>
-          </div>
-        </aside>
       </div>
 
 
@@ -718,40 +663,272 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
       {/* Preview Modal */}
       {previewModalOpen && (
         <div className="profile-modal-overlay" onClick={() => setPreviewModalOpen(false)}>
-          <div className="profile-modal-card" style={{ maxWidth: "540px" }} onClick={(e) => e.stopPropagation()}>
-            <div className="profile-modal-header">
-              <h3 className="profile-modal-title">Ommaviy ko‘rinish prevyusi</h3>
+          <div className="profile-modal-card preview-modal-dialog" onClick={(e) => e.stopPropagation()}>
+            {/* Header */}
+            <div className="preview-modal-header">
+              <div>
+                <span className="preview-modal-badge">
+                  <Eye size={13} />
+                  <span>Ommaviy ko‘rinish prevyusi</span>
+                </span>
+                <h3 className="preview-modal-title">Profilingiz boshqalar uchun qanday ko‘rinadi</h3>
+                <p className="preview-modal-subtitle">
+                  Sayt mehmonlari, talabalar va boshqa bitiruvchilar sizning ommaviy profilingizda quyidagi ma’lumotlarni ko‘radilar.
+                </p>
+              </div>
               <button
                 type="button"
                 className="profile-modal-close"
                 onClick={() => setPreviewModalOpen(false)}
+                title="Yopish"
               >
-                <X size={18} />
+                <X size={20} />
               </button>
             </div>
-            <div className="profile-modal-body">
-              <div className="profile-preview-card">
-                <div className="profile-preview-avatar">
-                  {fullName[0]}
-                </div>
-                <div className="profile-preview-info">
-                  <h4 className="profile-preview-name">{fullName}</h4>
-                  <p className="profile-preview-role">{position} {currentCompany ? `• ${currentCompany}` : ""}</p>
-                  <p className="profile-preview-grad">QarDU {graduationYear ? `${graduationYear}-yil bitiruvchisi` : ""}</p>
+
+            {/* Scrollable Body */}
+            <div className="preview-modal-scrollable-body" ref={previewScrollRef}>
+              {/* 1. Alumnus Hero Banner */}
+              <div className="preview-public-hero">
+                <div className="preview-hero-accent-strip" />
+                <div className="preview-hero-content">
+                  <div className="preview-avatar-box">
+                    {profile.avatar || profile.image_url ? (
+                      <Image
+                        src={profile.avatar || profile.image_url || ""}
+                        alt={fullName}
+                        width={76}
+                        height={76}
+                        className="preview-avatar-img"
+                      />
+                    ) : (
+                      <span>{initials}</span>
+                    )}
+                  </div>
+                  <div className="preview-hero-main">
+                    <h4 className="preview-hero-name">{fullName}</h4>
+                    <div className="preview-hero-role">
+                      <Briefcase size={14} className="text-brand-purple" />
+                      <span>{position || "Soha mutaxassisi"}</span>
+                      {currentCompany && (
+                        <>
+                          <span className="text-slate-300">•</span>
+                          <span className="font-semibold text-brand-navy">{currentCompany}</span>
+                        </>
+                      )}
+                    </div>
+
+                    <div className="preview-pills-row">
+                      {graduationYear && (
+                        <span className="preview-pill pill-primary">
+                          <GraduationCap size={13} />
+                          <span>QarDU {graduationYear}-yil bitiruvchisi</span>
+                        </span>
+                      )}
+                      {academicDegree && (
+                        <span className="preview-pill pill-accent">
+                          <Award size={13} />
+                          <span>{academicDegree}</span>
+                        </span>
+                      )}
+                      {city && (
+                        <span className="preview-pill">
+                          <MapPin size={13} />
+                          <span>{city}</span>
+                        </span>
+                      )}
+                      {faculty && (
+                        <span className="preview-pill">
+                          <Building2 size={13} />
+                          <span>{faculty}</span>
+                        </span>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
-              <p className="profile-modal-desc">
-                Bu ko‘rinish boshqa bitiruvchilar va mehmonlar sizning profilingizni ochganda qanday aks etishini ifodalaydi.
-              </p>
-              <div className="profile-modal-footer">
-                <button
-                  type="button"
-                  className="profile-btn profile-btn-primary"
-                  onClick={() => setPreviewModalOpen(false)}
+
+              {/* 2. Key Sections Grid */}
+              <div className="preview-sections-grid">
+                {/* BIO / Haqida */}
+                <div className="preview-section-card full-width">
+                  <div className="preview-section-title-row">
+                    <User size={16} className="preview-section-icon" />
+                    <h5 className="preview-section-title">O‘zi haqida qisqacha (BIO)</h5>
+                  </div>
+                  {rawBio ? (
+                    <p className="preview-bio-text">{rawBio}</p>
+                  ) : (
+                    <p className="preview-empty-hint">
+                      Qisqacha ma’lumot (BIO) hali kiritilmagan. Profil tahrirlash orqali faoliyatingiz haqida yozishingiz mumkin.
+                    </p>
+                  )}
+                </div>
+
+                {/* Hozirgi kasbiy faoliyat */}
+                <div className="preview-section-card">
+                  <div className="preview-section-title-row">
+                    <Briefcase size={16} className="preview-section-icon" />
+                    <h5 className="preview-section-title">Hozirgi kasbiy faoliyat</h5>
+                  </div>
+                  <div className="preview-key-val-list">
+                    <div className="preview-key-val-item">
+                      <span className="preview-item-label">Tashkilot / Ish joyi</span>
+                      <span className="preview-item-value">{currentCompany || "Ko‘rsatilmagan"}</span>
+                    </div>
+                    <div className="preview-key-val-item">
+                      <span className="preview-item-label">Lavozimi</span>
+                      <span className="preview-item-value">{position || "Ko‘rsatilmagan"}</span>
+                    </div>
+                    <div className="preview-key-val-item">
+                      <span className="preview-item-label">Faoliyat sohasi</span>
+                      <span className="preview-item-value">{industry || "Ko‘rsatilmagan"}</span>
+                    </div>
+                    <div className="preview-key-val-item">
+                      <span className="preview-item-label">Hudud (Shahar / Tuman)</span>
+                      <span className="preview-item-value">{city || "Ko‘rsatilmagan"}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Ta'lim ma'lumotlari */}
+                <div className="preview-section-card">
+                  <div className="preview-section-title-row">
+                    <GraduationCap size={16} className="preview-section-icon" />
+                    <h5 className="preview-section-title">Ta’lim ma’lumotlari</h5>
+                  </div>
+                  <div className="preview-key-val-list">
+                    <div className="preview-key-val-item">
+                      <span className="preview-item-label">Oliy ta’lim muassasasi</span>
+                      <span className="preview-item-value">Qarshi davlat universiteti</span>
+                    </div>
+                    {faculty && (
+                      <div className="preview-key-val-item">
+                        <span className="preview-item-label">Fakultet</span>
+                        <span className="preview-item-value">{faculty}</span>
+                      </div>
+                    )}
+                    {specialty && (
+                      <div className="preview-key-val-item">
+                        <span className="preview-item-label">Yo‘nalish / Mutaxassislik</span>
+                        <span className="preview-item-value">{specialty}</span>
+                      </div>
+                    )}
+                    <div className="preview-key-val-item">
+                      <span className="preview-item-label">Bitirgan yili & Daraja</span>
+                      <span className="preview-item-value">
+                        {graduationYear ? `${graduationYear}-yil` : "Ko‘rsatilmagan"} • {academicDegree}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Qo'shimcha ta'lim bosqichlari bo'lsa */}
+                  {educationList.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-slate-100">
+                      <span className="preview-item-label block mb-2">Qo‘shimcha ta’lim bosqichlari ({educationList.length})</span>
+                      <div className="flex flex-col gap-2">
+                        {educationList.map((edu, idx) => (
+                          <div key={idx} className="preview-history-item">
+                            <div className="preview-history-top">
+                              <span className="preview-history-company">
+                                {DEGREE_LABELS[edu.degree_level] || edu.degree_level}
+                              </span>
+                              {edu.graduation_year && (
+                                <span className="preview-history-period">{edu.graduation_year}-yil</span>
+                              )}
+                            </div>
+                            <span className="preview-history-role">
+                              {edu.institution || "Qarshi davlat universiteti"}
+                              {edu.faculty ? ` • ${edu.faculty}` : ""}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Mehnat faoliyati tarixi */}
+                <div className="preview-section-card full-width">
+                  <div className="preview-section-title-row">
+                    <Clock size={16} className="preview-section-icon" />
+                    <h5 className="preview-section-title">Mehnat faoliyati tarixi ({workList.length > 0 ? workList.length : "0"})</h5>
+                  </div>
+                  {workList.length > 0 ? (
+                    <div className="preview-history-list">
+                      {workList.map((w, idx) => (
+                        <div key={idx} className="preview-history-item">
+                          <div className="preview-history-top">
+                            <div className="flex items-center gap-2">
+                              <span className="preview-history-company">{w.company}</span>
+                              {w.region && (
+                                <span className="text-xs text-slate-500 font-normal">({w.region})</span>
+                              )}
+                            </div>
+                            <span className="preview-history-period">
+                              {w.start_year || ""}{w.end_year ? ` — ${w.end_year}-yil` : " — Hozirgacha"}
+                            </span>
+                          </div>
+                          <div className="preview-history-role">
+                            <span className="font-medium text-slate-700">{w.position}</span>
+                            {w.industry && <span className="text-slate-500"> • {w.industry}</span>}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="preview-empty-hint">
+                      Oldingi yoki qo‘shimcha ish joylari tarixi kiritilmagan.
+                    </p>
+                  )}
+                </div>
+
+                {/* Aloqa ma'lumotlari */}
+                {email && (
+                  <div className="preview-section-card full-width">
+                    <div className="preview-section-title-row">
+                      <Mail size={16} className="preview-section-icon" />
+                      <h5 className="preview-section-title">Ommaviy aloqa ma’lumoti</h5>
+                    </div>
+                    <div className="flex items-center gap-2 text-sm text-slate-700">
+                      <Mail size={14} className="text-brand-purple" />
+                      <span className="font-semibold">{email}</span>
+                      <span className="text-xs text-slate-500">(Boshqa bitiruvchilar siz bilan bog‘lanishlari uchun)</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Footer with Actions */}
+            <div className="preview-modal-footer-row">
+              <div className="flex items-center gap-2 flex-wrap">
+                {(profile.slug || profile.id) && (
+                  <Link
+                    href={`/alumni/${profile.slug || profile.id}`}
+                    target="_blank"
+                    className="profile-btn profile-btn-secondary"
+                  >
+                    <ExternalLink size={14} />
+                    <span>Ommaviy sahifani ochish</span>
+                  </Link>
+                )}
+                <Link
+                  href="/profile/edit"
+                  className="profile-btn profile-btn-secondary"
                 >
-                  Yopish
-                </button>
+                  <Edit3 size={14} />
+                  <span>Ma’lumotlarni to‘ldirish / tahrirlash</span>
+                </Link>
               </div>
+
+              <button
+                type="button"
+                className="profile-btn profile-btn-primary"
+                onClick={() => setPreviewModalOpen(false)}
+              >
+                Yopish
+              </button>
             </div>
           </div>
         </div>

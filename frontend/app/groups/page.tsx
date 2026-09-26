@@ -55,7 +55,12 @@ export default async function GroupsPage({
             <p>{t.retryText}</p>
           </div>
         ) : groups.length > 0 ? (
-          <GroupsGrid groups={groups} locale={locale} t={t} />
+          <>
+            <div className="result-count groups-result-count">
+              <strong>{groups.length}</strong> {locale === "en" ? "graduation groups available" : locale === "ru" ? "групп выпускников доступно" : "ta bitiruv guruhi mavjud"}
+            </div>
+            <GroupsGrid groups={groups} locale={locale} t={t} />
+          </>
         ) : (
           <div className="empty-state">
             <Calendar aria-hidden="true" size={48} className="empty-icon" />

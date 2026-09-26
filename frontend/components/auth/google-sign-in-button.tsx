@@ -9,6 +9,19 @@ type GoogleIdentity = {
 };
 declare global { interface Window { google?: { accounts: { id: GoogleIdentity } } } }
 let googleScript: Promise<void> | undefined;
+let pendingConfig: Promise<{ client_id: string; nonce: string }> | undefined;
+function getGoogleConfig() {
+  // Share concurrent mounts (including StrictMode) so session cookies cannot race.
+  if (!pendingConfig) {
+    pendingConfig = fetch("/api/v1/auth/google/config/", { credentials: "same-origin", cache: "no-store" })
+      .then(async (response) => {
+        if (!response.ok) throw new Error("Kirish xizmatiga ulanib bo'lmadi.");
+        return response.json();
+      })
+      .finally(() => { pendingConfig = undefined; });
+  }
+  return pendingConfig;
+}
 function loadGoogle() {
   if (window.google?.accounts.id) return Promise.resolve();
   if (!googleScript) {
@@ -41,9 +54,8 @@ export function GoogleSignInButton({ onSuccess, locale }: Pick<Props, "onSuccess
     let cancelled = false;
     async function initialize() {
       try {
-        const response = await fetch("/api/v1/auth/google/config/", { credentials: "same-origin", cache: "no-store" });
-        if (!response.ok) throw new Error("Kirish xizmatiga ulanib bo'lmadi.");
-        const config = await response.json();
+        const config = await getGoogleConfig();
+        if (cancelled) return;
         if (!config.client_id) {
           if (!cancelled) {
             setNotConfigured(true);

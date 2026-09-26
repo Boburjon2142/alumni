@@ -57,7 +57,7 @@ export function BrandPreloader({
         {/* Official University Logo */}
         <div className="brand-preloader-logo-wrapper">
           <img
-            src="/brand/Logo.png"
+            src="/brand/Logo.webp"
             alt="Qarshi Davlat Universiteti"
             width={320}
             height={190}

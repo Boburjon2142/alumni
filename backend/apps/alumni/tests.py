@@ -1,10 +1,58 @@
 import pytest
+from django.core.cache import cache
 from datetime import date
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from rest_framework.test import APIClient
 from apps.accounts.models import User
 from .models import Achievement, AlumniConsent, AlumniProfile, AlumniSource, FeaturedAlumni
+
+
+@pytest.mark.django_db
+def test_completing_profile_creates_group_and_adds_to_existing_group(client):
+    cache.clear()
+    assert client.get("/api/v1/alumni/groups/").data["data"] == []
+    for index in range(2):
+        user = User.objects.create_user(email=f"group{index}@example.com")
+        profile = AlumniProfile.objects.create(user=user, full_name=f"Group Member {index}")
+        client.force_authenticate(user=user)
+        response = client.patch("/api/v1/alumni/me/", {"graduation_year": 2025}, format="json")
+        assert response.status_code == 200
+        client.force_authenticate(user=None)
+        groups = client.get("/api/v1/alumni/groups/").data["data"]
+        assert len(groups) == 1
+        assert groups[0]["year"] == 2025
+        assert groups[0]["members_count"] == index + 1
+        detail = client.get("/api/v1/alumni/groups/2025/").data
+        assert detail["group"]["members_count"] == index + 1
+        assert profile.id in [member["id"] for member in detail["data"]]
+
+
+@pytest.mark.django_db
+def test_group_city_and_district_filters_are_distinct(client):
+    cache.clear()
+    for index, city in enumerate(["Qarshi shahri", "Qarshi tumani"]):
+        AlumniProfile.objects.create(full_name=f"Location Member {index}", city=city,
+            graduation_year=2025, approval_status="approved", is_published=True)
+    for city in ["Qarshi shahri", "Qarshi tumani"]:
+        response = client.get("/api/v1/alumni/groups/", {"region": city})
+        assert response.data["data"][0]["members_count"] == 1
+        detail = client.get("/api/v1/alumni/groups/2025/", {"region": city})
+        assert detail.data["group"]["members_count"] == 1
+
+
+@pytest.mark.django_db
+@pytest.mark.parametrize("status,visibility", [("rejected", "public"), ("pending", "private")])
+def test_completing_year_does_not_publish_rejected_or_private_profiles(client, status, visibility):
+    user = User.objects.create_user(email="hidden-group@example.com")
+    profile = AlumniProfile.objects.create(user=user, full_name="Hidden Group Member",
+        approval_status=status, visibility=visibility)
+    client.force_authenticate(user=user)
+    response = client.patch("/api/v1/alumni/me/", {"graduation_year": 2025}, format="json")
+    assert response.status_code == 200
+    profile.refresh_from_db()
+    assert not profile.is_published
+    assert profile.approval_status == status
 
 @pytest.fixture
 def client():
@@ -722,7 +770,6 @@ def test_recognition_titles_endpoint_and_filtering(client, alumni):
     nomatch_res = client.get("/api/v1/alumni/?recognition=innovatsiya-yetakchisi")
     assert nomatch_res.status_code == 200
     assert nomatch_res.data["pagination"]["count"] == 0
-
 
 
 

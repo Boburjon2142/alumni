@@ -59,7 +59,7 @@ describe("AlumniProfileView", () => {
     expect(screen.getByText("Abdug‘aniyev Boburjon Akramjon o‘g‘li")).toBeInTheDocument();
     expect(screen.getAllByText("Python Developer").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Uzum Technologies").length).toBeGreaterThan(0);
-    expect(screen.getByText("Universitet tomonidan tasdiqlangan")).toBeInTheDocument();
+    expect(screen.queryByText("Universitet tomonidan tasdiqlangan")).not.toBeInTheDocument();
     expect(screen.getAllByText(/2021-yil bitiruvchisi/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Axborot texnologiyalari fakulteti/).length).toBeGreaterThan(0);
     expect(screen.getByText("Profil to‘liqligi")).toBeInTheDocument();
@@ -81,11 +81,11 @@ describe("AlumniProfileView", () => {
     // Experience timeline
     expect(screen.getByText("Hozirda ishlaydi")).toBeInTheDocument();
 
-    // Sidebar items
+    // Sidebar items should not be present (including removed completion card)
     expect(screen.queryByText("Maxfiylik va ko‘rinish")).not.toBeInTheDocument();
     expect(screen.queryByText(/Bog‘lanish \(Email\)/)).not.toBeInTheDocument();
     expect(screen.queryByText(t.impactTitle)).not.toBeInTheDocument();
-    expect(screen.getByText("Profil to‘ldirilish darajasi")).toBeInTheDocument();
+    expect(screen.queryByText("Profil to‘ldirilish darajasi")).not.toBeInTheDocument();
   });
 
   it("allows switching tabs to filter sections", () => {
@@ -113,8 +113,31 @@ describe("AlumniProfileView", () => {
     expect(edu).toBeInTheDocument();
     expect(exp).toBeInTheDocument();
 
-    expect(grid).toContainElement(about);
-    expect(grid).toContainElement(edu);
-    expect(grid).toContainElement(exp);
+    expect(grid).toContainElement(about as HTMLElement);
+    expect(grid).toContainElement(edu as HTMLElement);
+    expect(grid).toContainElement(exp as HTMLElement);
+  });
+
+  it("opens public preview modal with all essential alumni details", () => {
+    render(<AlumniProfileView profile={mockProfile} locale="uz" t={t} />);
+
+    const previewBtn = screen.getByRole("button", { name: /Profilni ko‘rish/i });
+    fireEvent.click(previewBtn);
+
+    // Modal title & badge
+    expect(screen.getByText("Ommaviy ko‘rinish prevyusi")).toBeInTheDocument();
+    expect(screen.getByText("Profilingiz boshqalar uchun qanday ko‘rinadi")).toBeInTheDocument();
+
+    // Key info inside modal
+    expect(screen.getByText("O‘zi haqida qisqacha (BIO)")).toBeInTheDocument();
+    expect(screen.getAllByText("Texnologiyalar orqali odamlar hayotini yaxshilashga intilgan dasturchiman.").length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByText("Hozirgi kasbiy faoliyat")).toBeInTheDocument();
+    expect(screen.getByText("Ta’lim ma’lumotlari")).toBeInTheDocument();
+    expect(screen.getByText("Mehnat faoliyati tarixi (2)")).toBeInTheDocument();
+
+    // Close modal
+    const closeBtns = screen.getAllByRole("button", { name: "Yopish" });
+    fireEvent.click(closeBtns[0]);
+    expect(screen.queryByText("Profilingiz boshqalar uchun qanday ko‘rinadi")).not.toBeInTheDocument();
   });
 });

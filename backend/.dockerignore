@@ -1,0 +1,13 @@
+venv
+.venv
+.env
+.env.*
+db.sqlite3*
+media
+static
+__pycache__
+**/__pycache__
+.pytest_cache
+*.log
+fixtures/production_data_dump.json
+demo_data_backup.json

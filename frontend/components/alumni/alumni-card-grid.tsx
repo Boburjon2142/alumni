@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, GraduationCap } from "lucide-react";
 import type { Alumni } from "@/types/alumni";
 import { getRecognitionTitle, type Locale } from "@/lib/i18n";
 import { RemoteImage } from "@/components/ui/remote-image";
@@ -39,9 +39,8 @@ export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: L
                 slug={item.slug}
                 alt={item.image_alt || `${item.full_name} portreti`}
                 fallback={initials}
-                sizes="(max-width: 640px) 100vw, (max-width: 900px) 50vw, 300px"
+                sizes="(max-width: 680px) 32vw, 190px"
               />
-              <div className="alumni-card-media-gradient" />
             </div>
 
             <div className="alumni-card-info">
@@ -75,7 +74,10 @@ export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: L
                   <p className="minimal-card-role alumni-card-role">{item.position}</p>
                 )}
                 {item.faculty && (
-                  <span className="alumni-card-faculty">{item.faculty}</span>
+                  <span className="alumni-card-faculty">
+                    <GraduationCap size={13} aria-hidden="true" />
+                    <span>{item.faculty}</span>
+                  </span>
                 )}
               </div>
 

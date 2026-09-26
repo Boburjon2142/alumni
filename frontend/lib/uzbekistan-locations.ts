@@ -1,0 +1,283 @@
+/**
+ * O'zbekiston Respublikasi viloyatlari, shaharlari va tumanlari
+ * Qarshi davlat universiteti (QDU / KSU) bitiruvchilari va talabalari uchun
+ */
+
+import { SelectOption } from "@/components/ui/custom-select";
+
+export interface LocationItem {
+  value: string;
+  label: string;
+  region: string;
+  badge?: string;
+  isRegion?: boolean;
+}
+
+// 1. Asosiy viloyatlar ro'yxati (keng qamrovli)
+export const UZBEKISTAN_REGIONS = [
+  "Qashqadaryo viloyati",
+  "Toshkent shahri",
+  "Toshkent viloyati",
+  "Samarqand viloyati",
+  "Buxoro viloyati",
+  "Surxondaryo viloyati",
+  "Andijon viloyati",
+  "Farg‘ona viloyati",
+  "Namangan viloyati",
+  "Jizzax viloyati",
+  "Navoiy viloyati",
+  "Sirdaryo viloyati",
+  "Xorazm viloyati",
+  "Qoraqalpog‘iston Respublikasi",
+  "Xorij / Chet el",
+];
+
+// 2. Shahar va tumanlar ro'yxati
+export const UZBEKISTAN_LOCATIONS_DATA: LocationItem[] = [
+  // --- QASHQADARYO VILOYATI (Universitet joylashgan hudud - birinchi o'rinda) ---
+  { value: "Qarshi shahri", label: "Qarshi shahri", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Shahrisabz shahri", label: "Shahrisabz shahri", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Qarshi tumani", label: "Qarshi tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Chiroqchi tumani", label: "Chiroqchi tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Dehqonobod tumani", label: "Dehqonobod tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "G‘uzor tumani", label: "G‘uzor tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Kasbi tumani", label: "Kasbi tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Kitob tumani", label: "Kitob tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Koson tumani", label: "Koson tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Ko‘kdala tumani", label: "Ko‘kdala tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Mirishkor tumani", label: "Mirishkor tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Muborak tumani", label: "Muborak tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Nishon tumani", label: "Nishon tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Qamashi tumani", label: "Qamashi tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Shahrisabz tumani", label: "Shahrisabz tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+  { value: "Yakkabog‘ tumani", label: "Yakkabog‘ tumani", region: "Qashqadaryo viloyati", badge: "Qashqadaryo" },
+
+  // --- TOSHKENT SHAHRI ---
+  { value: "Toshkent shahri", label: "Toshkent shahri (Umumiy)", region: "Toshkent shahri", badge: "Poytaxt" },
+  { value: "Bektemir tumani (Toshkent)", label: "Bektemir tumani", region: "Toshkent shahri", badge: "Toshkent sh." },
+  { value: "Chilonzor tumani (Toshkent)", label: "Chilonzor tumani", region: "Toshkent shahri", badge: "Toshkent sh." },
+  { value: "Mirobod tumani (Toshkent)", label: "Mirobod tumani", region: "Toshkent shahri", badge: "Toshkent sh." },
+  { value: "Mirzo Ulug‘bek tumani (Toshkent)", label: "Mirzo Ulug‘bek tumani", region: "Toshkent shahri", badge: "Toshkent sh." },
+  { value: "Olmazor tumani (Toshkent)", label: "Olmazor tumani", region: "Toshkent shahri", badge: "Toshkent sh." },
+  { value: "Sergeli tumani (Toshkent)", label: "Sergeli tumani", region: "Toshkent shahri", badge: "Toshkent sh." },
+  { value: "Shayxontohur tumani (Toshkent)", label: "Shayxontohur tumani", region: "Toshkent shahri", badge: "Toshkent sh." },
+  { value: "Uchtepa tumani (Toshkent)", label: "Uchtepa tumani", region: "Toshkent shahri", badge: "Toshkent sh." },
+  { value: "Yakkasaroy tumani (Toshkent)", label: "Yakkasaroy tumani", region: "Toshkent shahri", badge: "Toshkent sh." },
+  { value: "Yangihayot tumani (Toshkent)", label: "Yangihayot tumani", region: "Toshkent shahri", badge: "Toshkent sh." },
+  { value: "Yashnobod tumani (Toshkent)", label: "Yashnobod tumani", region: "Toshkent shahri", badge: "Toshkent sh." },
+  { value: "Yunusobod tumani (Toshkent)", label: "Yunusobod tumani", region: "Toshkent shahri", badge: "Toshkent sh." },
+
+  // --- SAMARQAND VILOYATI ---
+  { value: "Samarqand shahri", label: "Samarqand shahri", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Kattaqo‘rg‘on shahri", label: "Kattaqo‘rg‘on shahri", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Bulung‘ur tumani", label: "Bulung‘ur tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Ishtixon tumani", label: "Ishtixon tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Jomboy tumani", label: "Jomboy tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Kattaqo‘rg‘on tumani", label: "Kattaqo‘rg‘on tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Narpay tumani", label: "Narpay tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Nurobod tumani", label: "Nurobod tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Oqdaryo tumani", label: "Oqdaryo tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Pastdarg‘om tumani", label: "Pastdarg‘om tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Paxtachi tumani", label: "Paxtachi tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Payariq tumani", label: "Payariq tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Qo‘shrabot tumani", label: "Qo‘shrabot tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Samarqand tumani", label: "Samarqand tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Toyloq tumani", label: "Toyloq tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+  { value: "Urgut tumani", label: "Urgut tumani", region: "Samarqand viloyati", badge: "Samarqand" },
+
+  // --- TOSHKENT VILOYATI ---
+  { value: "Olmaliq shahri", label: "Olmaliq shahri", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Angren shahri", label: "Angren shahri", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Bekobod shahri", label: "Bekobod shahri", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Chirchiq shahri", label: "Chirchiq shahri", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Nurafshon shahri", label: "Nurafshon shahri", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Ohangaron shahri", label: "Ohangaron shahri", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Yangiyo‘l shahri", label: "Yangiyo‘l shahri", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Bekobod tumani", label: "Bekobod tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Bo‘ka tumani", label: "Bo‘ka tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Bo‘stonliq tumani", label: "Bo‘stonliq tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Chinoz tumani", label: "Chinoz tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Ohangaron tumani", label: "Ohangaron tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Oqqo‘rg‘on tumani", label: "Oqqo‘rg‘on tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "O‘rta Chirchiq tumani", label: "O‘rta Chirchiq tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Parkent tumani", label: "Parkent tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Piskent tumani", label: "Piskent tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Qibray tumani", label: "Qibray tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Quyi Chirchiq tumani", label: "Quyi Chirchiq tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Toshkent tumani", label: "Toshkent tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Yangiyo‘l tumani", label: "Yangiyo‘l tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Yuqori Chirchiq tumani", label: "Yuqori Chirchiq tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+  { value: "Zangiota tumani", label: "Zangiota tumani", region: "Toshkent viloyati", badge: "Toshkent vil." },
+
+  // --- BUXORO VILOYATI ---
+  { value: "Buxoro shahri", label: "Buxoro shahri", region: "Buxoro viloyati", badge: "Buxoro" },
+  { value: "Kogon shahri", label: "Kogon shahri", region: "Buxoro viloyati", badge: "Buxoro" },
+  { value: "Buxoro tumani", label: "Buxoro tumani", region: "Buxoro viloyati", badge: "Buxoro" },
+  { value: "G‘ijduvon tumani", label: "G‘ijduvon tumani", region: "Buxoro viloyati", badge: "Buxoro" },
+  { value: "Jondor tumani", label: "Jondor tumani", region: "Buxoro viloyati", badge: "Buxoro" },
+  { value: "Kogon tumani", label: "Kogon tumani", region: "Buxoro viloyati", badge: "Buxoro" },
+  { value: "Olot tumani", label: "Olot tumani", region: "Buxoro viloyati", badge: "Buxoro" },
+  { value: "Peshku tumani", label: "Peshku tumani", region: "Buxoro viloyati", badge: "Buxoro" },
+  { value: "Qorako‘l tumani", label: "Qorako‘l tumani", region: "Buxoro viloyati", badge: "Buxoro" },
+  { value: "Qorovulbozor tumani", label: "Qorovulbozor tumani", region: "Buxoro viloyati", badge: "Buxoro" },
+  { value: "Romitan tumani", label: "Romitan tumani", region: "Buxoro viloyati", badge: "Buxoro" },
+  { value: "Shofirkon tumani", label: "Shofirkon tumani", region: "Buxoro viloyati", badge: "Buxoro" },
+  { value: "Vobkent tumani", label: "Vobkent tumani", region: "Buxoro viloyati", badge: "Buxoro" },
+
+  // --- SURXONDARYO VILOYATI ---
+  { value: "Termiz shahri", label: "Termiz shahri", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Angor tumani", label: "Angor tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Bandixon tumani", label: "Bandixon tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Boysun tumani", label: "Boysun tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Denov tumani", label: "Denov tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Jarqo‘rg‘on tumani", label: "Jarqo‘rg‘on tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Muzrabot tumani", label: "Muzrabot tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Oltinsoy tumani", label: "Oltinsoy tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Qiziriq tumani", label: "Qiziriq tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Qumqo‘rg‘on tumani", label: "Qumqo‘rg‘on tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Sariosiyo tumani", label: "Sariosiyo tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Sherobod tumani", label: "Sherobod tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Sho‘rchi tumani", label: "Sho‘rchi tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Termiz tumani", label: "Termiz tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+  { value: "Uzun tumani", label: "Uzun tumani", region: "Surxondaryo viloyati", badge: "Surxondaryo" },
+
+  // --- ANDIJON VILOYATI ---
+  { value: "Andijon shahri", label: "Andijon shahri", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Xonobod shahri", label: "Xonobod shahri", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Andijon tumani", label: "Andijon tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Asaka tumani", label: "Asaka tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Baliqchi tumani", label: "Baliqchi tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Bo‘ston tumani", label: "Bo‘ston tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Buloqboshi tumani", label: "Buloqboshi tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Izboskan tumani", label: "Izboskan tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Jalaquduq tumani", label: "Jalaquduq tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Marhamat tumani", label: "Marhamat tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Oltinko‘l tumani", label: "Oltinko‘l tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Paxtaobod tumani", label: "Paxtaobod tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Qo‘rg‘ontepa tumani", label: "Qo‘rg‘ontepa tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Shahrixon tumani", label: "Shahrixon tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Ulug‘nor tumani", label: "Ulug‘nor tumani", region: "Andijon viloyati", badge: "Andijon" },
+  { value: "Xo‘jaobod tumani", label: "Xo‘jaobod tumani", region: "Andijon viloyati", badge: "Andijon" },
+
+  // --- FARG‘ONA VILOYATI ---
+  { value: "Farg‘ona shahri", label: "Farg‘ona shahri", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Marg‘ilon shahri", label: "Marg‘ilon shahri", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Qo‘qon shahri", label: "Qo‘qon shahri", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Quvasoy shahri", label: "Quvasoy shahri", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Bag‘dod tumani", label: "Bag‘dod tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Beshariq tumani", label: "Beshariq tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Buvayda tumani", label: "Buvayda tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Dang‘ara tumani", label: "Dang‘ara tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Farg‘ona tumani", label: "Farg‘ona tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Furqat tumani", label: "Furqat tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Oltiariq tumani", label: "Oltiariq tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "O‘zbekiston tumani", label: "O‘zbekiston tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Qo‘shtepa tumani", label: "Qo‘shtepa tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Quva tumani", label: "Quva tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Rishton tumani", label: "Rishton tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "So‘x tumani", label: "So‘x tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Toshloq tumani", label: "Toshloq tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Uchko‘prik tumani", label: "Uchko‘prik tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+  { value: "Yozyovon tumani", label: "Yozyovon tumani", region: "Farg‘ona viloyati", badge: "Farg‘ona" },
+
+  // --- NAMANGAN VILOYATI ---
+  { value: "Namangan shahri", label: "Namangan shahri", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "Chortoq tumani", label: "Chortoq tumani", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "Chust tumani", label: "Chust tumani", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "Davlatobod tumani", label: "Davlatobod tumani", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "Kosonsoy tumani", label: "Kosonsoy tumani", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "Mingbuloq tumani", label: "Mingbuloq tumani", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "Namangan tumani", label: "Namangan tumani", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "Norin tumani", label: "Norin tumani", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "Pop tumani", label: "Pop tumani", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "To‘raqo‘rg‘on tumani", label: "To‘raqo‘rg‘on tumani", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "Uchqo‘rg‘on tumani", label: "Uchqo‘rg‘on tumani", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "Uychi tumani", label: "Uychi tumani", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "Yangi Namangan tumani", label: "Yangi Namangan tumani", region: "Namangan viloyati", badge: "Namangan" },
+  { value: "Yangiqo‘rg‘on tumani", label: "Yangiqo‘rg‘on tumani", region: "Namangan viloyati", badge: "Namangan" },
+
+  // --- JIZZAX VILOYATI ---
+  { value: "Jizzax shahri", label: "Jizzax shahri", region: "Jizzax viloyati", badge: "Jizzax" },
+  { value: "Arnasoy tumani", label: "Arnasoy tumani", region: "Jizzax viloyati", badge: "Jizzax" },
+  { value: "Baxmal tumani", label: "Baxmal tumani", region: "Jizzax viloyati", badge: "Jizzax" },
+  { value: "Do‘stlik tumani", label: "Do‘stlik tumani", region: "Jizzax viloyati", badge: "Jizzax" },
+  { value: "Forish tumani", label: "Forish tumani", region: "Jizzax viloyati", badge: "Jizzax" },
+  { value: "G‘allaorol tumani", label: "G‘allaorol tumani", region: "Jizzax viloyati", badge: "Jizzax" },
+  { value: "Mirzacho‘l tumani", label: "Mirzacho‘l tumani", region: "Jizzax viloyati", badge: "Jizzax" },
+  { value: "Paxtakor tumani", label: "Paxtakor tumani", region: "Jizzax viloyati", badge: "Jizzax" },
+  { value: "Sharof Rashidov tumani", label: "Sharof Rashidov tumani", region: "Jizzax viloyati", badge: "Jizzax" },
+  { value: "Yangiobod tumani", label: "Yangiobod tumani", region: "Jizzax viloyati", badge: "Jizzax" },
+  { value: "Zafarobod tumani", label: "Zafarobod tumani", region: "Jizzax viloyati", badge: "Jizzax" },
+  { value: "Zarbdor tumani", label: "Zarbdor tumani", region: "Jizzax viloyati", badge: "Jizzax" },
+  { value: "Zomin tumani", label: "Zomin tumani", region: "Jizzax viloyati", badge: "Jizzax" },
+
+  // --- NAVOIY VILOYATI ---
+  { value: "Navoiy shahri", label: "Navoiy shahri", region: "Navoiy viloyati", badge: "Navoiy" },
+  { value: "Zarafshon shahri", label: "Zarafshon shahri", region: "Navoiy viloyati", badge: "Navoiy" },
+  { value: "Karmana tumani", label: "Karmana tumani", region: "Navoiy viloyati", badge: "Navoiy" },
+  { value: "Konimex tumani", label: "Konimex tumani", region: "Navoiy viloyati", badge: "Navoiy" },
+  { value: "Navbahor tumani", label: "Navbahor tumani", region: "Navoiy viloyati", badge: "Navoiy" },
+  { value: "Nurota tumani", label: "Nurota tumani", region: "Navoiy viloyati", badge: "Navoiy" },
+  { value: "Qiziltepa tumani", label: "Qiziltepa tumani", region: "Navoiy viloyati", badge: "Navoiy" },
+  { value: "Tomdi tumani", label: "Tomdi tumani", region: "Navoiy viloyati", badge: "Navoiy" },
+  { value: "Uchquduq tumani", label: "Uchquduq tumani", region: "Navoiy viloyati", badge: "Navoiy" },
+  { value: "Xatirchi tumani", label: "Xatirchi tumani", region: "Navoiy viloyati", badge: "Navoiy" },
+
+  // --- SIRDARYO VILOYATI ---
+  { value: "Guliston shahri", label: "Guliston shahri", region: "Sirdaryo viloyati", badge: "Sirdaryo" },
+  { value: "Shirin shahri", label: "Shirin shahri", region: "Sirdaryo viloyati", badge: "Sirdaryo" },
+  { value: "Yangiyer shahri", label: "Yangiyer shahri", region: "Sirdaryo viloyati", badge: "Sirdaryo" },
+  { value: "Boyovut tumani", label: "Boyovut tumani", region: "Sirdaryo viloyati", badge: "Sirdaryo" },
+  { value: "Guliston tumani", label: "Guliston tumani", region: "Sirdaryo viloyati", badge: "Sirdaryo" },
+  { value: "Mirzaobod tumani", label: "Mirzaobod tumani", region: "Sirdaryo viloyati", badge: "Sirdaryo" },
+  { value: "Oqoltin tumani", label: "Oqoltin tumani", region: "Sirdaryo viloyati", badge: "Sirdaryo" },
+  { value: "Sardoba tumani", label: "Sardoba tumani", region: "Sirdaryo viloyati", badge: "Sirdaryo" },
+  { value: "Sayxunobod tumani", label: "Sayxunobod tumani", region: "Sirdaryo viloyati", badge: "Sirdaryo" },
+  { value: "Sirdaryo tumani", label: "Sirdaryo tumani", region: "Sirdaryo viloyati", badge: "Sirdaryo" },
+  { value: "Xovos tumani", label: "Xovos tumani", region: "Sirdaryo viloyati", badge: "Sirdaryo" },
+
+  // --- XORAZM VILOYATI ---
+  { value: "Urganch shahri", label: "Urganch shahri", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Xiva shahri", label: "Xiva shahri", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Pitnak shahri", label: "Pitnak shahri", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Bog‘ot tumani", label: "Bog‘ot tumani", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Gurlan tumani", label: "Gurlan tumani", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Hazorasp tumani", label: "Hazorasp tumani", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Qo‘shko‘pir tumani", label: "Qo‘shko‘pir tumani", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Shovot tumani", label: "Shovot tumani", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Tuproqqal’a tumani", label: "Tuproqqal’a tumani", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Urganch tumani", label: "Urganch tumani", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Xiva tumani", label: "Xiva tumani", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Xonqa tumani", label: "Xonqa tumani", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Yangiariq tumani", label: "Yangiariq tumani", region: "Xorazm viloyati", badge: "Xorazm" },
+  { value: "Yangibozor tumani", label: "Yangibozor tumani", region: "Xorazm viloyati", badge: "Xorazm" },
+
+  // --- QORAQALPOG‘ISTON RESPUBLIKASI ---
+  { value: "Nukus shahri", label: "Nukus shahri", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Amudaryo tumani", label: "Amudaryo tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Beruniy tumani", label: "Beruniy tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Bo‘zatov tumani", label: "Bo‘zatov tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Chimboy tumani", label: "Chimboy tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Ellikqal’a tumani", label: "Ellikqal’a tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Kegeyli tumani", label: "Kegeyli tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Mo‘ynoq tumani", label: "Mo‘ynoq tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Nukus tumani", label: "Nukus tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Qanliko‘l tumani", label: "Qanliko‘l tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Qorao‘zak tumani", label: "Qorao‘zak tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Qo‘ng‘irot tumani", label: "Qo‘ng‘irot tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Shumanay tumani", label: "Shumanay tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Taxtako‘pir tumani", label: "Taxtako‘pir tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Taxiatosh tumani", label: "Taxiatosh tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "To‘rtko‘l tumani", label: "To‘rtko‘l tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+  { value: "Xo‘jayli tumani", label: "Xo‘jayli tumani", region: "Qoraqalpog‘iston Respublikasi", badge: "Qoraqalpog‘iston" },
+
+  // --- XORIJ / CHET EL ---
+  { value: "Xorij / Chet el", label: "Xorij / Chet el", region: "Xorij", badge: "Xorij" },
+];
+
+/** Shared city/district options for profile forms and public filters. */
+export const LOCATION_OPTIONS: SelectOption[] = UZBEKISTAN_LOCATIONS_DATA.map((item) => ({
+  value: item.value,
+  label: item.label,
+  badge: item.badge,
+}));

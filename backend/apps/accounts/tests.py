@@ -7,6 +7,57 @@ def client():
     return APIClient()
 
 @pytest.mark.django_db
+def test_admin_bootstrap_preserves_existing_credentials(monkeypatch):
+    from importlib import import_module
+    from django.apps import apps
+
+    emails = ["boburjonabduganiyev83@gmail.com", "existing-admin@example.com"]
+    monkeypatch.setenv("ADMIN_EMAIL", emails[1])
+    monkeypatch.setenv("ADMIN_PASSWORD", "must-not-replace-existing-password")
+    for email in emails:
+        user, _ = User.objects.get_or_create(email=email)
+        user.set_password("existing-private-password")
+        user.role = "staff"
+        user.is_staff = True
+        user.is_superuser = False
+        user.save()
+    before = list(User.objects.filter(email__in=emails).order_by("email").values(
+        "email", "password", "role", "is_staff", "is_superuser", "is_active"))
+    import_module("apps.accounts.migrations.0004_ensure_admin_user").create_or_update_admin(apps, None)
+    after = list(User.objects.filter(email__in=emails).order_by("email").values(
+        "email", "password", "role", "is_staff", "is_superuser", "is_active"))
+    assert after == before
+
+@pytest.mark.django_db
+def test_google_config_reopen_preserves_pending_nonce(client, settings, monkeypatch):
+    settings.GOOGLE_CLIENT_ID = "test.apps.googleusercontent.com"
+    nonce = client.get("/api/v1/auth/google/config/").data["nonce"]
+    assert client.get("/api/v1/auth/google/config/").data["nonce"] == nonce
+    monkeypatch.setattr("apps.accounts.views.id_token.verify_oauth2_token", lambda *args: {
+        "sub": "stable-nonce", "email": "stable@gmail.com", "email_verified": True,
+        "name": "Stable Nonce Graduate", "nonce": nonce,
+    })
+    response = client.post("/api/v1/auth/google/", {"credential": "signed-token"}, format="json")
+    assert response.status_code == 200
+    assert client.get("/api/v1/auth/session/").data["authenticated"]
+    assert client.post("/api/v1/auth/google/", {"credential": "signed-token"}, format="json").status_code == 400
+
+@pytest.mark.django_db
+def test_console_email_is_not_reported_as_delivery(client, settings):
+    settings.EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+    response = client.post("/api/v1/auth/send-code/", {"email": "test@example.com", "purpose": "login"}, format="json")
+    assert response.status_code == 503
+    assert not EmailVerificationCode.objects.exists()
+
+@pytest.mark.django_db
+def test_email_failure_is_reported_in_debug_too(client, settings, monkeypatch):
+    settings.DEBUG = True
+    monkeypatch.setattr("apps.accounts.views.send_mail", lambda **kwargs: 0)
+    response = client.post("/api/v1/auth/send-code/", {"email": "test@example.com", "purpose": "login"}, format="json")
+    assert response.status_code == 503
+    assert not EmailVerificationCode.objects.exists()
+
+@pytest.mark.django_db
 def test_send_code_blocks_when_consent_not_accepted(client):
     payload = {
         "email": "talaba@qarshidu.uz",

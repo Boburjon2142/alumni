@@ -269,7 +269,7 @@ export function EditProfileModal({
                         onChange={(e) => setGraduationYear(e.target.value ? Number(e.target.value) : "")}
                         style={{ width: "100%", padding: "0.65rem 0.85rem", border: "1px solid #cbd5e1", borderRadius: "8px", fontSize: "0.95rem", background: "#ffffff" }}
                       >
-                        <option value="">Bitirgan yilingizni tanlang</option>
+                        <option value="">Bitirgan yilingiz</option>
                         {years.map((y) => (
                           <option key={y} value={y}>
                             {y}-yil

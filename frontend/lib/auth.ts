@@ -1,3 +1,4 @@
+import { apiErrorMessage } from "./api-error";
 export async function authSession() {
   const response = await fetch("/api/v1/auth/session/", { credentials: "same-origin", cache: "no-store" });
   if (!response.ok) throw new Error("Kirish xizmatiga ulanib bo'lmadi.");
@@ -5,6 +6,10 @@ export async function authSession() {
 }
 
 export async function authenticatedFetch(path: string, options: RequestInit = {}) {
+  const method = (options.method || "GET").toUpperCase();
+  if (["GET", "HEAD", "OPTIONS"].includes(method)) {
+    return fetch(path, { ...options, credentials: "same-origin", cache: "no-store" });
+  }
   const session = await authSession();
   const headers = new Headers(options.headers);
   headers.set("X-CSRFToken", session.csrf_token);
@@ -25,18 +30,7 @@ export async function loginWithPassword(email: string, password: string) {
   });
   const data = await res.json().catch(() => null);
   if (!res.ok) {
-    const errorMsg =
-      data?.error?.fields?.non_field_errors?.[0] ||
-      data?.error?.fields?.email?.[0] ||
-      data?.error?.fields?.password?.[0] ||
-      data?.error?.fields?.detail ||
-      data?.non_field_errors?.[0] ||
-      data?.email?.[0] ||
-      data?.password?.[0] ||
-      data?.message ||
-      data?.error?.message ||
-      data?.detail ||
-      "Email yoki parol noto‘g‘ri.";
+    const errorMsg = apiErrorMessage(data, "Email yoki parol noto‘g‘ri.");
     throw new Error(errorMsg);
   }
   authChanged();

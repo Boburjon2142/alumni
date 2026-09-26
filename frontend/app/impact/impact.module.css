@@ -10,9 +10,10 @@
 }
 
 .container {
-  max-width: 1420px;
+  width: min(1760px, calc(100% - 64px));
+  max-width: 1760px;
   margin: 0 auto;
-  padding: 32px 24px 0;
+  padding: 40px 0 0;
 }
 
 /* 1. Header */
@@ -25,10 +26,10 @@
   box-shadow: 0 1px 3px rgba(16, 24, 40, 0.03);
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 24px;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1100px) {
   .headerCard {
     flex-direction: row;
     align-items: center;
@@ -53,7 +54,7 @@
 }
 
 .headerTitle {
-  font-size: clamp(24px, 3vw, 32px);
+  font-size: clamp(30px, 3vw, 44px);
   font-weight: 700;
   color: #1a247e;
   line-height: 1.2;
@@ -62,7 +63,7 @@
 }
 
 .headerSubtitle {
-  font-size: 14.5px;
+  font-size: 16px;
   color: #667085;
   line-height: 1.55;
   margin: 0;
@@ -147,7 +148,8 @@
 .searchWrapper {
   position: relative;
   flex: 1;
-  max-width: 620px;
+  max-width: 900px;
+  min-width: 0;
 }
 
 .searchIcon {
@@ -341,9 +343,23 @@
 /* 3. Two-Column Main Layout (Left: Table, Right: Explanation) */
 .mainLayout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 350px;
-  gap: 28px;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 24px;
   align-items: start;
+}
+
+.mainLayout > div { min-width: 0; }
+
+@media (max-width: 640px) {
+  .container {
+    width: calc(100% - 32px);
+    padding-top: 24px;
+  }
+  .headerCard { padding: 22px 20px; }
+  .headerActions { align-items: stretch; }
+  .headerActions > * { justify-content: center; }
+  .dropdownGroup { flex-wrap: wrap; }
+  .rankingTable { min-width: 620px; }
 }
 
 @media (max-width: 992px) {
@@ -363,7 +379,9 @@
 }
 
 .rankingsHeader {
-  padding: 16px 20px;
+  padding: 20px 24px;
+  flex-wrap: wrap;
+  gap: 8px;
   border-bottom: 1px solid #e3e6ef;
   display: flex;
   align-items: center;
@@ -408,8 +426,8 @@
 }
 
 .rankingTable td {
-  padding: 13px 16px;
-  font-size: 13.5px;
+  padding: 18px 20px;
+  font-size: 14px;
   border-bottom: 1px solid #f1f3f9;
   vertical-align: middle;
 }
@@ -459,8 +477,8 @@
 }
 
 .alumniAvatar {
-  width: 38px;
-  height: 38px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   overflow: hidden;
   background-color: #eff1fa;
@@ -481,7 +499,7 @@
 }
 
 .alumniName {
-  font-size: 13.5px;
+  font-size: 15px;
   font-weight: 600;
   color: #182037;
   text-decoration: none;
@@ -493,7 +511,8 @@
 }
 
 .alumniRole {
-  font-size: 11.5px;
+  font-size: 13px;
+  line-height: 1.5;
   color: #667085;
   margin-top: 1px;
 }

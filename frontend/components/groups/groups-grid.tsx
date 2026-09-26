@@ -29,26 +29,30 @@ export function GroupsGrid({
             key={group.year}
             href={`/groups/${group.year}`}
             className="group-card-item"
+            aria-label={`${group.year}-yil bitiruvchilari guruhi`}
           >
             <div className="group-card-top">
               <div className="group-year-badge">
-                <Calendar size={18} aria-hidden="true" />
+                <Calendar size={16} aria-hidden="true" />
                 <span>{group.year}-yil</span>
               </div>
               <div className="group-count-badge">
-                <Users size={15} aria-hidden="true" />
+                <Users size={14} aria-hidden="true" />
                 <span>{countLabel}</span>
               </div>
             </div>
 
             <div className="group-card-body">
-              <h3>{group.title}</h3>
-              <p className="group-subtitle">{group.subtitle}</p>
+              <h3 className="group-card-title">{group.title}</h3>
+              <p className="group-subtitle">
+                <GraduationCap size={15} aria-hidden="true" className="group-uni-icon" />
+                <span>{group.subtitle || "Qarshi davlat universiteti"}</span>
+              </p>
             </div>
 
             <div className="group-card-footer">
               <span className="group-cta-text">
-                {t.groupCardCta} <ArrowRight size={15} aria-hidden="true" />
+                {t.groupCardCta || "Guruhni ko'rish"} <ArrowRight size={15} aria-hidden="true" />
               </span>
             </div>
           </Link>

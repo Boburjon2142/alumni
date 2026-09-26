@@ -256,7 +256,7 @@ const dictionaries = {
     formFullNameLabel: "F.I.Sh.",
     formFullNamePlaceholder: "Masalan: Karimov Jamshid Abdullayevich",
     formYearLabel: "Bitirgan yil",
-    formYearPlaceholder: "Bitirgan yilingizni tanlang",
+    formYearPlaceholder: "Bitirgan yilingiz",
     formEmailLabel: "Aloqa uchun email",
     formEmailPlaceholder: "email@qarshidu.uz",
     formEmailHelper: "Universitet bilan aloqa uchun saqlanadi, ommaga e’lon qilinmaydi.",

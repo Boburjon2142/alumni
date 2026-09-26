@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   db:
     image: postgres:15-alpine
@@ -12,9 +10,27 @@ services:
       - POSTGRES_DB=${POSTGRES_DB:-alumni_db}
     networks:
       - alumni_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    networks:
+      - alumni_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 12
 
   backend:
     build: ./backend
+    env_file:
+      - .env
     restart: always
     command: gunicorn --workers 3 --threads 2 --worker-class gthread --keep-alive 65 --bind 0.0.0.0:8000 config.wsgi:application
     volumes:
@@ -27,26 +43,37 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-alumni_password_2026}
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
-      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:-django-insecure-secret-key-qardu-alumni-production-2026}
+      - DJANGO_SECRET_KEY=${DJANGO_SECRET_KEY:?Set DJANGO_SECRET_KEY in the server .env}
       - DJANGO_DEBUG=False
-      - DJANGO_ALLOWED_HOSTS=*
+      - DJANGO_ALLOWED_HOSTS=${DJANGO_ALLOWED_HOSTS:-localhost,127.0.0.1,backend,213.230.96.104}
+      - USE_REDIS=true
+      - REDIS_URL=redis://redis:6379/1
+      - EMAIL_BACKEND=django.core.mail.backends.smtp.EmailBackend
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - TELEGRAM_ADMIN_CHAT_ID=${TELEGRAM_ADMIN_CHAT_ID}
-      - CSRF_TRUSTED_ORIGINS=http://${DOMAIN:-89.39.95.153},https://${DOMAIN:-89.39.95.153},http://89.39.95.153,http://localhost:3000
-      - CORS_ALLOWED_ORIGINS=http://${DOMAIN:-89.39.95.153},https://${DOMAIN:-89.39.95.153},http://89.39.95.153,http://localhost:3000
+      - CSRF_TRUSTED_ORIGINS=${CSRF_TRUSTED_ORIGINS:-http://213.230.96.104,https://213.230.96.104,http://localhost:3000}
+      - CORS_ALLOWED_ORIGINS=http://${DOMAIN:-213.230.96.104},https://${DOMAIN:-213.230.96.104},http://213.230.96.104,http://localhost:3000
     ports:
       - "127.0.0.1:8005:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     networks:
       - alumni_network
 
   frontend:
-    build: ./frontend
+    build:
+      context: ./frontend
+      args:
+        API_URL: http://backend:8000/api/v1
     restart: always
     environment:
       - API_URL=http://backend:8000/api/v1
-      - NEXT_PUBLIC_API_URL=http://${DOMAIN:-89.39.95.153}/api/v1
+      - NEXT_PUBLIC_API_URL=/api/v1
+    depends_on:
+      - backend
     ports:
       - "127.0.0.1:3005:3000"
     networks:

@@ -1,3 +1,4 @@
+import { apiErrorMessage } from "./api-error";
 import { authenticatedFetch, authChanged } from "./auth";
 import type {
   AdminDashboardStats,
@@ -32,7 +33,8 @@ import type {
 const API = process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://127.0.0.1:8000/api/v1";
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const response = await fetch(`${API}${path}`, {
+  const base = typeof window === "undefined" ? API : "/api/v1";
+  const response = await fetch(`${base}${path}`, {
     next: { revalidate: 60 },
     ...options,
   });
@@ -74,12 +76,12 @@ export const getFaculties = () =>
 
 export const getAlumniGroups = (query = "") =>
   request<{ success: boolean; data: import("@/types/alumni").GraduationGroup[] }>(
-    `/alumni/groups/${query ? `?${query}` : ""}`
+    `/alumni/groups/${query ? `?${query}` : ""}`, { cache: "no-store", next: { revalidate: 0 } }
   ).then((res) => (Array.isArray(res) ? { success: true, data: res } : res));
 
 export const getAlumniGroup = (year: number, query = "") =>
   request<Page<Alumni> & { group: import("@/types/alumni").GraduationGroup }>(
-    `/alumni/groups/${year}/${query ? `?${query}` : ""}`
+    `/alumni/groups/${year}/${query ? `?${query}` : ""}`, { cache: "no-store", next: { revalidate: 0 } }
   );
 
 export const submitAlumni = async (
@@ -93,20 +95,7 @@ export const submitAlumni = async (
 
   const data = await response.json().catch(() => null);
   if (!response.ok) {
-    const errorMsg =
-      data?.error?.fields?.consent_accepted?.[0] ||
-      data?.error?.fields?.graduation_year?.[0] ||
-      data?.error?.fields?.contact_email?.[0] ||
-      data?.error?.fields?.verification_code?.[0] ||
-      data?.error?.fields?.full_name?.[0] ||
-      data?.error?.fields?.avatar?.[0] ||
-      data?.error?.fields?.credential?.[0] ||
-      data?.error?.fields?.detail ||
-      data?.error?.fields?.non_field_errors?.[0] ||
-      data?.message ||
-      data?.error?.message ||
-      data?.detail ||
-      "Anketani yuborishda xatolik yuz berdi.";
+    const errorMsg = apiErrorMessage(data, "Anketani yuborishda xatolik yuz berdi.");
     throw new Error(errorMsg);
   }
   if (data?.authenticated) authChanged();
@@ -126,16 +115,7 @@ export const sendVerificationCode = async (
   });
   const data = await res.json().catch(() => null);
   if (!res.ok) {
-    const errorMsg =
-      data?.error?.fields?.consent_accepted?.[0] ||
-      data?.error?.fields?.email?.[0] ||
-      data?.error?.fields?.credential?.[0] ||
-      data?.error?.fields?.detail ||
-      data?.error?.fields?.non_field_errors?.[0] ||
-      data?.message ||
-      data?.error?.message ||
-      data?.detail ||
-      "Tasdiqlash kodini yuborishda xatolik yuz berdi.";
+    const errorMsg = apiErrorMessage(data, "Tasdiqlash kodini yuborishda xatolik yuz berdi.");
     throw new Error(errorMsg);
   }
   if (data?.authenticated) authChanged();
@@ -155,15 +135,7 @@ export const verifyEmailCode = async (
   });
   const data = await res.json().catch(() => null);
   if (!res.ok) {
-    const errorMsg =
-      data?.error?.fields?.code?.[0] ||
-      data?.error?.fields?.credential?.[0] ||
-      data?.error?.fields?.detail ||
-      data?.error?.fields?.non_field_errors?.[0] ||
-      data?.message ||
-      data?.error?.message ||
-      data?.detail ||
-      "Kodni tasdiqlashda xatolik yuz berdi.";
+    const errorMsg = apiErrorMessage(data, "Kodni tasdiqlashda xatolik yuz berdi.");
     throw new Error(errorMsg);
   }
   if (data?.authenticated) authChanged();
@@ -182,15 +154,7 @@ export const authWithGoogle = async (
   });
   const data = await res.json().catch(() => null);
   if (!res.ok) {
-    const errorMsg =
-      data?.error?.fields?.consent_accepted?.[0] ||
-      data?.error?.fields?.credential?.[0] ||
-      data?.error?.fields?.detail ||
-      data?.error?.fields?.non_field_errors?.[0] ||
-      data?.message ||
-      data?.error?.message ||
-      data?.detail ||
-      "Google orqali autentifikatsiyada xatolik yuz berdi.";
+    const errorMsg = apiErrorMessage(data, "Google orqali autentifikatsiyada xatolik yuz berdi.");
     throw new Error(errorMsg);
   }
   if (data?.authenticated) authChanged();
@@ -203,90 +167,14 @@ export const sendFeedback = async (
   payload: FeedbackPayload,
   locale?: string
 ): Promise<FeedbackResponse> => {
-  const TELEGRAM_TOKEN = "8925895219:AAGFBC5vcpVHlLEJXukWYZPSJV0bK2PWlL4";
-  const TELEGRAM_CHAT_ID = "-1003901101723";
-
-  // 1. Try server-side routes
-  const endpoints = ["/api-proxy/feedback", "/api/feedback", "/api/v1/feedback/"];
-  for (const endpoint of endpoints) {
-    try {
-      const res = await fetch(endpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      if (res.ok) {
-        return (await res.json()) as FeedbackResponse;
-      }
-    } catch {
-      // try next
-    }
-  }
-
-  // Helper to escape HTML for fallback telegram notification
-  const escapeHtml = (str?: string) =>
-    (str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-  // 2. Direct client-side Telegram API fallback
-  try {
-    const typeLabels: Record<string, string> = {
-      proposal: "Taklif",
-      question: "Savol",
-      error_report: "Xato haqida xabar",
-      data_correction: "Ma’lumotni tuzatish",
-      alumni_nomination: "Bitiruvchi ma’lumotini taklif qilish",
-      additional_info: "Qo‘shimcha ma’lumot",
-      other: "Boshqa",
-    };
-
-    const typeStr = typeLabels[payload.type] || payload.type || "Taklif";
-    let text = `<b>📩 Yangi murojaat</b>\n\n`;
-    text += `<b>Turi:</b> ${escapeHtml(typeStr)}\n`;
-    if (payload.subject) text += `<b>Mavzu:</b> ${escapeHtml(payload.subject)}\n`;
-    if (payload.name) text += `<b>Ism:</b> ${escapeHtml(payload.name)}\n`;
-    if (payload.email) text += `<b>Email:</b> ${escapeHtml(payload.email)}\n`;
-    if (payload.phone) text += `<b>Telefon:</b> ${escapeHtml(payload.phone)}\n`;
-    if (payload.contact && !payload.email && !payload.phone) {
-      text += `<b>Aloqa:</b> ${escapeHtml(payload.contact)}\n`;
-    }
-    if (payload.page_url) text += `<b>Sahifa:</b> ${escapeHtml(payload.page_url)}\n`;
-    text += `\n<b>Xabar:</b>\n<i>${escapeHtml(payload.message.trim())}</i>\n`;
-    text += `\n📅 Sana: ${new Date().toLocaleString("uz-UZ", { timeZone: "Asia/Tashkent" })}`;
-
-    await fetch(`https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text,
-        parse_mode: "HTML",
-        disable_web_page_preview: true,
-      }),
-    });
-  } catch (tgErr) {
-    console.error("Direct telegram delivery error:", tgErr);
-  }
-
-  return {
-    success: true,
-    message: "Murojaatingiz qabul qilindi. Taklif va fikringiz uchun rahmat!",
-    data: {
-      id: Date.now(),
-      type: payload.type,
-      subject: payload.subject,
-      name: payload.name || "",
-      email: payload.email || "",
-      phone: payload.phone || "",
-      contact: payload.contact || "",
-      message: payload.message,
-      page_type: payload.page_type || "",
-      page_url: payload.page_url || "",
-      alumni: payload.alumni || null,
-      story: payload.story || null,
-      created_at: new Date().toISOString(),
-    },
-  };
+  const res = await fetch("/api-proxy/feedback", {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await res.json().catch(() => null);
+  if (!res.ok) throw new Error(apiErrorMessage(data, "Murojaatni yuborib bo'lmadi. Qayta urinib ko'ring."));
+  return data as FeedbackResponse;
 };
 
 export const confirmAlumnus = async (
@@ -676,4 +564,3 @@ export const deleteAdminNews = async (id: number): Promise<void> => {
   const res = await authenticatedFetch(`${getAdminBase()}/admin/news/${id}/`, { method: "DELETE" });
   if (!res.ok) throw new Error("Yangilikni o‘chirib bo‘lmadi");
 };
-

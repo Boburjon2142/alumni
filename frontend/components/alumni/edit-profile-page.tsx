@@ -33,6 +33,7 @@ import {
 import type { Alumni, EducationExperience, GraduationYearChangeRequest, WorkExperience } from "@/types/alumni";
 import type { Locale } from "@/lib/i18n";
 import { CustomSelect } from "@/components/ui/custom-select";
+import { LOCATION_OPTIONS } from "@/lib/uzbekistan-locations";
 
 const CURRENT_YEAR = new Date().getFullYear();
 const YEARS = Array.from({ length: CURRENT_YEAR - 1956 + 2 }, (_, i) => CURRENT_YEAR + 1 - i);
@@ -47,23 +48,6 @@ const DEGREE_LEVEL_OPTIONS = [
   { value: "other", label: "Boshqa oliy ta’lim" },
 ];
 
-const REGIONS = [
-  "Toshkent shahri",
-  "Toshkent viloyati",
-  "Qashqadaryo viloyati",
-  "Samarqand viloyati",
-  "Buxoro viloyati",
-  "Andijon viloyati",
-  "Farg‘ona viloyati",
-  "Namangan viloyati",
-  "Jizzax viloyati",
-  "Navoiy viloyati",
-  "Sirdaryo viloyati",
-  "Surxondaryo viloyati",
-  "Xorazm viloyati",
-  "Qoraqalpog‘iston Respublikasi",
-  "Xorij / Chet el",
-];
 
 const ACADEMIC_CHOICES = [
   { value: "", label: "Mavjud emas / Tanlanmagan" },
@@ -117,11 +101,7 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
   const [submittingYearRequest, setSubmittingYearRequest] = useState(false);
   const [pendingYearRequest, setPendingYearRequest] = useState<GraduationYearChangeRequest | null>(null);
 
-  // Block 2 state
-  const [industry, setIndustry] = useState("");
-  const [currentCompany, setCurrentCompany] = useState("");
-  const [position, setPosition] = useState("");
-  const [city, setCity] = useState("");
+  // Work experiences state
   const [workExperiences, setWorkExperiences] = useState<WorkExperience[]>([]);
 
   useEffect(() => {
@@ -161,14 +141,21 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
           setEducations([]);
         }
 
-        // Block 2
-        setIndustry(data.industry || "");
-        setCurrentCompany(data.current_company || "");
-        setPosition(data.position || "");
-        setCity(data.city || "");
-
+        // Work experiences - agar bo'sh bo'lsa va avvalgi profilida current_company bo'lsa, saqlab qolamiz
         if (Array.isArray(data.work_experiences) && data.work_experiences.length > 0) {
           setWorkExperiences(data.work_experiences);
+        } else if (data.current_company || data.position) {
+          setWorkExperiences([
+            {
+              region: data.city || "Qarshi shahri",
+              company: data.current_company || "",
+              position: data.position || "",
+              industry: data.industry || "",
+              start_year: data.graduation_year || CURRENT_YEAR,
+              end_year: null,
+              is_current: true,
+            },
+          ]);
         } else {
           setWorkExperiences([]);
         }
@@ -251,7 +238,7 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
     setWorkExperiences([
       ...workExperiences,
       {
-        region: "Toshkent shahri",
+        region: "Qarshi shahri",
         company: "",
         position: "",
         industry: "",
@@ -344,10 +331,23 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
         degreeVal = academicCredentials === "bachelor" ? "Bakalavr" : "Magistr";
       }
 
+      // Mehnat faoliyatida "Hozirgi vaqtgacha" (end_year bo'sh yoki is_current)
+      // tanlangani profilning asosiy (hozirgi) faoliyati sifatida saqlanadi
+      const currentWork =
+        workExperiences.find((w) => !w.end_year || w.is_current) ||
+        (workExperiences.length > 0 ? workExperiences[0] : null);
+
+      const primaryCompany = currentWork ? currentWork.company.trim() : "";
+      const primaryPosition = currentWork ? currentWork.position.trim() : "";
+      const primaryIndustry = currentWork ? (currentWork.industry || "").trim() : "";
+      const primaryCity = currentWork ? (currentWork.region || "").trim() : "";
+
       if (avatarFile) {
         const formData = new FormData();
         formData.append("avatar", avatarFile);
-        formData.append("city", city.trim());
+        if (primaryCity) {
+          formData.append("city", primaryCity);
+        }
         const resAvatar = await authenticatedFetch("/api/v1/alumni/me/", {
           method: "PATCH",
           body: formData,
@@ -373,10 +373,10 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
         degree: degreeVal,
         academic_degree: academicDegreeVal,
         academic_title: academicTitleVal,
-        industry: industry.trim(),
-        current_company: currentCompany.trim(),
-        position: position.trim(),
-        city: city.trim(),
+        industry: primaryIndustry,
+        current_company: primaryCompany,
+        position: primaryPosition,
+        city: primaryCity,
         ...(!isYearLocked && graduationYear ? { graduation_year: graduationYear } : {}),
         educations: educations.map((e, idx) => ({
           degree_level: e.degree_level || "master",
@@ -388,7 +388,7 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
           order: idx + 1,
         })),
         work_experiences: workExperiences.map((w, idx) => ({
-          region: w.region || "Toshkent shahri",
+          region: w.region || "Qarshi shahri",
           company: w.company.trim(),
           position: w.position.trim(),
           industry: (w.industry || "").trim(),
@@ -567,74 +567,71 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
               </div>
             </div>
 
-            {/* Bitirgan yili & Fakulteti (Side-by-side grid) */}
-            <div className="edit-profile-row-2col">
-              {/* Bitirgan yil */}
-              <div className="edit-profile-field">
-                <div className="edit-profile-label-row">
-                  <label className="edit-profile-label">Bitirgan yil</label>
-                  {isYearLocked && (
-                    <span className="edit-profile-chip-locked">
-                      <Lock size={11} />
-                      <span>Tasdiqlangan</span>
-                    </span>
-                  )}
-                </div>
-
-                {isYearLocked ? (
-                  <div className="edit-profile-locked-year-card">
-                    <div className="locked-year-badge-left">
-                      <GraduationCap size={18} className="text-brand-gold" />
-                      <span className="locked-year-text">{graduationYear}-yil</span>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={() => setShowYearRequestModal(true)}
-                      className="edit-profile-req-btn"
-                    >
-                      <Edit3 size={13} />
-                      <span>O‘zgartirish so‘rovi</span>
-                    </button>
-                  </div>
-                ) : (
-                  <CustomSelect
-                    value={graduationYear}
-                    onChange={(val) => setGraduationYear(val ? Number(val) : null)}
-                    options={YEARS.map((y) => ({ value: y, label: `${y}-yil` }))}
-                    placeholder="Bitirgan yilingizni tanlang"
-                    icon={GraduationCap}
-                  />
-                )}
-
-                {pendingYearRequest && (
-                  <div className="edit-profile-pending-notice">
-                    <Clock size={13} className="text-amber-600 flex-shrink-0" />
-                    <span>
-                      Adminga <strong>{pendingYearRequest.requested_year}-yil</strong> uchun so‘rov yuborilgan (Kutilmoqda).
-                    </span>
-                  </div>
+            {/* Bitirgan yili */}
+            <div className="edit-profile-field">
+              <div className="edit-profile-label-row">
+                <label className="edit-profile-label">Bitirgan yil</label>
+                {isYearLocked && (
+                  <span className="edit-profile-chip-locked">
+                    <Lock size={11} />
+                    <span>Tasdiqlangan</span>
+                  </span>
                 )}
               </div>
 
-              {/* Fakulteti */}
-              <div className="edit-profile-field">
-                <div className="edit-profile-label-row">
-                  <label htmlFor="faculty_name" className="edit-profile-label">
-                    Fakulteti
-                  </label>
-                  <span className="edit-profile-optional-badge">Ixtiyoriy</span>
+              {isYearLocked ? (
+                <div className="edit-profile-locked-year-card">
+                  <div className="locked-year-badge-left">
+                    <GraduationCap size={18} className="text-brand-gold" />
+                    <span className="locked-year-text">{graduationYear}-yil</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowYearRequestModal(true)}
+                    className="edit-profile-req-btn"
+                  >
+                    <Edit3 size={13} />
+                    <span>O‘zgartirish so‘rovi</span>
+                  </button>
                 </div>
-                <div className="edit-profile-input-icon-wrap">
-                  <Building2 size={16} className="input-leading-icon" />
-                  <input
-                    id="faculty_name"
-                    type="text"
-                    value={facultyName}
-                    onChange={(e) => setFacultyName(e.target.value)}
-                    placeholder="Masalan: Axborot texnologiyalari"
-                    className="edit-profile-input with-leading-icon"
-                  />
+              ) : (
+                <CustomSelect
+                  value={graduationYear}
+                  onChange={(val) => setGraduationYear(val ? Number(val) : null)}
+                  options={YEARS.map((y) => ({ value: y, label: `${y}-yil` }))}
+                  placeholder="Bitirgan yilingiz"
+                  icon={GraduationCap}
+                />
+              )}
+
+              {pendingYearRequest && (
+                <div className="edit-profile-pending-notice">
+                  <Clock size={13} className="text-amber-600 flex-shrink-0" />
+                  <span>
+                    Adminga <strong>{pendingYearRequest.requested_year}-yil</strong> uchun so‘rov yuborilgan (Kutilmoqda).
+                  </span>
                 </div>
+              )}
+            </div>
+
+            {/* Fakulteti */}
+            <div className="edit-profile-field">
+              <div className="edit-profile-label-row">
+                <label htmlFor="faculty_name" className="edit-profile-label">
+                  Fakulteti
+                </label>
+                <span className="edit-profile-optional-badge">Ixtiyoriy</span>
+              </div>
+              <div className="edit-profile-input-icon-wrap">
+                <Building2 size={16} className="input-leading-icon" />
+                <input
+                  id="faculty_name"
+                  type="text"
+                  value={facultyName}
+                  onChange={(e) => setFacultyName(e.target.value)}
+                  placeholder="Masalan: Axborot texnologiyalari"
+                  className="edit-profile-input with-leading-icon"
+                />
               </div>
             </div>
 
@@ -707,7 +704,7 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
                   className="edit-profile-empty-add-btn"
                 >
                   <Plus size={15} />
-                  <span>+ Magistratura / PhD qo‘shish</span>
+                  <span>Magistratura / PhD qo‘shish</span>
                 </button>
               </div>
             ) : (
@@ -732,7 +729,7 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
                     </div>
 
                     {/* Ta'lim darajasi & Bitirgan yili */}
-                    <div className="edit-profile-row-2col mb-3">
+                    <div className="edit-profile-row-2col">
                       <div className="edit-profile-field">
                         <label className="edit-profile-label">Ta’lim darajasi / Bosqichi</label>
                         <CustomSelect
@@ -756,7 +753,7 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
                     </div>
 
                     {/* Muassasa nomi & Fakultet/Yo'nalish */}
-                    <div className="edit-profile-row-2col mb-3">
+                    <div className="edit-profile-row-2col">
                       <div className="edit-profile-field">
                         <label className="edit-profile-label">OTM / Muassasa nomi</label>
                         <div className="edit-profile-input-icon-wrap">
@@ -806,16 +803,16 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
           </section>
 
           {/* ================================================================= */}
-          {/* 3. BLOK: FAOLIYAT VA MEHNAT TARIXI                                */}
+          {/* 3. BLOK: MEHNAT FAOLIYATI TARIXI                                  */}
           {/* ================================================================= */}
           <section className="edit-profile-card">
             <div className="edit-profile-card-header">
               <div className="edit-profile-card-badge-wrap">
                 <span className="edit-profile-card-number">3</span>
                 <div>
-                  <h2 className="edit-profile-card-title">Faoliyat va Mehnat tarixi</h2>
+                  <h2 className="edit-profile-card-title">Mehnat faoliyati tarixi</h2>
                   <span className="edit-profile-card-subtitle">
-                    Hozirgi soha va ishlagan tashkilotlar ({workExperiences.length}/7)
+                    Hozirgi va avvalgi ish joylari ({workExperiences.length}/7)
                   </span>
                 </div>
               </div>
@@ -834,120 +831,14 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
               </div>
             </div>
 
-            {/* Hozirgi soha (Industry) */}
-            <div className="edit-profile-field">
-              <div className="edit-profile-label-row">
-                <label htmlFor="industry" className="edit-profile-label">
-                  Hozirgi faoliyat sohasi
-                </label>
-                <span className="edit-profile-optional-badge">Ixtiyoriy</span>
-              </div>
-              <CustomSelect
-                id="industry"
-                value={industry}
-                onChange={(val) => setIndustry(val)}
-                options={
-                  industry && !INDUSTRIES.includes(industry)
-                    ? [industry, ...INDUSTRIES]
-                    : INDUSTRIES
-                }
-                placeholder="O‘z sohangizni tanlang"
-                icon={Briefcase}
-              />
-            </div>
-
-            {/* Hozirgi tashkilot va lavozim */}
-            <div className="edit-profile-row-2col">
-              <div className="edit-profile-field">
-                <div className="edit-profile-label-row">
-                  <label htmlFor="current_company" className="edit-profile-label">
-                    Hozirgi tashkilot / ish joyi
-                  </label>
-                </div>
-                <div className="edit-profile-input-icon-wrap">
-                  <Building2 size={16} className="input-leading-icon" />
-                  <input
-                    id="current_company"
-                    type="text"
-                    value={currentCompany}
-                    onChange={(e) => setCurrentCompany(e.target.value)}
-                    placeholder="Masalan: IT Park Uzbekistan"
-                    className="edit-profile-input with-leading-icon"
-                  />
-                </div>
-              </div>
-
-              <div className="edit-profile-field">
-                <div className="edit-profile-label-row">
-                  <label htmlFor="position" className="edit-profile-label">
-                    Hozirgi lavozimi
-                  </label>
-                </div>
-                <div className="edit-profile-input-icon-wrap">
-                  <User size={16} className="input-leading-icon" />
-                  <input
-                    id="position"
-                    type="text"
-                    value={position}
-                    onChange={(e) => setPosition(e.target.value)}
-                    placeholder="Masalan: Yetakchi dasturchi"
-                    className="edit-profile-input with-leading-icon"
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* Hozirgi ish joyi hududi */}
-            <div className="edit-profile-field">
-              <div className="edit-profile-label-row">
-                <label htmlFor="city" className="edit-profile-label">
-                  Hozirgi ish joyi hududi (Shahar / Viloyat)
-                </label>
-                <span className="edit-profile-optional-badge">Ixtiyoriy</span>
-              </div>
-              <CustomSelect
-                id="city"
-                value={city}
-                onChange={(val) => setCity(val)}
-                options={
-                  city && !REGIONS.includes(city)
-                    ? [city, ...REGIONS].map((r) => ({ value: r, label: r }))
-                    : REGIONS.map((r) => ({ value: r, label: r }))
-                }
-                placeholder="Hududni tanlang (masalan: Qashqadaryo viloyati)"
-                icon={MapPin}
-              />
-            </div>
-
-            {/* Mehnat faoliyati tarixi */}
-            <div className="edit-profile-work-history-section">
-              <div className="edit-profile-work-history-header">
-                <div>
-                  <h3 className="edit-profile-subheading">Mehnat faoliyati tarixi</h3>
-                  <p className="edit-profile-subheading-desc">
-                    Ixtiyoriy, 7 tagacha ish joyi qo‘shishingiz mumkin ({workExperiences.length}/7)
-                  </p>
-                </div>
-                {workExperiences.length < 7 && (
-                  <button
-                    type="button"
-                    onClick={handleAddWorkExperience}
-                    className="edit-profile-add-exp-btn"
-                  >
-                    <Plus size={14} />
-                    <span>Ish joyi qo‘shish</span>
-                  </button>
-                )}
-              </div>
-
               {workExperiences.length === 0 ? (
                 <div className="edit-profile-empty-experiences">
                   <div className="empty-exp-icon-wrap">
                     <Briefcase size={24} className="text-brand-purple" />
                   </div>
-                  <h4 className="empty-exp-title">Hozircha qo‘shimcha ish joylari qo‘shilmagan</h4>
+                  <h4 className="empty-exp-title">Hozircha ish joylari kiritilmagan</h4>
                   <p className="empty-exp-desc">
-                    Avvalgi yoki qo‘shimcha ishlagan korxonalaringizni qo‘shib, tajribangizni boyiting.
+                    Hozirgi yoki avvalgi ishlagan tashkilotingizni qo‘shib, kasbiy profilingizni shakllantiring.
                   </p>
                   <button
                     type="button"
@@ -963,11 +854,17 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
                   {workExperiences.map((exp, idx) => (
                     <div key={idx} className="edit-profile-exp-card">
                       <div className="edit-profile-exp-card-top">
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <span className="edit-profile-exp-badge">#{idx + 1}</span>
                           <span className="edit-profile-exp-title">
                             {exp.company || "Yangi ish joyi"}
                           </span>
+                          {(!exp.end_year || exp.is_current) && (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                              <CheckCircle2 size={12} className="text-emerald-600" />
+                              Hozirgi asosiy faoliyat
+                            </span>
+                          )}
                         </div>
                         <button
                           type="button"
@@ -980,14 +877,19 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
                       </div>
 
                       {/* Hudud va Faoliyat sohasi */}
-                      <div className="edit-profile-row-2col mb-3">
+                      <div className="edit-profile-row-2col">
                         <div className="edit-profile-field">
-                          <label className="edit-profile-label">Hudud (Shahar / Viloyat)</label>
+                          <label className="edit-profile-label">Hudud (Shahar / Tuman)</label>
                           <CustomSelect
                             value={exp.region}
                             onChange={(val) => handleUpdateWorkExperience(idx, { region: val })}
-                            options={REGIONS}
+                            options={
+                              exp.region && !LOCATION_OPTIONS.some((o) => o.value === exp.region)
+                                ? [{ value: exp.region, label: exp.region, badge: "Tanlangan" }, ...LOCATION_OPTIONS]
+                                : LOCATION_OPTIONS
+                            }
                             placeholder="Hududni tanlang"
+                            searchPlaceholder="Shahar yoki tumanni qidiring..."
                             icon={MapPin}
                           />
                         </div>
@@ -1008,7 +910,7 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
                       </div>
 
                       {/* Tashkilot & Lavozim */}
-                      <div className="edit-profile-row-2col mb-3">
+                      <div className="edit-profile-row-2col">
                         <div className="edit-profile-field">
                           <label className="edit-profile-label">Tashkilot nomi</label>
                           <div className="edit-profile-input-icon-wrap">
@@ -1072,7 +974,6 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
                   ))}
                 </div>
               )}
-            </div>
           </section>
         </div>
 

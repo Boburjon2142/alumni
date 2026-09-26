@@ -1,4 +1,5 @@
 from django.contrib.auth import login
+import logging
 from django.db import transaction
 from datetime import date
 from django.db.models import Count, Q
@@ -12,6 +13,8 @@ from rest_framework.views import APIView
 from common.cache_utils import cache_api_response
 from .models import AlumniProfile, AlumniRecognition, FeaturedAlumni, GraduationYearChangeRequest, RecognitionTitle
 from .notifications import get_approver_display_name, notify_new_alumni_confirmed
+
+logger = logging.getLogger(__name__)
 
 from .serializers import (
     AlumniSubmissionSerializer,
@@ -170,7 +173,7 @@ class GraduationGroupListView(APIView):
         base_qs = visible_profiles(request).exclude(graduation_year__isnull=True)
         
         if region:
-            if region.lower() in ["xorij", "chet el", "foreign", "abroad"]:
+            if region.lower() in ["xorij", "chet el", "foreign", "abroad", "xorij / chet el"]:
                 base_qs = base_qs.exclude(country__iexact="O‘zbekiston").exclude(country__iexact="O'zbekiston").exclude(country__iexact="Uzbekistan")
             else:
                 base_qs = base_qs.filter(
@@ -224,7 +227,7 @@ class GraduationGroupDetailView(generics.ListAPIView):
         qs = visible_profiles(self.request).filter(graduation_year=year)
         region = self.request.query_params.get("region", "").strip() or self.request.query_params.get("city", "").strip()
         if region:
-            if region.lower() in ["xorij", "chet el", "foreign", "abroad"]:
+            if region.lower() in ["xorij", "chet el", "foreign", "abroad", "xorij / chet el"]:
                 qs = qs.exclude(country__iexact="O‘zbekiston").exclude(country__iexact="O'zbekiston").exclude(country__iexact="Uzbekistan")
             else:
                 qs = qs.filter(
@@ -246,6 +249,7 @@ class GraduationGroupDetailView(generics.ListAPIView):
             "subtitle": "Qarshi davlat universiteti",
             "description": f"{year}-yilda Qarshi davlat universitetini tamomlagan bitiruvchilar.",
             "total_members": total_count,
+            "members_count": total_count,
         }
         if isinstance(response.data, dict):
             response.data["group"] = group_meta

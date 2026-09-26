@@ -77,7 +77,6 @@ export function RemoteImage({
     activeSrc &&
       (activeSrc.startsWith("http://localhost") ||
         activeSrc.startsWith("http://127.0.0.1") ||
-        activeSrc.startsWith("/images/") ||
         activeSrc.startsWith("/media/") ||
         activeSrc.startsWith("https://i.ytimg.com") ||
         activeSrc.startsWith("https://img.youtube.com"))

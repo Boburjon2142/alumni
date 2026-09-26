@@ -1,10 +1,18 @@
 import os
+import sys
 from pathlib import Path
 from dotenv import load_dotenv
 
+if hasattr(sys.stdout, "reconfigure"):
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:
+        pass
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR.parent / ".env")
-load_dotenv(BASE_DIR / ".env")
+load_dotenv(BASE_DIR / ".env", override=True)
 
 from django.core.exceptions import ImproperlyConfigured
 
@@ -12,9 +20,11 @@ SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "")
 DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() == "true"
 
 if not SECRET_KEY or SECRET_KEY == "dev-only-change-me":
-    SECRET_KEY = "django-prod-sec-key-qardu-alumni-2026-9f8a7b6c5d4e3f2a1b0c9d8e7f6a5b4c"
+    if not DEBUG:
+        raise ImproperlyConfigured("DJANGO_SECRET_KEY is required in production")
+    SECRET_KEY = "dev-only-change-me"
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [host.strip() for host in os.getenv("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,backend,testserver").split(",") if host.strip()]
 
 INSTALLED_APPS = [
     "django.contrib.admin", "django.contrib.auth", "django.contrib.contenttypes",
@@ -154,8 +164,8 @@ else:
 
 # --- Frontend & Telegram Bot Integration ---
 FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000").rstrip("/")
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "8925895219:AAGFBC5vcpVHlLEJXukWYZPSJV0bK2PWlL4")
-TELEGRAM_ADMIN_CHAT_ID = os.getenv("TELEGRAM_ADMIN_CHAT_ID", "-1003901101723")
+TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+TELEGRAM_ADMIN_CHAT_ID = os.getenv("TELEGRAM_ADMIN_CHAT_ID", "")
 TELEGRAM_BOT_USERNAME = os.getenv("TELEGRAM_BOT_USERNAME", "qarshidu_alumni_bot")
 
 
