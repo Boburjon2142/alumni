@@ -15265,6 +15265,15 @@ img, video, iframe, canvas {
   transform: translateZ(0);
   will-change: opacity, visibility;
   transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  animation: preloaderAutoHide 0.35s ease 0.65s forwards;
+}
+
+@keyframes preloaderAutoHide {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
 }
 
 .brand-preloader-fading {
