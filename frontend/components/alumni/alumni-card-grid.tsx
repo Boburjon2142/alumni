@@ -13,17 +13,19 @@ export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: L
   return (
     <div className="cards-grid directory-grid">
       {alumni.map((item) => {
-        const initials = item.full_name
+        const name = item.full_name || "";
+        const initials = name
           .split(" ")
+          .filter(Boolean)
           .map((part) => part[0])
           .slice(0, 2)
-          .join("");
+          .join("") || "AD";
         const ariaLabel =
           locale === "ru"
-            ? `Посмотреть профиль ${item.full_name}`
+            ? `Посмотреть профиль ${name}`
             : locale === "en"
-            ? `View profile of ${item.full_name}`
-            : `${item.full_name} profilini ko‘rish`;
+            ? `View profile of ${name}`
+            : `${name} profilini ko‘rish`;
 
         return (
           <Link
