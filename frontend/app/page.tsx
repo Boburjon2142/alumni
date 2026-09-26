@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { ArrowRight, GraduationCap } from "lucide-react";
 import { AlumniCardGrid } from "@/components/alumni/alumni-card-grid";
-import { Button } from "@/components/ui/button";
 import { HeroCarousel } from "@/components/hero/hero-carousel";
-import { FeaturedCriteriaModal } from "@/components/alumni/featured-criteria-modal";
 import { getAlumni } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import type { Alumni } from "@/types/alumni";
@@ -47,11 +45,6 @@ export default async function Home() {
                 <em>{t.heroAccent}</em>
               </h1>
               <p>{t.heroDescription}</p>
-              <div className="hero-actions">
-                <Button href="/alumni">
-                  {t.heroCtaPrimary} <ArrowRight aria-hidden="true" />
-                </Button>
-              </div>
             </div>
           </div>
         </div>
@@ -67,7 +60,6 @@ export default async function Home() {
               <p className="section-sublead">{t.featuredSubtitle}</p>
             </div>
             <div className="section-heading-actions">
-              <FeaturedCriteriaModal locale={locale} />
               <Link href="/alumni" className="section-heading-link">
                 {t.viewAllAlumni} <ArrowRight />
               </Link>
