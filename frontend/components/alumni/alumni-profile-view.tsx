@@ -146,30 +146,21 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
       ? `${origin}/alumni/${profile.slug}`
       : `${origin}/alumni`;
 
-    const yearStr = profile.graduation_year ? ` (${profile.graduation_year}-yil)` : "";
-    const roleStr = (profile.position || profile.current_company)
-      ? ` — ${[profile.position, profile.current_company].filter(Boolean).join(", ")}`
-      : "";
-    const shareTitle = `${fullName} — Qarshi davlat universiteti bitiruvchisi`;
-    const shareText = `🎓 ${fullName}${yearStr}${roleStr}\nQarshi davlat universiteti — Bitiruvchi profili:`;
-
-    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
-      try {
-        await navigator.share({
-          title: shareTitle,
-          text: shareText,
-          url: publicUrl,
-        });
-        return;
-      } catch (err: any) {
-        if (err?.name === "AbortError") return;
+    try {
+      if (typeof navigator !== "undefined" && navigator.clipboard) {
+        await navigator.clipboard.writeText(publicUrl);
+      } else if (typeof document !== "undefined") {
+        const textarea = document.createElement("textarea");
+        textarea.value = publicUrl;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textarea);
       }
-    }
-
-    if (typeof navigator !== "undefined" && navigator.clipboard) {
-      await navigator.clipboard.writeText(publicUrl);
       setShareToast(true);
       setTimeout(() => setShareToast(false), 3000);
+    } catch (err) {
+      console.error("Failed to copy link", err);
     }
   };
 
