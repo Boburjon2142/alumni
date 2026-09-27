@@ -23,14 +23,11 @@ export function ProfileShareButtons({
   const [copied, setCopied] = useState(false);
 
   const getProfileUrl = () => {
-    if (typeof window !== "undefined") {
-      const origin = window.location.origin;
-      if (slug) {
-        return `${origin}/alumni/${slug}`;
-      }
-      return window.location.href;
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://alumni.qarshidu.uz";
+    if (slug) {
+      return `${origin}/alumni/${slug}`;
     }
-    return `https://alumni.qarshidu.uz/alumni/${slug}`;
+    return `${origin}/alumni`;
   };
 
   const getShareText = () => {

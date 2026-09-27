@@ -142,8 +142,9 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
 
   const handleShare = async () => {
     const origin = typeof window !== "undefined" ? window.location.origin : "https://alumni.qarshidu.uz";
-    const publicUrl = profile.slug
-      ? `${origin}/alumni/${profile.slug}`
+    const identifier = profile.slug || profile.id;
+    const publicUrl = identifier
+      ? `${origin}/alumni/${identifier}`
       : `${origin}/alumni`;
 
     try {
