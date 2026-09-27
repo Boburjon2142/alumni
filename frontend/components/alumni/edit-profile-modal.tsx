@@ -39,9 +39,11 @@ export function EditProfileModal({
           return;
         }
         const user = session.user;
+        const alumnusEmail = alumnus.contact_email ? alumnus.contact_email.toLowerCase() : "";
+        const userEmail = user.email ? user.email.toLowerCase() : "";
         const isOwner =
-          (Boolean(user.slug && alumnus.slug) && user.slug === alumnus.slug) ||
-          (Boolean(alumnus.contact_email && user.email) && user.email.toLowerCase() === alumnus.contact_email.toLowerCase());
+          Boolean(user.slug && alumnus.slug && user.slug === alumnus.slug) ||
+          Boolean(alumnusEmail && userEmail && userEmail === alumnusEmail);
 
         setCanEditState(Boolean(isOwner));
       })
