@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { HelpCircle, PlusCircle, ShieldCheck } from "lucide-react";
+import { FileText, PlusCircle, ShieldCheck } from "lucide-react";
 import type { Dictionary } from "@/lib/i18n";
 import styles from "@/app/impact/impact.module.css";
 
@@ -36,9 +36,14 @@ export function ImpactHeader({ t, onOpenSubmitModal }: ImpactHeaderProps) {
           </button>
         )}
 
-        <a href="#how-it-works" className={styles.secondaryBtn}>
-          <HelpCircle size={15} color="#667085" />
-          <span>{t.impactHowItWorksTitle}</span>
+        <a
+          href="/documents/qardu-bitiruvchilar-mukofotlari.pdf"
+          target="_blank"
+          rel="noopener noreferrer"
+          className={styles.secondaryBtn}
+        >
+          <FileText size={15} color="#667085" />
+          <span>{t.impactRegulationBtn || "Nizom bilan tanishish"}</span>
         </a>
       </div>
     </div>

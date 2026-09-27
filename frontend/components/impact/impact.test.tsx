@@ -19,6 +19,7 @@ const mockT = {
   impactTitle: "E’tirof",
   impactSubtitle: "Universitet va bitiruvchilar hamjamiyatiga qo‘shilgan tasdiqlangan hissalar",
   impactSubmitCta: "Tashabbus haqida xabar bering",
+  impactRegulationBtn: "Nizom bilan tanishish",
   impactHowItWorksTitle: "E’tirof qanday beriladi?",
   impactHowItWorksDesc: "ALUMNI reytingi tasdiqlangan foydali ishlarga asoslanadi.",
   impactPillar1Title: "Karyera va amaliyot",
