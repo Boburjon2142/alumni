@@ -100,8 +100,8 @@ class SendVerificationCodeView(APIView):
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 32px 26px; border: 1px solid #e5e7eb; border-radius: 20px; background: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
           <!-- Circular Logo & Black Brand Text -->
           <div style="text-align: center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid #f3f4f6;">
-            <div style="display: inline-block; width: 72px; height: 72px; border-radius: 50%; background: #ffffff; padding: 4px; border: 2px solid #000000; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; vertical-align: middle;">
-              <img src="https://alumni.qarshidu.uz/images/logo.png" alt="QarDU" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%; display: block;" />
+            <div style="display: inline-block; width: 80px; height: 80px; border-radius: 50%; background: #ffffff; padding: 4px; border: 2px solid #000000; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; vertical-align: middle;">
+              <img src="https://alumni.qarshidu.uz/images/qardu-avatar.png" alt="QarDU" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%; display: block;" />
             </div>
             <div style="margin-top: 12px;">
               <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #000000; letter-spacing: 0.5px; text-transform: uppercase;">QARSHI DAVLAT UNIVERSITETI</h3>

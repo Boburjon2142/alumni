@@ -154,8 +154,8 @@ def notify_existing_alumni_via_email(profile, approver_name: str) -> int:
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 580px; margin: 0 auto; background: #ffffff; border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
       <div style="background: linear-gradient(135deg, #002B49 0%, #004270 100%); padding: 28px 24px; text-align: center; color: #ffffff;">
         <div style="text-align: center; margin-bottom: 14px;">
-          <div style="display: inline-block; width: 68px; height: 68px; border-radius: 50%; background: #ffffff; padding: 4px; border: 2px solid #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.15); overflow: hidden; vertical-align: middle;">
-            <img src="https://alumni.qarshidu.uz/images/logo.png" alt="QarDU" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%; display: block;" />
+          <div style="display: inline-block; width: 76px; height: 76px; border-radius: 50%; background: #ffffff; padding: 4px; border: 2px solid #ffffff; box-shadow: 0 2px 10px rgba(0,0,0,0.15); overflow: hidden; vertical-align: middle;">
+            <img src="https://alumni.qarshidu.uz/images/qardu-avatar.png" alt="QarDU" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%; display: block;" />
           </div>
         </div>
         <span style="display: inline-block; background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Yangi a’zo</span>
