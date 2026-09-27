@@ -18,6 +18,33 @@ type Props = { params: Promise<{ id: string }> };
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
+function formatMetaImageUrl(src?: string | null, slug?: string, isHonorary?: boolean): string {
+  let s = (src || "").trim();
+  
+  // Clean up any localhost/127.0.0.1/backend internal hostnames from Django DRF serialization
+  s = s.replace(/^https?:\/\/(?:127\.0\.0\.1|localhost|0\.0\.0\.0|backend)(?::\d+)?\/?/i, "/");
+
+  if (s.startsWith("http://") || s.startsWith("https://")) {
+    return s;
+  }
+
+  // If empty and is honorary alumnus with slug
+  if (!s && slug && isHonorary) {
+    s = `/images/faxriylar/${slug}.webp`;
+  }
+
+  // If still empty, fall back to official university brand avatar
+  if (!s) {
+    return "https://alumni.qarshidu.uz/images/qardu-avatar.png";
+  }
+
+  // If it's a relative path like "alumni/..." or "avatars/...", make sure it starts with /media/
+  if (!s.startsWith("/")) {
+    s = `/media/${s}`;
+  }
+
+  return `https://alumni.qarshidu.uz${s}`;
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
@@ -26,11 +53,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const title = alumnus.seo_title || `${alumnus.full_name} — Qarshi davlat universiteti bitiruvchisi`;
     const description = alumnus.seo_description || alumnus.biography_uz || alumnus.bio || `${alumnus.full_name} haqida to‘liq ma’lumot, hayot yo‘li va erishgan yutuqlari.`;
     
-    // Resolve absolute image URL for Telegram preview
-    const rawImage = alumnus.image_url || alumnus.avatar || `/images/faxriylar/${alumnus.slug}.webp`;
-    const imageUrl = rawImage.startsWith("http")
-      ? rawImage
-      : `https://alumni.qarshidu.uz${rawImage.startsWith("/") ? "" : "/"}${rawImage}`;
+    // Resolve absolute public image URL for Telegram / social media preview
+    const imageUrl = formatMetaImageUrl(alumnus.avatar || alumnus.image_url, alumnus.slug, alumnus.is_honorary);
 
     return {
       title,
@@ -62,7 +86,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return {
       title: "Bitiruvchi profili — Qarshi davlat universiteti",
       openGraph: {
-        images: ["https://alumni.qarshidu.uz/brand/Logo.png"],
+        images: ["https://alumni.qarshidu.uz/images/qardu-avatar.png"],
       },
     };
   }

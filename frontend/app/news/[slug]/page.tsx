@@ -9,8 +9,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   try {
     const news = await getNewsBySlug(slug);
-    const rawImage = news.cover_image_url || news.cover_image || "/brand/Logo.png";
-    const imageUrl = rawImage.startsWith("http")
+    let rawImage = (news.cover_image_url || news.cover_image || "/images/qardu-avatar.png").trim();
+    rawImage = rawImage.replace(/^https?:\/\/(?:127\.0\.0\.1|localhost|0\.0\.0\.0|backend)(?::\d+)?\/?/i, "/");
+    const imageUrl = rawImage.startsWith("http://") || rawImage.startsWith("https://")
       ? rawImage
       : `https://alumni.qarshidu.uz${rawImage.startsWith("/") ? "" : "/"}${rawImage}`;
 

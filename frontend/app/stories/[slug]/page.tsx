@@ -25,8 +25,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     const story = await getStoryBySlug(slug);
     const title = story.title_uz || "Muvaffaqiyat hikoyasi";
     const desc = story.summary_uz || "Qarshi davlat universiteti bitiruvchisi muvaffaqiyat hikoyasi.";
-    const rawImage = story.hero_image_url || story.hero_image || "/brand/Logo.png";
-    const imageUrl = rawImage.startsWith("http")
+    let rawImage = (story.hero_image_url || story.hero_image || "/images/qardu-avatar.png").trim();
+    rawImage = rawImage.replace(/^https?:\/\/(?:127\.0\.0\.1|localhost|0\.0\.0\.0|backend)(?::\d+)?\/?/i, "/");
+    const imageUrl = rawImage.startsWith("http://") || rawImage.startsWith("https://")
       ? rawImage
       : `https://alumni.qarshidu.uz${rawImage.startsWith("/") ? "" : "/"}${rawImage}`;
 
