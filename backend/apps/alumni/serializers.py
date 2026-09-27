@@ -283,8 +283,8 @@ class OwnAlumniSerializer(serializers.ModelSerializer):
         return value
 
     def validate_educations(self, value):
-        if value and len(value) > 10:
-            raise serializers.ValidationError("Ta'lim bo‘yicha ko‘pi bilan 10 ta yozuv qo‘shish mumkin.")
+        if value and len(value) > 5:
+            raise serializers.ValidationError("Ta'lim bo‘yicha ko‘pi bilan 5 ta yozuv qo‘shish mumkin.")
         return value
 
     def validate_work_experiences(self, value):
@@ -319,7 +319,7 @@ class OwnAlumniSerializer(serializers.ModelSerializer):
         if educations_data is not None:
             instance.educations.all().delete()
             created_edu = []
-            for idx, edu_data in enumerate(educations_data[:10]):
+            for idx, edu_data in enumerate(educations_data[:5]):
                 created_edu.append(
                     EducationExperience(
                         alumnus=instance,

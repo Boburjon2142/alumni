@@ -200,8 +200,8 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
   };
 
   const handleAddEducation = () => {
-    if (educations.length >= 10) {
-      setError("Ko‘pi bilan 10 ta ta’lim bosqichini qo‘shishingiz mumkin.");
+    if (educations.length >= 5) {
+      setError("Ko‘pi bilan 5 ta ta’lim bosqichini qo‘shishingiz mumkin.");
       return;
     }
     setError("");
@@ -670,12 +670,12 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
                 <div>
                   <h2 className="edit-profile-card-title">Ta’lim bosqichlari</h2>
                   <span className="edit-profile-card-subtitle">
-                    Magistratura, PhD, DSc va boshqa oliy ta’lim ({educations.length}/10)
+                    Magistratura, PhD, DSc va boshqa oliy ta’lim ({educations.length}/5)
                   </span>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                {educations.length < 10 && (
+                {educations.length < 5 && (
                   <button
                     type="button"
                     onClick={handleAddEducation}
