@@ -97,18 +97,32 @@ class SendVerificationCodeView(APIView):
             f"Agar bu so‘rovni siz amalga oshirmagan bo‘lsangiz, ushbu xatga e’tibor bermang."
         )
         html_message = f"""
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 28px 24px; border: 1px solid #e2e8f0; border-radius: 16px; background: #ffffff; box-shadow: 0 4px 16px rgba(0,0,0,0.06);">
-          <div style="text-align: center; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9;">
-            <img src="https://alumni.qarshidu.uz/images/logo.png" alt="QarshiDU Logotipi" style="max-height: 52px; width: auto; display: inline-block;" />
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 32px 26px; border: 1px solid #e5e7eb; border-radius: 20px; background: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+          <!-- Circular Logo & Black Brand Text -->
+          <div style="text-align: center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid #f3f4f6;">
+            <div style="display: inline-block; width: 72px; height: 72px; border-radius: 50%; background: #ffffff; padding: 4px; border: 2px solid #000000; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; vertical-align: middle;">
+              <img src="https://alumni.qarshidu.uz/images/logo.png" alt="QarDU" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%; display: block;" />
+            </div>
+            <div style="margin-top: 12px;">
+              <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #000000; letter-spacing: 0.5px; text-transform: uppercase;">QARSHI DAVLAT UNIVERSITETI</h3>
+              <p style="margin: 3px 0 0 0; font-size: 13px; font-weight: 700; color: #000000;">Bitiruvchilar Hamjamiyati (ALUMNI)</p>
+            </div>
           </div>
-          <h2 style="color: #002B49; margin-top: 0; font-size: 20px; text-align: center; font-weight: 700;">Bitiruvchilar Portali</h2>
-          <p style="color: #475569; font-size: 15px; line-height: 1.5; text-align: center; margin-bottom: 20px;">Assalomu alaykum! Profilingizni tasdiqlash uchun quyidagi bir martalik koddan foydalaning:</p>
-          <div style="background: #f8fafc; padding: 20px; border-radius: 12px; text-align: center; margin: 20px 0; border: 1px dashed #cbd5e1;">
-            <span style="font-size: 36px; font-weight: 800; letter-spacing: 8px; color: #002B49; font-family: monospace;">{code}</span>
+
+          <!-- Main Content with Black Typography -->
+          <h2 style="color: #000000; margin-top: 0; font-size: 20px; text-align: center; font-weight: 800;">Bir martalik tasdiqlash kodi</h2>
+          <p style="color: #111827; font-size: 15px; line-height: 1.5; text-align: center; margin: 12px 0 24px 0;">
+            Assalomu alaykum! Profilingizni tasdiqlash uchun quyidagi bir martalik maxsus koddan foydalaning:
+          </p>
+
+          <!-- OTP Code Box -->
+          <div style="background: #f9fafb; padding: 20px; border-radius: 14px; text-align: center; margin: 20px 0; border: 2px dashed #000000;">
+            <span style="font-size: 38px; font-weight: 900; letter-spacing: 10px; color: #000000; font-family: 'Courier New', Courier, monospace; display: inline-block; padding-left: 10px;">{code}</span>
           </div>
-          <p style="color: #64748b; font-size: 13px; line-height: 1.5; text-align: center; margin-top: 20px;">
-            ⏰ Ushbu kod <strong>10 daqiqa</strong> davomida amal qiladi.<br>
-            Xavfsizlik yuzasidan kodni hech kimga bermang.
+
+          <p style="color: #1f2937; font-size: 13px; line-height: 1.5; text-align: center; margin-top: 22px;">
+            ⏰ Ushbu kod <strong style="color: #000000;">10 daqiqa</strong> davomida amal qiladi.<br>
+            <span style="color: #4b5563;">Xavfsizlik yuzasidan ushbu kodni begonalarga bermang.</span>
           </p>
         </div>
         """
