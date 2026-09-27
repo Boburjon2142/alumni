@@ -4952,7 +4952,7 @@ button:disabled { cursor: not-allowed; }
 
 /* --- Honorary Profile 2-Column Responsive Layout --- */
 .honorary-profile-body {
-  padding-top: 60px !important;
+  padding-top: 40px !important;
   padding-bottom: 96px !important;
   display: block !important;
   grid-template-columns: none !important;

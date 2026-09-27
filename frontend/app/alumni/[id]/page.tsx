@@ -1,14 +1,26 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft, Award, BadgeCheck, BookOpen, ExternalLink, GraduationCap, MapPin, MessageSquareQuote } from "lucide-react";
+import {
+  ArrowLeft,
+  Award,
+  BookOpen,
+  Briefcase,
+  Building2,
+  Clock,
+  ExternalLink,
+  GraduationCap,
+  MapPin,
+  MessageSquareQuote,
+  User,
+} from "lucide-react";
 import { RemoteImage } from "@/components/ui/remote-image";
 import { EditProfileModal } from "@/components/alumni/edit-profile-modal";
 import { PeerConfirmation } from "@/components/alumni/peer-confirmation";
 import { ProfileShareButtons } from "@/components/alumni/profile-share-buttons";
 import { AlumniOfficialAwards } from "@/components/alumni/alumni-official-awards";
 import { AlumniImpactCard } from "@/components/impact/alumni-impact-card";
-
+import type { EducationExperience, WorkExperience } from "@/types/alumni";
 
 import { getAlumniById } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
@@ -17,6 +29,16 @@ type Props = { params: Promise<{ id: string }> };
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
+
+const DEGREE_LABELS: Record<string, string> = {
+  bachelor: "Bakalavr",
+  master: "Magistratura (Magistr)",
+  phd: "Falsafa doktori (PhD)",
+  dsc: "Fan doktori (DSc)",
+  residency: "Ordinatura / Rezidentura",
+  second_degree: "Ikkinchi oliy ta’lim",
+  other: "Oliy ta’lim",
+};
 
 function formatMetaImageUrl(src?: string | null, slug?: string, isHonorary?: boolean): string {
   let s = (src || "").trim();
@@ -92,7 +114,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 }
 
-
 export default async function Profile({ params }: Props) {
   const locale = await getLocale();
   const t = getDictionary(locale);
@@ -117,6 +138,10 @@ export default async function Profile({ params }: Props) {
     Boolean(cleanPos && cleanComp && (normPos.includes(normComp) || normComp.includes(normPos)));
   const displayPosition = cleanPos || t.graduate;
   const displayCompany = cleanComp && !isCompanyInPosition ? cleanComp : null;
+
+  const academicDegree = a.academic_degree || a.academic_title || a.degree || "Bakalavr";
+  const educationList: EducationExperience[] = Array.isArray(a.educations) ? a.educations : [];
+  const workList: WorkExperience[] = Array.isArray(a.work_experiences) ? a.work_experiences : [];
 
   return (
     <article className="honorary-profile">
@@ -163,28 +188,20 @@ export default async function Profile({ params }: Props) {
             </div>
 
             <div className="honorary-meta" aria-label="Alumni metadata">
-              {(a.faculty || a.graduation_year) && (
+              {a.graduation_year && (
                 <div className="honorary-meta-item honorary-meta-edu">
                   <span className="honorary-meta-icon-wrapper" aria-hidden="true">
                     <GraduationCap size={15} />
                   </span>
-                  <span className="honorary-meta-text">
-                    {a.faculty && <span>{a.faculty}</span>}
-                    {a.faculty && a.graduation_year && (
-                      <span className="honorary-meta-year"> · {a.graduation_year}</span>
-                    )}
-                    {!a.faculty && a.graduation_year && (
-                      <span className="honorary-meta-year">{a.graduation_year}</span>
-                    )}
-                  </span>
+                  <span className="honorary-meta-text">QarDU {a.graduation_year}-yil bitiruvchisi</span>
                 </div>
               )}
-              {a.specialty && (
-                <div className="honorary-meta-item honorary-meta-spec" title={a.specialty}>
+              {academicDegree && (
+                <div className="honorary-meta-item honorary-meta-deg">
                   <span className="honorary-meta-icon-wrapper" aria-hidden="true">
-                    <BookOpen size={15} />
+                    <Award size={15} />
                   </span>
-                  <span className="honorary-meta-text">{a.specialty}</span>
+                  <span className="honorary-meta-text">{DEGREE_LABELS[academicDegree] || academicDegree}</span>
                 </div>
               )}
               {(a.city || a.country) && (
@@ -197,13 +214,23 @@ export default async function Profile({ params }: Props) {
                   </span>
                 </div>
               )}
+              {a.faculty && (
+                <div className="honorary-meta-item honorary-meta-spec" title={a.faculty}>
+                  <span className="honorary-meta-icon-wrapper" aria-hidden="true">
+                    <Building2 size={15} />
+                  </span>
+                  <span className="honorary-meta-text">{a.faculty}</span>
+                </div>
+              )}
+              {a.specialty && (
+                <div className="honorary-meta-item honorary-meta-spec" title={a.specialty}>
+                  <span className="honorary-meta-icon-wrapper" aria-hidden="true">
+                    <BookOpen size={15} />
+                  </span>
+                  <span className="honorary-meta-text">{a.specialty}</span>
+                </div>
+              )}
             </div>
-
-            {biography && (
-              <p className="honorary-hero-bio">
-                {biography}
-              </p>
-            )}
 
             <div style={{ marginTop: "1.25rem", display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
               <EditProfileModal alumnus={a} locale={locale} />
@@ -220,7 +247,7 @@ export default async function Profile({ params }: Props) {
         </div>
       </header>
 
-      {/* Profile Body: Responsive Layout for extended details */}
+      {/* Profile Body: Rich Structured Cards Layout */}
       <div className="container honorary-profile-body">
         {/* Official QarDU Recognitions and Awards */}
         <AlumniOfficialAwards recognitions={a.recognitions || []} locale={locale} t={t} />
@@ -228,124 +255,256 @@ export default async function Profile({ params }: Props) {
         {/* Alumni Impact & Contributions Activity */}
         <AlumniImpactCard slug={a.slug} t={t} />
 
-        {(a.advice?.length || a.achievements?.length || a.sources?.length || a.timeline?.length || careerStory) ? (
-          <div className={(a.advice?.length || a.achievements?.length || a.sources?.length) && (a.timeline?.length || careerStory) ? "honorary-profile-grid-2col" : "honorary-profile-grid-single"}>
-            {/* Chap ustun: Yoshlar uchun maslahatlar, Yutuqlar, Manbalar */}
-            {(a.advice?.length || a.achievements?.length || a.sources?.length) ? (
-              <div className="honorary-col-left">
-                {/* 02. Advice for Students */}
-                {!!a.advice?.length && (
-                  <section className="profile-section profile-advice-section" aria-labelledby="advice-title">
-                    <h2 id="advice-title">{t.alumniAdvice}</h2>
-                    <div className="profile-advice-list">
-                      {a.advice.map((item) => {
-                        const text = (locale === "en" && item.content_en) || item.content_uz;
-                        return (
-                          <blockquote key={item.id} className="profile-advice-quote">
-                            <MessageSquareQuote className="profile-advice-icon" aria-hidden="true" />
-                            <p>"{text}"</p>
-                            {item.category && (
-                              <span className="profile-advice-category">{item.category}</span>
-                            )}
-                          </blockquote>
-                        );
-                      })}
-                    </div>
-                  </section>
-                )}
-
-                {/* 05. Key Achievements */}
-                {!!a.achievements?.length && (
-                  <section className="profile-section" aria-labelledby="achievements-title">
-                    <h2 id="achievements-title">{t.achievements}</h2>
-                    <div className="achievement-list">
-                      {a.achievements.map((item) => (
-                        <article key={item.id}>
-                          <span className="achievement-year">{item.year || item.category}</span>
-                          <div>
-                            <h3>{item.title}</h3>
-                            {item.description && <p>{item.description}</p>}
-                          </div>
-                        </article>
-                      ))}
-                    </div>
-                  </section>
-                )}
-
-                {/* 06. Verified Sources */}
-                {!!a.sources?.length && (
-                  <section className="profile-section" aria-labelledby="sources-title">
-                    <h2 id="sources-title">{t.verifiedSources}</h2>
-                    <div className="source-list">
-                      {a.sources.map((source) => (
-                        <a
-                          href={source.url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          key={source.id}
-                          className="source-item"
-                        >
-                          <div>
-                            <strong>{source.title}</strong>
-                            {source.publisher && <span>{source.publisher}</span>}
-                          </div>
-                          <span className="source-link-label">
-                            <ExternalLink size={16} />
-                          </span>
-                        </a>
-                      ))}
-                    </div>
-                  </section>
-                )}
+        {/* Rich Sections Grid */}
+        <div className="preview-sections-grid">
+          {/* 1. BIO / Haqida */}
+          {biography && (
+            <div className="preview-section-card full-width">
+              <div className="preview-section-title-row">
+                <User size={16} className="preview-section-icon" />
+                <h2 className="preview-section-title">O‘zi haqida qisqacha (BIO)</h2>
               </div>
-            ) : null}
+              <p className="preview-bio-text">{biography}</p>
+            </div>
+          )}
 
-            {/* O'ng ustun: Hayot va kasbiy yo'l */}
-            {(a.timeline?.length || careerStory) ? (
-              <div className="honorary-col-right">
-                {/* 03. Career & Life Timeline */}
-                {!!a.timeline?.length && (
-                  <section className="profile-section timeline-card-section" aria-labelledby="timeline-title">
-                    <h2 id="timeline-title">{t.timeline}</h2>
-                    <div className="career-timeline-container">
-                      <ol className="career-timeline">
-                        {a.timeline.map((item) => (
-                          <li key={item.id} className="timeline-entry">
-                            <div className="timeline-year-col">
-                              <time className="timeline-year-badge">{item.year}</time>
-                            </div>
-                            <div className="timeline-line-node" aria-hidden="true">
-                              <span className="timeline-dot" />
-                            </div>
-                            <div className="timeline-content-card">
-                              <h3>{item.title}</h3>
-                              {item.organization && (
-                                <strong className="timeline-org">{item.organization}</strong>
-                              )}
-                              {item.description && item.description.trim() !== item.title.trim() && (
-                                <p className="timeline-desc">{item.description}</p>
-                              )}
-                            </div>
-                          </li>
-                        ))}
-                      </ol>
-                    </div>
-                  </section>
-                )}
-
-                {/* 04. Career Story */}
-                {careerStory && (
-                  <section className="profile-section story-prose-section" aria-labelledby="story-title">
-                    <h2 id="story-title">{locale === "en" ? "Career Story" : locale === "ru" ? "История карьеры" : "Hayot va kasbiy yo‘l"}</h2>
-                    <div className="profile-prose">
-                      <p>{careerStory}</p>
-                    </div>
-                  </section>
-                )}
+          {/* 2. Hozirgi kasbiy faoliyat */}
+          <div className="preview-section-card">
+            <div className="preview-section-title-row">
+              <Briefcase size={16} className="preview-section-icon" />
+              <h2 className="preview-section-title">Hozirgi kasbiy faoliyat</h2>
+            </div>
+            <div className="preview-key-val-list">
+              <div className="preview-key-val-item">
+                <span className="preview-item-label">Tashkilot / Ish joyi</span>
+                <span className="preview-item-value">{cleanComp || "Ko‘rsatilmagan"}</span>
               </div>
-            ) : null}
+              <div className="preview-key-val-item">
+                <span className="preview-item-label">Lavozimi</span>
+                <span className="preview-item-value">{cleanPos || "Ko‘rsatilmagan"}</span>
+              </div>
+              <div className="preview-key-val-item">
+                <span className="preview-item-label">Faoliyat sohasi</span>
+                <span className="preview-item-value">{a.industry || "Ko‘rsatilmagan"}</span>
+              </div>
+              <div className="preview-key-val-item">
+                <span className="preview-item-label">Hudud (Shahar / Tuman)</span>
+                <span className="preview-item-value">{a.city || "Ko‘rsatilmagan"}</span>
+              </div>
+            </div>
           </div>
-        ) : null}
+
+          {/* 3. Ta'lim ma'lumotlari */}
+          <div className="preview-section-card">
+            <div className="preview-section-title-row">
+              <GraduationCap size={16} className="preview-section-icon" />
+              <h2 className="preview-section-title">Ta’lim ma’lumotlari</h2>
+            </div>
+            <div className="preview-key-val-list">
+              <div className="preview-key-val-item">
+                <span className="preview-item-label">Oliy ta’lim muassasasi</span>
+                <span className="preview-item-value">Qarshi davlat universiteti</span>
+              </div>
+              {a.faculty && (
+                <div className="preview-key-val-item">
+                  <span className="preview-item-label">Fakultet</span>
+                  <span className="preview-item-value">{a.faculty}</span>
+                </div>
+              )}
+              {a.specialty && (
+                <div className="preview-key-val-item">
+                  <span className="preview-item-label">Yo‘nalish / Mutaxassislik</span>
+                  <span className="preview-item-value">{a.specialty}</span>
+                </div>
+              )}
+              <div className="preview-key-val-item">
+                <span className="preview-item-label">Bitirgan yili & Daraja</span>
+                <span className="preview-item-value">
+                  {a.graduation_year ? `${a.graduation_year}-yil` : "Ko‘rsatilmagan"} • {DEGREE_LABELS[academicDegree] || academicDegree}
+                </span>
+              </div>
+            </div>
+
+            {/* Qo'shimcha ta'lim bosqichlari */}
+            {educationList.length > 0 && (
+              <div className="mt-3 pt-3 border-t border-slate-100">
+                <span className="preview-item-label block mb-2">Qo‘shimcha ta’lim bosqichlari ({educationList.length})</span>
+                <div className="flex flex-col gap-2">
+                  {educationList.map((edu, idx) => (
+                    <div key={idx} className="preview-history-item">
+                      <div className="preview-history-top">
+                        <span className="preview-history-company">
+                          {DEGREE_LABELS[edu.degree_level] || edu.degree_level_display || edu.degree_level}
+                        </span>
+                        {edu.graduation_year && (
+                          <span className="preview-history-period">{edu.graduation_year}-yil</span>
+                        )}
+                      </div>
+                      <span className="preview-history-role">
+                        {edu.institution || "Qarshi davlat universiteti"}
+                        {edu.faculty ? ` • ${edu.faculty}` : ""}
+                        {edu.specialty ? ` • ${edu.specialty}` : ""}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 4. Mehnat faoliyati tarixi */}
+          {workList.length > 0 && (
+            <div className="preview-section-card full-width">
+              <div className="preview-section-title-row">
+                <Clock size={16} className="preview-section-icon" />
+                <h2 className="preview-section-title">Mehnat faoliyati tarixi ({workList.length})</h2>
+              </div>
+              <div className="preview-history-list">
+                {workList.map((w, idx) => (
+                  <div key={idx} className="preview-history-item">
+                    <div className="preview-history-top">
+                      <div className="flex items-center gap-2">
+                        <span className="preview-history-company">{w.company}</span>
+                        {w.region && (
+                          <span className="text-xs text-slate-500 font-normal">({w.region})</span>
+                        )}
+                      </div>
+                      <span className="preview-history-period">
+                        {w.start_year || ""}{w.end_year ? ` — ${w.end_year}-yil` : " — Hozirgacha"}
+                      </span>
+                    </div>
+                    <div className="preview-history-role">
+                      <span className="font-medium text-slate-700">{w.position}</span>
+                      {w.industry && <span className="text-slate-500"> • {w.industry}</span>}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 5. Talabalarga maslahat */}
+          {!!a.advice?.length && (
+            <div className="preview-section-card full-width">
+              <div className="preview-section-title-row">
+                <MessageSquareQuote size={16} className="preview-section-icon" />
+                <h2 className="preview-section-title">{t.alumniAdvice}</h2>
+              </div>
+              <div className="profile-advice-list">
+                {a.advice.map((item) => {
+                  const text = (locale === "en" && item.content_en) || item.content_uz;
+                  return (
+                    <blockquote key={item.id} className="profile-advice-quote">
+                      <MessageSquareQuote className="profile-advice-icon" aria-hidden="true" />
+                      <p>"{text}"</p>
+                      {item.category && (
+                        <span className="profile-advice-category">{item.category}</span>
+                      )}
+                    </blockquote>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* 6. Asosiy yutuqlar */}
+          {!!a.achievements?.length && (
+            <div className="preview-section-card full-width">
+              <div className="preview-section-title-row">
+                <Award size={16} className="preview-section-icon" />
+                <h2 className="preview-section-title">{t.achievements}</h2>
+              </div>
+              <div className="achievement-list">
+                {a.achievements.map((item) => (
+                  <article key={item.id}>
+                    <span className="achievement-year">{item.year || item.category}</span>
+                    <div>
+                      <h3>{item.title}</h3>
+                      {item.description && <p>{item.description}</p>}
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* 7. Faoliyat yo'li (Timeline) */}
+          {!!a.timeline?.length && (
+            <div className="preview-section-card full-width timeline-card-section">
+              <div className="preview-section-title-row">
+                <Clock size={16} className="preview-section-icon" />
+                <h2 className="preview-section-title">{t.timeline}</h2>
+              </div>
+              <div className="career-timeline-container">
+                <ol className="career-timeline">
+                  {a.timeline.map((item) => (
+                    <li key={item.id} className="timeline-entry">
+                      <div className="timeline-year-col">
+                        <time className="timeline-year-badge">{item.year}</time>
+                      </div>
+                      <div className="timeline-line-node" aria-hidden="true">
+                        <span className="timeline-dot" />
+                      </div>
+                      <div className="timeline-content-card">
+                        <h3>{item.title}</h3>
+                        {item.organization && (
+                          <strong className="timeline-org">{item.organization}</strong>
+                        )}
+                        {item.description && item.description.trim() !== item.title.trim() && (
+                          <p className="timeline-desc">{item.description}</p>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          )}
+
+          {/* 8. Career Story */}
+          {careerStory && (
+            <div className="preview-section-card full-width">
+              <div className="preview-section-title-row">
+                <BookOpen size={16} className="preview-section-icon" />
+                <h2 className="preview-section-title">
+                  {locale === "en" ? "Career Story" : locale === "ru" ? "История карьеры" : "Hayot va kasbiy yo‘l"}
+                </h2>
+              </div>
+              <div className="profile-prose">
+                <p>{careerStory}</p>
+              </div>
+            </div>
+          )}
+
+          {/* 9. Tasdiqlangan manbalar */}
+          {!!a.sources?.length && (
+            <div className="preview-section-card full-width">
+              <div className="preview-section-title-row">
+                <ExternalLink size={16} className="preview-section-icon" />
+                <h2 className="preview-section-title">{t.verifiedSources}</h2>
+              </div>
+              <div className="source-list">
+                {a.sources.map((source) => (
+                  <a
+                    href={source.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    key={source.id}
+                    className="source-item"
+                  >
+                    <div>
+                      <strong>{source.title}</strong>
+                      {source.publisher && <span>{source.publisher}</span>}
+                    </div>
+                    <span className="source-link-label">
+                      <ExternalLink size={16} />
+                    </span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </article>
   );
