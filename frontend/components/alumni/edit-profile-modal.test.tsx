@@ -49,10 +49,11 @@ const mockAlumniWithoutYear: Alumni = {
 } as Alumni;
 
 describe("EditProfileModal - One-time Graduation Year Selection", () => {
-  it("locks graduation year if already set and disables editing it", () => {
+  it("locks graduation year if already set and disables editing it", async () => {
     render(
       <EditProfileModal
         alumnus={mockAlumniWithYear}
+        canEdit={true}
         trigger={<button>Edit</button>}
       />
     );
@@ -76,6 +77,7 @@ describe("EditProfileModal - One-time Graduation Year Selection", () => {
     render(
       <EditProfileModal
         alumnus={mockAlumniWithoutYear}
+        canEdit={true}
         trigger={<button>Edit</button>}
         onProfileUpdated={onProfileUpdated}
       />

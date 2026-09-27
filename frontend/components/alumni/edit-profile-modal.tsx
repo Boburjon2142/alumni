@@ -22,7 +22,7 @@ export function EditProfileModal({
   onProfileUpdated,
 }: EditProfileModalProps) {
   const [open, setOpen] = useState(false);
-  const [canEditState, setCanEditState] = useState<boolean | null>(canEditProp ?? null);
+  const [canEditState, setCanEditState] = useState<boolean>(Boolean(canEditProp));
 
   useEffect(() => {
     if (canEditProp !== undefined) {
@@ -40,12 +40,8 @@ export function EditProfileModal({
         }
         const user = session.user;
         const isOwner =
-          user.slug === alumnus.slug ||
-          (alumnus.contact_email && user.email && user.email.toLowerCase() === alumnus.contact_email.toLowerCase()) ||
-          user.role === "admin" ||
-          user.role === "staff" ||
-          Boolean(user.is_staff) ||
-          Boolean(user.is_superuser);
+          (Boolean(user.slug && alumnus.slug) && user.slug === alumnus.slug) ||
+          (Boolean(alumnus.contact_email && user.email) && user.email.toLowerCase() === alumnus.contact_email.toLowerCase());
 
         setCanEditState(Boolean(isOwner));
       })
@@ -157,10 +153,7 @@ export function EditProfileModal({
     }
   };
 
-  if (canEditState === false) {
-    return null;
-  }
-  if (canEditState === null && !trigger) {
+  if (!canEditState) {
     return null;
   }
 
