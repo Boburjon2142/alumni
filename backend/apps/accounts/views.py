@@ -89,10 +89,45 @@ class SendVerificationCodeView(APIView):
         )
 
         # 2. Send Email via Django send_mail
-        subject = f"QarshiDU Alumni — Tasdiqlash kodi: {code}"
+        purpose_titles = {
+            "join": "Bitiruvchilar safiga qo‘shilish",
+            "login": "Shaxsiy kabinetga kirish",
+            "edit": "Profil ma’lumotlarini yangilash",
+        }
+        purpose_descriptions = {
+            "join": (
+                "Siz <strong>Qarshi davlat universiteti bitiruvchilar platformasi</strong>da "
+                "(<a href='https://alumni.qarshidu.uz' style='color: #002b49; font-weight: 700; text-decoration: none;'>alumni.qarshidu.uz</a>) "
+                "yangi bitiruvchi sifatida ro‘yxatdan o‘tish va anketangizni tasdiqlash so‘rovini yubordingiz. "
+                "A’zolikni faollashtirish uchun quyidagi bir martalik maxsus koddan foydalaning:"
+            ),
+            "login": (
+                "Siz <strong>Qarshi davlat universiteti bitiruvchilar platformasi</strong>dagi "
+                "(<a href='https://alumni.qarshidu.uz' style='color: #002b49; font-weight: 700; text-decoration: none;'>alumni.qarshidu.uz</a>) "
+                "shaxsiy profilingizga kirish so‘rovini amalga oshirdingiz. "
+                "Tizimga kirishni tasdiqlash uchun quyidagi bir martalik xavfsizlik kodidan foydalaning:"
+            ),
+            "edit": (
+                "Siz <strong>Qarshi davlat universiteti bitiruvchilar platformasi</strong>dagi "
+                "(<a href='https://alumni.qarshidu.uz' style='color: #002b49; font-weight: 700; text-decoration: none;'>alumni.qarshidu.uz</a>) "
+                "profilingiz ma’lumotlarini tahrirlash so‘rovini yubordingiz. "
+                "O‘zgarishlarni tasdiqlash uchun quyidagi koddan foydalaning:"
+            ),
+        }
+
+        title_text = purpose_titles.get(purpose, "Email manzilini tasdiqlash")
+        desc_text = purpose_descriptions.get(
+            purpose,
+            "Siz <strong>Qarshi davlat universiteti bitiruvchilar platformasi</strong>da "
+            "(<a href='https://alumni.qarshidu.uz' style='color: #002b49; font-weight: 700; text-decoration: none;'>alumni.qarshidu.uz</a>) "
+            "tasdiqlash so‘rovini amalga oshirdingiz. Jarayonni yakunlash uchun quyidagi xavfsizlik kodidan foydalaning:"
+        )
+
+        subject = f"QarshiDU Alumni — {title_text}: {code}"
         message = (
             f"Assalomu alaykum!\n\n"
-            f"QarshiDU bitiruvchilar portalida tasdiqlash kodingiz: {code}\n"
+            f"Qarshi davlat universiteti bitiruvchilar platformasida (alumni.qarshidu.uz) "
+            f"{title_text.lower()} uchun tasdiqlash kodingiz: {code}\n"
             f"Ushbu kod 10 daqiqa davomida amal qiladi.\n\n"
             f"Agar bu so‘rovni siz amalga oshirmagan bo‘lsangiz, ushbu xatga e’tibor bermang."
         )
@@ -105,15 +140,18 @@ class SendVerificationCodeView(APIView):
             </div>
             <div style="margin-top: 10px;">
               <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: #000000; letter-spacing: 0.5px; text-transform: uppercase;">QARSHI DAVLAT UNIVERSITETI</h3>
-              <p style="margin: 2px 0 0 0; font-size: 12.5px; font-weight: 600; color: #64748b;">Bitiruvchilar Portali • ALUMNI</p>
+              <p style="margin: 2px 0 0 0; font-size: 12.5px; font-weight: 600; color: #64748b;">Rasmiy bitiruvchilar platformasi (ALUMNI)</p>
             </div>
           </div>
 
-          <!-- Main Title & Description -->
+          <!-- Main Title & Dynamic Action Description -->
           <div style="text-align: center; padding: 22px 0 16px 0;">
-            <h2 style="color: #000000; margin: 0 0 8px 0; font-size: 19px; font-weight: 800; letter-spacing: -0.3px;">Bir martalik tasdiqlash kodi</h2>
-            <p style="color: #334155; font-size: 14px; line-height: 1.55; margin: 0 auto; max-width: 380px;">
-              Assalomu alaykum! Profilingizni tasdiqlash va tizimga kirish uchun quyidagi maxsus xavfsizlik kodidan foydalaning:
+            <div style="display: inline-block; background: #f1f5f9; padding: 4px 12px; border-radius: 20px; font-size: 11.5px; font-weight: 700; color: #002b49; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px;">
+              alumni.qarshidu.uz
+            </div>
+            <h2 style="color: #000000; margin: 0 0 10px 0; font-size: 19px; font-weight: 800; letter-spacing: -0.3px;">{title_text}</h2>
+            <p style="color: #334155; font-size: 14px; line-height: 1.6; margin: 0 auto; max-width: 400px;">
+              {desc_text}
             </p>
           </div>
 
@@ -123,7 +161,7 @@ class SendVerificationCodeView(APIView):
           </div>
 
           <!-- Security & Expiration Box -->
-          <div style="max-width: 380px; margin: 0 auto; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 10px; padding: 12px 16px; text-align: center;">
+          <div style="max-width: 400px; margin: 0 auto; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 10px; padding: 12px 16px; text-align: center;">
             <p style="color: #92400e; font-size: 12.5px; line-height: 1.45; margin: 0; font-weight: 600;">
               ⏰ Ushbu kod <strong>10 daqiqa</strong> davomida amal qiladi.
             </p>
