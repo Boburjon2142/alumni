@@ -24,6 +24,10 @@ export function ProfileShareButtons({
 
   const getProfileUrl = () => {
     if (typeof window !== "undefined") {
+      const origin = window.location.origin;
+      if (slug) {
+        return `${origin}/alumni/${slug}`;
+      }
       return window.location.href;
     }
     return `https://alumni.qarshidu.uz/alumni/${slug}`;

@@ -140,9 +140,34 @@ export function AlumniProfileView({ profile, locale, t }: Props) {
     .join("")
     .toUpperCase() || "B";
 
-  const handleShare = () => {
-    if (typeof window !== "undefined") {
-      navigator.clipboard?.writeText(window.location.href);
+  const handleShare = async () => {
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://alumni.qarshidu.uz";
+    const publicUrl = profile.slug
+      ? `${origin}/alumni/${profile.slug}`
+      : `${origin}/alumni`;
+
+    const yearStr = profile.graduation_year ? ` (${profile.graduation_year}-yil)` : "";
+    const roleStr = (profile.position || profile.current_company)
+      ? ` — ${[profile.position, profile.current_company].filter(Boolean).join(", ")}`
+      : "";
+    const shareTitle = `${fullName} — Qarshi davlat universiteti bitiruvchisi`;
+    const shareText = `🎓 ${fullName}${yearStr}${roleStr}\nQarshi davlat universiteti — Bitiruvchi profili:`;
+
+    if (typeof navigator !== "undefined" && typeof navigator.share === "function") {
+      try {
+        await navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: publicUrl,
+        });
+        return;
+      } catch (err: any) {
+        if (err?.name === "AbortError") return;
+      }
+    }
+
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      await navigator.clipboard.writeText(publicUrl);
       setShareToast(true);
       setTimeout(() => setShareToast(false), 3000);
     }
