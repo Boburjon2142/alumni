@@ -90,6 +90,17 @@ class AlumniListView(generics.ListAPIView):
             qs = qs.filter(current_company__icontains=company)
         if location:
             qs = qs.filter(Q(city__icontains=location) | Q(country__icontains=location))
+        region = self.request.query_params.get("region", "").strip() or self.request.query_params.get("city", "").strip()
+        if region:
+            if region.lower() in ["xorij", "chet el", "foreign", "abroad", "xorij / chet el"]:
+                qs = qs.exclude(country__iexact="O‘zbekiston").exclude(country__iexact="O'zbekiston").exclude(country__iexact="Uzbekistan")
+            else:
+                qs = qs.filter(
+                    Q(city__icontains=region)
+                    | Q(country__icontains=region)
+                    | Q(current_activity__icontains=region)
+                    | Q(current_company__icontains=region)
+                )
         if year and str(year).isdigit():
             qs = qs.filter(graduation_year=int(year))
         if recognition:

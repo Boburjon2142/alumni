@@ -1,10 +1,12 @@
 import Link from "next/link";
 import { ArrowRight, Calendar, GraduationCap, Users } from "lucide-react";
-import { getAlumniGroups } from "@/lib/api";
+import { getAlumni, getAlumniGroups } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import { GroupsGrid } from "@/components/groups/groups-grid";
 import { GroupsFilter } from "@/components/groups/groups-filter";
+import { AlumniCardGrid } from "@/components/alumni/alumni-card-grid";
 import { Button } from "@/components/ui/button";
+import type { Alumni, GraduationGroup } from "@/types/alumni";
 
 export const metadata = {
   title: "Bitiruvchilar guruhlari — Qarshi davlat universiteti",
@@ -25,14 +27,25 @@ export default async function GroupsPage({
   if (params.search) query.set("search", params.search);
   if (params.region) query.set("region", params.region);
 
-  let groups: import("@/types/alumni").GraduationGroup[] = [];
+  const isFiltered = Boolean(params.search || params.region);
+
+  let groups: GraduationGroup[] = [];
+  let alumniList: Alumni[] = [];
+  let totalCount = 0;
   let error = false;
 
   try {
-    const res = await getAlumniGroups(query.toString());
-    groups = res.data ?? [];
+    if (isFiltered) {
+      const res = await getAlumni(query.toString());
+      alumniList = res.data ?? [];
+      totalCount = res.pagination?.count ?? alumniList.length;
+    } else {
+      const res = await getAlumniGroups(query.toString());
+      groups = res.data ?? [];
+      totalCount = groups.length;
+    }
   } catch (err) {
-    console.error("Failed to load alumni groups:", err);
+    console.error("Failed to load alumni data on groups page:", err);
     error = true;
   }
 
@@ -54,6 +67,22 @@ export default async function GroupsPage({
             <h3>{t.loadError}</h3>
             <p>{t.retryText}</p>
           </div>
+        ) : isFiltered ? (
+          alumniList.length > 0 ? (
+            <>
+              <div className="result-count groups-result-count">
+                <strong>{totalCount}</strong> {locale === "en" ? "alumni found" : locale === "ru" ? "выпускников найдено" : "nafar bitiruvchi topildi"}
+              </div>
+              <AlumniCardGrid alumni={alumniList} locale={locale} />
+            </>
+          ) : (
+            <div className="empty-state">
+              <GraduationCap aria-hidden="true" size={48} className="empty-icon" />
+              <h3>{locale === "en" ? "No alumni found" : locale === "ru" ? "Выпускники не найдены" : "Bitiruvchilar topilmadi"}</h3>
+              <p>{locale === "en" ? "Try changing your search keywords or selected location." : locale === "ru" ? "Попробуйте изменить поисковый запрос или выбранный регион." : "Qidiruv so‘zini yoki tanlangan hududni o‘zgartirib ko‘ring."}</p>
+              <Button href="/join">{t.landingCtaButton}</Button>
+            </div>
+          )
         ) : groups.length > 0 ? (
           <>
             <div className="result-count groups-result-count">
