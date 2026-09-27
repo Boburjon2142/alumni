@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, Search, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { LanguageSwitcher } from "./language-switcher";
 import { PublicNavDropdowns } from "./public-nav-dropdowns";
 import { AuthModal } from "@/components/auth/auth-modal";
@@ -12,10 +12,8 @@ import type { Dictionary, Locale } from "@/lib/i18n";
 
 export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
   const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const pathname = usePathname();
-  const router = useRouter();
   const home = pathname === "/";
   const headerRef = useRef<HTMLElement>(null);
 
@@ -70,14 +68,6 @@ export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
     };
   }, [open]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      router.push(`/alumni?search=${encodeURIComponent(searchQuery.trim())}`);
-      close();
-    }
-  };
-
   if (pathname?.startsWith("/admin")) {
     return null;
   }
@@ -111,24 +101,6 @@ export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
               <AuthModal locale={locale} t={t} />
             </div>
           </div>
-
-          {/* Search bar */}
-          <form className="nav-search-form" onSubmit={handleSearch} role="search">
-            <Search className="nav-search-icon" aria-hidden="true" />
-            <input
-              type="search"
-              className="nav-search-input"
-              placeholder={t.searchPlaceholder}
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label={t.search}
-            />
-            {searchQuery.trim() && (
-              <button type="submit" className="nav-search-submit" aria-label={t.search}>
-                <Search size={14} />
-              </button>
-            )}
-          </form>
         </nav>
 
         {/* Right header controls: Auth + Language Switcher + Menu */}

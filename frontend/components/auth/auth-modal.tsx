@@ -183,9 +183,13 @@ export function AuthModal({
     <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>
         {trigger || (
-          <button type="button" className="button button-outline header-auth-btn">
-            <LogIn size={15} />
-            <span>{locale === "en" ? "Sign In" : locale === "ru" ? "Вход" : "Kirish"}</span>
+          <button
+            type="button"
+            className="header-auth-circle-btn"
+            title={locale === "en" ? "Sign In" : locale === "ru" ? "Вход" : "Kirish"}
+            aria-label={locale === "en" ? "Sign In" : locale === "ru" ? "Вход" : "Kirish"}
+          >
+            <LogIn size={18} />
           </button>
         )}
       </Dialog.Trigger>

@@ -1,4 +1,5 @@
 const heroVariants = [
+  { minWidth: 2200, width: 2560, height: 1440 },
   { minWidth: 1800, width: 1920, height: 1080 },
   { minWidth: 1440, width: 1600, height: 900 },
   { minWidth: 1200, width: 1366, height: 768 },

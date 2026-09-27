@@ -6623,6 +6623,7 @@ button:disabled { cursor: not-allowed; }
   max-width: 780px;
   color: rgba(255, 255, 255, 0.78);
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transform: translateY(-36px);
 }
 .hero.hero-v2 .hero-message h1 {
   margin: 0 0 20px;
@@ -7529,8 +7530,9 @@ button.nav-item-link {
   background: rgba(255, 255, 255, 0.16);
 }
 
-/* Circular Header Profile Avatar Button */
-.header-profile-avatar-link {
+/* Circular Header Profile Avatar & Sign In Buttons */
+.header-profile-avatar-link,
+.header-auth-circle-btn {
   width: 38px;
   height: 38px;
   border-radius: 50%;
@@ -7547,15 +7549,18 @@ button.nav-item-link {
   cursor: pointer;
   flex-shrink: 0;
   text-decoration: none;
+  padding: 0;
 }
 
-.header-profile-avatar-link:hover {
+.header-profile-avatar-link:hover,
+.header-auth-circle-btn:hover {
   transform: scale(1.08);
   border-color: #f5cc91;
   box-shadow: 0 0 0 3px rgba(245, 204, 145, 0.35), 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
-.header-profile-avatar-link:focus-visible {
+.header-profile-avatar-link:focus-visible,
+.header-auth-circle-btn:focus-visible {
   outline: 3px solid #f5cc91;
   outline-offset: 3px;
 }

@@ -221,7 +221,7 @@ describe("Header", () => {
     expect(trigger).toHaveAttribute("aria-expanded", "false");
   });
 
-  it("closes the mobile menu after navigation and preserves search and controls", () => {
+  it("closes the mobile menu after navigation and preserves controls", () => {
     render(<Header locale="uz" t={getDictionary("uz")} />);
     const menuButton = screen.getByLabelText("Menyuni ochish");
     fireEvent.click(menuButton);
@@ -230,9 +230,6 @@ describe("Header", () => {
     expect(menuButton).toHaveAttribute("aria-expanded", "false");
     expect(screen.getByRole("button", { name: "Alumni" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: getDictionary("uz").navJoin })).toHaveAttribute("href", "/join");
-    fireEvent.change(screen.getByRole("searchbox"), { target: { value: "Ali Vali" } });
-    fireEvent.submit(screen.getByRole("search"));
-    expect(navigation.push).toHaveBeenCalledWith("/alumni?search=Ali%20Vali");
     expect(screen.getAllByRole("button", { name: "Kirish" })).toHaveLength(2);
     expect(screen.getByTestId("lang-switcher")).toBeInTheDocument();
   });
