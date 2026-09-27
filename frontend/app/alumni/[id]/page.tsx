@@ -199,6 +199,12 @@ export default async function Profile({ params }: Props) {
               )}
             </div>
 
+            {biography && (
+              <p className="honorary-hero-bio">
+                {biography}
+              </p>
+            )}
+
             <div style={{ marginTop: "1.25rem", display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
               <EditProfileModal alumnus={a} locale={locale} />
               <ProfileShareButtons
@@ -214,8 +220,7 @@ export default async function Profile({ params }: Props) {
         </div>
       </header>
 
-
-      {/* Profile Body: 2-Column Responsive Layout */}
+      {/* Profile Body: Responsive Layout for extended details */}
       <div className="container honorary-profile-body">
         {/* Official QarDU Recognitions and Awards */}
         <AlumniOfficialAwards recognitions={a.recognitions || []} locale={locale} t={t} />
@@ -223,130 +228,124 @@ export default async function Profile({ params }: Props) {
         {/* Alumni Impact & Contributions Activity */}
         <AlumniImpactCard slug={a.slug} t={t} />
 
-        <div className="honorary-profile-grid-2col">
+        {(a.advice?.length || a.achievements?.length || a.sources?.length || a.timeline?.length || careerStory) ? (
+          <div className={(a.advice?.length || a.achievements?.length || a.sources?.length) && (a.timeline?.length || careerStory) ? "honorary-profile-grid-2col" : "honorary-profile-grid-single"}>
+            {/* Chap ustun: Yoshlar uchun maslahatlar, Yutuqlar, Manbalar */}
+            {(a.advice?.length || a.achievements?.length || a.sources?.length) ? (
+              <div className="honorary-col-left">
+                {/* 02. Advice for Students */}
+                {!!a.advice?.length && (
+                  <section className="profile-section profile-advice-section" aria-labelledby="advice-title">
+                    <h2 id="advice-title">{t.alumniAdvice}</h2>
+                    <div className="profile-advice-list">
+                      {a.advice.map((item) => {
+                        const text = (locale === "en" && item.content_en) || item.content_uz;
+                        return (
+                          <blockquote key={item.id} className="profile-advice-quote">
+                            <MessageSquareQuote className="profile-advice-icon" aria-hidden="true" />
+                            <p>"{text}"</p>
+                            {item.category && (
+                              <span className="profile-advice-category">{item.category}</span>
+                            )}
+                          </blockquote>
+                        );
+                      })}
+                    </div>
+                  </section>
+                )}
 
-          {/* Chap ustun: Qisqacha tavsif & Yoshlar uchun maslahatlar */}
-          <div className="honorary-col-left">
-            {/* 01. Overview / Biography */}
-            {biography && (
-              <section className="profile-section" aria-labelledby="about-title">
-                <h2 id="about-title">{t.overview}</h2>
-                <div className="profile-prose">
-                  <p className="profile-lead">{biography}</p>
-                </div>
-              </section>
-            )}
+                {/* 05. Key Achievements */}
+                {!!a.achievements?.length && (
+                  <section className="profile-section" aria-labelledby="achievements-title">
+                    <h2 id="achievements-title">{t.achievements}</h2>
+                    <div className="achievement-list">
+                      {a.achievements.map((item) => (
+                        <article key={item.id}>
+                          <span className="achievement-year">{item.year || item.category}</span>
+                          <div>
+                            <h3>{item.title}</h3>
+                            {item.description && <p>{item.description}</p>}
+                          </div>
+                        </article>
+                      ))}
+                    </div>
+                  </section>
+                )}
 
-            {/* 02. Advice for Students */}
-            {!!a.advice?.length && (
-              <section className="profile-section profile-advice-section" aria-labelledby="advice-title">
-                <h2 id="advice-title">{t.alumniAdvice}</h2>
-                <div className="profile-advice-list">
-                  {a.advice.map((item) => {
-                    const text = (locale === "en" && item.content_en) || item.content_uz;
-                    return (
-                      <blockquote key={item.id} className="profile-advice-quote">
-                        <MessageSquareQuote className="profile-advice-icon" aria-hidden="true" />
-                        <p>"{text}"</p>
-                        {item.category && (
-                          <span className="profile-advice-category">{item.category}</span>
-                        )}
-                      </blockquote>
-                    );
-                  })}
-                </div>
-              </section>
-            )}
+                {/* 06. Verified Sources */}
+                {!!a.sources?.length && (
+                  <section className="profile-section" aria-labelledby="sources-title">
+                    <h2 id="sources-title">{t.verifiedSources}</h2>
+                    <div className="source-list">
+                      {a.sources.map((source) => (
+                        <a
+                          href={source.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          key={source.id}
+                          className="source-item"
+                        >
+                          <div>
+                            <strong>{source.title}</strong>
+                            {source.publisher && <span>{source.publisher}</span>}
+                          </div>
+                          <span className="source-link-label">
+                            <ExternalLink size={16} />
+                          </span>
+                        </a>
+                      ))}
+                    </div>
+                  </section>
+                )}
+              </div>
+            ) : null}
 
-            {/* 05. Key Achievements */}
-            {!!a.achievements?.length && (
-              <section className="profile-section" aria-labelledby="achievements-title">
-                <h2 id="achievements-title">{t.achievements}</h2>
-                <div className="achievement-list">
-                  {a.achievements.map((item) => (
-                    <article key={item.id}>
-                      <span className="achievement-year">{item.year || item.category}</span>
-                      <div>
-                        <h3>{item.title}</h3>
-                        {item.description && <p>{item.description}</p>}
-                      </div>
-                    </article>
-                  ))}
-                </div>
-              </section>
-            )}
+            {/* O'ng ustun: Hayot va kasbiy yo'l */}
+            {(a.timeline?.length || careerStory) ? (
+              <div className="honorary-col-right">
+                {/* 03. Career & Life Timeline */}
+                {!!a.timeline?.length && (
+                  <section className="profile-section timeline-card-section" aria-labelledby="timeline-title">
+                    <h2 id="timeline-title">{t.timeline}</h2>
+                    <div className="career-timeline-container">
+                      <ol className="career-timeline">
+                        {a.timeline.map((item) => (
+                          <li key={item.id} className="timeline-entry">
+                            <div className="timeline-year-col">
+                              <time className="timeline-year-badge">{item.year}</time>
+                            </div>
+                            <div className="timeline-line-node" aria-hidden="true">
+                              <span className="timeline-dot" />
+                            </div>
+                            <div className="timeline-content-card">
+                              <h3>{item.title}</h3>
+                              {item.organization && (
+                                <strong className="timeline-org">{item.organization}</strong>
+                              )}
+                              {item.description && item.description.trim() !== item.title.trim() && (
+                                <p className="timeline-desc">{item.description}</p>
+                              )}
+                            </div>
+                          </li>
+                        ))}
+                      </ol>
+                    </div>
+                  </section>
+                )}
 
-            {/* 06. Verified Sources */}
-            {!!a.sources?.length && (
-              <section className="profile-section" aria-labelledby="sources-title">
-                <h2 id="sources-title">{t.verifiedSources}</h2>
-                <div className="source-list">
-                  {a.sources.map((source) => (
-                    <a
-                      href={source.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      key={source.id}
-                      className="source-item"
-                    >
-                      <div>
-                        <strong>{source.title}</strong>
-                        {source.publisher && <span>{source.publisher}</span>}
-                      </div>
-                      <span className="source-link-label">
-                        <ExternalLink size={16} />
-                      </span>
-                    </a>
-                  ))}
-                </div>
-              </section>
-            )}
+                {/* 04. Career Story */}
+                {careerStory && (
+                  <section className="profile-section story-prose-section" aria-labelledby="story-title">
+                    <h2 id="story-title">{locale === "en" ? "Career Story" : locale === "ru" ? "История карьеры" : "Hayot va kasbiy yo‘l"}</h2>
+                    <div className="profile-prose">
+                      <p>{careerStory}</p>
+                    </div>
+                  </section>
+                )}
+              </div>
+            ) : null}
           </div>
-
-          {/* O'ng ustun: Hayot va kasbiy yo'l */}
-          <div className="honorary-col-right">
-            {/* 03. Career & Life Timeline */}
-            {!!a.timeline?.length && (
-              <section className="profile-section timeline-card-section" aria-labelledby="timeline-title">
-                <h2 id="timeline-title">{t.timeline}</h2>
-                <div className="career-timeline-container">
-                  <ol className="career-timeline">
-                    {a.timeline.map((item) => (
-                      <li key={item.id} className="timeline-entry">
-                        <div className="timeline-year-col">
-                          <time className="timeline-year-badge">{item.year}</time>
-                        </div>
-                        <div className="timeline-line-node" aria-hidden="true">
-                          <span className="timeline-dot" />
-                        </div>
-                        <div className="timeline-content-card">
-                          <h3>{item.title}</h3>
-                          {item.organization && (
-                            <strong className="timeline-org">{item.organization}</strong>
-                          )}
-                          {item.description && item.description.trim() !== item.title.trim() && (
-                            <p className="timeline-desc">{item.description}</p>
-                          )}
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                </div>
-              </section>
-            )}
-
-
-            {/* 04. Career Story */}
-            {careerStory && (
-              <section className="profile-section story-prose-section" aria-labelledby="story-title">
-                <h2 id="story-title">{locale === "en" ? "Career Story" : locale === "ru" ? "История карьеры" : "Hayot va kasbiy yo‘l"}</h2>
-                <div className="profile-prose">
-                  <p>{careerStory}</p>
-                </div>
-              </section>
-            )}
-          </div>
-        </div>
+        ) : null}
       </div>
     </article>
   );

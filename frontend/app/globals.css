@@ -240,6 +240,13 @@ body{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-ser
   color: #64748b;
   font-weight: 600;
 }
+.honorary-hero-bio {
+  margin: 14px 0 16px;
+  font-size: 15px;
+  line-height: 1.68;
+  color: #334155;
+  max-width: 820px;
+}
 .profile-share-group {
   display: inline-flex;
   align-items: center;
@@ -4957,6 +4964,11 @@ button:disabled { cursor: not-allowed; }
   grid-template-columns: 1.15fr 1fr;
   gap: 56px;
   align-items: start;
+}
+
+.honorary-profile-grid-single {
+  display: block;
+  max-width: 860px;
 }
 
 .honorary-col-left,
