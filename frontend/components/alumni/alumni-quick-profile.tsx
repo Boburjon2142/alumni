@@ -88,11 +88,12 @@ export function AlumniQuickProfile({open,onOpenChange,profile,loading,error,onRe
                           fontWeight: 700,
                         }}
                       >
-                        <RecognitionIcon icon={r.icon} size={14} />
+                        <RecognitionIcon icon={r.symbol_name || r.icon} size={14} />
                         <span>{getRecognitionTitle(r.slug, locale, r.name)}</span>
                       </span>
                     ))}
                   </div>
+
                 )}
               </div>
             </header>

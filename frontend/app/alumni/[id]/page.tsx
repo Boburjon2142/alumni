@@ -6,7 +6,9 @@ import { RemoteImage } from "@/components/ui/remote-image";
 import { EditProfileModal } from "@/components/alumni/edit-profile-modal";
 import { PeerConfirmation } from "@/components/alumni/peer-confirmation";
 import { ProfileShareButtons } from "@/components/alumni/profile-share-buttons";
+import { AlumniOfficialAwards } from "@/components/alumni/alumni-official-awards";
 import { AlumniImpactCard } from "@/components/impact/alumni-impact-card";
+
 
 import { getAlumniById } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
@@ -191,10 +193,14 @@ export default async function Profile({ params }: Props) {
 
       {/* Profile Body: 2-Column Responsive Layout */}
       <div className="container honorary-profile-body">
-        {/* Alumni Impact & Recognition section */}
+        {/* Official QarDU Recognitions and Awards */}
+        <AlumniOfficialAwards recognitions={a.recognitions || []} locale={locale} t={t} />
+
+        {/* Alumni Impact & Contributions Activity */}
         <AlumniImpactCard slug={a.slug} t={t} />
 
         <div className="honorary-profile-grid-2col">
+
           {/* Chap ustun: Qisqacha tavsif & Yoshlar uchun maslahatlar */}
           <div className="honorary-col-left">
             {/* 01. Overview / Biography */}

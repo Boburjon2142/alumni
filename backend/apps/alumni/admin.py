@@ -6,14 +6,17 @@ from .models import (
     Achievement,
     AlumniConsent,
     AlumniProfile,
+    AlumniRecognition,
     AlumniSource,
     CareerTimelineItem,
     EducationExperience,
     FeaturedAlumni,
     GraduationYearChangeRequest,
+    RecognitionTitle,
     WorkExperience,
 )
 from .notifications import notify_new_alumni_confirmed
+
 
 
 class AlumniConsentInline(admin.StackedInline):
@@ -43,6 +46,12 @@ class CareerTimelineInline(admin.StackedInline):
 class AlumniSourceInline(admin.TabularInline):
     model = AlumniSource
     extra = 0
+
+class AlumniRecognitionInline(admin.TabularInline):
+    model = AlumniRecognition
+    extra = 0
+    fields = ("title", "level", "year", "status", "is_active", "justification", "approved_at")
+    readonly_fields = ("approved_at",)
 
 @admin.register(AlumniProfile)
 class AlumniProfileAdmin(admin.ModelAdmin):
@@ -83,7 +92,16 @@ class AlumniProfileAdmin(admin.ModelAdmin):
         "linkedin_url", "github_url", "website_url", "image_url", "image_alt", "image_credit", "image_source_url"
     )
     list_select_related = ("faculty", "specialty")
-    inlines = (AlumniConsentInline, EducationExperienceInline, WorkExperienceInline, AchievementInline, CareerTimelineInline, AlumniSourceInline)
+    inlines = (
+        AlumniConsentInline,
+        AlumniRecognitionInline,
+        EducationExperienceInline,
+        WorkExperienceInline,
+        AchievementInline,
+        CareerTimelineInline,
+        AlumniSourceInline,
+    )
+
     actions = (
         "approve_selected_profiles",
         "reject_selected_profiles",
@@ -316,4 +334,89 @@ class GraduationYearChangeRequestAdmin(admin.ModelAdmin):
             req.save()
             count += 1
         self.message_user(request, f"{count} ta bitiruv yili so‘rovi rad etildi.")
+
+
+@admin.register(RecognitionTitle)
+class RecognitionTitleAdmin(admin.ModelAdmin):
+    list_display = ("order", "name", "category_badge", "recognition_type_badge", "annual_quota", "has_levels", "is_active")
+    list_filter = ("category", "recognition_type", "is_active", "has_levels")
+    search_fields = ("name", "slug", "description", "eligibility_summary")
+    prepopulated_fields = {"slug": ("name",)}
+    ordering = ("order", "name")
+
+    @admin.display(description="Kategoriya")
+    def category_badge(self, obj):
+        colors = {
+            RecognitionTitle.Category.SUPREME_HONOR: "#7c3aed",
+            RecognitionTitle.Category.ACHIEVEMENT_NOMINATION: "#2563eb",
+            RecognitionTitle.Category.UNIVERSITY_CONTRIBUTION: "#d97706",
+            RecognitionTitle.Category.TRADITIONAL_STATUS: "#059669",
+        }
+        color = colors.get(obj.category, "#64748b")
+        return format_html(
+            '<span style="background:{}; color:#fff; padding:3px 8px; border-radius:12px; font-weight:600; font-size:12px;">{}</span>',
+            color,
+            obj.get_category_display(),
+        )
+
+    @admin.display(description="Turi")
+    def recognition_type_badge(self, obj):
+        return obj.get_recognition_type_display()
+
+
+@admin.register(AlumniRecognition)
+class AlumniRecognitionAdmin(admin.ModelAdmin):
+    list_display = ("alumnus", "title", "level_display", "year", "status_badge", "approved_by", "approved_at")
+    list_filter = ("status", "title__category", "level", "year", "title")
+    search_fields = ("alumnus__full_name", "title__name", "justification", "revocation_reason")
+    raw_id_fields = ("alumnus",)
+    readonly_fields = ("created_at", "updated_at", "approved_at", "revoked_at")
+    actions = ("approve_selected", "revoke_selected")
+
+    @admin.display(description="Daraja")
+    def level_display(self, obj):
+        return obj.get_level_display() or "—"
+
+    @admin.display(description="Holat")
+    def status_badge(self, obj):
+        colors = {
+            AlumniRecognition.Status.APPROVED: "#16a34a",
+            AlumniRecognition.Status.DRAFT: "#eab308",
+            AlumniRecognition.Status.REVOKED: "#dc2626",
+        }
+        color = colors.get(obj.status, "#64748b")
+        return format_html(
+            '<span style="background:{}; color:#fff; padding:3px 8px; border-radius:12px; font-weight:600; font-size:12px;">{}</span>',
+            color,
+            obj.get_status_display(),
+        )
+
+    @admin.action(description="Tanlangan mukofotlarni tasdiqlash")
+    def approve_selected(self, request, queryset):
+        count = 0
+        now = timezone.now()
+        for rec in queryset:
+            rec.status = AlumniRecognition.Status.APPROVED
+            rec.is_active = True
+            rec.approved_by = request.user
+            rec.approved_at = now
+            rec.save()
+            count += 1
+        self.message_user(request, f"{count} ta mukofot tasdiqlandi.")
+
+    @admin.action(description="Tanlangan mukofotlarni bekor qilish (Revoke)")
+    def revoke_selected(self, request, queryset):
+        count = 0
+        now = timezone.now()
+        for rec in queryset:
+            rec.status = AlumniRecognition.Status.REVOKED
+            rec.is_active = False
+            rec.revoked_by = request.user
+            rec.revoked_at = now
+            if not rec.revocation_reason:
+                rec.revocation_reason = "Admin qarori asosida bekor qilindi."
+            rec.save()
+            count += 1
+        self.message_user(request, f"{count} ta mukofot bekor qilindi (Revoked).")
+
 

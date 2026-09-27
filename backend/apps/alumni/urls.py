@@ -3,6 +3,8 @@ from .admin_views import (
     AdminAlumniDetailView,
     AdminAlumniListView,
     AdminAlumniModerationActionView,
+    AdminAlumniRecognitionCreateView,
+    AdminAlumniRecognitionRevokeView,
     AdminDashboardStatsView,
     AdminGraduationYearRequestActionView,
     AdminGraduationYearRequestListView,
@@ -28,11 +30,14 @@ urlpatterns = [
     path("admin/stats/", AdminDashboardStatsView.as_view(), name="admin-stats"),
     path("admin/alumni/", AdminAlumniListView.as_view(), name="admin-alumni-list"),
     path("admin/alumni/<str:identifier>/", AdminAlumniDetailView.as_view(), name="admin-alumni-detail"),
+    path("admin/alumni/<str:identifier>/recognitions/", AdminAlumniRecognitionCreateView.as_view(), name="admin-alumni-recognition-create"),
+    path("admin/alumni-recognitions/<int:pk>/revoke/", AdminAlumniRecognitionRevokeView.as_view(), name="admin-alumni-recognition-revoke"),
     path("admin/alumni/<int:pk>/action/", AdminAlumniModerationActionView.as_view(), name="admin-alumni-action"),
     path("admin/recognitions/", AdminRecognitionTitleListView.as_view(), name="admin-recognitions-list"),
     path("admin/recognitions/<int:pk>/", AdminRecognitionTitleDetailView.as_view(), name="admin-recognitions-detail"),
     path("admin/requests/graduation-year/", AdminGraduationYearRequestListView.as_view(), name="admin-year-requests-list"),
     path("admin/requests/graduation-year/<int:pk>/action/", AdminGraduationYearRequestActionView.as_view(), name="admin-year-requests-action"),
+
 
     # Public APIs
     path("alumni/recognitions/", RecognitionTitleListView.as_view(), name="recognition-title-list"),

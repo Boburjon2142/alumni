@@ -1,11 +1,46 @@
+export type RecognitionCategory =
+  | "supreme_honor"
+  | "achievement_nomination"
+  | "university_contribution"
+  | "traditional_status";
+
+export type RecognitionType =
+  | "supreme_honor"
+  | "nomination"
+  | "term_status"
+  | "traditional_status";
+
+export type AwardLevel = "bronze" | "silver" | "gold";
+
+export type RecognitionStatus = "draft" | "approved" | "revoked";
+
 export type Recognition = {
   id: number;
+  assignment_id?: number;
   name: string;
   slug: string;
+  category?: RecognitionCategory | string;
+  category_display?: string;
+  recognition_type?: RecognitionType | string;
+  recognition_type_display?: string;
+  symbol_name?: string;
   icon: string;
   description?: string;
-  year?: number;
+  eligibility_summary?: string;
+  has_levels?: boolean;
+  annual_quota?: number | null;
+  term_years?: number | null;
+  level?: AwardLevel | string | null;
+  level_display?: string | null;
+  year?: number | null;
+  awarded_at?: string | null;
+  valid_from?: string | null;
+  valid_until?: string | null;
+  justification?: string | null;
+  status?: RecognitionStatus | string;
+  is_active?: boolean;
 };
+
 
 export type Achievement = {
   id: number;

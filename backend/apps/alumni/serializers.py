@@ -19,9 +19,96 @@ from apps.editorial.serializers import AdviceSerializer
 from apps.universities.models import Faculty
 
 class RecognitionTitleSerializer(serializers.ModelSerializer):
+    category_display = serializers.CharField(source="get_category_display", read_only=True)
+    recognition_type_display = serializers.CharField(source="get_recognition_type_display", read_only=True)
+
     class Meta:
         model = RecognitionTitle
-        fields = ("id", "name", "slug", "icon", "description", "order")
+        fields = (
+            "id",
+            "name",
+            "slug",
+            "category",
+            "category_display",
+            "recognition_type",
+            "recognition_type_display",
+            "icon",
+            "symbol_name",
+            "description",
+            "eligibility_summary",
+            "has_levels",
+            "annual_quota",
+            "term_years",
+            "order",
+            "is_active",
+        )
+
+
+class AlumniRecognitionSerializer(serializers.ModelSerializer):
+    name = serializers.CharField(source="title.name", read_only=True)
+    slug = serializers.CharField(source="title.slug", read_only=True)
+    category = serializers.CharField(source="title.category", read_only=True)
+    category_display = serializers.CharField(source="title.get_category_display", read_only=True)
+    recognition_type = serializers.CharField(source="title.recognition_type", read_only=True)
+    recognition_type_display = serializers.CharField(source="title.get_recognition_type_display", read_only=True)
+    symbol_name = serializers.CharField(source="title.symbol_name", read_only=True)
+    icon = serializers.CharField(source="title.icon", read_only=True)
+    description = serializers.CharField(source="title.description", read_only=True)
+    eligibility_summary = serializers.CharField(source="title.eligibility_summary", read_only=True)
+    level_display = serializers.CharField(source="get_level_display", read_only=True)
+    status_display = serializers.CharField(source="get_status_display", read_only=True)
+
+    class Meta:
+        model = AlumniRecognition
+        fields = (
+            "id",
+            "title",
+            "name",
+            "slug",
+            "category",
+            "category_display",
+            "recognition_type",
+            "recognition_type_display",
+            "symbol_name",
+            "icon",
+            "description",
+            "eligibility_summary",
+            "level",
+            "level_display",
+            "year",
+            "awarded_at",
+            "valid_from",
+            "valid_until",
+            "justification",
+            "status",
+            "status_display",
+            "is_active",
+        )
+
+
+def format_public_recognition(r: AlumniRecognition) -> dict:
+    return {
+        "id": r.title.id,
+        "assignment_id": r.id,
+        "name": r.title.name,
+        "slug": r.title.slug,
+        "category": r.title.category,
+        "category_display": r.title.get_category_display(),
+        "recognition_type": r.title.recognition_type,
+        "symbol_name": r.title.symbol_name,
+        "icon": r.title.icon,
+        "description": r.title.description,
+        "eligibility_summary": r.title.eligibility_summary,
+        "has_levels": r.title.has_levels,
+        "level": r.level,
+        "level_display": r.get_level_display() if r.level else None,
+        "year": r.year,
+        "awarded_at": r.awarded_at,
+        "valid_from": r.valid_from,
+        "valid_until": r.valid_until,
+        "justification": r.justification,
+    }
+
 
 class AchievementSerializer(serializers.ModelSerializer):
     class Meta: model = Achievement; fields = ("id", "title", "description", "year", "category", "order")
@@ -100,16 +187,9 @@ class PublicAlumniSerializer(serializers.ModelSerializer):
 
     def get_recognitions(self, obj):
         return [
-            {
-                "id": r.title.id,
-                "name": r.title.name,
-                "slug": r.title.slug,
-                "icon": r.title.icon,
-                "description": r.title.description,
-                "year": r.year,
-            }
+            format_public_recognition(r)
             for r in obj.recognitions.all()
-            if r.is_active and r.title.is_active
+            if r.status == AlumniRecognition.Status.APPROVED and r.is_active and r.title.is_active
         ]
 
 
@@ -129,16 +209,9 @@ class PublicAlumniListSerializer(serializers.ModelSerializer):
 
     def get_recognitions(self, obj):
         return [
-            {
-                "id": r.title.id,
-                "name": r.title.name,
-                "slug": r.title.slug,
-                "icon": r.title.icon,
-                "description": r.title.description,
-                "year": r.year,
-            }
+            format_public_recognition(r)
             for r in obj.recognitions.all()
-            if r.is_active and r.title.is_active
+            if r.status == AlumniRecognition.Status.APPROVED and r.is_active and r.title.is_active
         ]
 
 class OwnAlumniSerializer(serializers.ModelSerializer):

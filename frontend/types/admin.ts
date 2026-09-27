@@ -62,12 +62,22 @@ export type AdminRecognition = {
   id: number;
   name: string;
   slug: string;
+  category?: string;
+  category_display?: string;
+  recognition_type?: string;
+  recognition_type_display?: string;
   icon: string;
+  symbol_name?: string;
   description?: string;
+  eligibility_summary?: string;
+  has_levels?: boolean;
+  annual_quota?: number | null;
+  term_years?: number | null;
   is_active: boolean;
   order: number;
   alumni_count?: number;
 };
+
 
 export type AdminFeedbackItem = {
   id: number;

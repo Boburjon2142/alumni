@@ -279,35 +279,181 @@ class GraduationYearChangeRequest(models.Model):
 
 
 class RecognitionTitle(models.Model):
-    name = models.CharField(max_length=120)
-    slug = models.SlugField(max_length=140, unique=True)
+    class Category(models.TextChoices):
+        SUPREME_HONOR = "supreme_honor", "Oliy unvon"
+        ACHIEVEMENT_NOMINATION = "achievement_nomination", "Yutuqlar uchun nominatsiya"
+        UNIVERSITY_CONTRIBUTION = "university_contribution", "Universitetga qo‘shgan hissa"
+        TRADITIONAL_STATUS = "traditional_status", "An’anaviy status"
+
+    class RecognitionType(models.TextChoices):
+        SUPREME_HONOR = "supreme_honor", "Oliy unvon"
+        NOMINATION = "nomination", "Yillik nominatsiya"
+        TERM_STATUS = "term_status", "Muddatli maqom"
+        TRADITIONAL_STATUS = "traditional_status", "An’anaviy status"
+
+    name = models.CharField(max_length=160)
+    slug = models.SlugField(max_length=160, unique=True)
+    category = models.CharField(
+        max_length=32,
+        choices=Category.choices,
+        default=Category.ACHIEVEMENT_NOMINATION,
+        db_index=True,
+    )
+    recognition_type = models.CharField(
+        max_length=32,
+        choices=RecognitionType.choices,
+        default=RecognitionType.NOMINATION,
+        db_index=True,
+    )
+    description = models.TextField(blank=True, max_length=1000)
+    eligibility_summary = models.TextField(blank=True, max_length=1000)
+    symbol_name = models.CharField(max_length=64, blank=True)
     icon = models.CharField(max_length=64, blank=True, default="award")
-    description = models.TextField(blank=True, max_length=500)
-    is_active = models.BooleanField(default=True, db_index=True)
+    has_levels = models.BooleanField(default=False)
+    annual_quota = models.PositiveSmallIntegerField(null=True, blank=True)
+    term_years = models.PositiveSmallIntegerField(null=True, blank=True)
     order = models.PositiveSmallIntegerField(default=0)
+    is_active = models.BooleanField(default=True, db_index=True)
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True, blank=True)
 
     class Meta:
         ordering = ("order", "name")
-        verbose_name = "Faxriy unvon"
-        verbose_name_plural = "Faxriy unvonlar"
+        verbose_name = "Faxriy unvon / Mukofot"
+        verbose_name_plural = "Faxriy unvonlar va mukofotlar"
+        indexes = [
+            models.Index(fields=("category", "is_active"), name="rec_title_cat_act_idx"),
+            models.Index(fields=("recognition_type", "is_active"), name="rec_title_type_act_idx"),
+        ]
 
     def __str__(self):
-        return self.name
+        return f"{self.name} ({self.get_category_display()})"
 
 
 class AlumniRecognition(models.Model):
+    class Level(models.TextChoices):
+        BRONZE = "bronze", "Bronza"
+        SILVER = "silver", "Kumush"
+        GOLD = "gold", "Oltin"
+
+    LEVEL_ORDER = {
+        Level.BRONZE: 1,
+        Level.SILVER: 2,
+        Level.GOLD: 3,
+    }
+
+    class Status(models.TextChoices):
+        DRAFT = "draft", "Qoralama"
+        APPROVED = "approved", "Tasdiqlangan"
+        REVOKED = "revoked", "Bekor qilingan"
+
     alumnus = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name="recognitions")
     title = models.ForeignKey(RecognitionTitle, on_delete=models.CASCADE, related_name="alumni_recognitions")
-    year = models.PositiveSmallIntegerField(null=True, blank=True)
+    level = models.CharField(max_length=16, choices=Level.choices, null=True, blank=True, db_index=True)
+    year = models.PositiveSmallIntegerField(null=True, blank=True, db_index=True)
+    awarded_at = models.DateField(null=True, blank=True)
+    valid_from = models.DateField(null=True, blank=True)
+    valid_until = models.DateField(null=True, blank=True)
+    justification = models.TextField(blank=True, max_length=2000)
+    status = models.CharField(max_length=16, choices=Status.choices, default=Status.APPROVED, db_index=True)
+    approved_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="approved_recognitions"
+    )
+    approved_at = models.DateTimeField(null=True, blank=True)
+    revoked_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="revoked_recognitions"
+    )
+    revoked_at = models.DateTimeField(null=True, blank=True)
+    revocation_reason = models.TextField(blank=True, max_length=1000)
     is_active = models.BooleanField(default=True, db_index=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ("title__order", "-year", "id")
-        unique_together = ("alumnus", "title")
-        verbose_name = "Bitiruvchi faxriy unvoni"
-        verbose_name_plural = "Bitiruvchilar faxriy unvonlari"
+        verbose_name = "Bitiruvchi e’tirofi / mukofoti"
+        verbose_name_plural = "Bitiruvchilar e’tiroflari va mukofotlari"
+        indexes = [
+            models.Index(fields=("status", "is_active"), name="alumni_rec_st_act_idx"),
+            models.Index(fields=("title", "year", "status"), name="alumni_rec_yr_st_idx"),
+            models.Index(fields=("alumnus", "title", "status"), name="alumni_rec_alumnus_idx"),
+        ]
+
+    def clean(self):
+        super().clean()
+        # 1. Sync is_active with status
+        if self.status == self.Status.APPROVED:
+            self.is_active = True
+        else:
+            self.is_active = False
+
+        # 2. Duplicate prevention & level upgrade validation
+        if self.alumnus_id and self.title_id:
+            existing = AlumniRecognition.objects.filter(
+                alumnus_id=self.alumnus_id,
+                title_id=self.title_id
+            ).exclude(pk=self.pk).exclude(status=self.Status.REVOKED)
+
+            if existing.exists():
+                if not getattr(self.title, "has_levels", False):
+                    raise ValidationError(
+                        f'"{self.title.name}" e’tirofi ushbu bitiruvchiga allaqachon biriktirilgan. '
+                        f'Nizomga ko‘ra bitta nominatsiya bir shaxsga bir marta beriladi.'
+                    )
+                else:
+                    # For awards with levels (e.g. Oliyhimmat), check level upgrade
+                    prev_rec = existing.first()
+                    prev_order = self.LEVEL_ORDER.get(prev_rec.level, 0)
+                    curr_order = self.LEVEL_ORDER.get(self.level, 0)
+                    if curr_order <= prev_order:
+                        raise ValidationError(
+                            f'"{self.title.name}" mukofoti darajasini faqat oshirish mumkin '
+                            f'(Mavjud: {prev_rec.get_level_display() or "Yo‘q"}, Yangi: {self.get_level_display() or "Yo‘q"}).'
+                        )
+
+        # 3. Quota enforcement for nominations with annual quota
+        if self.title_id and getattr(self.title, "annual_quota", None) and self.year and self.status == self.Status.APPROVED:
+            quota = self.title.annual_quota
+            current_approved_count = AlumniRecognition.objects.filter(
+                title_id=self.title_id,
+                year=self.year,
+                status=self.Status.APPROVED
+            ).exclude(pk=self.pk).count()
+
+            if current_approved_count >= quota:
+                raise ValidationError(
+                    f'"{self.title.name}" nominatsiyasi uchun {self.year}-yilda belgilangan '
+                    f'yillik kvota ({quota} nafar laureat) to‘lgan.'
+                )
+
+        # 4. Term status validity date auto-computation
+        if self.title_id and getattr(self.title, "recognition_type", "") == RecognitionTitle.RecognitionType.TERM_STATUS:
+            if self.valid_from and not self.valid_until:
+                term_years = getattr(self.title, "term_years", 2) or 2
+                try:
+                    self.valid_until = self.valid_from.replace(year=self.valid_from.year + term_years)
+                except ValueError:
+                    self.valid_until = self.valid_from + (date(self.valid_from.year + term_years, 3, 1) - date(self.valid_from.year, 3, 1))
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        if self.status == self.Status.APPROVED and not self.approved_at:
+            self.approved_at = timezone.now()
+        if self.status == self.Status.REVOKED and not self.revoked_at:
+            self.revoked_at = timezone.now()
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.alumnus.full_name} — {self.title.name}"
+        level_str = f" ({self.get_level_display()})" if self.level else ""
+        year_str = f" [{self.year}]" if self.year else ""
+        return f"{self.alumnus.full_name} — {self.title.name}{level_str}{year_str}"
+
 

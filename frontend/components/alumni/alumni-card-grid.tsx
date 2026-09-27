@@ -56,12 +56,13 @@ export function AlumniCardGrid({ alumni, locale }: { alumni: Alumni[]; locale: L
                   return (
                     <span className="alumni-card-badge" title={titleName}>
                       <RecognitionIcon
-                        icon={item.recognitions[0].icon}
+                        icon={item.recognitions[0].symbol_name || item.recognitions[0].icon}
                         size={13}
                         className="emblem-icon"
                       />
                       <span>{titleName}</span>
                     </span>
+
                   );
                 })() : <span />}
 

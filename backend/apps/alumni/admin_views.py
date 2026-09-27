@@ -30,6 +30,7 @@ def apply_avatar(profile, avatar_data, files=None):
         except Exception:
             pass
 
+from django.core.exceptions import ValidationError as DjangoValidationError
 from apps.accounts.models import User
 from apps.accounts.permissions import IsAdminOrStaffUser
 from apps.alumni.models import (
@@ -45,6 +46,7 @@ from apps.alumni.models import (
 )
 from apps.alumni.serializers import (
     AchievementSerializer,
+    AlumniRecognitionSerializer,
     CareerTimelineSerializer,
     EducationExperienceSerializer,
     GraduationYearChangeRequestSerializer,
@@ -53,6 +55,7 @@ from apps.alumni.serializers import (
     RecognitionTitleSerializer,
     WorkExperienceSerializer,
 )
+
 from apps.editorial.models import AlumniInterview, SuccessStory
 from apps.feedback.models import Feedback
 from apps.impact.models import Contribution
@@ -239,14 +242,41 @@ class AdminAlumniDetailView(APIView):
         profile.save()
 
         # Update recognitions (admin-assigned honorary awards)
-        if "recognition_ids" in data:
+        if "recognition_ids" in data or "recognitions" in data:
+            rec_inputs = data.get("recognitions") or data.get("recognition_ids", [])
             profile.recognitions.all().delete()
-            for r_id in data["recognition_ids"]:
-                try:
-                    r_title = RecognitionTitle.objects.get(id=r_id)
-                    AlumniRecognition.objects.create(alumnus=profile, title=r_title)
-                except RecognitionTitle.DoesNotExist:
-                    pass
+            for item in rec_inputs:
+                if isinstance(item, int):
+                    title_id = item
+                    rec_kwargs = {}
+                elif isinstance(item, dict):
+                    title_id = item.get("title_id") or item.get("id") or item.get("title")
+                    rec_kwargs = {
+                        "level": item.get("level"),
+                        "year": item.get("year"),
+                        "justification": item.get("justification", "").strip(),
+                        "valid_from": item.get("valid_from"),
+                        "valid_until": item.get("valid_until"),
+                        "status": item.get("status", AlumniRecognition.Status.APPROVED),
+                    }
+                else:
+                    continue
+
+                if title_id:
+                    try:
+                        r_title = RecognitionTitle.objects.get(id=int(title_id))
+                        rec_obj = AlumniRecognition(
+                            alumnus=profile,
+                            title=r_title,
+                            approved_by=request.user,
+                            approved_at=timezone.now(),
+                            **rec_kwargs
+                        )
+                        rec_obj.full_clean()
+                        rec_obj.save()
+                    except (RecognitionTitle.DoesNotExist, DjangoValidationError, ValueError) as err:
+                        if isinstance(err, DjangoValidationError):
+                            return Response({"message": str(err.messages[0] if hasattr(err, "messages") else err)}, status=status.HTTP_400_BAD_REQUEST)
 
         # Update achievements
         if "achievements" in data and isinstance(data["achievements"], list):
@@ -347,21 +377,15 @@ class AdminRecognitionTitleListView(APIView):
     permission_classes = [IsAdminOrStaffUser]
 
     def get(self, request):
-        titles = RecognitionTitle.objects.annotate(alumni_count=Count("alumni_recognitions")).order_by("order", "name")
-        data = [
-            {
-                "id": t.id,
-                "name": t.name,
-                "slug": t.slug,
-                "icon": t.icon,
-                "description": t.description,
-                "is_active": t.is_active,
-                "order": t.order,
-                "alumni_count": t.alumni_count,
-            }
-            for t in titles
-        ]
-        return Response({"results": data})
+        titles = RecognitionTitle.objects.annotate(
+            alumni_count=Count("alumni_recognitions", filter=Q(alumni_recognitions__status=AlumniRecognition.Status.APPROVED))
+        ).order_by("order", "name")
+        serialized = RecognitionTitleSerializer(titles, many=True).data
+        # Attach alumni_count
+        count_map = {t.id: t.alumni_count for t in titles}
+        for item in serialized:
+            item["alumni_count"] = count_map.get(item["id"], 0)
+        return Response({"results": serialized})
 
     def post(self, request):
         serializer = RecognitionTitleSerializer(data=request.data)
@@ -397,6 +421,75 @@ class AdminRecognitionTitleDetailView(APIView):
             return Response({"message": "Faxriy unvon topilmadi"}, status=status.HTTP_404_NOT_FOUND)
         title.delete()
         return Response({"success": True, "message": "Faxriy unvon o‘chirildi"}, status=status.HTTP_204_NO_CONTENT)
+
+
+class AdminAlumniRecognitionCreateView(APIView):
+    permission_classes = [IsAdminOrStaffUser]
+
+    def post(self, request, identifier):
+        profile = AlumniProfile.objects.filter(id=int(identifier) if identifier.isdigit() else 0).first() or AlumniProfile.objects.filter(slug=identifier).first()
+        if not profile:
+            return Response({"message": "Bitiruvchi topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+
+        title_id = request.data.get("title_id") or request.data.get("title")
+        if not title_id:
+            return Response({"message": "Mukofot / Unvon tanlanishi shart (title_id)"}, status=status.HTTP_400_BAD_REQUEST)
+
+        title = RecognitionTitle.objects.filter(id=title_id).first()
+        if not title:
+            return Response({"message": "Bunday e’tirof / mukofot topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+
+        rec = AlumniRecognition(
+            alumnus=profile,
+            title=title,
+            level=request.data.get("level") or None,
+            year=request.data.get("year") or None,
+            valid_from=request.data.get("valid_from") or None,
+            valid_until=request.data.get("valid_until") or None,
+            justification=request.data.get("justification", "").strip(),
+            status=request.data.get("status", AlumniRecognition.Status.APPROVED),
+            approved_by=request.user,
+            approved_at=timezone.now(),
+        )
+        try:
+            rec.full_clean()
+            rec.save()
+        except DjangoValidationError as err:
+            msg = err.messages[0] if hasattr(err, "messages") else str(err)
+            return Response({"message": msg}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(
+            {
+                "success": True,
+                "message": f"{profile.full_name} ga {title.name} muvaffaqiyatli biriktirildi.",
+                "data": AlumniRecognitionSerializer(rec).data,
+            },
+            status=status.HTTP_201_CREATED
+        )
+
+
+class AdminAlumniRecognitionRevokeView(APIView):
+    permission_classes = [IsAdminOrStaffUser]
+
+    def post(self, request, pk):
+        rec = AlumniRecognition.objects.filter(pk=pk).first()
+        if not rec:
+            return Response({"message": "Mukofot birikmasi topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+
+        reason = request.data.get("revocation_reason", "").strip() or "Admin qarori asosida bekor qilindi."
+        rec.status = AlumniRecognition.Status.REVOKED
+        rec.is_active = False
+        rec.revoked_by = request.user
+        rec.revoked_at = timezone.now()
+        rec.revocation_reason = reason
+        rec.save()
+
+        return Response({
+            "success": True,
+            "message": f"{rec.title.name} e’tirofi bekor qilindi (Revoked).",
+            "data": AlumniRecognitionSerializer(rec).data
+        })
+
 
 
 class AdminGraduationYearRequestListView(APIView):

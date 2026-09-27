@@ -1190,45 +1190,90 @@ export function getCategoryLabel(category: string, locale: Locale): string {
 }
 
 export const recognitionTitlesMap: Record<string, Record<Locale, string>> = {
-  "faxriy-ustoz": {
-    uz: "Faxriy ustoz",
-    ru: "Почётный наставник",
-    en: "Honorary Mentor",
-  },
-  "karyera-koprigi": {
-    uz: "Karyera ko‘prigi",
-    ru: "Карьерный мост",
-    en: "Career Bridge",
-  },
-  "faol-bitiruvchi": {
-    uz: "Faol bitiruvchi",
-    ru: "Активный выпускник",
-    en: "Active Alumnus",
-  },
-  "universitet-fidoyisi": {
-    uz: "Universitet fidoyisi",
-    ru: "Преданный университету",
-    en: "University Devotee",
+  "qardu-iftixori": {
+    uz: "QarDU iftixori",
+    ru: "Гордость КарГУ",
+    en: "Pride of KarSU",
   },
   "ilm-fan-fidoyisi": {
     uz: "Ilm-fan fidoyisi",
     ru: "Деятель науки",
     en: "Science Champion",
   },
-  "innovatsiya-yetakchisi": {
-    uz: "Innovatsiya yetakchisi",
-    ru: "Лидер инноваций",
-    en: "Innovation Leader",
+  "ziyo-mashali": {
+    uz: "Ziyo mash’ali",
+    ru: "Факел просвещения",
+    en: "Torch of Enlightenment",
   },
-  "tadbirkor-bitiruvchi": {
-    uz: "Tadbirkor bitiruvchi",
-    ru: "Выпускник-предприниматель",
-    en: "Entrepreneur Alumnus",
+  "yuksak-parvoz": {
+    uz: "Yuksak parvoz",
+    ru: "Высокий полёт",
+    en: "High Flight",
   },
-  "yil-bitiruvchisi": {
-    uz: "Yil bitiruvchisi",
-    ru: "Выпускник года",
-    en: "Alumnus of the Year",
+  "ibrat": {
+    uz: "Ibrat",
+    ru: "Пример для подражания",
+    en: "Role Model",
+  },
+  "istiqbol-yoshlari": {
+    uz: "Istiqbol yoshlari",
+    ru: "Молодёжь перспективы",
+    en: "Future Leaders",
+  },
+  "ezgulik": {
+    uz: "Ezgulik",
+    ru: "Благородство и доброта",
+    en: "Benevolence",
+  },
+  "oliyhimmat": {
+    uz: "Oliyhimmat",
+    ru: "Благородный меценат",
+    en: "Noble Patron",
+  },
+  "istedodlar-tayanchi": {
+    uz: "Iste’dodlar tayanchi",
+    ru: "Опора талантов",
+    en: "Pillar of Talents",
+  },
+  "marifat-hadyasi": {
+    uz: "Ma’rifat hadyasi",
+    ru: "Дар просвещения",
+    en: "Gift of Knowledge",
+  },
+  "yolchiroq": {
+    uz: "Yo‘lchiroq",
+    ru: "Путеводная звезда / Ментор",
+    en: "Guiding Light / Mentor",
+  },
+  "kelajakka-koprik": {
+    uz: "Kelajakka ko‘prik",
+    ru: "Мост в будущее",
+    en: "Bridge to the Future",
+  },
+  "ona-dargoh-qadrdoni": {
+    uz: "Ona dargoh qadrdoni",
+    ru: "Хранитель традиций Alma Mater",
+    en: "Devoted to Alma Mater",
+  },
+  "qardu-elchisi": {
+    uz: "QarDU elchisi",
+    ru: "Посол КарГУ",
+    en: "Ambassador of KarSU",
+  },
+  "kumush-bitiruvchi": {
+    uz: "Kumush bitiruvchi",
+    ru: "Серебряный выпускник (25 лет)",
+    en: "Silver Alumnus (25 Years)",
+  },
+  "oltin-bitiruvchi": {
+    uz: "Oltin bitiruvchi",
+    ru: "Золотой выпускник (50 лет)",
+    en: "Golden Alumnus (50 Years)",
+  },
+  "qardu-sulolasi": {
+    uz: "QarDU sulolasi",
+    ru: "Династия КарГУ",
+    en: "Dynasty of KarSU",
   },
 };
 

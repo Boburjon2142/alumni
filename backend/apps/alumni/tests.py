@@ -744,32 +744,246 @@ def test_alumni_education_experiences(client, alumni):
     assert pub_res.data["educations"][0]["institution"] == "Qarshi davlat universiteti"
 
 @pytest.mark.django_db
-def test_recognition_titles_endpoint_and_filtering(client, alumni):
+def test_official_recognition_catalog_integrity(client):
+    from seed_official_awards import seed_official_awards
+    from apps.alumni.models import RecognitionTitle
+
+    seed_official_awards()
+    titles = RecognitionTitle.objects.all()
+    assert titles.count() >= 17
+
+    supreme = titles.get(slug="qardu-iftixori")
+    assert supreme.category == RecognitionTitle.Category.SUPREME_HONOR
+    assert supreme.annual_quota == 3
+
+    oliyhimmat = titles.get(slug="oliyhimmat")
+    assert oliyhimmat.has_levels is True
+
+    elchi = titles.get(slug="qardu-elchisi")
+    assert elchi.recognition_type == RecognitionTitle.RecognitionType.TERM_STATUS
+    assert elchi.term_years == 2
+
+    # Check demo definitions are absent
+    assert not RecognitionTitle.objects.filter(slug="faxriy-ustoz").exists()
+    assert not RecognitionTitle.objects.filter(slug="karyera-koprigi").exists()
+    assert not RecognitionTitle.objects.filter(slug="yil-bitiruvchisi").exists()
+
+
+@pytest.mark.django_db
+def test_unauthorized_user_cannot_assign_or_modify_awards(client, alumni):
     from apps.alumni.models import RecognitionTitle, AlumniRecognition
 
-    title1 = RecognitionTitle.objects.create(name="Faxriy ustoz", slug="faxriy-ustoz", icon="🎖️", order=1, is_active=True)
-    title2 = RecognitionTitle.objects.create(name="Innovatsiya yetakchisi", slug="innovatsiya-yetakchisi", icon="🚀", order=2, is_active=True)
+    title = RecognitionTitle.objects.create(
+        name="QarDU iftixori",
+        slug="qardu-iftixori",
+        category=RecognitionTitle.Category.SUPREME_HONOR,
+        annual_quota=3,
+        is_active=True
+    )
 
-    # 1. Test recognitions endpoint
-    res = client.get("/api/v1/alumni/recognitions/")
+    client.login(email="alumni@example.com", password="StrongPass123")
+    # Attempt mass assignment / self-awarding via patch me
+    res = client.patch(
+        "/api/v1/alumni/me/",
+        {"recognitions": [{"title_id": title.id, "status": "approved"}]},
+        format="json"
+    )
     assert res.status_code == 200
-    assert len(res.data) == 2
-    assert res.data[0]["slug"] == "faxriy-ustoz"
+    # Confirm no award was created
+    assert AlumniRecognition.objects.filter(alumnus=alumni).count() == 0
 
-    # 2. Attach recognition to alumni
-    AlumniRecognition.objects.create(alumnus=alumni, title=title1, is_active=True)
+    # Attempt to call admin assign endpoint as normal user
+    admin_res = client.post(
+        f"/api/v1/admin/alumni/{alumni.id}/recognitions/",
+        {"title_id": title.id, "year": 2024},
+        format="json"
+    )
+    assert admin_res.status_code in (401, 403)
 
-    # 3. Filter by recognition slug
-    match_res = client.get("/api/v1/alumni/?recognition=faxriy-ustoz")
-    assert match_res.status_code == 200
-    assert match_res.data["pagination"]["count"] == 1
-    assert len(match_res.data["data"][0]["recognitions"]) == 1
-    assert match_res.data["data"][0]["recognitions"][0]["slug"] == "faxriy-ustoz"
 
-    # 4. Filter by non-matching recognition slug
-    nomatch_res = client.get("/api/v1/alumni/?recognition=innovatsiya-yetakchisi")
-    assert nomatch_res.status_code == 200
-    assert nomatch_res.data["pagination"]["count"] == 0
+@pytest.mark.django_db
+def test_approved_award_public_visibility_and_revocation(client, alumni, admin_user):
+    from apps.alumni.models import RecognitionTitle, AlumniRecognition
+
+    title = RecognitionTitle.objects.create(
+        name="Ilm-fan fidoyisi",
+        slug="ilm-fan-fidoyisi",
+        category=RecognitionTitle.Category.ACHIEVEMENT_NOMINATION,
+        annual_quota=3,
+        is_active=True
+    )
+
+    # 1. Draft award is NOT visible on public profile
+    draft_rec = AlumniRecognition.objects.create(
+        alumnus=alumni,
+        title=title,
+        year=2024,
+        status=AlumniRecognition.Status.DRAFT,
+        justification="Draft justification"
+    )
+    res = client.get(f"/api/v1/alumni/{alumni.slug}/")
+    assert res.status_code == 200
+    assert len(res.data["recognitions"]) == 0
+
+    # 2. Approved award IS visible publicly
+    draft_rec.status = AlumniRecognition.Status.APPROVED
+    draft_rec.approved_by = admin_user
+    draft_rec.save()
+
+    res = client.get(f"/api/v1/alumni/{alumni.slug}/")
+    assert res.status_code == 200
+    assert len(res.data["recognitions"]) == 1
+    rec_data = res.data["recognitions"][0]
+    assert rec_data["slug"] == "ilm-fan-fidoyisi"
+    assert rec_data["year"] == 2024
+    assert rec_data["justification"] == "Draft justification"
+
+    # 3. Revoked award is hidden publicly and records audit data
+    client.force_authenticate(user=admin_user)
+    revoke_res = client.post(
+        f"/api/v1/admin/alumni-recognitions/{draft_rec.id}/revoke/",
+        {"revocation_reason": "Kengash qarori bilan bekor qilindi"},
+        format="json"
+    )
+    assert revoke_res.status_code == 200
+    client.force_authenticate(user=None)
+
+    draft_rec.refresh_from_db()
+    assert draft_rec.status == AlumniRecognition.Status.REVOKED
+    assert draft_rec.is_active is False
+    assert draft_rec.revoked_by == admin_user
+    assert "Kengash qarori" in draft_rec.revocation_reason
+
+    pub_res = client.get(f"/api/v1/alumni/{alumni.slug}/")
+    assert len(pub_res.data["recognitions"]) == 0
+
+
+@pytest.mark.django_db
+def test_duplicate_award_prevention(alumni):
+    from apps.alumni.models import RecognitionTitle, AlumniRecognition
+
+    title = RecognitionTitle.objects.create(
+        name="Ziyo mash’ali",
+        slug="ziyo-mashali",
+        category=RecognitionTitle.Category.ACHIEVEMENT_NOMINATION,
+        has_levels=False,
+        annual_quota=3,
+        is_active=True
+    )
+
+    AlumniRecognition.objects.create(
+        alumnus=alumni,
+        title=title,
+        year=2024,
+        status=AlumniRecognition.Status.APPROVED
+    )
+
+    # Attempt duplicate assignment
+    dup = AlumniRecognition(
+        alumnus=alumni,
+        title=title,
+        year=2025,
+        status=AlumniRecognition.Status.APPROVED
+    )
+    with pytest.raises(ValidationError) as exc:
+        dup.full_clean()
+    assert "allaqachon biriktirilgan" in str(exc.value)
+
+
+@pytest.mark.django_db
+def test_oliyhimmat_level_upgrade(alumni):
+    from apps.alumni.models import RecognitionTitle, AlumniRecognition
+
+    title = RecognitionTitle.objects.create(
+        name="Oliyhimmat",
+        slug="oliyhimmat",
+        category=RecognitionTitle.Category.UNIVERSITY_CONTRIBUTION,
+        has_levels=True,
+        is_active=True
+    )
+
+    rec = AlumniRecognition.objects.create(
+        alumnus=alumni,
+        title=title,
+        level=AlumniRecognition.Level.BRONZE,
+        year=2023,
+        status=AlumniRecognition.Status.APPROVED
+    )
+
+    # Valid upgrade to Silver
+    rec.level = AlumniRecognition.Level.SILVER
+    rec.year = 2024
+    rec.full_clean()
+    rec.save()
+    assert rec.level == AlumniRecognition.Level.SILVER
+
+    # Valid upgrade to Gold
+    rec.level = AlumniRecognition.Level.GOLD
+    rec.year = 2025
+    rec.full_clean()
+    rec.save()
+    assert rec.level == AlumniRecognition.Level.GOLD
+
+
+@pytest.mark.django_db
+def test_annual_quota_enforcement(db):
+    from apps.alumni.models import RecognitionTitle, AlumniProfile, AlumniRecognition
+
+    title = RecognitionTitle.objects.create(
+        name="QarDU iftixori",
+        slug="qardu-iftixori",
+        category=RecognitionTitle.Category.SUPREME_HONOR,
+        annual_quota=3,
+        is_active=True
+    )
+
+    # Create 3 approved recipients in 2024
+    for i in range(3):
+        prof = AlumniProfile.objects.create(full_name=f"Laureate {i}", graduation_year=2000)
+        AlumniRecognition.objects.create(
+            alumnus=prof,
+            title=title,
+            year=2024,
+            status=AlumniRecognition.Status.APPROVED
+        )
+
+    # 4th assignment in the same year must be blocked by quota
+    prof4 = AlumniProfile.objects.create(full_name="Laureate 4", graduation_year=2001)
+    rec4 = AlumniRecognition(
+        alumnus=prof4,
+        title=title,
+        year=2024,
+        status=AlumniRecognition.Status.APPROVED
+    )
+    with pytest.raises(ValidationError) as exc:
+        rec4.full_clean()
+    assert "kvota" in str(exc.value).lower()
+
+
+@pytest.mark.django_db
+def test_qardu_elchisi_term_dates_support(alumni):
+    from apps.alumni.models import RecognitionTitle, AlumniRecognition
+
+    title = RecognitionTitle.objects.create(
+        name="QarDU elchisi",
+        slug="qardu-elchisi",
+        category=RecognitionTitle.Category.UNIVERSITY_CONTRIBUTION,
+        recognition_type=RecognitionTitle.RecognitionType.TERM_STATUS,
+        term_years=2,
+        is_active=True
+    )
+
+    rec = AlumniRecognition(
+        alumnus=alumni,
+        title=title,
+        valid_from=date(2024, 9, 1),
+        status=AlumniRecognition.Status.APPROVED
+    )
+    rec.full_clean()
+    rec.save()
+
+    assert rec.valid_until == date(2026, 9, 1)
+
 
 
 
