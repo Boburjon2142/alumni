@@ -192,7 +192,7 @@ def notify_existing_alumni_via_email(profile, approver_name: str) -> int:
     """
 
     sent_count = 0
-    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "QarshiDU Alumni <noreply@qarshidu.uz>")
+    from_email = getattr(settings, "DEFAULT_FROM_EMAIL", "QarshiDU Alumni <alumni@qarshidu.uz>")
     for email in recipient_emails:
         try:
             send_mail(
