@@ -226,7 +226,7 @@ class OwnAlumniSerializer(serializers.ModelSerializer):
     class Meta:
         model = AlumniProfile
         fields = (
-            "id", "email", "avatar", "full_name", "faculty", "faculty_name", "specialty",
+            "id", "slug", "email", "avatar", "full_name", "faculty", "faculty_name", "specialty",
             "graduation_year", "is_graduation_year_locked", "degree",
             "academic_degree", "academic_title", "current_company", "position",
             "current_activity", "industry", "city", "country", "skills", "bio",

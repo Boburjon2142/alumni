@@ -128,6 +128,21 @@ class AlumniDetailView(generics.RetrieveAPIView):
             "achievements", "timeline", "educations", "work_experiences", "sources", "advice"
         )
 
+    def get_object(self):
+        queryset = self.get_queryset()
+        lookup_url_kwarg = self.lookup_url_kwarg or self.lookup_field
+        lookup_value = str(self.kwargs.get(lookup_url_kwarg, "")).strip()
+
+        if lookup_value.isdigit():
+            obj = queryset.filter(Q(id=int(lookup_value)) | Q(slug=lookup_value)).first()
+        else:
+            obj = queryset.filter(slug=lookup_value).first()
+
+        if obj is None:
+            raise NotFound("Bitiruvchi profili topilmadi.")
+        self.check_object_permissions(self.request, obj)
+        return obj
+
 class AlumniSubmissionCreateView(generics.CreateAPIView):
     permission_classes = [AllowAny]
     serializer_class = AlumniSubmissionSerializer
