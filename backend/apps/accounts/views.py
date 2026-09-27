@@ -97,33 +97,45 @@ class SendVerificationCodeView(APIView):
             f"Agar bu so‘rovni siz amalga oshirmagan bo‘lsangiz, ushbu xatga e’tibor bermang."
         )
         html_message = f"""
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 32px 26px; border: 1px solid #e5e7eb; border-radius: 20px; background: #ffffff; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
-          <!-- Circular Logo & Black Brand Text -->
-          <div style="text-align: center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid #f3f4f6;">
-            <div style="display: inline-block; width: 80px; height: 80px; border-radius: 50%; background: #ffffff; padding: 4px; border: 2px solid #000000; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; vertical-align: middle;">
-              <img src="https://alumni.qarshidu.uz/images/qardu-avatar.png" alt="QarDU" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%; display: block;" />
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 28px; border: 1px solid #e2e8f0; border-radius: 16px; background: #ffffff; box-shadow: 0 4px 16px rgba(0,0,0,0.04);">
+          <!-- Header: Circular Emblem & University Name -->
+          <div style="text-align: center; padding-bottom: 20px; border-bottom: 1px solid #f1f5f9;">
+            <div style="display: inline-block; width: 68px; height: 68px; border-radius: 50%; background: #ffffff; padding: 4px; border: 2px solid #000000; box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow: hidden; vertical-align: middle;">
+              <img src="https://alumni.qarshidu.uz/images/qardu-avatar.png" alt="QarDU" width="68" height="68" style="width: 100%; height: 100%; object-fit: contain; border-radius: 50%; display: block; border: 0;" />
             </div>
-            <div style="margin-top: 12px;">
-              <h3 style="margin: 0; font-size: 16px; font-weight: 800; color: #000000; letter-spacing: 0.5px; text-transform: uppercase;">QARSHI DAVLAT UNIVERSITETI</h3>
-              <p style="margin: 3px 0 0 0; font-size: 13px; font-weight: 700; color: #000000;">Bitiruvchilar Hamjamiyati (ALUMNI)</p>
+            <div style="margin-top: 10px;">
+              <h3 style="margin: 0; font-size: 15px; font-weight: 800; color: #000000; letter-spacing: 0.5px; text-transform: uppercase;">QARSHI DAVLAT UNIVERSITETI</h3>
+              <p style="margin: 2px 0 0 0; font-size: 12.5px; font-weight: 600; color: #64748b;">Bitiruvchilar Portali • ALUMNI</p>
             </div>
           </div>
 
-          <!-- Main Content with Black Typography -->
-          <h2 style="color: #000000; margin-top: 0; font-size: 20px; text-align: center; font-weight: 800;">Bir martalik tasdiqlash kodi</h2>
-          <p style="color: #111827; font-size: 15px; line-height: 1.5; text-align: center; margin: 12px 0 24px 0;">
-            Assalomu alaykum! Profilingizni tasdiqlash uchun quyidagi bir martalik maxsus koddan foydalaning:
-          </p>
-
-          <!-- OTP Code Box -->
-          <div style="background: #f9fafb; padding: 20px; border-radius: 14px; text-align: center; margin: 20px 0; border: 2px dashed #000000;">
-            <span style="font-size: 38px; font-weight: 900; letter-spacing: 10px; color: #000000; font-family: 'Courier New', Courier, monospace; display: inline-block; padding-left: 10px;">{code}</span>
+          <!-- Main Title & Description -->
+          <div style="text-align: center; padding: 22px 0 16px 0;">
+            <h2 style="color: #000000; margin: 0 0 8px 0; font-size: 19px; font-weight: 800; letter-spacing: -0.3px;">Bir martalik tasdiqlash kodi</h2>
+            <p style="color: #334155; font-size: 14px; line-height: 1.55; margin: 0 auto; max-width: 380px;">
+              Assalomu alaykum! Profilingizni tasdiqlash va tizimga kirish uchun quyidagi maxsus xavfsizlik kodidan foydalaning:
+            </p>
           </div>
 
-          <p style="color: #1f2937; font-size: 13px; line-height: 1.5; text-align: center; margin-top: 22px;">
-            ⏰ Ushbu kod <strong style="color: #000000;">10 daqiqa</strong> davomida amal qiladi.<br>
-            <span style="color: #4b5563;">Xavfsizlik yuzasidan ushbu kodni begonalarga bermang.</span>
-          </p>
+          <!-- Compact Centered OTP Box -->
+          <div style="max-width: 290px; margin: 0 auto 20px auto; background: #f8fafc; padding: 14px 20px; border-radius: 12px; text-align: center; border: 2px dashed #000000;">
+            <span style="font-size: 34px; font-weight: 900; letter-spacing: 8px; color: #000000; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; display: inline-block; padding-left: 8px;">{code}</span>
+          </div>
+
+          <!-- Security & Expiration Box -->
+          <div style="max-width: 380px; margin: 0 auto; background: #fffbeb; border: 1px solid #fef3c7; border-radius: 10px; padding: 12px 16px; text-align: center;">
+            <p style="color: #92400e; font-size: 12.5px; line-height: 1.45; margin: 0; font-weight: 600;">
+              ⏰ Ushbu kod <strong>10 daqiqa</strong> davomida amal qiladi.
+            </p>
+            <p style="color: #b45309; font-size: 11.5px; line-height: 1.4; margin: 3px 0 0 0;">
+              Xavfsizlik yuzasidan ushbu kodni begonalarga bermang.
+            </p>
+          </div>
+
+          <!-- Footer -->
+          <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #f1f5f9; text-align: center; font-size: 11.5px; color: #94a3b8;">
+            Qarshi davlat universiteti bitiruvchilar hamjamiyati • <a href="https://alumni.qarshidu.uz" style="color: #002b49; font-weight: 600; text-decoration: none;">alumni.qarshidu.uz</a>
+          </div>
         </div>
         """
 
