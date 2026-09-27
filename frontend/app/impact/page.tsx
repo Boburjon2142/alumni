@@ -47,6 +47,7 @@ export default async function ImpactPage({
   return (
     <main className={styles.page}>
       <ImpactView
+        locale={locale}
         t={t}
         initialRankings={initialRankings}
         faculties={faculties}

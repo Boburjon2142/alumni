@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
-import type { Dictionary } from "@/lib/i18n";
+import type { Dictionary, Locale } from "@/lib/i18n";
 import type { Faculty, ImpactRankingEntry } from "@/types/alumni";
 import { ImpactHeader } from "./impact-header";
 import { ImpactFilters } from "./impact-filters";
@@ -9,23 +9,38 @@ import { ImpactRankingTable } from "./impact-ranking-table";
 import { ImpactExplanation } from "./impact-explanation";
 import { ImpactSubmitModal } from "./impact-submit-modal";
 import { getImpactRankings } from "@/lib/api";
+import { authSession } from "@/lib/auth";
 import styles from "@/app/impact/impact.module.css";
 
 interface ImpactViewProps {
   t: Dictionary;
+  locale?: Locale;
   initialRankings: ImpactRankingEntry[];
   faculties: Faculty[];
 }
 
-export function ImpactView({ t, initialRankings, faculties }: ImpactViewProps) {
+export function ImpactView({ t, locale = "uz", initialRankings, faculties }: ImpactViewProps) {
   const [category, setCategory] = useState("");
   const [faculty, setFaculty] = useState("");
   const [year, setYear] = useState("");
   const [search, setSearch] = useState("");
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const [rankings, setRankings] = useState<ImpactRankingEntry[]>(initialRankings);
   const [loading, setLoading] = useState(false);
+
+  // Sync auth state
+  useEffect(() => {
+    const sync = () => {
+      authSession()
+        .then((session) => setIsAuthenticated(Boolean(session?.authenticated)))
+        .catch(() => setIsAuthenticated(false));
+    };
+    sync();
+    window.addEventListener("auth-changed", sync);
+    return () => window.removeEventListener("auth-changed", sync);
+  }, []);
 
   // Fetch rankings when category, faculty, or year change
   useEffect(() => {
@@ -78,6 +93,8 @@ export function ImpactView({ t, initialRankings, faculties }: ImpactViewProps) {
       {/* 1. Header */}
       <ImpactHeader
         t={t}
+        locale={locale}
+        isAuthenticated={isAuthenticated}
         onOpenSubmitModal={() => setIsSubmitModalOpen(true)}
       />
 
@@ -121,6 +138,8 @@ export function ImpactView({ t, initialRankings, faculties }: ImpactViewProps) {
         isOpen={isSubmitModalOpen}
         onClose={() => setIsSubmitModalOpen(false)}
         t={t}
+        locale={locale}
+        isAuthenticated={isAuthenticated}
         onSubmitted={() => {
           getImpactRankings("").then((res) => {
             if (res.success) setRankings(res.data);

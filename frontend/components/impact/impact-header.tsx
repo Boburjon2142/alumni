@@ -2,15 +2,23 @@
 
 import React from "react";
 import { FileText, PlusCircle, ShieldCheck } from "lucide-react";
-import type { Dictionary } from "@/lib/i18n";
+import type { Dictionary, Locale } from "@/lib/i18n";
+import { AuthModal } from "@/components/auth/auth-modal";
 import styles from "@/app/impact/impact.module.css";
 
 interface ImpactHeaderProps {
   t: Dictionary;
+  locale?: Locale;
+  isAuthenticated?: boolean;
   onOpenSubmitModal?: () => void;
 }
 
-export function ImpactHeader({ t, onOpenSubmitModal }: ImpactHeaderProps) {
+export function ImpactHeader({
+  t,
+  locale = "uz",
+  isAuthenticated = false,
+  onOpenSubmitModal,
+}: ImpactHeaderProps) {
   return (
     <div className={styles.headerCard}>
       <div className={styles.headerLeft}>
@@ -25,7 +33,7 @@ export function ImpactHeader({ t, onOpenSubmitModal }: ImpactHeaderProps) {
       </div>
 
       <div className={styles.headerActions}>
-        {onOpenSubmitModal && (
+        {isAuthenticated ? (
           <button
             type="button"
             onClick={onOpenSubmitModal}
@@ -34,6 +42,20 @@ export function ImpactHeader({ t, onOpenSubmitModal }: ImpactHeaderProps) {
             <PlusCircle size={16} />
             <span>{t.impactSubmitCta}</span>
           </button>
+        ) : (
+          <AuthModal
+            locale={locale}
+            t={t}
+            trigger={
+              <button
+                type="button"
+                className={styles.primaryBtn}
+              >
+                <PlusCircle size={16} />
+                <span>{t.impactSubmitCta}</span>
+              </button>
+            }
+          />
         )}
 
         <a

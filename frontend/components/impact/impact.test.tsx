@@ -15,6 +15,12 @@ vi.mock("next/link", () => ({
   default: ({ children, href, ...props }: any) => <a href={href} {...props}>{children}</a>,
 }));
 
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn(), refresh: vi.fn(), replace: vi.fn() }),
+  usePathname: () => "/impact",
+  useSearchParams: () => new URLSearchParams(),
+}));
+
 const mockT = {
   impactTitle: "E’tirof",
   impactSubtitle: "Universitet va bitiruvchilar hamjamiyatiga qo‘shilgan tasdiqlangan hissalar",
@@ -86,14 +92,21 @@ const mockEntries: ImpactRankingEntry[] = [
 describe("Impact & Recognition Module", () => {
   afterEach(() => cleanup());
 
-  it("renders ImpactHeader with title and triggers submit modal callback", () => {
+  it("renders ImpactHeader with title and triggers submit modal callback when authenticated", () => {
     const handleOpen = vi.fn();
-    render(<ImpactHeader t={mockT} onOpenSubmitModal={handleOpen} />);
+    render(<ImpactHeader t={mockT} isAuthenticated={true} onOpenSubmitModal={handleOpen} />);
 
     expect(screen.getByRole("heading", { name: /E’tirof/i })).toBeInTheDocument();
     const btn = screen.getByText(/Tashabbus haqida xabar bering/i);
     fireEvent.click(btn);
     expect(handleOpen).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders ImpactHeader with auth modal trigger when unauthenticated", () => {
+    render(<ImpactHeader t={mockT} isAuthenticated={false} />);
+
+    expect(screen.getByRole("heading", { name: /E’tirof/i })).toBeInTheDocument();
+    expect(screen.getByText(/Tashabbus haqida xabar bering/i)).toBeInTheDocument();
   });
 
   it("renders ImpactExplanation with all 4 pillars", () => {

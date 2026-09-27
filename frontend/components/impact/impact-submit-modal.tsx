@@ -1,19 +1,30 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, Send, CheckCircle2, AlertCircle, Sparkles } from "lucide-react";
-import type { Dictionary } from "@/lib/i18n";
+import Link from "next/link";
+import { X, Send, CheckCircle2, AlertCircle, Sparkles, LogIn, UserCheck } from "lucide-react";
+import type { Dictionary, Locale } from "@/lib/i18n";
 import type { ImpactCategory, ImpactContributionPayload } from "@/types/alumni";
 import { submitContribution } from "@/lib/api";
+import { AuthModal } from "@/components/auth/auth-modal";
 
 interface ImpactSubmitModalProps {
   isOpen: boolean;
   onClose: () => void;
   t: Dictionary;
+  locale?: Locale;
+  isAuthenticated?: boolean;
   onSubmitted?: () => void;
 }
 
-export function ImpactSubmitModal({ isOpen, onClose, t, onSubmitted }: ImpactSubmitModalProps) {
+export function ImpactSubmitModal({
+  isOpen,
+  onClose,
+  t,
+  locale = "uz",
+  isAuthenticated = false,
+  onSubmitted,
+}: ImpactSubmitModalProps) {
   const [category, setCategory] = useState<ImpactCategory>("career");
   const [actionType, setActionType] = useState<string>("hiring_alumni");
   const [title, setTitle] = useState("");
@@ -119,7 +130,44 @@ export function ImpactSubmitModal({ isOpen, onClose, t, onSubmitted }: ImpactSub
 
         {/* Content */}
         <div className="p-6 overflow-y-auto space-y-4">
-          {success ? (
+          {!isAuthenticated ? (
+            <div className="py-8 px-4 text-center space-y-4">
+              <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 text-[#0D1667] dark:text-indigo-300 flex items-center justify-center mx-auto border border-indigo-100 dark:border-indigo-900/50">
+                <LogIn className="w-7 h-7" />
+              </div>
+              <div className="space-y-1.5 max-w-sm mx-auto">
+                <h4 className="font-bold text-slate-900 dark:text-white text-base">
+                  {t.impactLoginRequired || "Tashabbus haqida xabar berish uchun akkauntga kiring"}
+                </h4>
+                <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                  {t.impactLoginRequiredDesc || "Universitetga qo‘shgan hissangiz yoki tashabbusingiz moderatsiyadan o‘tishi va profilingizga hisoblanishi uchun platformaga kiring."}
+                </p>
+              </div>
+              <div className="pt-2 flex flex-col sm:flex-row gap-2.5 justify-center max-w-xs mx-auto">
+                <AuthModal
+                  locale={locale}
+                  t={t}
+                  trigger={
+                    <button
+                      type="button"
+                      className="w-full py-2.5 px-4 rounded-xl bg-[#0D1667] hover:bg-[#1a237e] text-white font-medium text-xs shadow-sm flex items-center justify-center gap-2 transition-all"
+                    >
+                      <LogIn className="w-4 h-4" />
+                      <span>{t.impactSignInBtn || "Akkauntga kirish"}</span>
+                    </button>
+                  }
+                />
+                <Link
+                  href="/join"
+                  onClick={onClose}
+                  className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 font-medium text-xs flex items-center justify-center gap-2 transition-all border border-slate-200 dark:border-slate-700"
+                >
+                  <UserCheck className="w-4 h-4" />
+                  <span>{t.impactRegisterBtn || "Ro‘yxatdan o‘tish"}</span>
+                </Link>
+              </div>
+            </div>
+          ) : success ? (
             <div className="py-8 text-center space-y-3">
               <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto" />
               <h4 className="font-bold text-slate-900 dark:text-white text-lg">
