@@ -97,15 +97,18 @@ class SendVerificationCodeView(APIView):
             f"Agar bu so‘rovni siz amalga oshirmagan bo‘lsangiz, ushbu xatga e’tibor bermang."
         )
         html_message = f"""
-        <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff;">
-          <h2 style="color: #002B49; margin-top: 0; font-size: 20px;">QarshiDU Bitiruvchilar Portali</h2>
-          <p style="color: #475569; font-size: 15px; line-height: 1.5;">Assalomu alaykum! Profilingizni tasdiqlash uchun quyidagi bir martalik koddan foydalaning:</p>
-          <div style="background: #f1f5f9; padding: 18px; border-radius: 8px; text-align: center; margin: 24px 0; border: 1px dashed #cbd5e1;">
-            <span style="font-size: 34px; font-weight: bold; letter-spacing: 8px; color: #002B49; font-family: monospace;">{code}</span>
+        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 28px 24px; border: 1px solid #e2e8f0; border-radius: 16px; background: #ffffff; box-shadow: 0 4px 16px rgba(0,0,0,0.06);">
+          <div style="text-align: center; margin-bottom: 22px; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9;">
+            <img src="https://alumni.qarshidu.uz/images/logo.png" alt="QarshiDU Logotipi" style="max-height: 52px; width: auto; display: inline-block;" />
           </div>
-          <p style="color: #64748b; font-size: 13px; line-height: 1.4;">
+          <h2 style="color: #002B49; margin-top: 0; font-size: 20px; text-align: center; font-weight: 700;">Bitiruvchilar Portali</h2>
+          <p style="color: #475569; font-size: 15px; line-height: 1.5; text-align: center; margin-bottom: 20px;">Assalomu alaykum! Profilingizni tasdiqlash uchun quyidagi bir martalik koddan foydalaning:</p>
+          <div style="background: #f8fafc; padding: 20px; border-radius: 12px; text-align: center; margin: 20px 0; border: 1px dashed #cbd5e1;">
+            <span style="font-size: 36px; font-weight: 800; letter-spacing: 8px; color: #002B49; font-family: monospace;">{code}</span>
+          </div>
+          <p style="color: #64748b; font-size: 13px; line-height: 1.5; text-align: center; margin-top: 20px;">
             ⏰ Ushbu kod <strong>10 daqiqa</strong> davomida amal qiladi.<br>
-            Xavfsizlik yuzasidan kodni boshqalarga bermang.
+            Xavfsizlik yuzasidan kodni hech kimga bermang.
           </p>
         </div>
         """
