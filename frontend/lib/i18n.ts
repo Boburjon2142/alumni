@@ -50,7 +50,7 @@ const dictionaries = {
     heroTitle: "Bir dargoh, turli avlodlar,",
     heroLine2: "",
     heroAccent: "umumiy faxr.",
-    heroDescription: "Bitiruvchilarimizning yo‘li, tajribasi va kelajak avlodga ulashadigan\nfikrlari bilan tanishing.",
+    heroDescription: "Bitiruvchilarimizning yo‘li, tajribasi\nva kelajak avlodga ulashadigan\nfikrlari bilan tanishing.",
     heroCtaPrimary: "Bizning faxrimiz",
     heroCtaSecondary: "Maslahatlarni o‘qish",
 

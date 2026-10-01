@@ -10,9 +10,9 @@ describe("HeroCarousel", () => {
     const img = screen.getByRole("img", {
       name: /qarshi davlat universiteti faxriy bitiruvchilari/i,
     });
-    expect(img.getAttribute("src")).toMatch(/\/images\/hero\/profiles\/hero-360x800\.(webp|png)/);
-    expect(img).toHaveAttribute("width", "360");
-    expect(img).toHaveAttribute("height", "800");
+    expect(img.getAttribute("src")).toBe("/images/hero/campus-20261001/hero-360x800.png");
+    expect(img).toHaveAttribute("width", "841");
+    expect(img).toHaveAttribute("height", "1870");
     expect(img).toHaveAttribute("fetchpriority", "high");
     expect(img).toHaveAttribute("loading", "eager");
   });
@@ -20,19 +20,20 @@ describe("HeroCarousel", () => {
   it("selects the matching composition for all supplied viewport widths", () => {
     const { container } = render(<HeroCarousel />);
     const sources = Array.from(container.querySelectorAll("source"));
-    for (const [width, height] of [
-      [360, 800], [375, 812], [390, 844], [430, 932],
-      [768, 1024], [1024, 768], [1366, 768], [1600, 900], [1920, 1080],
-    ]) {
-      const source = sources.find((s) => {
-        const minimum = Number(s.media.match(/min-width: (\d+)px/)?.[1]);
-        return width >= minimum;
-      });
-      const image = source ?? container.querySelector("img")!;
-      expect(image.getAttribute(source ? "srcset" : "src"))
-        .toMatch(new RegExp(`/images/hero/profiles/hero-${width}x${height}\\.(webp|png)`));
-      expect(image).toHaveAttribute("width", String(width));
-      expect(image).toHaveAttribute("height", String(height));
+    for (const [viewport, asset] of [
+      [360, "360x800"], [375, "390x844"], [390, "390x844"], [430, "430x932"],
+      [768, "768x1024"], [820, "820x1180"], [1024, "820x1180"],
+      [1366, "1366x768"], [1440, "1440x900"], [1600, "1440x900"],
+      [1920, "1920x1080"], [2560, "1920x1080"],
+    ] as const) {
+      for (const format of ["webp", "png"]) {
+        const source = sources.find((s) => {
+          const minimum = Number(s.media.match(/min-width: (\d+)px/)?.[1]);
+          return s.type === `image/${format}` && viewport >= minimum;
+        });
+        expect(source?.getAttribute("srcset"))
+          .toBe(`/images/hero/campus-20261001/hero-${asset}.${format}`);
+      }
     }
   });
 });
