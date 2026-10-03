@@ -17640,3 +17640,14 @@ img, video, iframe, canvas {
   max-width: 1560px !important;
   margin-inline: auto !important;
 }
+
+/* Compact catalog spacing and uppercase public navigation. */
+.nav-item-link { text-transform: uppercase; font-size: 13px; font-weight: 600; letter-spacing: .025em; }
+.directory-grid .minimal-alumni-card { min-height: 180px !important; }
+.directory-grid .alumni-card-info { justify-content: flex-start !important; gap: 6px !important; padding: 14px 18px !important; }
+.directory-grid .alumni-card-footer { margin-top: 10px !important; }
+.directory-grid > * { content-visibility: visible; contain-intrinsic-size: none; }
+@media (max-width: 680px) {
+  .directory-grid .minimal-alumni-card { min-height: 0 !important; }
+  .directory-grid .alumni-card-info { padding: 12px !important; }
+}

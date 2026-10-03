@@ -27,6 +27,7 @@ import { actionAdminAlumni, deleteAdminAlumni, getAdminAlumni, getFaculties } fr
 import { RecognitionIcon } from "@/components/alumni/recognition-icon";
 import { getRecognitionTitle } from "@/lib/i18n";
 import type { Alumni, Faculty } from "@/types/alumni";
+import styles from "@/components/admin/alumni-list.module.css";
 
 export default function AdminAlumniListPage() {
   const [alumniList, setAlumniList] = useState<Alumni[]>([]);
@@ -101,9 +102,9 @@ export default function AdminAlumniListPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className={styles.page}>
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className={`${styles.header} flex flex-col sm:flex-row sm:items-center justify-between gap-4`}>
         <div>
           <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
             Bitiruvchilar Boshqaruvi va Moderatsiya
@@ -114,7 +115,7 @@ export default function AdminAlumniListPage() {
         </div>
         <div className="flex items-center gap-2 shrink-0">
           <a
-            href="/anketa"
+            href="/join"
             target="_blank"
             rel="noopener noreferrer"
             className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-semibold flex items-center gap-1.5 transition"
@@ -128,7 +129,7 @@ export default function AdminAlumniListPage() {
 
       {/* Filter Toolbar */}
       <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3.5">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <div className={styles.filters}>
           {/* Search */}
           <div className="admin-search-box">
             <Search />
@@ -247,7 +248,7 @@ export default function AdminAlumniListPage() {
                       {/* Photo & Name */}
                       <td>
                         <div className="flex items-center gap-3">
-                          <div className="relative w-10 h-10 rounded-full overflow-hidden bg-slate-100 border border-slate-200 shrink-0">
+                          <div className={`${styles.avatar} relative w-10 h-10 rounded-full overflow-hidden bg-slate-100 border border-slate-200 shrink-0`}>
                             {hasPhoto ? (
                               <Image
                                 src={alumnus.avatar || alumnus.image_url || ""}
@@ -306,7 +307,7 @@ export default function AdminAlumniListPage() {
                             </span>
                           )}
                           {alumnus.recognitions && alumnus.recognitions.length > 0 ? (
-                            alumnus.recognitions.map((r) => (
+                            alumnus.recognitions.slice(0, 2).map((r) => (
                               <span
                                 key={r.id}
                                 className="admin-badge admin-badge-purple"
@@ -320,6 +321,11 @@ export default function AdminAlumniListPage() {
                             !alumnus.is_honorary && (
                               <span className="text-[11px] text-slate-400 italic">Unvonlar yo‘q</span>
                             )
+                          )}
+                          {alumnus.recognitions && alumnus.recognitions.length > 2 && (
+                            <span className="admin-badge admin-badge-purple" title={alumnus.recognitions.slice(2).map((r) => getRecognitionTitle(r.slug, "uz", r.name)).join(", ")}>
+                              +{alumnus.recognitions.length - 2} ta unvon
+                            </span>
                           )}
                         </div>
                       </td>

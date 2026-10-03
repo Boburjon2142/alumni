@@ -1,0 +1,20 @@
+.page { display: grid; gap: 16px; min-width: 0; }
+.page > * { margin-top: 0 !important; min-width: 0; }
+.header { gap: 12px; }
+.header h2 { margin: 0; font-size: 20px !important; }
+.header p { margin: 6px 0 0; }
+.filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.page > :global(.p-5) { padding: 14px !important; }
+.page :global(.admin-table) { min-width: 980px; }
+.page :global(.admin-table) th { min-width: 0 !important; }
+.page :global(.admin-table) th, .page :global(.admin-table) td { padding: 10px 12px; }
+.page :global(.admin-badge-list) { max-width: 220px; gap: 4px; }
+.avatar { position: relative !important; width: 40px !important; height: 40px !important; min-width: 40px; max-height: 40px; overflow: hidden; }
+.avatar img { width: 100% !important; height: 100% !important; object-fit: cover; }
+:global(.admin-portal-wrapper):has(.page) :global(.admin-content-area) { padding: 24px 28px !important; }
+@media (max-width: 900px) { .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639px) {
+  .filters { grid-template-columns: minmax(0, 1fr); }
+  .header h2 { font-size: 18px !important; }
+  :global(.admin-portal-wrapper):has(.page) :global(.admin-content-area) { padding: 16px !important; }
+}
