@@ -4,3 +4,6 @@ class ImpactConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
     name = "apps.impact"
     verbose_name = "Alumni Impact & Recognition"
+
+    def ready(self):
+        from . import signals

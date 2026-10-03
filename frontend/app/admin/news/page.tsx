@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import {
   Newspaper,
@@ -23,6 +23,9 @@ import {
   updateAdminNews,
 } from "@/lib/api";
 import type { AdminNewsItem, AdminNewsPayload } from "@/types/admin";
+import { AdminDialog } from "@/components/admin/admin-dialog";
+import { AdminPagination } from "@/components/admin/admin-pagination";
+import styles from "@/components/admin/management.module.css";
 
 export default function AdminNewsPage() {
   const [newsList, setNewsList] = useState<AdminNewsItem[]>([]);
@@ -52,26 +55,36 @@ export default function AdminNewsPage() {
   const [isFeatured, setIsFeatured] = useState(false);
   const [isPublished, setIsPublished] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState(0);
+  const [actionLoading, setActionLoading] = useState<number | null>(null);
+  const latestRequest = useRef(0);
+  const saveInFlight = useRef(false);
 
   const fetchNews = async () => {
+    const requestId = ++latestRequest.current;
     try {
       setLoading(true);
       const params = new URLSearchParams();
       if (search.trim()) params.set("search", search.trim());
       if (categoryFilter) params.set("category", categoryFilter);
+      params.set("page", String(page));
       const res = await getAdminNews(params.toString());
+      if (requestId !== latestRequest.current) return;
       setNewsList(res.results || []);
+      setCount(res.count);
+      setError("");
     } catch (err: any) {
-      setError(err.message || "Yangiliklarni yuklab bo‘lmadi");
+      if (requestId === latestRequest.current) setError(err.message || "Yangiliklarni yuklab bo‘lmadi");
     } finally {
-      setLoading(false);
+      if (requestId === latestRequest.current) setLoading(false);
     }
   };
 
   useEffect(() => {
     const timer = setTimeout(fetchNews, 250);
-    return () => clearTimeout(timer);
-  }, [search, categoryFilter]);
+    return () => { clearTimeout(timer); latestRequest.current++; };
+  }, [search, categoryFilter, page]);
 
   const handleOpenCreate = () => {
     setEditingId(null);
@@ -119,11 +132,13 @@ export default function AdminNewsPage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (saveInFlight.current) return;
     if (!titleUz.trim() || !summaryUz.trim()) {
       setError("O‘zbekcha sarlavha va qisqacha ma’lumot to‘ldirilishi shart!");
       return;
     }
 
+    saveInFlight.current = true;
     try {
       setSaving(true);
       setError("");
@@ -152,46 +167,57 @@ export default function AdminNewsPage() {
         setSuccessMsg("Yangilik muvaffaqiyatli saqlandi!");
       } else {
         await createAdminNews(payload);
-        setSuccessMsg("Yangi yangilik muvaffaqiyatli chop etildi!");
+        setSuccessMsg(isPublished ? "Yangi yangilik nashr qilindi!" : "Yangilik qoralama sifatida saqlandi!");
       }
 
       setModalOpen(false);
-      fetchNews();
+      if (!editingId && page !== 1) setPage(1);
+      else await fetchNews();
       setTimeout(() => setSuccessMsg(""), 4000);
     } catch (err: any) {
       setError(err.message || "Xatolik yuz berdi");
     } finally {
+      saveInFlight.current = false;
       setSaving(false);
     }
   };
 
   const handleTogglePublish = async (item: AdminNewsItem) => {
     try {
-      await updateAdminNews(item.id, { is_published: !item.is_published });
+      setActionLoading(item.id);
+      const updated = await updateAdminNews(item.id, { is_published: !item.is_published });
       setNewsList((prev) =>
-        prev.map((n) => (n.id === item.id ? { ...n, is_published: !n.is_published } : n))
+        prev.map((n) => (n.id === item.id ? updated : n))
       );
     } catch (err: any) {
-      alert("Holatni o‘zgartirib bo‘lmadi: " + err.message);
+      setError(err.message || "Holatni o‘zgartirib bo‘lmadi");
+    } finally {
+      setActionLoading(null);
     }
   };
 
   const handleDelete = async (id: number) => {
     if (!confirm("Haqiqatan ham ushbu yangilikni o‘chirmoqchimisiz?")) return;
     try {
+      setActionLoading(id);
       await deleteAdminNews(id);
       setNewsList((prev) => prev.filter((n) => n.id !== id));
+      setCount((previous) => Math.max(0, previous - 1));
+      if (newsList.length === 1 && page > 1) setPage(page - 1);
+      else await fetchNews();
       setSuccessMsg("Yangilik o‘chirildi");
       setTimeout(() => setSuccessMsg(""), 3000);
     } catch (err: any) {
-      alert("O‘chirishda xatolik: " + err.message);
+      setError(err.message || "O‘chirishda xatolik");
+    } finally {
+      setActionLoading(null);
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className={styles.page}>
       {/* Top Banner & Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+      <div className={styles.header}>
         <div>
           <div className="flex items-center gap-2.5 text-[#0d1667] mb-1">
             <Newspaper className="w-6 h-6" />
@@ -204,7 +230,7 @@ export default function AdminNewsPage() {
 
         <button
           onClick={handleOpenCreate}
-          className="inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-[#0d1667] text-white text-sm font-semibold rounded-xl hover:bg-[#0a1254] transition shadow-sm"
+          className={styles.primary}
         >
           <Plus size={18} />
           <span>Yangi yangilik qo‘shish</span>
@@ -227,21 +253,22 @@ export default function AdminNewsPage() {
       )}
 
       {/* Search and Filters */}
-      <div className="flex flex-col sm:flex-row items-center gap-3">
-        <div className="relative flex-1 w-full">
+      <div className={styles.filters}>
+        <div className={styles.search}>
           <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
           <input
             type="search"
             placeholder="Yangiliklar bo‘yicha qidiruv..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setPage(1); }}
             className="w-full pl-10 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0d1667]/20 focus:border-[#0d1667]"
           />
         </div>
 
         <select
           value={categoryFilter}
-          onChange={(e) => setCategoryFilter(e.target.value)}
+          aria-label="Yangilik kategoriyasi"
+          onChange={(e) => { setCategoryFilter(e.target.value); setPage(1); }}
           className="w-full sm:w-48 px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#0d1667]/20 focus:border-[#0d1667]"
         >
           <option value="">Barcha kategoriyalar</option>
@@ -273,14 +300,14 @@ export default function AdminNewsPage() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className={styles.cards}>
           {newsList.map((item) => (
             <div
               key={item.id}
-              className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition flex flex-col"
+              className={`${styles.card} flex flex-col`}
             >
               {/* Cover Image */}
-              <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
+              {(item.cover_image_url || item.cover_image) && <div className={styles.cover}>
                 {item.cover_image_url || item.cover_image ? (
                   <Image
                     src={item.cover_image_url || (item.cover_image as string)}
@@ -304,7 +331,7 @@ export default function AdminNewsPage() {
                     </span>
                   )}
                 </div>
-              </div>
+              </div>}
 
               {/* Body */}
               <div className="p-5 flex-1 flex flex-col justify-between">
@@ -328,9 +355,10 @@ export default function AdminNewsPage() {
                 </div>
 
                 {/* Footer Controls */}
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-between">
+                <div className={styles.cardFooter}>
                   <button
                     onClick={() => handleTogglePublish(item)}
+                    disabled={actionLoading === item.id}
                     className={`text-xs px-2.5 py-1 rounded-full font-semibold transition ${
                       item.is_published
                         ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
@@ -343,6 +371,7 @@ export default function AdminNewsPage() {
                   <div className="flex items-center gap-2">
                     <button
                       onClick={() => handleOpenEdit(item)}
+                      disabled={actionLoading === item.id}
                       className="p-1.5 text-slate-500 hover:text-[#0d1667] hover:bg-slate-50 rounded-lg transition"
                       title="Tahrirlash"
                     >
@@ -350,6 +379,7 @@ export default function AdminNewsPage() {
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
+                      disabled={actionLoading === item.id}
                       className="p-1.5 text-slate-500 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition"
                       title="O‘chirish"
                     >
@@ -364,15 +394,17 @@ export default function AdminNewsPage() {
       )}
 
       {/* Create / Edit Modal */}
+      <AdminPagination page={page} count={count} onChange={setPage} loading={loading} />
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
-          <div className="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-100 my-8">
+        <AdminDialog title={editingId ? "Yangilikni tahrirlash" : "Yangi yangilik yaratish"} onClose={() => setModalOpen(false)} busy={saving}>
             <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
               <h2 className="text-lg font-bold text-slate-900">
                 {editingId ? "Yangilikni tahrirlash" : "Yangi yangilik yaratish"}
               </h2>
               <button
                 onClick={() => setModalOpen(false)}
+                disabled={saving}
+                aria-label="Oynani yopish"
                 className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg"
               >
                 <X size={18} />
@@ -380,12 +412,14 @@ export default function AdminNewsPage() {
             </div>
 
             <form onSubmit={handleSave} className="space-y-4 max-h-[75vh] overflow-y-auto pr-1">
+              {error && <p role="alert" className={styles.error}>{error}</p>}
               {/* Category & Status */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Kategoriya</label>
                   <select
                     value={category}
+                    aria-label="Kategoriya"
                     onChange={(e: any) => setCategory(e.target.value)}
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white"
                   >
@@ -402,6 +436,8 @@ export default function AdminNewsPage() {
                   <input
                     type="text"
                     value={authorName}
+                    aria-label="Muallif / Bo‘lim"
+                    maxLength={160}
                     onChange={(e) => setAuthorName(e.target.value)}
                     placeholder="Masalan: Axborot xizmati"
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white"
@@ -418,6 +454,8 @@ export default function AdminNewsPage() {
                   type="text"
                   required
                   value={titleUz}
+                  aria-label="Sarlavha (O‘zbekcha)"
+                  maxLength={240}
                   onChange={(e) => setTitleUz(e.target.value)}
                   placeholder="Yangilikning asosiy sarlavhasi"
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white"
@@ -433,6 +471,8 @@ export default function AdminNewsPage() {
                   required
                   rows={2}
                   value={summaryUz}
+                  aria-label="Qisqacha mazmun (O‘zbekcha)"
+                  maxLength={450}
                   onChange={(e) => setSummaryUz(e.target.value)}
                   placeholder="Karta va ro‘yxatlarda ko‘rinadigan qisqacha tavsif"
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white"
@@ -447,6 +487,8 @@ export default function AdminNewsPage() {
                 <textarea
                   rows={6}
                   value={contentUz}
+                  aria-label="To‘liq matn (O‘zbekcha)"
+                  maxLength={12000}
                   onChange={(e) => setContentUz(e.target.value)}
                   placeholder="Yangilikning to‘liq matni..."
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white"
@@ -461,6 +503,8 @@ export default function AdminNewsPage() {
                 <input
                   type="url"
                   value={coverImageUrl}
+                  aria-label="Muqova rasm URL"
+                  maxLength={700}
                   onChange={(e) => setCoverImageUrl(e.target.value)}
                   placeholder="https://images.unsplash.com/photo-..."
                   className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white"
@@ -495,6 +539,7 @@ export default function AdminNewsPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
+                  disabled={saving}
                   className="px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-100 rounded-xl transition"
                 >
                   Bekor qilish
@@ -502,15 +547,14 @@ export default function AdminNewsPage() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="inline-flex items-center gap-2 px-5 py-2 bg-[#0d1667] text-white text-sm font-semibold rounded-xl hover:bg-[#0a1254] transition shadow-sm disabled:opacity-50"
+                  className={styles.primary}
                 >
                   {saving && <Loader2 size={16} className="animate-spin" />}
-                  <span>{editingId ? "O‘zgarishlarni saqlash" : "Chop etish"}</span>
+                  <span>Saqlash</span>
                 </button>
               </div>
             </form>
-          </div>
-        </div>
+        </AdminDialog>
       )}
     </div>
   );

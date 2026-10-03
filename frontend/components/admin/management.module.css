@@ -1,0 +1,100 @@
+.page { display: grid; gap: 16px; min-width: 0; }
+.page > * { margin-top: 0 !important; min-width: 0; }
+.page h1, .page h2, .page h3, .dialog h2, .dialog h3 { margin: 0; line-height: 1.35; }
+.page p { margin-top: 6px; margin-bottom: 0; }
+.header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 18px !important; background: #fff; border: 1px solid #e2e8f0 !important; border-radius: 14px; }
+.header h1, .header h2 { font-size: 20px !important; }
+.header p { font-size: 13px !important; line-height: 1.5; }
+.header > div { min-width: 0; }
+.primary { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 14px; min-height: 42px; border: 1px solid #0d1667; border-radius: 10px; background: #0d1667; color: #fff; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; flex-shrink: 0; }
+.primary:hover { background: #1a2580; }
+.primary:disabled, .page button:disabled, .dialog button:disabled { opacity: .55; cursor: wait; }
+.page button:focus-visible, .dialog button:focus-visible { outline: 2px solid #612175; outline-offset: 2px; }
+.filters { display: flex; gap: 12px; align-items: center; }
+.filterGrid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+.filterGrid select { width: 100%; min-width: 0; }
+.header > div > div { gap: 8px; }
+.search { position: relative; flex: 1; min-width: 0; }
+.search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 18px; height: 18px; pointer-events: none; }
+.search input { width: 100%; padding: 10px 12px 10px 40px !important; min-height: 42px; }
+.filters > select { width: 220px !important; flex: 0 0 220px; }
+.page input, .page select, .dialog input:not([type="checkbox"]), .dialog select, .dialog textarea { box-sizing: border-box; border: 1px solid #dbe2ed; border-radius: 10px; background: #fff; color: #0f172a; font: inherit; font-size: 13px; min-height: 40px; }
+.page select, .dialog select { padding: 8px 10px; }
+.page select option, .dialog select option { background: #fff; color: #0f172a; }
+.page input:focus, .page select:focus, .dialog input:focus, .dialog select:focus, .dialog textarea:focus { outline: 2px solid #0d166733; outline-offset: 1px; }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px !important; align-items: start; }
+.card { min-width: 0; border: 1px solid #e2e8f0 !important; border-radius: 14px; overflow: hidden; background: #fff; }
+.card h3 { font-size: 15px !important; }
+.card p { line-height: 1.5; }
+.card > :global(.p-5) { padding: 16px !important; }
+.card:global(.p-5) { padding: 16px !important; }
+.cover { position: relative; height: 130px; width: 100%; overflow: hidden; background: #f1f5f9; }
+.cover > div { position: absolute; top: 10px; left: 10px; }
+.cover span { padding: 4px 8px; background: #0f172abf; border-radius: 8px; font-size: 11px; }
+.cardFooter { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding-top: 12px; margin-top: 12px; border-top: 1px solid #f1f5f9; }
+.cardFooter button { cursor: pointer; }
+.cardFooter > button { min-height: 32px; padding: 6px 9px; border-radius: 8px; font-size: 12px; }
+.cardFooter > div > button { display: inline-flex; align-items: center; justify-content: center; width: 36px; height: 36px; border: 1px solid #e2e8f0; border-radius: 9px; background: #f8fafc; }
+.cardFooter > div > button:last-child { background: #fff1f2; color: #be123c; border-color: #fecdd3; }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.tabs button { border: 1px solid #e2e8f0; padding: 9px 11px; border-radius: 10px; cursor: pointer; }
+.tabs button[aria-pressed="true"] { border-color: #0d1667; background: #0d1667 !important; color: #fff !important; }
+.tabs button > span:last-child { padding: 2px 5px; }
+.card :global(.mb-3) { margin-bottom: 10px !important; }
+.card :global(.mb-1) { margin-bottom: 6px !important; flex-wrap: wrap; }
+.card :global(.mb-1) > span { padding: 3px 6px; border: 0 !important; border-radius: 5px; font-size: 11px !important; }
+.card :global(.mb-3) > div:last-child > span { padding: 3px 6px; border: 0; border-radius: 5px; }
+.card :global(.w-10.h-10) { width: 38px; height: 38px; }
+.card :global(.mt-4) { margin-top: 12px !important; }
+.card :global(.py-0\.5) { padding-top: 3px; padding-bottom: 3px; }
+.pagination { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 0; font-size: 13px; color: #64748b; }
+.pagination > div { display: flex; align-items: center; gap: 10px; }
+.pagination button { padding: 8px 12px; min-height: 38px; border: 1px solid #dbe2ed; border-radius: 9px; background: #fff; color: #0d1667; cursor: pointer; font: inherit; }
+.error { margin: 0; padding: 12px; border: 1px solid #fecdd3; border-radius: 10px; background: #fff1f2; color: #9f1239; font-size: 13px; }
+.tableScroll { overflow-x: auto; max-width: 100%; }
+.tableScroll table { min-width: 900px; width: 100%; }
+.tableScroll th, .tableScroll td { padding: 12px 14px !important; }
+.tableScroll th { min-width: 0 !important; }
+.tableScroll td p { margin: 0; }
+.tableScroll td:first-child { max-width: 220px; overflow-wrap: anywhere; }
+.tableScroll td select { width: 160px; min-height: 36px; font-size: 12px; }
+.overlay { position: fixed; inset: 0; z-index: 110; background: #0f172a80; }
+.dialog { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: min(680px, calc(100vw - 32px)); max-height: calc(100dvh - 40px); padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px; background: #fff; box-shadow: 0 20px 60px #0f172a33; z-index: 111; overflow-y: auto; color: #0f172a; }
+.dialogTitle { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+.dialog :global(.space-y-4) > * + * { margin-top: 14px !important; }
+.dialog :global(.space-y-5) > * + * { margin-top: 14px; }
+.dialog :global(.mb-4), .dialog :global(.mb-5) { margin-bottom: 16px !important; }
+.dialog :global(.pb-3), .dialog :global(.pb-4) { padding-bottom: 12px; }
+.dialog :global(.pt-4), .dialog :global(.pt-5) { padding-top: 14px; }
+.dialog form { max-height: none; overflow: visible; }
+.dialog label { font-size: 12px; line-height: 1.5; }
+.dialog label:global(.block) { margin-bottom: 5px; }
+.dialog input:not([type="checkbox"]), .dialog select, .dialog textarea { width: 100%; padding: 9px 11px !important; }
+.dialog textarea { resize: vertical; }
+.dialog input[type="checkbox"] { width: 17px; height: 17px; accent-color: #0d1667; flex-shrink: 0; }
+.dialog :global(.gap-6) { gap: 12px !important; flex-wrap: wrap; }
+.dialog button { cursor: pointer; border: 1px solid #e2e8f0; }
+.dialog button:global(.p-1\.5) { padding: 7px; min-width: 34px; min-height: 34px; }
+.dialog :global(.flex-wrap) button { padding: 6px 8px; font-size: 11px; }
+.dialog :global(.font-mono) { overflow-wrap: anywhere; }
+.dialog :global(.whitespace-pre-wrap) { white-space: pre-wrap; overflow-wrap: anywhere; }
+:global(.admin-portal-wrapper):has(.page) :global(.admin-content-area) { padding: 24px 28px !important; }
+@media (max-width: 1199px) { .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 639px) {
+  .filterGrid { grid-template-columns: minmax(0, 1fr); }
+  .cards { grid-template-columns: minmax(0, 1fr); }
+  .header { flex-direction: column; align-items: stretch; padding: 14px !important; }
+  .header h1, .header h2 { font-size: 18px !important; }
+  .filters { flex-direction: column; align-items: stretch; }
+  .filters > select { width: 100% !important; flex: auto; }
+  .dialog { padding: 16px; }
+  .dialog :global(.grid-cols-2) { grid-template-columns: minmax(0, 1fr) !important; }
+  :global(.admin-portal-wrapper):has(.page) :global(.admin-content-area) { padding: 16px !important; }
+  :global(.admin-portal-wrapper):has(.page) :global(.admin-topbar) { padding: 0 16px !important; gap: 10px; }
+  :global(.admin-portal-wrapper):has(.page) :global(.admin-topbar-left) { min-width: 0; gap: 10px !important; }
+  :global(.admin-portal-wrapper):has(.page) :global(.admin-topbar-sidebar-btn) { padding: 10px !important; }
+  :global(.admin-portal-wrapper):has(.page) :global(.admin-topbar-sidebar-btn) span,
+  :global(.admin-portal-wrapper):has(.page) :global(.admin-topbar-subtitle) { display: none; }
+  :global(.admin-portal-wrapper):has(.page) :global(.admin-topbar-title) { font-size: 13px !important; }
+  :global(.admin-portal-wrapper):has(.page) :global(.admin-topbar-user) { flex-shrink: 0; }
+}

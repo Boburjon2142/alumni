@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.accounts.permissions import IsAdminOrStaffUser
+from common.cache_utils import invalidate_cache_prefix
 from apps.alumni.models import AlumniProfile
 from apps.editorial.models import (
     AlumniAdvice,
@@ -402,7 +403,7 @@ class AdminNewsListView(APIView):
     pagination_class = AdminStandardPagination
 
     def get(self, request):
-        qs = News.objects.all().order_by("-created_at")
+        qs = News.objects.all().order_by("-created_at", "-id")
         search = request.query_params.get("search", "").strip()
         if search:
             qs = qs.filter(
@@ -425,42 +426,27 @@ class AdminNewsListView(APIView):
 
     def post(self, request):
         data = request.data
-        title_uz = data.get("title_uz", "").strip()
+        title_uz = data.get("title_uz", "")
+        title_uz = title_uz.strip() if isinstance(title_uz, str) else ""
         if not title_uz:
             return Response({"error": "Sarlavha (UZ) majburiy"}, status=status.HTTP_400_BAD_REQUEST)
 
-        slug = data.get("slug", "").strip() or slugify(title_uz)
+        supplied_slug = data.get("slug", "")
+        supplied_slug = supplied_slug.strip() if isinstance(supplied_slug, str) else ""
+        slug = (supplied_slug or slugify(title_uz) or "yangilik")[:180]
         orig_slug = slug
         counter = 1
         while News.objects.filter(slug=slug).exists():
             slug = f"{orig_slug}-{counter}"
             counter += 1
 
-        news = News.objects.create(
-            slug=slug,
-            title_uz=title_uz,
-            title_ru=data.get("title_ru", "").strip(),
-            title_en=data.get("title_en", "").strip(),
-            summary_uz=data.get("summary_uz", "").strip(),
-            summary_ru=data.get("summary_ru", "").strip(),
-            summary_en=data.get("summary_en", "").strip(),
-            content_uz=data.get("content_uz", "").strip(),
-            content_ru=data.get("content_ru", "").strip(),
-            content_en=data.get("content_en", "").strip(),
-            category=data.get("category", News.Category.GENERAL),
-            cover_image_url=data.get("cover_image_url", "").strip(),
-            cover_image_alt=data.get("cover_image_alt", "").strip(),
-            cover_image_credit=data.get("cover_image_credit", "").strip(),
-            cover_image_source_url=data.get("cover_image_source_url", "").strip(),
-            author_name=data.get("author_name", "").strip(),
-            is_featured=bool(data.get("is_featured", False)),
-            is_published=bool(data.get("is_published", False)),
-        )
-        if "cover_image" in request.FILES:
-            news.cover_image = request.FILES["cover_image"]
-            news.save()
-
-        return Response(AdminNewsSerializer(news).data, status=status.HTTP_201_CREATED)
+        payload = data.copy()
+        payload["slug"] = slug
+        serializer = AdminNewsSerializer(data=payload)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        invalidate_cache_prefix("api:news_list")
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 class AdminNewsDetailView(APIView):
@@ -480,38 +466,18 @@ class AdminNewsDetailView(APIView):
         if not news:
             return Response({"message": "Yangilik topilmadi"}, status=status.HTTP_404_NOT_FOUND)
 
-        data = request.data
-        for field in [
-            "title_uz", "title_ru", "title_en",
-            "summary_uz", "summary_ru", "summary_en",
-            "content_uz", "content_ru", "content_en",
-            "category", "cover_image_url", "cover_image_alt",
-            "cover_image_credit", "cover_image_source_url", "author_name"
-        ]:
-            if field in data:
-                setattr(news, field, data[field].strip() if isinstance(data[field], str) else data[field])
-
-        if "slug" in data and data["slug"].strip() and data["slug"].strip() != news.slug:
-            slug = data["slug"].strip()
-            if News.objects.filter(slug=slug).exclude(pk=pk).exists():
-                return Response({"error": "Bunday slug mavjud"}, status=status.HTTP_400_BAD_REQUEST)
-            news.slug = slug
-
-        if "is_featured" in data:
-            news.is_featured = bool(data["is_featured"])
-        if "is_published" in data:
-            news.is_published = bool(data["is_published"])
-        if "cover_image" in request.FILES:
-            news.cover_image = request.FILES["cover_image"]
-
-        news.save()
-        return Response(AdminNewsSerializer(news).data)
+        serializer = AdminNewsSerializer(news, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        invalidate_cache_prefix("api:news_list")
+        return Response(serializer.data)
 
     def delete(self, request, pk):
         news = self.get_object(pk)
         if not news:
             return Response({"message": "Yangilik topilmadi"}, status=status.HTTP_404_NOT_FOUND)
         news.delete()
+        invalidate_cache_prefix("api:news_list")
         return Response({"success": True, "message": "Yangilik o‘chirildi"}, status=status.HTTP_204_NO_CONTENT)
 
 

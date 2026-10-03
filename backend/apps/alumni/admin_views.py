@@ -6,6 +6,7 @@ from django.db import transaction
 from django.db.models import Count, Q
 from django.utils import timezone
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -45,6 +46,8 @@ from apps.alumni.models import (
     WorkExperience,
 )
 from apps.alumni.serializers import (
+    AdminAlumniSerializer,
+    AdminAlumniDetailSerializer,
     AchievementSerializer,
     AlumniRecognitionSerializer,
     CareerTimelineSerializer,
@@ -182,7 +185,7 @@ class AdminAlumniListView(APIView):
 
         paginator = self.pagination_class()
         page = paginator.paginate_queryset(qs, request)
-        serializer = PublicAlumniSerializer(page, many=True)
+        serializer = AdminAlumniSerializer(page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
@@ -211,7 +214,7 @@ class AdminAlumniDetailView(APIView):
         profile = self.get_object(identifier)
         if not profile:
             return Response({"message": "Bitiruvchi profili topilmadi"}, status=status.HTTP_404_NOT_FOUND)
-        return Response(PublicAlumniDetailSerializer(profile).data)
+        return Response(AdminAlumniDetailSerializer(profile).data)
 
     @transaction.atomic
     def put(self, request, identifier):
@@ -220,6 +223,12 @@ class AdminAlumniDetailView(APIView):
             return Response({"message": "Bitiruvchi profili topilmadi"}, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data
+
+        if "approval_status" in data and data["approval_status"] not in AlumniProfile.ApprovalStatus.values:
+            raise ValidationError({"approval_status": "Moderatsiya holati noto‘g‘ri."})
+        for field in ("is_honorary", "is_featured", "is_published"):
+            if field in data and not isinstance(data[field], bool):
+                raise ValidationError({field: "Qiymat true yoki false bo‘lishi kerak."})
 
         # Xavfsizlik va ma'lumotlar daxlsizligi:
         # Bitiruvchining shaxsiy ma'lumotlarini (F.I.SH., tarjimai hol, ish joyi, telefon, bio, email)
@@ -242,7 +251,32 @@ class AdminAlumniDetailView(APIView):
         profile.save()
 
         # Update recognitions (admin-assigned honorary awards)
-        if "recognition_ids" in data or "recognitions" in data:
+        if "recognition_ids" in data and "recognitions" not in data:
+            selected_ids = data["recognition_ids"]
+            if not isinstance(selected_ids, list) or any(type(item) is not int for item in selected_ids):
+                raise ValidationError({"recognition_ids": "Unvonlar ID ro‘yxati bo‘lishi kerak."})
+            selected_ids = set(selected_ids)
+            titles = {title.pk: title for title in RecognitionTitle.objects.filter(pk__in=selected_ids)}
+            if selected_ids != set(titles):
+                raise ValidationError({"recognition_ids": "Tanlangan unvon topilmadi."})
+            current = profile.recognitions.filter(status=AlumniRecognition.Status.APPROVED, is_active=True)
+            current_ids = set(current.values_list("title_id", flat=True))
+            for recognition in current.exclude(title_id__in=selected_ids):
+                recognition.status = AlumniRecognition.Status.REVOKED
+                recognition.revoked_by = request.user
+                recognition.revocation_reason = "Admin profil boshqaruvida bekor qilindi."
+                recognition.save()
+            for title_id in selected_ids - current_ids:
+                try:
+                    recognition = AlumniRecognition(
+                        alumnus=profile, title=titles[title_id], approved_by=request.user,
+                        approved_at=timezone.now(),
+                    )
+                    recognition.full_clean()
+                    recognition.save()
+                except DjangoValidationError as err:
+                    raise ValidationError({"recognition_ids": err.messages}) from err
+        elif "recognitions" in data:
             rec_inputs = data.get("recognitions") or data.get("recognition_ids", [])
             profile.recognitions.all().delete()
             for item in rec_inputs:
@@ -275,8 +309,7 @@ class AdminAlumniDetailView(APIView):
                         rec_obj.full_clean()
                         rec_obj.save()
                     except (RecognitionTitle.DoesNotExist, DjangoValidationError, ValueError) as err:
-                        if isinstance(err, DjangoValidationError):
-                            return Response({"message": str(err.messages[0] if hasattr(err, "messages") else err)}, status=status.HTTP_400_BAD_REQUEST)
+                        raise ValidationError({"recognitions": err.messages if isinstance(err, DjangoValidationError) else "Tanlangan unvon topilmadi."}) from err
 
         # Update achievements
         if "achievements" in data and isinstance(data["achievements"], list):
@@ -309,7 +342,7 @@ class AdminAlumniDetailView(APIView):
 
         # Refresh
         profile = self.get_object(str(profile.id))
-        return Response(PublicAlumniDetailSerializer(profile).data)
+        return Response(AdminAlumniDetailSerializer(profile).data)
 
     def delete(self, request, identifier):
         profile = self.get_object(identifier)

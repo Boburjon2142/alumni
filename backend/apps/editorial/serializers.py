@@ -149,7 +149,12 @@ class NewsDetailSerializer(NewsListSerializer):
 
 
 class AdminNewsSerializer(serializers.ModelSerializer):
+    cover_image_url = serializers.URLField(max_length=700, required=False, allow_blank=True)
+    cover_image_source_url = serializers.URLField(max_length=500, required=False, allow_blank=True)
+
     class Meta:
         model = News
         fields = "__all__"
+        read_only_fields = ("views_count", "published_at", "created_at", "updated_at")
+        extra_kwargs = {"content_uz": {"required": False, "allow_blank": True}}
 

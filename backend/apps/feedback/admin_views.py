@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.utils import timezone
 from rest_framework import status
+from rest_framework.exceptions import ValidationError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -20,7 +21,7 @@ class AdminFeedbackListView(APIView):
     pagination_class = AdminStandardPagination
 
     def get(self, request):
-        qs = Feedback.objects.select_related("alumni", "story").order_by("-created_at")
+        qs = Feedback.objects.select_related("alumni", "story").order_by("-created_at", "-id")
 
         search = request.query_params.get("search", "").strip()
         if search:
@@ -103,6 +104,8 @@ class AdminFeedbackDetailView(APIView):
             return Response({"message": "Murojaat topilmadi"}, status=status.HTTP_404_NOT_FOUND)
 
         new_status = request.data.get("status")
+        if new_status not in Feedback.Status.values:
+            raise ValidationError({"status": "Murojaat holati noto‘g‘ri."})
         if new_status and new_status in Feedback.Status.values:
             f.status = new_status
             f.reviewed_at = timezone.now()

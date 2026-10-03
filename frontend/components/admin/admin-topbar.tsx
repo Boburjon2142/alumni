@@ -9,6 +9,7 @@ import { useAdminSidebar } from "@/components/admin/admin-sidebar-context";
 const pageTitles: Record<string, string> = {
   "/admin": "Boshqaruv Paneli Umumiy Ko‘rinishi",
   "/admin/alumni": "Bitiruvchilar Ma’lumotlar Bazasi va Moderatsiya",
+  "/admin/news": "Yangiliklar Boshqaruvi",
   "/admin/recognitions": "Tavsiyaviy Faxriy Unvonlar Tizimi",
   "/admin/stories": "Muvaffaqiyat Hikoyalari Muharriri",
   "/admin/interviews": "Eksklyuziv Intervyular Muharriri",

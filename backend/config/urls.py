@@ -3,11 +3,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path, re_path
 from django.views.static import serve
+from apps.feedback.admin_views import AdminFeedbackDetailView, AdminFeedbackListView
 
 urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("admin/", admin.site.urls),
     path("api/v1/auth/", include("apps.accounts.urls")),
+    path("api/v1/admin/feedback/", AdminFeedbackListView.as_view(), name="admin-feedback-list-v1"),
+    path("api/v1/admin/feedback/<int:pk>/", AdminFeedbackDetailView.as_view(), name="admin-feedback-detail-v1"),
     path("api/v1/", include("apps.alumni.urls")),
     path("api/", include("apps.alumni.urls")),
     path("api/v1/editorial/", include("apps.editorial.urls")),

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -42,6 +42,7 @@ import { RecognitionIcon } from "@/components/alumni/recognition-icon";
 import { getRecognitionTitle } from "@/lib/i18n";
 import type { AdminRecognition } from "@/types/admin";
 import type { Alumni } from "@/types/alumni";
+import styles from "./alumni-form-editor.module.css";
 
 interface AlumniFormEditorProps {
   initialId?: string;
@@ -54,6 +55,7 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const saveInFlight = useRef(false);
 
   const [alumnus, setAlumnus] = useState<Alumni | null>(null);
   const [recognitionsList, setRecognitionsList] = useState<AdminRecognition[]>([]);
@@ -68,7 +70,7 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
   useEffect(() => {
     getAdminRecognitions()
       .then((res) => setRecognitionsList(res.results || []))
-      .catch(console.error);
+      .catch(() => setError("Unvonlar ro‘yxatini yuklab bo‘lmadi. Sahifani yangilang."));
 
     if (initialId) {
       getAdminAlumniById(initialId)
@@ -93,7 +95,8 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
 
   const handleSaveModeration = async (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    if (!initialId || !alumnus) return;
+    if (!initialId || !alumnus || saveInFlight.current) return;
+    saveInFlight.current = true;
 
     setSaving(true);
     setError("");
@@ -110,11 +113,18 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
 
       const updated = await updateAdminAlumni(initialId, payload);
       setAlumnus(updated);
+      setIsHonorary(Boolean(updated.is_honorary));
+      setIsFeatured(Boolean(updated.is_featured));
+      setIsPublished(Boolean(updated.is_published));
+      setApprovalStatus(updated.approval_status as "pending" | "approved" | "rejected");
+      setSelectedRecognitionIds((updated.recognitions || []).map((recognition) => recognition.id));
+      router.refresh();
       setSuccessMsg("Moderatsiya va unvonlar muvaffaqiyatli saqlandi!");
       setTimeout(() => setSuccessMsg(""), 4000);
     } catch (err: any) {
       setError(err.message || "Saqlashda xatolik yuz berdi");
     } finally {
+      saveInFlight.current = false;
       setSaving(false);
     }
   };
@@ -230,7 +240,7 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
   const hasPhoto = Boolean(alumnus?.avatar || alumnus?.image_url);
 
   return (
-    <div className="space-y-6 pb-12">
+    <div className={`${styles.editor} space-y-6 pb-12`}>
       {/* Header Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-3">
@@ -272,12 +282,12 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
       </div>
 
       {/* Security & Integrity Banner */}
-      <div className="bg-gradient-to-r from-blue-50 to-indigo-50/60 border border-blue-200/80 p-4 sm:p-5 rounded-2xl flex items-start gap-3.5 shadow-sm">
-        <div className="p-2 rounded-xl bg-blue-600 text-white shrink-0 mt-0.5">
+      <div className={styles.notice}>
+        <div className={styles.noticeIcon}>
           <Lock className="w-4 h-4" />
         </div>
-        <div className="text-xs sm:text-sm text-blue-950 leading-relaxed">
-          <strong className="font-bold block text-blue-900 mb-0.5">
+        <div className={styles.noticeText}>
+          <strong>
             Bitiruvchi ma’lumotlari daxlsizligi himoyalangan (Read-Only)
           </strong>
           Ushbu sahifada bitiruvchining shaxsiy biografiyasi, kasbiy faoliyati va aloqa ma’lumotlari faqat ko‘rish rejimida taqdim etiladi. Admin profil ma’lumotlarini o‘zboshimchalik bilan o‘zgartira olmaydi — faqat moderatsiya holati, verifikatsiya va faxriy unvonlarni boshqara oladi.
@@ -300,13 +310,13 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
       )}
 
       {/* Two Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      <div className={`${styles.layout} grid grid-cols-1 lg:grid-cols-12 gap-6`}>
         {/* Left Column: Read-only Profile Information (7 cols) */}
-        <div className="lg:col-span-7 space-y-5">
+        <div className={`${styles.profile} lg:col-span-7 space-y-5`}>
           {/* Main Profile Card */}
           <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
             <div className="flex flex-col sm:flex-row items-start gap-4 pb-5 border-b border-slate-100">
-              <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-slate-100 border-2 border-slate-200 shrink-0">
+              <div className={`${styles.avatar} relative w-20 h-20 rounded-2xl overflow-hidden bg-slate-100 border-2 border-slate-200 shrink-0`}>
                 {hasPhoto ? (
                   <Image
                     src={alumnus?.avatar || alumnus?.image_url || ""}
@@ -492,9 +502,9 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
         </div>
 
         {/* Right Column: Admin Moderation Controls (5 cols) */}
-        <div className="lg:col-span-5 space-y-5">
+        <div className={`${styles.controls} lg:col-span-5 space-y-5`}>
           {/* Moderation Controls Card */}
-          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+          <div className={`${styles.controlCard} bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5`}>
             <div className="flex items-center gap-2 pb-3 border-b border-slate-100">
               <ShieldCheck className="w-5 h-5 text-[#0D1667]" />
               <h3 className="font-bold text-slate-900 text-base">
@@ -511,6 +521,8 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
                 <button
                   type="button"
                   onClick={() => setApprovalStatus("approved")}
+                  disabled={saving}
+                  aria-pressed={approvalStatus === "approved"}
                   className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition ${
                     approvalStatus === "approved"
                       ? "bg-emerald-50 border-emerald-500 text-emerald-800 ring-2 ring-emerald-200"
@@ -524,6 +536,8 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
                 <button
                   type="button"
                   onClick={() => setApprovalStatus("pending")}
+                  disabled={saving}
+                  aria-pressed={approvalStatus === "pending"}
                   className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition ${
                     approvalStatus === "pending"
                       ? "bg-amber-50 border-amber-500 text-amber-800 ring-2 ring-amber-200"
@@ -537,6 +551,8 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
                 <button
                   type="button"
                   onClick={() => setApprovalStatus("rejected")}
+                  disabled={saving}
+                  aria-pressed={approvalStatus === "rejected"}
                   className={`p-2.5 rounded-xl border text-xs font-bold flex flex-col items-center gap-1 transition ${
                     approvalStatus === "rejected"
                       ? "bg-rose-50 border-rose-500 text-rose-800 ring-2 ring-rose-200"
@@ -564,6 +580,8 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
                 <input
                   type="checkbox"
                   checked={isPublished}
+                  disabled={saving}
+                  aria-label="Saytda e’lon qilish"
                   onChange={(e) => setIsPublished(e.target.checked)}
                   className="w-4 h-4 rounded text-[#0D1667] focus:ring-[#0D1667] cursor-pointer"
                 />
@@ -582,6 +600,8 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
                 <input
                   type="checkbox"
                   checked={isFeatured}
+                  disabled={saving}
+                  aria-label="Bosh sahifada tavsiya etish"
                   onChange={(e) => setIsFeatured(e.target.checked)}
                   className="w-4 h-4 rounded text-[#0D1667] focus:ring-[#0D1667] cursor-pointer"
                 />
@@ -600,6 +620,8 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
                 <input
                   type="checkbox"
                   checked={isHonorary}
+                  disabled={saving}
+                  aria-label="Faxriy Bitiruvchi maqomi"
                   onChange={(e) => setIsHonorary(e.target.checked)}
                   className="w-4 h-4 rounded text-amber-600 focus:ring-amber-500 cursor-pointer"
                 />
@@ -618,18 +640,13 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
                 </span>
               </div>
 
-              <div className="space-y-1.5 max-h-[220px] overflow-y-auto pr-1">
+              <div className={styles.recognitionList}>
                 {recognitionsList.map((rec) => {
                   const isChecked = selectedRecognitionIds.includes(rec.id);
                   return (
-                    <div
+                    <label
                       key={rec.id}
-                      onClick={() => toggleRecognition(rec.id)}
-                      className={`p-2.5 rounded-xl border text-xs cursor-pointer flex items-center justify-between transition ${
-                        isChecked
-                          ? "bg-purple-50 border-purple-300 text-purple-900 font-semibold"
-                          : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
-                      }`}
+                      className={`${styles.recognition} ${isChecked ? styles.selectedRecognition : ""}`}
                     >
                       <div className="flex items-center gap-2">
                         <RecognitionIcon icon={rec.icon} size={14} className="text-purple-600" />
@@ -638,22 +655,27 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
                       <input
                         type="checkbox"
                         checked={isChecked}
-                        onChange={() => {}}
-                        className="w-3.5 h-3.5 rounded text-purple-600 pointer-events-none"
+                        disabled={saving}
+                        onChange={() => toggleRecognition(rec.id)}
+                        aria-label={getRecognitionTitle(rec.slug, "uz", rec.name)}
                       />
-                    </div>
+                    </label>
                   );
                 })}
               </div>
             </div>
 
             {/* Action Buttons */}
-            <div className="pt-4 border-t border-slate-100 space-y-2.5">
+            <div className={styles.actions}>
+              <div className={styles.feedback} aria-live="polite">
+                {error && <p role="alert" className={styles.error}>{error}</p>}
+                {successMsg && <p role="status" className={styles.success}>{successMsg}</p>}
+              </div>
               <button
                 type="button"
                 onClick={handleSaveModeration}
                 disabled={saving}
-                className="w-full py-2.5 px-4 bg-[#0D1667] hover:bg-[#1a2580] text-white rounded-xl text-sm font-bold flex items-center justify-center gap-2 shadow-sm transition active:scale-[0.98] disabled:opacity-50"
+                className={styles.saveButton}
               >
                 {saving ? (
                   <>
@@ -663,7 +685,7 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
                 ) : (
                   <>
                     <Save className="w-4 h-4" />
-                    <span>Moderatsiyani Saqlash</span>
+                    <span>Saqlash</span>
                   </>
                 )}
               </button>
@@ -672,7 +694,7 @@ export function AlumniFormEditor({ initialId }: AlumniFormEditorProps) {
                 type="button"
                 onClick={handleDelete}
                 disabled={saving}
-                className="w-full py-2 px-4 bg-rose-50 hover:bg-rose-100 text-rose-700 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition disabled:opacity-50"
+                className={styles.deleteButton}
               >
                 <Trash2 className="w-3.5 h-3.5" />
                 <span>Soxta / Spamer profilni o‘chirish</span>

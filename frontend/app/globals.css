@@ -13971,12 +13971,20 @@ img, video, iframe, canvas {
 }
 
 .admin-sidebar-nav {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   flex: 1 !important;
   padding: 14px 10px !important;
   overflow-y: auto !important;
   display: flex !important;
   flex-direction: column !important;
   gap: 4px !important;
+}
+
+.admin-sidebar-nav::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
 }
 
 .admin-sidebar.collapsed .admin-sidebar-nav {

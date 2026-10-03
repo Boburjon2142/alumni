@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Award,
   Plus,
@@ -23,8 +23,9 @@ import {
   updateAdminRecognition,
 } from "@/lib/api";
 import { RecognitionIcon } from "@/components/alumni/recognition-icon";
-import { getRecognitionTitle } from "@/lib/i18n";
 import type { AdminRecognition } from "@/types/admin";
+import { AdminDialog } from "@/components/admin/admin-dialog";
+import styles from "@/components/admin/management.module.css";
 
 const CATEGORIES = [
   { value: "", label: "Barcha e’tiroflar" },
@@ -79,12 +80,16 @@ export default function AdminRecognitionsPage() {
   const [order, setOrder] = useState(0);
   const [isActive, setIsActive] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [slugEdited, setSlugEdited] = useState(false);
+  const [actionLoading, setActionLoading] = useState<number | null>(null);
+  const saveInFlight = useRef(false);
 
   const fetchRecognitions = async () => {
     try {
       setLoading(true);
       const res = await getAdminRecognitions();
       setRecognitions(res.results || []);
+      setError("");
     } catch (err: any) {
       setError(err.message || "Faxriy unvonlarni yuklab bo‘lmadi");
     } finally {
@@ -100,6 +105,7 @@ export default function AdminRecognitionsPage() {
     setEditingItem(null);
     setName("");
     setSlug("");
+    setSlugEdited(false);
     setCategory("achievement_nomination");
     setRecognitionType("nomination");
     setIcon("award");
@@ -120,6 +126,7 @@ export default function AdminRecognitionsPage() {
     setEditingItem(item);
     setName(item.name);
     setSlug(item.slug);
+    setSlugEdited(true);
     setCategory(item.category || "achievement_nomination");
     setRecognitionType(item.recognition_type || "nomination");
     setIcon(item.icon || "award");
@@ -138,11 +145,13 @@ export default function AdminRecognitionsPage() {
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (saveInFlight.current) return;
     if (!name.trim() || !slug.trim()) {
       setError("Unvon nomi va identifikatori (slug) majburiy");
       return;
     }
 
+    saveInFlight.current = true;
     setSaving(true);
     setError("");
     try {
@@ -175,6 +184,7 @@ export default function AdminRecognitionsPage() {
     } catch (err: any) {
       setError(err.message || "Saqlashda xatolik yuz berdi");
     } finally {
+      saveInFlight.current = false;
       setSaving(false);
     }
   };
@@ -182,10 +192,13 @@ export default function AdminRecognitionsPage() {
   const handleDelete = async (id: number, title: string) => {
     if (!confirm(`Haqiqatan ham "${title}" mukofotini o‘chirmoqchimisiz?`)) return;
     try {
+      setActionLoading(id);
       await deleteAdminRecognition(id);
       await fetchRecognitions();
     } catch (err: any) {
-      alert(err.message || "O‘chirishda xatolik");
+      setError(err.message || "O‘chirishda xatolik");
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -195,9 +208,9 @@ export default function AdminRecognitionsPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className={styles.page}>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className={styles.header}>
         <div>
           <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
             QarDU Ramziy Unvon va Mukofotlar Tizimi
@@ -208,7 +221,7 @@ export default function AdminRecognitionsPage() {
         </div>
         <button
           onClick={handleOpenCreate}
-          className="px-4 py-2.5 bg-[#0D1667] hover:bg-[#1a2580] text-white rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition active:scale-95 shrink-0"
+          className={styles.primary}
         >
           <Plus className="w-4 h-4 text-[#D38E4F]" />
           <span>Yangi mukofot / unvon</span>
@@ -216,7 +229,7 @@ export default function AdminRecognitionsPage() {
       </div>
 
       {/* Categories Tabs */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+      <div className={styles.tabs}>
         {CATEGORIES.map((cat) => {
           const IconComp = cat.icon;
           const isSelected = selectedCategory === cat.value;
@@ -224,6 +237,7 @@ export default function AdminRecognitionsPage() {
             <button
               key={cat.value}
               onClick={() => setSelectedCategory(cat.value)}
+              aria-pressed={isSelected}
               className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shrink-0 ${
                 isSelected
                   ? "bg-[#0D1667] text-white shadow-sm"
@@ -255,7 +269,7 @@ export default function AdminRecognitionsPage() {
       )}
 
       {/* Recognitions Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className={styles.cards}>
         {loading ? (
           <div className="col-span-full py-16 text-center text-slate-400">
             <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#0D1667]" />
@@ -271,7 +285,7 @@ export default function AdminRecognitionsPage() {
             return (
               <div
                 key={rec.id}
-                className={`bg-white p-5 rounded-2xl border transition flex flex-col justify-between ${
+                className={`${styles.card} bg-white p-5 rounded-2xl border transition flex flex-col justify-between ${
                   isSupreme
                     ? "border-[#D38E4F] shadow-md ring-1 ring-[#D38E4F]/30"
                     : "border-slate-200 shadow-sm hover:border-[#D38E4F]/60"
@@ -306,7 +320,7 @@ export default function AdminRecognitionsPage() {
 
                   <div className="flex items-center gap-1.5 mb-1">
                     <span className="px-2 py-0.5 bg-slate-100 text-slate-600 rounded text-[10px] font-semibold">
-                      {rec.category_display || rec.category}
+                      {rec.category_display || CATEGORIES.find((item) => item.value === rec.category)?.label || rec.category}
                     </span>
                     {rec.annual_quota && (
                       <span className="px-2 py-0.5 bg-amber-50 text-amber-800 border border-amber-200/60 rounded text-[10px] font-bold">
@@ -326,7 +340,7 @@ export default function AdminRecognitionsPage() {
                   </div>
 
                   <h3 className="font-bold text-slate-900 text-sm mt-1">
-                    {getRecognitionTitle(rec.slug, "uz", rec.name)}
+                    {rec.name}
                   </h3>
                   <p className="text-[11px] text-slate-400 font-mono mt-0.5">{rec.slug}</p>
                   <p className="text-xs text-slate-600 mt-2 line-clamp-2">
@@ -334,7 +348,7 @@ export default function AdminRecognitionsPage() {
                   </p>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+                <div className={`${styles.cardFooter} text-xs`}>
                   <div className="flex items-center gap-1.5 text-slate-500 font-medium">
                     <Users className="w-3.5 h-3.5" />
                     <span>{rec.alumni_count || 0} nafar laureat</span>
@@ -342,6 +356,7 @@ export default function AdminRecognitionsPage() {
                   <div className="admin-actions-group">
                     <button
                       onClick={() => handleOpenEdit(rec)}
+                      disabled={actionLoading === rec.id}
                       className="admin-action-icon-btn"
                       title="Tahrirlash"
                     >
@@ -349,6 +364,7 @@ export default function AdminRecognitionsPage() {
                     </button>
                     <button
                       onClick={() => handleDelete(rec.id, rec.name)}
+                      disabled={actionLoading === rec.id}
                       className="admin-action-icon-btn btn-delete"
                       title="O‘chirish"
                     >
@@ -364,8 +380,7 @@ export default function AdminRecognitionsPage() {
 
       {/* Create / Edit Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white max-w-xl w-full rounded-3xl p-6 shadow-2xl border border-slate-200 max-h-[90vh] overflow-y-auto">
+        <AdminDialog title={editingItem ? "Unvonni tahrirlash" : "Yangi mukofot / unvon"} onClose={() => setModalOpen(false)} busy={saving}>
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
               <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
                 <Award className="w-5 h-5 text-[#D38E4F]" />
@@ -373,6 +388,8 @@ export default function AdminRecognitionsPage() {
               </h3>
               <button
                 onClick={() => setModalOpen(false)}
+                disabled={saving}
+                aria-label="Oynani yopish"
                 className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg"
               >
                 <X className="w-4 h-4" />
@@ -380,6 +397,7 @@ export default function AdminRecognitionsPage() {
             </div>
 
             <form onSubmit={handleSave} className="space-y-4 text-xs">
+              {error && <p role="alert" className={styles.error}>{error}</p>}
               <div>
                 <label className="block font-bold text-slate-700 mb-1">Mukofot Nomi (O‘zbekcha)</label>
                 <input
@@ -387,7 +405,7 @@ export default function AdminRecognitionsPage() {
                   value={name}
                   onChange={(e) => {
                     setName(e.target.value);
-                    if (!editingItem && !slug) {
+                    if (!slugEdited) {
                       setSlug(
                         e.target.value
                           .toLowerCase()
@@ -408,7 +426,7 @@ export default function AdminRecognitionsPage() {
                   <input
                     type="text"
                     value={slug}
-                    onChange={(e) => setSlug(e.target.value)}
+                    onChange={(e) => { setSlug(e.target.value); setSlugEdited(true); }}
                     placeholder="qardu-iftixori"
                     className="w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl font-mono text-slate-900 focus:bg-white focus:ring-2 focus:ring-[#0D1667]"
                     required
@@ -548,6 +566,7 @@ export default function AdminRecognitionsPage() {
                 <button
                   type="button"
                   onClick={() => setModalOpen(false)}
+                  disabled={saving}
                   className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-semibold"
                 >
                   Bekor qilish
@@ -555,15 +574,14 @@ export default function AdminRecognitionsPage() {
                 <button
                   type="submit"
                   disabled={saving}
-                  className="px-5 py-2 bg-[#0D1667] hover:bg-[#1a2580] text-white rounded-xl font-bold flex items-center gap-1.5 shadow-sm disabled:opacity-50"
+                  className={styles.primary}
                 >
                   {saving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
                   <span>Saqlash</span>
                 </button>
               </div>
             </form>
-          </div>
-        </div>
+        </AdminDialog>
       )}
     </div>
   );

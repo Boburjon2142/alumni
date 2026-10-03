@@ -124,6 +124,8 @@ from django.dispatch import receiver
 def clear_alumni_cache(sender, **kwargs):
     from common.cache_utils import invalidate_cache_prefix
     invalidate_cache_prefix("api:alumni")
+    invalidate_cache_prefix("api:featured_alumni")
+    invalidate_cache_prefix("api:recognition_titles")
     invalidate_cache_prefix("api:graduation_group")
     invalidate_cache_prefix("api:stats")
     invalidate_cache_prefix("api:impact")
@@ -455,5 +457,11 @@ class AlumniRecognition(models.Model):
         level_str = f" ({self.get_level_display()})" if self.level else ""
         year_str = f" [{self.year}]" if self.year else ""
         return f"{self.alumnus.full_name} — {self.title.name}{level_str}{year_str}"
+
+
+post_save.connect(clear_alumni_cache, sender=RecognitionTitle, dispatch_uid="recognition_title_saved")
+post_delete.connect(clear_alumni_cache, sender=RecognitionTitle, dispatch_uid="recognition_title_deleted")
+post_save.connect(clear_alumni_cache, sender=AlumniRecognition, dispatch_uid="alumni_recognition_saved")
+post_delete.connect(clear_alumni_cache, sender=AlumniRecognition, dispatch_uid="alumni_recognition_deleted")
 
 

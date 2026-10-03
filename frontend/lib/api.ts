@@ -35,7 +35,7 @@ const API = process.env.API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://12
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
   const base = typeof window === "undefined" ? API : "/api/v1";
   const response = await fetch(`${base}${path}`, {
-    next: { revalidate: 60 },
+    cache: "no-store",
     ...options,
   });
   if (!response.ok) throw new Error("API so‘rovi bajarilmadi");
@@ -180,7 +180,7 @@ export const sendFeedback = async (
 export const confirmAlumnus = async (
   slug: string
 ): Promise<{ success: boolean; message: string; data?: any }> => {
-  const apiBase = typeof window !== "undefined" ? (process.env.NEXT_PUBLIC_API_URL || "/api/v1") : API;
+  const apiBase = typeof window !== "undefined" ? "/api/v1" : API;
   const res = await fetch(`${apiBase}/alumni/${encodeURIComponent(slug)}/confirm/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -223,7 +223,7 @@ export const getMyImpact = async (): Promise<{
   success: boolean;
   data: ImpactSummary;
 }> => {
-  const apiBase = typeof window !== "undefined" ? (process.env.NEXT_PUBLIC_API_URL || "/api/v1") : API;
+  const apiBase = typeof window !== "undefined" ? "/api/v1" : API;
   const res = await authenticatedFetch(`${apiBase}/impact/me/`, {
     headers: { Accept: "application/json" },
   });
@@ -241,7 +241,7 @@ export const submitContribution = async (
   message: string;
   data: ImpactContribution;
 }> => {
-  const apiBase = typeof window !== "undefined" ? (process.env.NEXT_PUBLIC_API_URL || "/api/v1") : API;
+  const apiBase = typeof window !== "undefined" ? "/api/v1" : API;
   const res = await authenticatedFetch(`${apiBase}/impact/contributions/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -270,7 +270,7 @@ export const submitContribution = async (
 
 const getAdminBase = () => {
   if (typeof window !== "undefined") {
-    return process.env.NEXT_PUBLIC_API_URL || "/api/v1";
+    return "/api/v1";
   }
   return API;
 };
@@ -311,7 +311,7 @@ export const updateAdminAlumni = async (idOrSlug: string, payload: Partial<Admin
     body: JSON.stringify(payload),
   });
   const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(data?.message || "Profilni yangilashda xatolik yuz berdi");
+  if (!res.ok) throw new Error(apiErrorMessage(data, "Profilni yangilashda xatolik yuz berdi"));
   return data;
 };
 
@@ -350,7 +350,7 @@ export const createAdminRecognition = async (payload: Partial<AdminRecognition>)
     body: JSON.stringify(payload),
   });
   const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(data?.message || "Faxriy unvon yaratib bo‘lmadi");
+  if (!res.ok) throw new Error(apiErrorMessage(data, "Faxriy unvon yaratib bo‘lmadi"));
   return data;
 };
 
@@ -361,7 +361,7 @@ export const updateAdminRecognition = async (id: number, payload: Partial<AdminR
     body: JSON.stringify(payload),
   });
   const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(data?.message || "Faxriy unvon yangilab bo‘lmadi");
+  if (!res.ok) throw new Error(apiErrorMessage(data, "Faxriy unvon yangilab bo‘lmadi"));
   return data;
 };
 
@@ -486,14 +486,14 @@ export const getAdminFeedback = async (query = ""): Promise<AdminPaginatedRespon
 export const updateAdminFeedbackStatus = async (
   id: number,
   status: "new" | "reviewing" | "resolved" | "spam"
-): Promise<{ success: boolean; message: string }> => {
+): Promise<{ success: boolean; message: string; status: AdminFeedbackItem["status"]; status_display: string; reviewed_at: string; reviewed_by: string }> => {
   const res = await authenticatedFetch(`${getAdminBase()}/admin/feedback/${id}/`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ status }),
   });
   const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(data?.message || "Murojaat holatini yangilab bo‘lmadi");
+  if (!res.ok) throw new Error(apiErrorMessage(data, "Murojaat holatini yangilab bo‘lmadi"));
   return data;
 };
 
@@ -505,7 +505,13 @@ export const deleteAdminFeedback = async (id: number): Promise<void> => {
 export const getAdminContributions = async (query = ""): Promise<AdminPaginatedResponse<ImpactContribution>> => {
   const res = await authenticatedFetch(`${getAdminBase()}/impact/contributions/${query ? `?${query}` : ""}`);
   if (!res.ok) throw new Error("Hissalarni yuklab bo‘lmadi");
-  return res.json();
+  const data = await res.json();
+  return {
+    results: data.data,
+    count: data.pagination.count,
+    next: data.pagination.next,
+    previous: data.pagination.previous,
+  };
 };
 
 export const approveAdminContribution = async (id: number, verification_note = ""): Promise<ImpactContribution> => {
@@ -544,7 +550,7 @@ export const createAdminNews = async (data: AdminNewsPayload | FormData): Promis
     body: isFormData ? data : JSON.stringify(data),
   });
   const resData = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(resData?.error || resData?.message || "Yangilik yaratib bo‘lmadi");
+  if (!res.ok) throw new Error(apiErrorMessage(resData, "Yangilik yaratib bo‘lmadi"));
   return resData;
 };
 
@@ -556,7 +562,7 @@ export const updateAdminNews = async (id: number, data: Partial<AdminNewsPayload
     body: isFormData ? data : JSON.stringify(data),
   });
   const resData = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(resData?.error || resData?.message || "Yangilikni yangilab bo‘lmadi");
+  if (!res.ok) throw new Error(apiErrorMessage(resData, "Yangilikni yangilab bo‘lmadi"));
   return resData;
 };
 

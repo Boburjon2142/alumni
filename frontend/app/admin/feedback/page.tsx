@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Inbox,
   Search,
@@ -22,6 +22,9 @@ import {
   updateAdminFeedbackStatus,
 } from "@/lib/api";
 import type { AdminFeedbackItem } from "@/types/admin";
+import { AdminDialog } from "@/components/admin/admin-dialog";
+import { AdminPagination } from "@/components/admin/admin-pagination";
+import styles from "@/components/admin/management.module.css";
 
 export default function AdminFeedbackPage() {
   const [feedbackList, setFeedbackList] = useState<AdminFeedbackItem[]>([]);
@@ -32,39 +35,47 @@ export default function AdminFeedbackPage() {
   const [typeFilter, setTypeFilter] = useState("");
   const [selectedItem, setSelectedItem] = useState<AdminFeedbackItem | null>(null);
   const [actionLoading, setActionLoading] = useState<number | null>(null);
+  const [error, setError] = useState("");
+  const [page, setPage] = useState(1);
+  const latestRequest = useRef(0);
 
-  const fetchFeedback = async () => {
+  const fetchFeedback = async (background = false) => {
+    const requestId = ++latestRequest.current;
     try {
-      setLoading(true);
+      if (!background) setLoading(true);
       const params = new URLSearchParams();
       if (search.trim()) params.set("search", search.trim());
       if (statusFilter) params.set("status", statusFilter);
       if (typeFilter) params.set("type", typeFilter);
+      params.set("page", String(page));
       const res = await getAdminFeedback(params.toString());
+      if (requestId !== latestRequest.current) return;
       setFeedbackList(res.results || []);
       setTotalCount(res.count || 0);
+      setError("");
     } catch (err: any) {
-      console.error("Failed to load feedback:", err);
+      if (requestId === latestRequest.current) setError(err.message || "Murojaatlarni yuklab bo‘lmadi");
     } finally {
-      setLoading(false);
+      if (requestId === latestRequest.current) setLoading(false);
     }
   };
 
   useEffect(() => {
     const timer = setTimeout(fetchFeedback, 250);
-    return () => clearTimeout(timer);
-  }, [search, statusFilter, typeFilter]);
+    return () => { clearTimeout(timer); latestRequest.current++; };
+  }, [search, statusFilter, typeFilter, page]);
 
   const handleUpdateStatus = async (id: number, newStatus: "new" | "reviewing" | "resolved" | "spam") => {
     try {
       setActionLoading(id);
-      await updateAdminFeedbackStatus(id, newStatus);
-      await fetchFeedback();
+      const updated = await updateAdminFeedbackStatus(id, newStatus);
+      setFeedbackList((previous) => previous.map((item) => item.id === id ? { ...item, ...updated } : item));
       if (selectedItem?.id === id) {
-        setSelectedItem((prev) => (prev ? { ...prev, status: newStatus } : null));
+        setSelectedItem((prev) => (prev ? { ...prev, ...updated } : null));
       }
+      await fetchFeedback(true);
     } catch (err: any) {
-      alert(err.message || "Holatni o‘zgartirib bo‘lmadi");
+      setError(err.message || "Holatni o‘zgartirib bo‘lmadi");
     } finally {
       setActionLoading(null);
     }
@@ -76,42 +87,48 @@ export default function AdminFeedbackPage() {
       setActionLoading(id);
       await deleteAdminFeedback(id);
       if (selectedItem?.id === id) setSelectedItem(null);
-      await fetchFeedback();
+      if (feedbackList.length === 1 && page > 1) setPage(page - 1);
+      else await fetchFeedback(true);
     } catch (err: any) {
-      alert(err.message || "O‘chirishda xatolik");
+      setError(err.message || "O‘chirishda xatolik");
     } finally {
       setActionLoading(null);
     }
   };
 
   return (
-    <div className="space-y-6">
+    <div className={styles.page}>
       {/* Header */}
-      <div>
+      <div className={styles.header}>
+        <div>
         <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
           Foydalanuvchilar Murojaatlari va Takliflar
         </h2>
         <p className="text-xs md:text-sm text-slate-500 mt-0.5">
           Sayt orqali yuborilgan takliflar, savollar, xatolik xabarlari va qo‘shimcha ma’lumotlar
         </p>
+        </div>
       </div>
+
+      {error && <p role="alert" className={styles.error}>{error}</p>}
 
       {/* Filter Toolbar */}
       <div className="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm space-y-3">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-          <div className="admin-search-box">
+        <div className={styles.filterGrid}>
+          <div className={styles.search}>
             <Search />
             <input
               type="text"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => { setSearch(e.target.value); setPage(1); }}
               placeholder="Ism, aloqa yoki xabar matni..."
             />
           </div>
 
           <select
             value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
+            aria-label="Murojaat holati filtri"
+            onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
             className="admin-filter-select"
           >
             <option value="">Barcha holatlar</option>
@@ -123,13 +140,16 @@ export default function AdminFeedbackPage() {
 
           <select
             value={typeFilter}
-            onChange={(e) => setTypeFilter(e.target.value)}
+            aria-label="Murojaat turi filtri"
+            onChange={(e) => { setTypeFilter(e.target.value); setPage(1); }}
             className="admin-filter-select"
           >
             <option value="">Barcha turlar</option>
             <option value="proposal">Taklif</option>
             <option value="question">Savol</option>
             <option value="error_report">Ma’lumotdagi xato</option>
+            <option value="data_correction">Ma’lumotni tuzatish</option>
+            <option value="alumni_nomination">Bitiruvchini taklif qilish</option>
             <option value="additional_info">Qo‘shimcha ma’lumot</option>
             <option value="other">Boshqa</option>
           </select>
@@ -143,7 +163,7 @@ export default function AdminFeedbackPage() {
       {/* Messages Table */}
       {/* Messages Table */}
       <div className="admin-table-wrapper">
-        <div className="admin-table-scroll">
+        <div className={`${styles.tableScroll} admin-table-scroll`}>
           <table className="admin-table">
             <thead>
               <tr>
@@ -177,6 +197,8 @@ export default function AdminFeedbackPage() {
                       f.status === "new" ? "bg-purple-50/20 font-medium" : ""
                     }`}
                     onClick={() => setSelectedItem(f)}
+                    tabIndex={0}
+                    onKeyDown={(event) => { if (event.target === event.currentTarget && event.key === "Enter") setSelectedItem(f); }}
                   >
                     <td>
                       <div className="font-bold text-slate-900 text-sm">{f.name || "Anonim"}</div>
@@ -194,9 +216,11 @@ export default function AdminFeedbackPage() {
                     </td>
 
                     <td className="whitespace-nowrap text-slate-500 text-xs">
-                      {new Date(f.created_at).toLocaleDateString("uz-UZ", {
-                        month: "short",
-                        day: "numeric",
+                      {new Date(f.created_at).toLocaleString("uz-UZ", {
+                        month: "2-digit",
+                        day: "2-digit",
+                        year: "numeric",
+                        timeZone: "Asia/Tashkent",
                         hour: "2-digit",
                         minute: "2-digit",
                       })}
@@ -205,6 +229,7 @@ export default function AdminFeedbackPage() {
                     <td className="whitespace-nowrap" onClick={(e) => e.stopPropagation()}>
                       <select
                         value={f.status}
+                        aria-label={`${f.name || "Anonim"}: holat`}
                         onChange={(e) => handleUpdateStatus(f.id, e.target.value as any)}
                         disabled={actionLoading === f.id}
                         className={`px-2.5 py-1 rounded-lg text-xs font-bold border focus:outline-none cursor-pointer ${
@@ -251,10 +276,11 @@ export default function AdminFeedbackPage() {
         </div>
       </div>
 
+      <AdminPagination page={page} count={totalCount} onChange={setPage} loading={loading} />
+
       {/* Message Detail Modal */}
       {selectedItem && (
-        <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white max-w-xl w-full rounded-3xl p-6 shadow-2xl border border-slate-200">
+        <AdminDialog title="Murojaat Tafsilotlari" onClose={() => setSelectedItem(null)} busy={actionLoading === selectedItem.id}>
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
               <div className="flex items-center gap-2">
                 <Inbox className="w-5 h-5 text-[#0D1667]" />
@@ -262,6 +288,8 @@ export default function AdminFeedbackPage() {
               </div>
               <button
                 onClick={() => setSelectedItem(null)}
+                disabled={actionLoading === selectedItem.id}
+                aria-label="Oynani yopish"
                 className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-lg"
               >
                 <X className="w-4 h-4" />
@@ -269,6 +297,7 @@ export default function AdminFeedbackPage() {
             </div>
 
             <div className="space-y-4 text-xs">
+              {error && <p role="alert" className={styles.error}>{error}</p>}
               <div className="grid grid-cols-2 gap-4 bg-slate-50 p-4 rounded-xl">
                 <div>
                   <span className="text-slate-400 block mb-0.5">Yuboruvchi:</span>
@@ -317,6 +346,8 @@ export default function AdminFeedbackPage() {
                   <span className="font-bold text-slate-700">Holatni o‘zgartirish:</span>
                   <select
                     value={selectedItem.status}
+                    aria-label="Murojaat holati"
+                    disabled={actionLoading === selectedItem.id}
                     onChange={(e) => handleUpdateStatus(selectedItem.id, e.target.value as any)}
                     className="px-2.5 py-1 bg-slate-50 border border-slate-200 rounded-lg text-xs font-bold text-slate-900"
                   >
@@ -330,14 +361,14 @@ export default function AdminFeedbackPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedItem(null)}
-                  className="px-4 py-2 bg-[#0D1667] text-white rounded-xl font-bold"
+                  disabled={actionLoading === selectedItem.id}
+                  className={styles.primary}
                 >
                   Yopish
                 </button>
               </div>
             </div>
-          </div>
-        </div>
+        </AdminDialog>
       )}
     </div>
   );

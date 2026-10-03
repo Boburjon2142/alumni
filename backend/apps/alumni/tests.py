@@ -170,7 +170,7 @@ def _set_verified_join(client, email):
     session.save()
 
 @pytest.mark.django_db
-def test_alumni_submission_creates_pending_profile(client):
+def test_alumni_submission_creates_active_profile_without_admin_approval(client):
     _set_verified_join(client, "nodira@example.uz")
     payload = {
         "full_name": "Nodira Rahimova",
@@ -192,12 +192,61 @@ def test_alumni_submission_creates_pending_profile(client):
     assert profile.is_published is True
     assert profile.is_featured is False
     assert profile.is_honorary is False
+    assert profile.approved_at is not None
+    assert profile.approved_by is None
 
     # Check consent recorded and audited
     consent = AlumniConsent.objects.get(alumni=profile)
     assert consent.accepted is True
     assert consent.policy_version == "1.0"
     assert consent.accepted_at is not None
+
+
+@pytest.mark.django_db
+def test_registration_creates_year_group_and_joins_existing_group(client, monkeypatch):
+    monkeypatch.setattr("apps.alumni.notifications.notify_new_alumni_confirmed", lambda *args, **kwargs: None)
+    cache.clear()
+    assert client.get("/api/v1/alumni/groups/").data["data"] == []
+    for index, year in enumerate([2024, 2024, 2025]):
+        email = f"automatic-group-{index}@example.com"
+        _set_verified_join(client, email)
+        response = client.post("/api/v1/alumni/submissions/", {
+            "full_name": f"Automatic group member {index}",
+            "contact_email": email,
+            "graduation_year": year,
+            "consent_accepted": True,
+        }, format="json")
+        assert response.status_code == 201, response.data
+        profile = AlumniProfile.objects.get(pk=response.data["data"]["id"])
+        assert profile.approval_status == "approved" and profile.is_published
+        assert profile.approved_by is None
+        client.logout()
+        expected_count = 2 if index == 1 else 1
+        groups = client.get("/api/v1/alumni/groups/").data["data"]
+        matching = [group for group in groups if group["year"] == year]
+        assert len(matching) == 1 and matching[0]["members_count"] == expected_count
+        detail = client.get(f"/api/v1/alumni/groups/{year}/").data
+        assert detail["group"]["members_count"] == expected_count
+        assert profile.pk in {member["id"] for member in detail["data"]}
+    cache.clear()
+
+
+@pytest.mark.django_db
+def test_registration_without_year_joins_group_when_year_entered(client, monkeypatch):
+    monkeypatch.setattr("apps.alumni.notifications.notify_new_alumni_confirmed", lambda *args, **kwargs: None)
+    cache.clear()
+    email = "later-year@example.com"
+    _set_verified_join(client, email)
+    response = client.post("/api/v1/alumni/submissions/", {
+        "full_name": "Later year member", "contact_email": email, "consent_accepted": True,
+    }, format="json")
+    assert response.status_code == 201
+    assert client.get("/api/v1/alumni/groups/").data["data"] == []
+    assert client.patch("/api/v1/alumni/me/", {"graduation_year": 2023}, format="json").status_code == 200
+    client.logout()
+    groups = client.get("/api/v1/alumni/groups/").data["data"]
+    assert groups[0]["year"] == 2023 and groups[0]["members_count"] == 1
+    cache.clear()
 
 @pytest.mark.django_db
 def test_submission_fails_without_consent(client):

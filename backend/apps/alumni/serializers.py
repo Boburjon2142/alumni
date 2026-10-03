@@ -380,6 +380,26 @@ class PublicAlumniDetailSerializer(PublicAlumniSerializer):
         qs = obj.advice.filter(is_published=True)
         return AdviceSerializer(qs, many=True).data
 
+class AdminAlumniSerializer(PublicAlumniSerializer):
+    email = serializers.SerializerMethodField()
+
+    class Meta(PublicAlumniSerializer.Meta):
+        fields = PublicAlumniSerializer.Meta.fields + ("email", "contact_email", "phone", "is_published", "visibility")
+
+    def get_email(self, obj):
+        return obj.contact_email or (obj.user.email if obj.user_id else "")
+
+
+class AdminAlumniDetailSerializer(PublicAlumniDetailSerializer):
+    email = serializers.SerializerMethodField()
+
+    class Meta(PublicAlumniDetailSerializer.Meta):
+        fields = PublicAlumniDetailSerializer.Meta.fields + ("email", "contact_email", "phone", "is_published", "visibility")
+
+    def get_email(self, obj):
+        return obj.contact_email or (obj.user.email if obj.user_id else "")
+
+
 class AlumniSubmissionSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(max_length=160, min_length=3, trim_whitespace=True)
     graduation_year = serializers.IntegerField(
