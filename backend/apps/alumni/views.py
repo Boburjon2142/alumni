@@ -112,6 +112,13 @@ class AlumniListView(generics.ListAPIView):
         if self.request.query_params.get("featured") == "true":
             qs = qs.filter(Q(is_honorary=True) | Q(is_featured=True))
 
+        honorary_param = self.request.query_params.get("honorary") or self.request.query_params.get("is_honorary")
+        if honorary_param is not None:
+            if str(honorary_param).lower() in ("true", "1", "yes"):
+                qs = qs.filter(is_honorary=True)
+            elif str(honorary_param).lower() in ("false", "0", "no"):
+                qs = qs.filter(is_honorary=False)
+
         ordering = self.request.query_params.get("ordering", "featured")
         allowed = {
             "name": ("full_name",),

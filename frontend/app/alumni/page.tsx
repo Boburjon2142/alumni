@@ -24,6 +24,7 @@ export default async function AlumniPage({
   Object.entries(params).forEach(([key, value]) => {
     if (value) query.set(key, value);
   });
+  query.set("honorary", "true");
 
   let result: Page<Alumni> | null = null;
   let faculties: Faculty[] = [];

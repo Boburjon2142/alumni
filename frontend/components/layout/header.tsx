@@ -77,7 +77,12 @@ export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
       <div className="container nav">
         {/* Brand Logo */}
         <Link href="/" className="brand brand-logo" aria-label={`${t.university} ${t.navHome}`}>
-          <img src="/images/logo.png?v=4" alt={`${t.university} logotipi`} width="420" height="120" />
+          <img
+            src={locale === "en" ? "/brand/logo-en-light.svg" : "/brand/logo-oz-light.svg"}
+            alt={`${t.university} logotipi`}
+            width="420"
+            height="120"
+          />
         </Link>
 
         {/* Navigation panel */}

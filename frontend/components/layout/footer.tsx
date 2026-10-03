@@ -17,7 +17,12 @@ export function Footer({ t, locale }: { t: Dictionary; locale?: Locale }) {
       <div className="container footer-grid">
         <div className="footer-brand-col">
           <Link href="/" className="brand brand-logo footer-logo" aria-label={`${t.university} ${t.navHome}`}>
-            <img src="/images/logo.png?v=4" alt={`${t.university} logotipi`} width="420" height="120" />
+            <img
+              src={locale === "en" ? "/brand/logo-en-light.svg" : "/brand/logo-oz-light.svg"}
+              alt={`${t.university} logotipi`}
+              width="420"
+              height="120"
+            />
           </Link>
           <p className="footer-description">{t.footerText}</p>
         </div>
