@@ -10,7 +10,7 @@ export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export const metadata = {
-  title: "Bitiruvchilar bilan intervyular — Qarshi davlat universiteti",
+  title: "Suhbat va intervyular — Qarshi davlat universiteti",
   description: "Qarshi davlat universiteti faxriy va yetuk bitiruvchilari bilan eksklyuziv suhbatlar, hayotiy tajriba va kasbiy saboqlar.",
 };
 

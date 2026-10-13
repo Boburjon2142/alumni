@@ -293,7 +293,7 @@ export function DirectoryFilters({
                 value={gradYearValue}
                 onChange={handleGradYearChange}
                 placeholder="2010"
-                min="1956"
+                min="1945"
                 max={new Date().getFullYear()}
               />
             </div>

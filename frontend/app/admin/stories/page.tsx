@@ -58,7 +58,7 @@ export default function AdminStoriesPage() {
       const res = await getAdminStories(params.toString());
       setStories(res.results || []);
     } catch (err: any) {
-      setError(err.message || "Hikoyalarni yuklab bo‘lmadi");
+      setError(err.message || "Faoliyat yo‘llarini yuklab bo‘lmadi");
     } finally {
       setLoading(false);
     }
@@ -173,7 +173,7 @@ export default function AdminStoriesPage() {
       };
 
       await saveAdminStory(editingId, payload);
-      setSuccessMsg("Hikoya muvaffaqiyatli saqlandi");
+      setSuccessMsg("Faoliyat yo‘li muvaffaqiyatli saqlandi");
       setModalOpen(false);
       await fetchStories();
     } catch (err: any) {
@@ -184,7 +184,7 @@ export default function AdminStoriesPage() {
   };
 
   const handleDelete = async (id: number, title: string) => {
-    if (!confirm(`Haqiqatan ham "${title}" hikoyasini o‘chirmoqchimisiz?`)) return;
+    if (!confirm(`Haqiqatan ham "${title}" faoliyat yo‘lini o‘chirmoqchimisiz?`)) return;
     try {
       await deleteAdminStory(id);
       await fetchStories();
@@ -199,7 +199,7 @@ export default function AdminStoriesPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight">
-            Muvaffaqiyat Hikoyalari Muharriri
+            Bitiruvchilar faoliyati yo‘li muharriri
           </h2>
           <p className="text-xs md:text-sm text-slate-500 mt-0.5">
             Bitiruvchilarning ilhomlantiruvchi muvaffaqiyat yo‘li va talabalar uchun maslahatlar
@@ -210,7 +210,7 @@ export default function AdminStoriesPage() {
           className="px-4 py-2.5 bg-[#0D1667] hover:bg-[#1a2580] text-white rounded-xl text-sm font-semibold flex items-center gap-2 shadow-sm transition active:scale-95 shrink-0"
         >
           <Plus className="w-4 h-4 text-[#D38E4F]" />
-          <span>Yangi hikoya yaratish</span>
+          <span>Yangi faoliyat yo‘li yaratish</span>
         </button>
       </div>
 
@@ -222,7 +222,7 @@ export default function AdminStoriesPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Hikoya sarlavhasi yoki bitiruvchi ismi..."
+            placeholder="Faoliyat yo‘li sarlavhasi yoki bitiruvchi ismi..."
           />
         </div>
       </div>
@@ -233,7 +233,7 @@ export default function AdminStoriesPage() {
           <table className="admin-table">
             <thead>
               <tr>
-                <th style={{ minWidth: "260px" }}>Hikoya & Bitiruvchi</th>
+                <th style={{ minWidth: "260px" }}>Faoliyat yo‘li va bitiruvchi</th>
                 <th style={{ minWidth: "240px" }}>Qisqacha Mazmuni</th>
                 <th style={{ minWidth: "150px" }}>Holat</th>
                 <th style={{ minWidth: "120px" }}>Sana</th>
@@ -245,13 +245,13 @@ export default function AdminStoriesPage() {
                 <tr>
                   <td colSpan={5} className="py-12 text-center text-slate-400">
                     <Loader2 className="w-6 h-6 animate-spin mx-auto mb-2 text-[#0D1667]" />
-                    Hikoyalar yuklanmoqda...
+                    Bitiruvchilar faoliyati yo‘li yuklanmoqda...
                   </td>
                 </tr>
               ) : stories.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="py-12 text-center text-slate-400">
-                    Hikoyalar topilmadi.
+                    Bitiruvchilar faoliyati yo‘li topilmadi.
                   </td>
                 </tr>
               ) : (
@@ -351,7 +351,7 @@ export default function AdminStoriesPage() {
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
               <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-[#0D1667]" />
-                <span>{editingId ? "Hikoyani Tahrirlash" : "Yangi Muvaffaqiyat Hikoyasi"}</span>
+                <span>{editingId ? "Faoliyat yo‘lini Tahrirlash" : "Yangi bitiruvchi faoliyati yo‘li"}</span>
               </h3>
               <button
                 onClick={() => setModalOpen(false)}
@@ -449,7 +449,7 @@ export default function AdminStoriesPage() {
               <div className="pt-2 border-t border-slate-100">
                 <div className="flex items-center justify-between mb-2">
                   <label className="font-bold text-slate-900 uppercase tracking-wider text-[#0D1667]">
-                    Hikoya Bo‘limlari ({sections.length})
+                    Faoliyat yo‘li Bo‘limlari ({sections.length})
                   </label>
                   <button
                     type="button"

@@ -18,7 +18,7 @@ import {
 import { getDictionary, getLocale } from "@/lib/i18n";
 
 export const metadata = {
-  title: "Platforma haqida — Qarshi davlat universiteti",
+  title: "Alumni platformasi haqida — Qarshi davlat universiteti",
   description:
     "Qarshi davlat universiteti bitiruvchilarini bir makonda birlashtiruvchi, ularning tajribasi, yutuqlari va universitet bilan davom etayotgan aloqasini yangi avlod bilan bog‘lovchi rasmiy raqamli platforma.",
 };
@@ -156,7 +156,7 @@ export default async function AboutPage() {
         <div className="about-container">
           <div className="about-stats-strip">
             <div className="about-stat-col">
-              <div className="about-stat-val">1956-yildan</div>
+              <div className="about-stat-val">1945-yildan</div>
               <div className="about-stat-lbl">
                 {isUz ? "Universitet an’analari" : isRu ? "Академические традиции" : "Academic Tradition"}
               </div>

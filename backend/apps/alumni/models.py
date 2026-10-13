@@ -56,8 +56,13 @@ class AlumniProfile(models.Model):
     image_source_url = models.URLField(max_length=500, blank=True, validators=[validate_unsplash_source_url])
     faculty = models.ForeignKey("universities.Faculty", null=True, blank=True, on_delete=models.SET_NULL, related_name="alumni")
     specialty = models.ForeignKey("universities.Specialty", null=True, blank=True, on_delete=models.SET_NULL, related_name="alumni")
-    graduation_year = models.PositiveSmallIntegerField(null=True, blank=True, db_index=True, validators=[MinValueValidator(1956), MaxValueValidator(date.today().year + 1)])
+    graduation_year = models.PositiveSmallIntegerField(null=True, blank=True, db_index=True, validators=[MinValueValidator(1945), MaxValueValidator(date.today().year + 1)])
     degree = models.CharField(max_length=80, blank=True)
+    graduation_degree = models.CharField(max_length=32, default="bachelor", choices=[
+        ("bachelor", "Bakalavr"), ("master", "Magistr"), ("phd", "PhD"),
+        ("dsc", "DSc"), ("residency", "Ordinatura / Rezidentura"),
+        ("second_degree", "Ikkinchi oliy ta’lim"), ("other", "Boshqa"),
+    ])
     academic_degree = models.CharField(max_length=64, choices=AcademicDegree.choices, blank=True, default="")
     academic_title = models.CharField(max_length=64, choices=AcademicTitle.choices, blank=True, default="")
     current_company = models.CharField(max_length=160, blank=True, db_index=True)
@@ -147,7 +152,7 @@ class CareerTimelineItem(models.Model):
     class Type(models.TextChoices):
         EDUCATION="education", "Education"; CAREER="career", "Career"; AWARD="award", "Award"; LEADERSHIP="leadership", "Leadership"; MILESTONE="milestone", "Milestone"
     alumnus = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name="timeline")
-    year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1956), MaxValueValidator(date.today().year + 1)])
+    year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1945), MaxValueValidator(date.today().year + 1)])
     title = models.CharField(max_length=500)
     organization = models.CharField(max_length=180, blank=True)
     description = models.TextField(blank=True, max_length=1200)
@@ -208,8 +213,8 @@ class WorkExperience(models.Model):
     company = models.CharField(max_length=200)
     position = models.CharField(max_length=200)
     industry = models.CharField(max_length=160, blank=True, verbose_name="Faoliyat sohasi")
-    start_year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1956), MaxValueValidator(date.today().year + 1)])
-    end_year = models.PositiveSmallIntegerField(null=True, blank=True, validators=[MinValueValidator(1956), MaxValueValidator(date.today().year + 1)])
+    start_year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1945), MaxValueValidator(date.today().year + 1)])
+    end_year = models.PositiveSmallIntegerField(null=True, blank=True, validators=[MinValueValidator(1945), MaxValueValidator(date.today().year + 1)])
     is_current = models.BooleanField(default=False)
     order = models.PositiveSmallIntegerField(default=0)
 
@@ -239,10 +244,10 @@ class EducationExperience(models.Model):
     specialty = models.CharField(max_length=220, blank=True)
     start_year = models.PositiveSmallIntegerField(
         null=True, blank=True,
-        validators=[MinValueValidator(1956), MaxValueValidator(date.today().year + 1)]
+        validators=[MinValueValidator(1945), MaxValueValidator(date.today().year + 1)]
     )
     graduation_year = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(1956), MaxValueValidator(date.today().year + 1)]
+        validators=[MinValueValidator(1945), MaxValueValidator(date.today().year + 1)]
     )
     order = models.PositiveSmallIntegerField(default=0)
 
@@ -263,7 +268,7 @@ class GraduationYearChangeRequest(models.Model):
 
     alumnus = models.ForeignKey(AlumniProfile, on_delete=models.CASCADE, related_name="graduation_year_requests")
     old_year = models.PositiveSmallIntegerField(null=True, blank=True)
-    requested_year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1956), MaxValueValidator(date.today().year + 1)])
+    requested_year = models.PositiveSmallIntegerField(validators=[MinValueValidator(1945), MaxValueValidator(date.today().year + 1)])
     reason = models.TextField(max_length=1000)
     status = models.CharField(max_length=16, choices=Status.choices, default=Status.PENDING, db_index=True)
     admin_note = models.TextField(blank=True, max_length=1000)

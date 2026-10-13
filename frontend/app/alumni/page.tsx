@@ -97,7 +97,7 @@ export default async function AlumniPage({
             <div className="result-count">
               <strong>{result.pagination.count}</strong> {t.found}
             </div>
-            <AlumniCardGrid alumni={result.data} locale={locale} />
+            <AlumniCardGrid alumni={result.data} locale={locale} fullWidth horizontal />
             {result.pagination.pages > 1 && (
               <nav className="pagination" aria-label="Sahifalar">
                 {result.pagination.previous && (

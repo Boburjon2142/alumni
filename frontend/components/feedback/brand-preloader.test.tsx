@@ -1,5 +1,5 @@
 import { render, screen, act } from "@testing-library/react";
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { BrandPreloader } from "./brand-preloader";
 
 let mockPathname = "/";
@@ -13,6 +13,8 @@ describe("BrandPreloader", () => {
     vi.useFakeTimers();
   });
 
+  afterEach(() => vi.useRealTimers());
+
   it("renders on initial visit and unmounts cleanly after timer", () => {
     const { container } = render(
       <BrandPreloader minDisplayMs={300} fadeDurationMs={200} />
@@ -20,14 +22,14 @@ describe("BrandPreloader", () => {
 
     // Initial render
     expect(screen.getByRole("status")).toBeInTheDocument();
-    expect(screen.getByText("ALUMNI PLATFORMASI")).toBeInTheDocument();
-    expect(screen.getByText("Bir umrlik aloqa")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "ALUMNI PLATFORMASI" })).toBeInTheDocument();
+    expect(screen.getByText("Bitiruvchilar hamjamiyati yuklanmoqda...")).toBeInTheDocument();
 
     // Advance to fade stage
     act(() => {
       vi.advanceTimersByTime(300);
     });
-    expect(container.querySelector(".brand-preloader-fading")).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveAttribute("data-fading", "true");
 
     // Advance past fade duration
     act(() => {
@@ -35,7 +37,7 @@ describe("BrandPreloader", () => {
     });
 
     // Should be unmounted from DOM completely
-    expect(container.querySelector(".brand-preloader")).toBeNull();
+    expect(container.querySelector("[data-app-loader]")).toBeNull();
   });
 
   it("re-triggers preload smoothly on route change", () => {
@@ -47,7 +49,7 @@ describe("BrandPreloader", () => {
     act(() => {
       vi.advanceTimersByTime(500);
     });
-    expect(container.querySelector(".brand-preloader")).toBeNull();
+    expect(container.querySelector("[data-app-loader]")).toBeNull();
 
     // Change route pathname
     mockPathname = "/alumni";
@@ -55,12 +57,12 @@ describe("BrandPreloader", () => {
 
     // Preloader is active again for the new page
     expect(screen.getByRole("status")).toBeInTheDocument();
-    expect(screen.getByText("ALUMNI PLATFORMASI")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "ALUMNI PLATFORMASI" })).toBeInTheDocument();
 
     // Complete transition
     act(() => {
       vi.advanceTimersByTime(500);
     });
-    expect(container.querySelector(".brand-preloader")).toBeNull();
+    expect(container.querySelector("[data-app-loader]")).toBeNull();
   });
 });

@@ -14,7 +14,7 @@ type Props = {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { year } = await params;
   const yearNum = Number(year);
-  if (isNaN(yearNum) || yearNum < 1956) {
+  if (isNaN(yearNum) || yearNum < 1945) {
     return { title: "Guruh topilmadi — Qarshi davlat universiteti" };
   }
   return {
@@ -28,7 +28,7 @@ export default async function GroupDetailPage({ params }: Props) {
   const yearNum = Number(year);
   const currentYear = new Date().getFullYear();
 
-  if (isNaN(yearNum) || yearNum < 1956 || yearNum > currentYear + 1) {
+  if (isNaN(yearNum) || yearNum < 1945 || yearNum > currentYear + 1) {
     return notFound();
   }
 
@@ -83,7 +83,7 @@ export default async function GroupDetailPage({ params }: Props) {
         {/* Member list or Empty State */}
         {members.length > 0 ? (
           <div className="group-members-container">
-            <AlumniCardGrid alumni={members} locale={locale} />
+            <AlumniCardGrid alumni={members} locale={locale} fullWidth />
           </div>
         ) : (
           <div className="empty-state group-empty-state">

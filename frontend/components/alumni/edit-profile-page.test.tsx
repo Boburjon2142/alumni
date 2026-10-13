@@ -1,4 +1,4 @@
-import { render, screen, waitFor, cleanup } from "@testing-library/react";
+import { render, screen, waitFor, cleanup, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { EditProfilePage } from "./edit-profile-page";
 
@@ -49,6 +49,16 @@ describe("EditProfilePage 3-block structure", () => {
   afterEach(() => {
     cleanup();
     vi.restoreAllMocks();
+  });
+
+  it("defaults the primary graduation stage to bachelor and permits one selection", async () => {
+    render(<EditProfilePage locale="uz" />);
+    const select = await screen.findByLabelText("Bitirgan ta’lim bosqichi");
+    expect(select).toHaveTextContent("Bakalavriat (Bakalavr)");
+    fireEvent.click(select);
+    fireEvent.click(screen.getByRole("option", { name: "Magistratura (Magistr)" }));
+    expect(select).toHaveTextContent("Magistratura (Magistr)");
+    expect(select).not.toHaveTextContent("Bakalavriat (Bakalavr)");
   });
 
   it("renders exactly 3 main profile blocks and removes redundant current job block", async () => {

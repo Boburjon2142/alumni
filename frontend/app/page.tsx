@@ -67,7 +67,7 @@ export default async function Home() {
           </div>
 
           {alumniList.length > 0 ? (
-            <AlumniCardGrid alumni={alumniList.slice(0, 12)} locale={locale} />
+            <AlumniCardGrid alumni={alumniList.slice(0, 12)} locale={locale} fullWidth horizontal />
           ) : (
             <div className="empty-state">
               <GraduationCap aria-hidden="true" />

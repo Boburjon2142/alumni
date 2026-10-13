@@ -7,8 +7,8 @@ import { RemoteImage } from "@/components/ui/remote-image";
 export function StoryCard({ story, locale }: { story: SuccessStory; locale: Locale }) {
   const title = (locale === "en" && story.title_en) || (locale === "ru" && story.title_ru) || story.title_uz || story.title;
   const summary = (locale === "en" && story.summary_en) || (locale === "ru" && story.summary_ru) || story.summary_uz || story.summary;
-  const readText = locale === "en" ? "Read Story" : locale === "ru" ? "Читать историю" : "Hikoyani o‘qish";
-  const eyebrowText = locale === "en" ? "Success Story" : locale === "ru" ? "История успеха" : "Muvaffaqiyat hikoyasi";
+  const readText = locale === "en" ? "Read Story" : locale === "ru" ? "Читать историю" : "Faoliyat yo‘lini o‘qish";
+  const eyebrowText = locale === "en" ? "Success Story" : locale === "ru" ? "История успеха" : "Bitiruvchi faoliyati yo‘li";
 
   return (
     <article className="story-card">

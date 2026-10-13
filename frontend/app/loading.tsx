@@ -1,5 +1,5 @@
-import { PageSkeleton } from "@/components/feedback/page-skeleton";
+import { AppLoader } from "@/components/feedback/app-loader";
 
 export default function Loading() {
-  return <PageSkeleton />;
+  return <AppLoader />;
 }

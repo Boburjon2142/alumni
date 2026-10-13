@@ -11,7 +11,7 @@ const pageTitles: Record<string, string> = {
   "/admin/alumni": "Bitiruvchilar Ma’lumotlar Bazasi va Moderatsiya",
   "/admin/news": "Yangiliklar Boshqaruvi",
   "/admin/recognitions": "Tavsiyaviy Faxriy Unvonlar Tizimi",
-  "/admin/stories": "Muvaffaqiyat Hikoyalari Muharriri",
+  "/admin/stories": "Bitiruvchilar faoliyati yo‘li muharriri",
   "/admin/interviews": "Eksklyuziv Intervyular Muharriri",
   "/admin/advice": "Karyera va Hayotiy Maslahatlar",
   "/admin/feedback": "Foydalanuvchilar Murojaatlari va Takliflar",
@@ -41,7 +41,7 @@ export function AdminTopbar() {
     if (pathname.startsWith("/admin/alumni/") && pathname.endsWith("/edit")) {
       return "Bitiruvchi Profili va Moderatsiya";
     }
-    if (pathname.startsWith("/admin/stories/")) return "Hikoyani Tahrirlash";
+    if (pathname.startsWith("/admin/stories/")) return "Faoliyat yo‘lini Tahrirlash";
     if (pathname.startsWith("/admin/interviews/")) return "Intervyuni Tahrirlash";
     return "QarDU Alumni Administrator";
   };

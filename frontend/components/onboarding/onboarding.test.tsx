@@ -6,6 +6,8 @@ import { getDictionary } from "@/lib/i18n";
 import { sendVerificationCode, verifyEmailCode, submitAlumni } from "@/lib/api";
 vi.mock("@/lib/api", () => ({ sendVerificationCode: vi.fn(), verifyEmailCode: vi.fn(), submitAlumni: vi.fn() }));
 vi.mock("@/components/auth/google-sign-in-button", () => ({ GoogleSignInButton: () => null }));
+const { replace } = vi.hoisted(() => ({ replace: vi.fn() }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ replace }) }));
 const t = getDictionary("en");
 beforeEach(() => vi.resetAllMocks());
 afterEach(cleanup);
@@ -35,7 +37,7 @@ it("opens terms without accepting consent or losing form data", () => {
   expect(screen.getByRole("dialog", { name: t.consentTitle })).toBeInTheDocument();
   expect(submitAlumni).not.toHaveBeenCalled();
 });
-it("verifies email, creates one profile and displays success", async () => {
+it("verifies email, creates one profile and redirects to the dashboard", async () => {
   vi.mocked(verifyEmailCode).mockResolvedValue({ success: true, verified: true, message: "Verified" });
   vi.mocked(submitAlumni).mockResolvedValue({ success: true, data: { id: 42, full_name: "Test Graduate" } } as any);
   await sendCode();
@@ -43,6 +45,7 @@ it("verifies email, creates one profile and displays success", async () => {
   fireEvent.change(screen.getByLabelText("Tasdiqlash kodi"), { target: { value: "123456" } });
   fireEvent.click(screen.getByRole("button", { name: "Kodni tasdiqlash" }));
   await screen.findByRole("link", { name: "My profile" });
+  await waitFor(() => expect(replace).toHaveBeenCalledWith("/profile"));
   expect(submitAlumni).toHaveBeenCalledTimes(1);
   expect(vi.mocked(submitAlumni).mock.calls[0][0].get("contact_email")).toBe("graduate@example.com");
 });
@@ -53,8 +56,10 @@ it("retries a failed profile submission without consuming the OTP twice", async 
   fireEvent.change(screen.getByLabelText("Tasdiqlash kodi"), { target: { value: "123456" } });
   fireEvent.click(screen.getByRole("button", { name: "Kodni tasdiqlash" }));
   await screen.findByText("Temporary failure");
+  expect(replace).not.toHaveBeenCalled();
   fireEvent.click(screen.getByRole("button", { name: "Kodni tasdiqlash" }));
   await screen.findByRole("link", { name: "My profile" });
+  await waitFor(() => expect(replace).toHaveBeenCalledWith("/profile"));
   expect(verifyEmailCode).toHaveBeenCalledTimes(1);
   expect(submitAlumni).toHaveBeenCalledTimes(2);
 });

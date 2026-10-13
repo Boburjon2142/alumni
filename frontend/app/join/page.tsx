@@ -58,7 +58,7 @@ export default async function JoinPage() {
           <div className="join-brand-panel">
             <div className="join-logo-wrap">
               <img
-                src="/brand/Logo.png"
+                src="/brand/logo-oz-light.svg"
                 alt="Qarshi davlat universiteti rasmiy logotipi"
                 className="join-university-logo"
                 width={180}
@@ -79,10 +79,10 @@ export default async function JoinPage() {
               </h2>
               <p className="join-brand-desc">
                 {isUz
-                  ? "1956-yildan buyon ilm-fan, ta’lim va yetuk mutaxassislar tayyorlash maskani. ALUMNI platformasi barcha davrlardagi bitiruvchilarimizni birlashtiradi."
+                  ? "1945-yildan buyon ilm-fan, ta’lim va yetuk mutaxassislar tayyorlash maskani. ALUMNI platformasi barcha davrlardagi bitiruvchilarimizni birlashtiradi."
                   : isRu
-                  ? "С 1956 года — центр науки, образования и подготовки высококвалифицированных специалистов. Платформа ALUMNI объединяет выпускников всех поколений."
-                  : "Since 1956, a center of science, education, and excellence. The ALUMNI platform unites graduates across generations."}
+                  ? "С 1945 года — центр науки, образования и подготовки высококвалифицированных специалистов. Платформа ALUMNI объединяет выпускников всех поколений."
+                  : "Since 1945, a center of science, education, and excellence. The ALUMNI platform unites graduates across generations."}
               </p>
             </div>
 

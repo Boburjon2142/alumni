@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { TermsContent } from "./terms-content";
 import * as Dialog from "@radix-ui/react-dialog";
 import {
@@ -50,6 +51,7 @@ export function AlumniForm({
   locale: Locale;
   t: Dictionary;
 }) {
+  const router = useRouter();
   const [consentAccepted, setConsentAccepted] = useState(false);
 
   // Form State - basic info: Full name and Email
@@ -72,6 +74,10 @@ export function AlumniForm({
   const [submitting, setSubmitting] = useState(false);
   const [successData, setSuccessData] = useState<{ id: number; fullName: string; email: string } | null>(null);
   const [generalError, setGeneralError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (successData) router.replace("/profile");
+  }, [successData, router]);
 
   // Countdown timer effect
   useEffect(() => {

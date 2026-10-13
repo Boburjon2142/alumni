@@ -1,32 +1,53 @@
-import Link from "next/link";
-import { Award, BadgeCheck, Building2, GraduationCap, MapPin } from "lucide-react";
-import type { Alumni } from "@/types/alumni";
-import type { Dictionary } from "@/lib/i18n";
-import { RemoteImage } from "@/components/ui/remote-image";
+"use client";
 
-export function AlumniCard({ alumni, featured = false, t }: { alumni: Alumni; featured?: boolean; t: Dictionary }) {
-  const initials = alumni.full_name.split(" ").map((part) => part[0]).slice(0, 2).join("");
-  return <article className={`alumni-card ${featured ? "featured-card" : ""}`}>
-    <RemoteImage
-      className="alumni-card-image"
-      src={alumni.avatar || alumni.image_url || (alumni.slug ? `/images/faxriylar/${alumni.slug}.webp` : undefined)}
-      slug={alumni.slug}
-      alt={alumni.image_alt || `${alumni.full_name} portreti`}
-      fallback={initials}
-      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-    />
-    <div className="card-top">
-      <span />
-    </div>
-    <div>
-      {featured && <span className="featured-label"><Award size={14}/> {t.featuredBadge || t.graduate}</span>}
-      <h3><Link href={`/alumni/${alumni.slug}`}>{alumni.full_name}</Link></h3>
-      <p className="role">{alumni.position || t.graduate}{alumni.current_company && ` — ${alumni.current_company}`}</p>
-    </div>
-    <div className="meta">
-      {alumni.faculty && <span><GraduationCap/> {alumni.faculty}{alumni.graduation_year && ` · ${alumni.graduation_year}`}</span>}
-      {alumni.city && <span><MapPin/> {alumni.city}{alumni.country && `, ${alumni.country}`}</span>}
-      {alumni.industry && <span><Building2/> {alumni.industry}</span>}
-    </div>
-  </article>;
+import Link from "next/link";
+import { ArrowRight, GraduationCap } from "lucide-react";
+import type { Alumni } from "@/types/alumni";
+import type { Locale } from "@/lib/i18n";
+import { RemoteImage } from "@/components/ui/remote-image";
+import { AlumniHonorBadges } from "./alumni-honor-badges";
+import { AlumniAwards } from "./alumni-awards";
+import { getAlumniAwards } from "@/lib/recognition-assets";
+import styles from "./alumni-card.module.css";
+
+export function AlumniCard({ alumni, locale, sizes, horizontal = false }: { alumni: Alumni; locale: Locale; sizes?: string; horizontal?: boolean }) {
+  const name = alumni.full_name;
+  const awards = alumni.awards ?? getAlumniAwards(alumni);
+  const details = locale === "ru" ? "Подробнее" : locale === "en" ? "View profile" : "Batafsil";
+  const activity = alumni.current_activity || alumni.position || alumni.current_company;
+  const initials = name.split(/\s+/).filter(Boolean).slice(0, 2).map(part => part[0]).join("");
+  const label = locale === "ru" ? `Посмотреть профиль ${name}` : locale === "en" ? `View profile of ${name}` : `${name} profilini ko‘rish`;
+  return (
+    <article className={`${styles.card}${horizontal ? ` ${styles.horizontalCard}` : ""}`}>
+      <div className={styles.media}>
+        <RemoteImage
+          className={styles.portrait}
+          src={alumni.avatar || alumni.image_url}
+          slug={alumni.slug}
+          alt={alumni.image_alt || name}
+          fallback={initials}
+          sizes={sizes ?? "(max-width: 599px) 280px, (max-width: 899px) 45vw, (max-width: 1199px) 30vw, 280px"}
+        />
+        <AlumniHonorBadges honors={alumni.card_honors ?? alumni.recognitions ?? []} locale={locale} />
+      </div>
+      <div className={styles.info}>
+        {horizontal && alumni.graduation_year && <span className={styles.year}>{alumni.graduation_year}{locale === "uz" ? "-yil" : locale === "ru" ? " г." : ""}</span>}
+        <h3 className={styles.name}>
+          <Link href={`/alumni/${alumni.slug}`} aria-label={label} className={styles.link} title={name}>{name}</Link>
+        </h3>
+        {horizontal && <AlumniAwards awards={awards} locale={locale} />}
+        {horizontal && (
+          <>
+            {activity && <p className={styles.activity}>{activity}</p>}
+            {(alumni.specialty || alumni.faculty) && <p className={styles.faculty}><GraduationCap size={14} aria-hidden="true" />{alumni.specialty || alumni.faculty}</p>}
+            <span className={styles.details} aria-hidden="true">{details}<ArrowRight size={14} /></span>
+          </>
+        )}
+      </div>
+    </article>
+  );
+}
+
+export function AlumniCardSkeleton() {
+  return <div className={`${styles.card} ${styles.skeleton}`} aria-hidden="true"><div className={styles.media} /><div className={styles.info}><span /></div></div>;
 }

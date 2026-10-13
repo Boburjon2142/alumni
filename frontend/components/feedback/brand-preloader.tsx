@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import { AppLoader } from "./app-loader";
 
 interface BrandPreloaderProps {
   /**
@@ -45,43 +46,5 @@ export function BrandPreloader({
     return null;
   }
 
-  return (
-    <div
-      className={`brand-preloader ${isFading ? "brand-preloader-fading" : ""}`}
-      role="status"
-      aria-live="polite"
-      aria-label="Qarshi Davlat Universiteti Alumni platformasi yuklanmoqda"
-    >
-      <div className="brand-preloader-backdrop" />
-      <div className="brand-preloader-content">
-        {/* Official University Logo */}
-        <div className="brand-preloader-logo-wrapper">
-          <img
-            src="/brand/Logo.webp"
-            alt="Qarshi Davlat Universiteti"
-            width={320}
-            height={190}
-            fetchPriority="high"
-            decoding="async"
-            className="brand-preloader-logo"
-          />
-        </div>
-
-        {/* Minimalist, Luxury Alumni Tag & Slogan */}
-        <div className="brand-preloader-text">
-          <div className="brand-preloader-badge">
-            <span className="brand-preloader-pill">ALUMNI PLATFORMASI</span>
-          </div>
-          <p className="brand-preloader-slogan">Bir umrlik aloqa</p>
-        </div>
-
-        {/* Smooth Gold Shimmer Progress Bar */}
-        <div className="brand-preloader-track" aria-hidden="true">
-          <div className="brand-preloader-bar" />
-        </div>
-
-        <span className="sr-only">Yuklanmoqda...</span>
-      </div>
-    </div>
-  );
+  return <AppLoader fading={isFading} fadeDurationMs={fadeDurationMs} />;
 }

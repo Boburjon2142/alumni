@@ -7,7 +7,7 @@ const dictionaries = {
     navDirectoryDescription: "QarDU bitiruvchilari bilan tanishing",
     navPrideTitle: "Bizning faxrimiz",
     navPrideDescription: "QarDU faxriga aylangan yetuk bitiruvchilar",
-    navStoriesTitle: "Muvaffaqiyat hikoyalari",
+    navStoriesTitle: "Bitiruvchilar faoliyati yo‘li",
     navStoriesDescription: "Bitiruvchilarning professional kamoloti va ibratli yo‘li",
     navRecognitionTitle: "E’tirof",
     navRecognitionDescription: "Faxriy unvonlar va e’tirofga sazovor bitiruvchilar",
@@ -36,21 +36,21 @@ const dictionaries = {
     navAlumni: "Bizning Faxrimiz",
     navGroups: "Bitiruvchilar",
     navJoin: "Universitetimiz bitiruvchisimisiz?",
-    navStories: "Hikoyalar",
-    navInterviews: "Intervyular",
+    navStories: "Bitiruvchilar faoliyati yo‘li",
+    navInterviews: "Suhbat va intervyular",
     navAdvice: "Maslahatlar",
-    navAbout: "Platforma haqida",
-    navFeedback: "Murojaatlar",
+    navAbout: "Alumni platformasi haqida",
+    navFeedback: "Taklif va murojaatlar",
     navImpact: "E’tirof",
     university: "Qarshi davlat universiteti",
     brand: "Qarshi davlat universiteti Faxriy Bitiruvchilari",
     
     // Hero (UNTOUCHED)
-    heroEyebrow: "Qarshi davlat universiteti Faxriy Bitiruvchilari",
-    heroTitle: "Bir dargoh, turli avlodlar,",
+    heroEyebrow: "QARSHI DAVLAT UNIVERSITETI ALUMNI PLATFORMASI",
+    heroTitle: "Bir dargohdan boshlangan",
     heroLine2: "",
-    heroAccent: "umumiy faxr.",
-    heroDescription: "Bitiruvchilarimizning yo‘li, tajribasi\nva kelajak avlodga ulashadigan\nfikrlari bilan tanishing.",
+    heroAccent: "minglab yo‘llar.",
+    heroDescription: "Qarshi davlat universiteti bitiruvchilarining \nkasbiy yo‘li va hayotiy tajribasi bilan tanishing.",
     heroCtaPrimary: "Bizning faxrimiz",
     heroCtaSecondary: "Maslahatlarni o‘qish",
 
@@ -65,15 +65,15 @@ const dictionaries = {
     featuredEmptyText: "Universitet tahririyati tasdiqlagan profillar tez orada e’lon qilinadi.",
 
     // Success Stories section
-    storiesTitle: "Muvaffaqiyat hikoyalari",
+    storiesTitle: "Bitiruvchilar faoliyati yo‘li",
     storiesSubtitle: "QarshiDU bitiruvchilarining professional kamoloti va bosib o‘tgan ibratli yo‘li.",
-    viewAllStories: "Barcha hikoyalar",
-    readStory: "Hikoyani o‘qish",
-    storyEyebrow: "Muvaffaqiyat hikoyasi",
+    viewAllStories: "Barcha bitiruvchilar faoliyati yo‘li",
+    readStory: "Faoliyat yo‘lini o‘qish",
+    storyEyebrow: "Bitiruvchi faoliyati yo‘li",
     studentTakeaway: "Talabalar uchun xulosa",
-    storiesEmptyTitle: "Hikoyalar tayyorlanmoqda",
+    storiesEmptyTitle: "Bitiruvchilar faoliyati yo‘li tayyorlanmoqda",
     storiesEmptyText: "Tahririyat tomonidan yangi maqolalar yozilmoqda.",
-    backToStories: "Barcha hikoyalarga qaytish",
+    backToStories: "Barcha bitiruvchilar faoliyati yo‘liga qaytish",
     authorProfile: "Bitiruvchi profili",
 
     // Advice section
@@ -84,7 +84,7 @@ const dictionaries = {
     adviceEmptyText: "Bitiruvchilarning tavsiyalari tahririyat tomonidan joylashtirilmoqda.",
 
     // Interviews section
-    interviewsTitle: "Bitiruvchilar bilan intervyular",
+    interviewsTitle: "Suhbat va intervyular",
     interviewsSubtitle: "Qarshi davlat universiteti faxriy va yetuk bitiruvchilari bilan eksklyuziv suhbatlar, hayotiy tajriba va kasbiy saboqlar.",
     interviewsSearchPlaceholder: "Intervyu, ism yoki soha bo‘yicha qidiring...",
     interviewsEmptyTitle: "Intervyular tayyorlanmoqda",
@@ -158,7 +158,7 @@ const dictionaries = {
 
     // Legacy Section
     legacyTitle: "Akademik an’ana va yuksak salohiyat",
-    legacyText: "1956-yildan buyon Qarshi davlat universiteti minglab yetuk mutaxassislar, olimlar, davlat va jamoat arboblarini tarbiyalab kelmoqda. Bu platforma ularning boy merosi va tajribasini jamlovchi rasmiy arxivdir.",
+    legacyText: "1945-yildan buyon Qarshi davlat universiteti minglab yetuk mutaxassislar, olimlar, davlat va jamoat arboblarini tarbiyalab kelmoqda. Bu platforma ularning boy merosi va tajribasini jamlovchi rasmiy arxivdir.",
     legacyPoint1Title: "Ilmiy va kasbiy meros",
     legacyPoint1Text: "Turli davrlarda ta’lim olgan bitiruvchilarning ilmiy maktabi va amaliy yutuqlari.",
     legacyPoint2Title: "Avlodlar vorisiyligi",
@@ -211,7 +211,7 @@ const dictionaries = {
     profileNotFoundText: "Ushbu profil mavjud emas yoki nashr qilinmagan.",
 
     // About Page
-    aboutTitle: "Platforma haqida",
+    aboutTitle: "Alumni platformasi haqida",
     aboutSubtitle: "Qarshi davlat universitetining faxriy bitiruvchilarini tanishtiruvchi rasmiy raqamli platforma.",
     aboutMissionTitle: "Loyiha maqsadi",
     aboutMissionText: "Ushbu platformaning bosh maqsadi — Qarshi davlat universitetining jamiyat, ilm-fan, davlat boshqaruvi va iqtisodiyot rivojiga ulkan hissa qo‘shgan faxriy bitiruvchilarini xalqimiz va yosh avlodga tanishtirish, ularning tajribasini universitetning akademik merosi sifatida saqlashdir.",
@@ -223,7 +223,7 @@ const dictionaries = {
     // Privacy & Legal
     privacyTitle: "Maxfiylik va ishonchlilik siyosati",
     privacyText: "Platforma faqat ochiq, professional va tahririyat tomonidan tasdiqlangan ma’lumotlarni nashr etadi. Shaxsiy aloqa ma’lumotlari (shaxsiy telefon, yopiq email, uy manzili) ommaga e’lon qilinmaydi.",
-    footerText: "Qarshi davlat universitetining faxriy bitiruvchilari rasmiy raqamli arxivi.",
+    footerText: "Qarshi davlat universiteti bitiruvchilari uchun rasmiy raqamli platforma.",
     copyright: "Barcha huquqlar himoyalangan.",
     loadError: "Ma’lumotlarni yuklab bo‘lmadi",
     retryText: "Iltimos, sahifani yangilang yoki birozdan so‘ng qayta urinib ko‘ring.",
@@ -367,8 +367,8 @@ const dictionaries = {
     newsBack: "Barcha yangiliklarga qaytish",
     newsFeaturedBadge: "Muhim xabar",
     newsPublishedAt: "Nashr qilingan sana",
-    storyBack: "Barcha hikoyalarga qaytish",
-    storyBadge: "MUVAFFAQIYAT HIKOYASI",
+    storyBack: "Barcha bitiruvchilar faoliyati yo‘liga qaytish",
+    storyBadge: "BITIRUVCHILAR FAOLIYATI YO‘LI",
     storyFaculty: "Fakultet",
     storyGradYear: "Bitirgan yili",
     storyCurrentRole: "Hozirgi lavozimi",
@@ -382,8 +382,8 @@ const dictionaries = {
     storyAdviceHeading: "Yoshlar uchun maslahat",
     storyProfileCtaTitle: "haqida batafsil",
     storyProfileCtaDesc: "Bitiruvchining ta’limi, faoliyati va professional ma’lumotlarini rasmiy profil orqali ko‘ring.",
-    storySimilarHeading: "O‘xshash hikoyalar",
-    storyAllStoriesLink: "Barcha hikoyalar",
+    storySimilarHeading: "O‘xshash faoliyat yo‘llari",
+    storyAllStoriesLink: "Barcha bitiruvchilar faoliyati yo‘li",
   },
 
   ru: {
@@ -542,7 +542,7 @@ const dictionaries = {
 
     // Legacy Section
     legacyTitle: "Академические традиции и высокий потенциал",
-    legacyText: "С 1956 года Каршинский государственный университет воспитал тысячи специалистов, учёных, государственных и общественных деятелей.",
+    legacyText: "С 1945 года Каршинский государственный университет воспитал тысячи специалистов, учёных, государственных и общественных деятелей.",
     legacyPoint1Title: "Научное и профессиональное наследие",
     legacyPoint1Text: "Научная школа и практические достижения выпускников разных эпох.",
     legacyPoint2Title: "Преемственность поколений",
@@ -607,7 +607,7 @@ const dictionaries = {
     // Privacy & Legal
     privacyTitle: "Политика конфиденциальности и доверия",
     privacyText: "Платформа публикует исключительно открытые, профессиональные и подтверждённые редакцией сведения. Личные контакты не публикуются.",
-    footerText: "Официальный цифровой архив почётных выпускников Каршинского государственного университета.",
+    footerText: "Официальная цифровая платформа для всех выпускников Каршинского государственного университета.",
     copyright: "Все права защищены.",
     loadError: "Не удалось загрузить данные",
     retryText: "Пожалуйста, обновите страницу или повторите попытку позже.",
@@ -926,7 +926,7 @@ const dictionaries = {
 
     // Legacy Section
     legacyTitle: "Academic Tradition & Distinction",
-    legacyText: "Since 1956, Karshi State University has nurtured thousands of prominent scholars, leaders, and pioneers.",
+    legacyText: "Since 1945, Karshi State University has nurtured thousands of prominent scholars, leaders, and pioneers.",
     legacyPoint1Title: "Scholarly Legacy",
     legacyPoint1Text: "Scientific schools and practical achievements of alumni across decades.",
     legacyPoint2Title: "Mentorship & Continuity",
@@ -991,7 +991,7 @@ const dictionaries = {
     // Privacy & Legal
     privacyTitle: "Privacy & Reliability Policy",
     privacyText: "The platform publishes only verified public information. Personal contact information remains strictly confidential.",
-    footerText: "Official digital archive of Karshi State University honorary alumni.",
+    footerText: "Official digital platform for all alumni of Karshi State University.",
     copyright: "All rights reserved.",
     loadError: "Failed to load data",
     retryText: "Please refresh the page or try again in a few moments.",

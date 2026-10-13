@@ -131,6 +131,9 @@ export type GraduationYearChangeRequest = {
 };
 
 export type Alumni = {
+  /** Original PNG filenames derived from confirmed recognition assignments. */
+  awards?: string[];
+  card_honors?: Recognition[];
   id: number;
   slug: string;
   email?: string;
@@ -145,6 +148,7 @@ export type Alumni = {
   specialty?: string;
   graduation_year?: number;
   is_graduation_year_locked?: boolean;
+  graduation_degree?: string;
   degree?: string;
   academic_degree?: string;
   academic_title?: string;

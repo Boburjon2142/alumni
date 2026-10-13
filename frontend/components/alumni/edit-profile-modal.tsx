@@ -73,7 +73,7 @@ export function EditProfileModal({
   const [success, setSuccess] = useState(false);
 
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: currentYear - 1956 + 1 }, (_, i) => currentYear - i);
+  const years = Array.from({ length: currentYear - 1945 + 1 }, (_, i) => currentYear - i);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();

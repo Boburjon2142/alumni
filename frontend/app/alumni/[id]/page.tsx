@@ -18,7 +18,6 @@ import { RemoteImage } from "@/components/ui/remote-image";
 import { EditProfileModal } from "@/components/alumni/edit-profile-modal";
 import { PeerConfirmation } from "@/components/alumni/peer-confirmation";
 import { ProfileShareButtons } from "@/components/alumni/profile-share-buttons";
-import { AlumniOfficialAwards } from "@/components/alumni/alumni-official-awards";
 import { AlumniImpactCard } from "@/components/impact/alumni-impact-card";
 import type { EducationExperience, WorkExperience } from "@/types/alumni";
 
@@ -249,9 +248,6 @@ export default async function Profile({ params }: Props) {
 
       {/* Profile Body: Rich Structured Cards Layout */}
       <div className="container honorary-profile-body">
-        {/* Official QarDU Recognitions and Awards */}
-        <AlumniOfficialAwards recognitions={a.recognitions || []} locale={locale} t={t} />
-
         {/* Alumni Impact & Contributions Activity */}
         <AlumniImpactCard slug={a.slug} t={t} />
 

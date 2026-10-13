@@ -316,7 +316,7 @@ export default function AdminDashboardPage() {
           className="p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-[#0D1667] transition group flex items-center justify-between"
         >
           <div>
-            <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">Muvaffaqiyat Hikoyalari</p>
+            <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">Bitiruvchilar faoliyati yo‘li</p>
             <p className="text-xl font-bold text-slate-900 mt-1">{counts?.published_stories || 0} ta nashr qilingan</p>
           </div>
           <div className="w-10 h-10 rounded-xl bg-slate-50 group-hover:bg-[#0D1667] group-hover:text-white text-slate-600 flex items-center justify-center transition">

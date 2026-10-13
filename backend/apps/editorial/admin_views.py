@@ -126,14 +126,14 @@ class AdminSuccessStoryDetailView(APIView):
     def get(self, request, pk):
         story = self.get_object(pk)
         if not story:
-            return Response({"message": "Hikoya topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "Faoliyat yo‘li topilmadi"}, status=status.HTTP_404_NOT_FOUND)
         return Response(SuccessStoryDetailSerializer(story).data)
 
     @transaction.atomic
     def put(self, request, pk):
         story = self.get_object(pk)
         if not story:
-            return Response({"message": "Hikoya topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "Faoliyat yo‘li topilmadi"}, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data
         if "alumni_id" in data:
@@ -175,9 +175,9 @@ class AdminSuccessStoryDetailView(APIView):
     def delete(self, request, pk):
         story = self.get_object(pk)
         if not story:
-            return Response({"message": "Hikoya topilmadi"}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"message": "Faoliyat yo‘li topilmadi"}, status=status.HTTP_404_NOT_FOUND)
         story.delete()
-        return Response({"success": True, "message": "Hikoya o‘chirildi"}, status=status.HTTP_204_NO_CONTENT)
+        return Response({"success": True, "message": "Faoliyat yo‘li o‘chirildi"}, status=status.HTTP_204_NO_CONTENT)
 
 
 # --- Interviews ---

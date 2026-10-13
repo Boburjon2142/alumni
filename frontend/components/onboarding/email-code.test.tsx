@@ -5,6 +5,7 @@ import { getDictionary } from "@/lib/i18n";
 import { sendVerificationCode } from "@/lib/api";
 vi.mock("@/lib/api", () => ({ sendVerificationCode: vi.fn(), verifyEmailCode: vi.fn(), submitAlumni: vi.fn() }));
 vi.mock("@/components/auth/google-sign-in-button", () => ({ GoogleSignInButton: () => null }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ replace: vi.fn() }) }));
 afterEach(() => { cleanup(); vi.resetAllMocks(); });
 it("reports email delivery failure, does not claim delivery, and allows retry", async () => {
   const t = getDictionary("en");

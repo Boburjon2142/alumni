@@ -148,8 +148,8 @@ class GraduationYearChangeRequestSerializer(serializers.ModelSerializer):
 
     def validate_requested_year(self, value):
         current_year = date.today().year
-        if value < 1956 or value > current_year + 1:
-            raise serializers.ValidationError(f"Bitirgan yil 1956 va {current_year + 1} oralig‘ida bo‘lishi kerak.")
+        if value < 1945 or value > current_year + 1:
+            raise serializers.ValidationError(f"Bitirgan yil 1945 va {current_year + 1} oralig‘ida bo‘lishi kerak.")
         return value
 
     def validate_reason(self, value):
@@ -160,7 +160,28 @@ class GraduationYearChangeRequestSerializer(serializers.ModelSerializer):
 class AlumniSourceSerializer(serializers.ModelSerializer):
     class Meta: model = AlumniSource; fields = ("id", "title", "url", "source_type", "publisher", "published_date", "is_verified")
 
+def latest_card_honors(obj):
+    eligible = [
+        r for r in obj.recognitions.all()
+        if r.status == AlumniRecognition.Status.APPROVED and r.is_active and r.title.is_active
+    ]
+    if not eligible:
+        return []
+
+    def awarded_order(r):
+        assigned_at = r.approved_at or r.created_at
+        awarded_date = r.awarded_at or (date(r.year, 1, 1) if r.year else assigned_at.date() if assigned_at else date.min)
+        return (awarded_date, assigned_at.timestamp() if assigned_at else 0, r.pk)
+
+    return [format_public_recognition(max(eligible, key=awarded_order))]
+
+
 class PublicAlumniSerializer(serializers.ModelSerializer):
+    card_honors = serializers.SerializerMethodField()
+
+    def get_card_honors(self, obj):
+        return latest_card_honors(obj)
+
     faculty = serializers.CharField(source="faculty.name", default=None)
     specialty = serializers.CharField(source="specialty.name", default=None)
     verified = serializers.SerializerMethodField()
@@ -176,7 +197,7 @@ class PublicAlumniSerializer(serializers.ModelSerializer):
             "current_company", "position", "current_activity", "industry", "city", "country",
             "skills", "bio", "biography_uz", "biography_en",
             "is_featured", "is_honorary", "seo_title", "seo_description", "verified",
-            "approval_status", "approved_at", "approved_by_name", "recognitions"
+            "approval_status", "approved_at", "approved_by_name", "recognitions", "card_honors"
         )
     def get_verified(self, obj): return obj.verification_status == AlumniProfile.Verification.VERIFIED
     def get_approved_by_name(self, obj):
@@ -194,6 +215,11 @@ class PublicAlumniSerializer(serializers.ModelSerializer):
 
 
 class PublicAlumniListSerializer(serializers.ModelSerializer):
+    card_honors = serializers.SerializerMethodField()
+
+    def get_card_honors(self, obj):
+        return latest_card_honors(obj)
+
     faculty = serializers.CharField(source="faculty.name", default=None)
     specialty = serializers.CharField(source="specialty.name", default=None)
     recognitions = serializers.SerializerMethodField()
@@ -204,7 +230,7 @@ class PublicAlumniListSerializer(serializers.ModelSerializer):
             "id", "slug", "avatar", "image_url", "image_alt", "full_name",
             "position", "current_company", "current_activity",
             "faculty", "specialty", "graduation_year",
-            "is_featured", "is_honorary", "recognitions"
+            "is_featured", "is_honorary", "recognitions", "card_honors"
         )
 
     def get_recognitions(self, obj):
@@ -227,7 +253,7 @@ class OwnAlumniSerializer(serializers.ModelSerializer):
         model = AlumniProfile
         fields = (
             "id", "slug", "email", "avatar", "full_name", "faculty", "faculty_name", "specialty",
-            "graduation_year", "is_graduation_year_locked", "degree",
+            "graduation_year", "is_graduation_year_locked", "degree", "graduation_degree",
             "academic_degree", "academic_title", "current_company", "position",
             "current_activity", "industry", "city", "country", "skills", "bio",
             "linkedin_url", "github_url", "website_url", "phone", "visibility",
@@ -256,8 +282,8 @@ class OwnAlumniSerializer(serializers.ModelSerializer):
 
         if value is not None:
             current_year = date.today().year
-            if value < 1956 or value > current_year + 1:
-                raise serializers.ValidationError(f"Bitirgan yil 1956 va {current_year + 1} oralig‘ida bo‘lishi kerak.")
+            if value < 1945 or value > current_year + 1:
+                raise serializers.ValidationError(f"Bitirgan yil 1945 va {current_year + 1} oralig‘ida bo‘lishi kerak.")
         return value
 
     def validate_full_name(self, value):
@@ -403,7 +429,7 @@ class AdminAlumniDetailSerializer(PublicAlumniDetailSerializer):
 class AlumniSubmissionSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(max_length=160, min_length=3, trim_whitespace=True)
     graduation_year = serializers.IntegerField(
-        min_value=1956,
+        min_value=1945,
         max_value=date.today().year + 1,
         required=False,
         allow_null=True,
@@ -461,8 +487,8 @@ class AlumniSubmissionSerializer(serializers.ModelSerializer):
         if value in (None, "", "null"):
             return None
         current_year = date.today().year
-        if value < 1956 or value > current_year + 1:
-            raise serializers.ValidationError(f"Bitirgan yil 1956 va {current_year + 1} oralig‘ida bo‘lishi kerak.")
+        if value < 1945 or value > current_year + 1:
+            raise serializers.ValidationError(f"Bitirgan yil 1945 va {current_year + 1} oralig‘ida bo‘lishi kerak.")
         return value
 
     def validate(self, data):

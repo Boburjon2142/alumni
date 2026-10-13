@@ -7,6 +7,15 @@ Ushbu qoidalar loyiha ildizi va barcha ichki papkalarga tatbiq etiladi.
 Foydalanuvchi hozirgacha yaratilgan dizayn va ko‘rinishlarni saqlashni buyurgan.
 **Foydalanuvchining aniq topshirig‘isiz mavjud dizaynni yoki ko‘rinishni o‘zgartirish TAQIQLANADI.**
 
+### Himoyalangan amaldagi holat
+
+- 2026-10-10 kuni foydalanuvchi tasdiqlagan hozirgi dizayn, jumladan `/groups/[year]` va `/alumni` sahifalaridagi kengaytirilgan kontent va kartalar panjarasi, saqlanishi shart bo‘lgan amaldagi holatdir.
+- Bu qoida keyingi suhbatlar, yangi agentlar va barcha kelajakdagi topshiriqlarda ham amal qiladi. Foydalanuvchi «dizaynni o‘zgartir» deb aniq topshiriq bermaguncha tashqi ko‘rinishga o‘zgarish kiritilmasin.
+- «Tahlil qil», «lokalda ishga tushir», «xatoni tuzat», «testlarni o‘tkaz», «build qil» yoki «deploy qil» kabi topshiriqlar dizaynni o‘zgartirishga ruxsat emas.
+- Oldingi dizaynga qaytarish, kartalar yoki kontent kengligini qayta o‘zgartirish, umumiy komponentning standartlarini almashtirish ham alohida aniq topshiriqsiz taqiqlanadi.
+- Paket yangilanishi, build, kod refaktori yoki funksional tuzatish ko‘rinishga bilvosita ta’sir qilsa, bu ham dizayn o‘zgarishi hisoblanadi va shu cheklovga bo‘ysunadi.
+- O‘zgarish yakunida ruxsat berilmagan vizual farq aniqlansa, ish tugallangan deb hisoblanmasin; agent kiritgan farq foydalanuvchining boshqa o‘zgarishlariga tegmasdan bartaraf etilsin.
+
 - Sahifa tuzilishi, kartalar, modal oynalar, navigatsiya, filtrlar, formalar, tugmalar va ularning joylashuvi saqlansin.
 - Ranglar, shriftlar, matn o‘lchamlari, oraliqlar, kenglik/balandlik, ustunlar, chegaralar, soyalar, yumaloqlik, ikonalar, rasmlar va rasmlarning kesilishi o‘zgartirilmasin.
 - Mobil, planshet va desktop ko‘rinishlari, breakpointlar, animatsiyalar va vizual holatlar ham himoyalangan.

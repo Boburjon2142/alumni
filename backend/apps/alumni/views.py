@@ -254,8 +254,8 @@ class GraduationGroupDetailView(generics.ListAPIView):
     def get_queryset(self):
         year = self.kwargs.get("year")
         current_year = date.today().year
-        if year < 1956 or year > current_year + 1:
-            raise ValidationError({"year": f"Bitiruv yili 1956 va {current_year + 1} oralig‘ida bo‘lishi kerak."})
+        if year < 1945 or year > current_year + 1:
+            raise ValidationError({"year": f"Bitiruv yili 1945 va {current_year + 1} oralig‘ida bo‘lishi kerak."})
         
         qs = visible_profiles(self.request).filter(graduation_year=year)
         region = self.request.query_params.get("region", "").strip() or self.request.query_params.get("city", "").strip()

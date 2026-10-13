@@ -1,5 +1,6 @@
 import { apiErrorMessage } from "./api-error";
 import { authenticatedFetch, authChanged } from "./auth";
+import { getAlumniAwards } from "./recognition-assets";
 import type {
   AdminDashboardStats,
   AdminFeedbackItem,
@@ -43,7 +44,8 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 }
 
 export const getFeatured = () => request<Featured[]>("/featured-alumni/");
-export const getAlumni = (query = "") => request<Page<Alumni>>(`/alumni/${query ? `?${query}` : ""}`);
+export const getAlumni = (query = "") => request<Page<Alumni>>(`/alumni/${query ? `?${query}` : ""}`)
+  .then(page => ({ ...page, data: page.data.map(alumni => ({ ...alumni, awards: getAlumniAwards(alumni) })) }));
 export const getRecognitions = () =>
   request<Recognition[] | { data: Recognition[] }>("/alumni/recognitions/").then((res) =>
     Array.isArray(res) ? res : (res as { data: Recognition[] }).data ?? []
@@ -395,13 +397,13 @@ export const actionAdminYearRequest = async (
 
 export const getAdminStories = async (query = ""): Promise<AdminPaginatedResponse<SuccessStory>> => {
   const res = await authenticatedFetch(`${getAdminBase()}/admin/stories/${query ? `?${query}` : ""}`);
-  if (!res.ok) throw new Error("Hikoyalarni yuklab bo‘lmadi");
+  if (!res.ok) throw new Error("Faoliyat yo‘llarini yuklab bo‘lmadi");
   return res.json();
 };
 
 export const getAdminStoryById = async (id: number): Promise<SuccessStory> => {
   const res = await authenticatedFetch(`${getAdminBase()}/admin/stories/${id}/`);
-  if (!res.ok) throw new Error("Hikoyani yuklab bo‘lmadi");
+  if (!res.ok) throw new Error("Faoliyat yo‘lini yuklab bo‘lmadi");
   return res.json();
 };
 
@@ -414,13 +416,13 @@ export const saveAdminStory = async (id: number | null, payload: any): Promise<S
     body: JSON.stringify(payload),
   });
   const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(data?.message || "Hikoyani saqlab bo‘lmadi");
+  if (!res.ok) throw new Error(data?.message || "Faoliyat yo‘lini saqlab bo‘lmadi");
   return data;
 };
 
 export const deleteAdminStory = async (id: number): Promise<void> => {
   const res = await authenticatedFetch(`${getAdminBase()}/admin/stories/${id}/`, { method: "DELETE" });
-  if (!res.ok) throw new Error("Hikoyani o‘chirib bo‘lmadi");
+  if (!res.ok) throw new Error("Faoliyat yo‘lini o‘chirib bo‘lmadi");
 };
 
 export const getAdminInterviews = async (query = ""): Promise<AdminPaginatedResponse<Interview>> => {

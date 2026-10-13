@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import styles from "./stories.module.css";
 
 export const metadata = {
-  title: "Muvaffaqiyat hikoyalari — Qarshi davlat universiteti",
+  title: "Bitiruvchilar faoliyati yo‘li — Qarshi davlat universiteti",
   description: "Qarshi davlat universiteti faxriy bitiruvchilarining ibratli hayot va kasbiy yo‘li haqidagi tahririyat maqolalari.",
 };
 

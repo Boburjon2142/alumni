@@ -23,8 +23,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   try {
     const story = await getStoryBySlug(slug);
-    const title = story.title_uz || "Muvaffaqiyat hikoyasi";
-    const desc = story.summary_uz || "Qarshi davlat universiteti bitiruvchisi muvaffaqiyat hikoyasi.";
+    const title = story.title_uz || "Bitiruvchi faoliyati yo‘li";
+    const desc = story.summary_uz || "Qarshi davlat universiteti bitiruvchisi faoliyati yo‘li.";
     let rawImage = (story.hero_image_url || story.hero_image || "/images/qardu-avatar.png").trim();
     rawImage = rawImage.replace(/^https?:\/\/(?:127\.0\.0\.1|localhost|0\.0\.0\.0|backend)(?::\d+)?\/?/i, "/");
     const imageUrl = rawImage.startsWith("http://") || rawImage.startsWith("https://")
@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     };
   } catch {
     return {
-      title: "Muvaffaqiyat hikoyasi — Qarshi davlat universiteti ALUMNI",
+      title: "Bitiruvchi faoliyati yo‘li — Qarshi davlat universiteti ALUMNI",
       openGraph: {
         images: ["https://alumni.qarshidu.uz/brand/Logo.png"],
       },
@@ -177,7 +177,7 @@ export default async function StoryDetailPage({ params }: { params: Promise<{ sl
         <div className={styles.container}>
           <Link href="/stories" className={styles.backLink}>
             <ArrowLeft size={15} />
-            <span>{t.storyBack || "Barcha hikoyalarga qaytish"}</span>
+            <span>{t.storyBack || "Barcha bitiruvchilar faoliyati yo‘liga qaytish"}</span>
           </Link>
         </div>
       </div>
@@ -191,7 +191,7 @@ export default async function StoryDetailPage({ params }: { params: Promise<{ sl
               {/* Category Badge */}
               <div className={styles.categoryBadge}>
                 <BookOpen size={12} color="#1A247E" />
-                <span>{t.storyBadge || "MUVAFFAQIYAT HIKOYASI"}</span>
+                <span>{t.storyBadge || "BITIRUVCHILAR FAOLIYATI YO‘LI"}</span>
               </div>
 
               {/* Main Title */}
@@ -433,10 +433,10 @@ export default async function StoryDetailPage({ params }: { params: Promise<{ sl
           <div className={styles.container}>
             <div className={styles.similarHeader}>
               <h3 className={styles.similarHeading}>
-                {t.storySimilarHeading || "O‘xshash hikoyalar"}
+                {t.storySimilarHeading || "O‘xshash faoliyat yo‘llari"}
               </h3>
               <Link href="/stories" className={styles.similarAllLink}>
-                <span>{t.storyAllStoriesLink || "Barcha hikoyalar"}</span>
+                <span>{t.storyAllStoriesLink || "Barcha bitiruvchilar faoliyati yo‘li"}</span>
                 <ArrowRight size={14} />
               </Link>
             </div>

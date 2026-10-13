@@ -11,7 +11,7 @@ export function YearPicker({ id, value, onChange, placeholder, invalid = false }
   const listId = useId();
   const list = useRef<HTMLDivElement>(null);
   const currentYear = new Date().getFullYear();
-  const years = Array.from({ length: currentYear - 1955 }, (_, i) => String(currentYear - i)).filter((year) => year.includes(query));
+  const years = Array.from({ length: currentYear - 1945 + 1 }, (_, i) => String(currentYear - i)).filter((year) => year.includes(query));
   useEffect(() => {
     if (open) list.current?.children[active]?.scrollIntoView?.({ block: "nearest" });
   }, [active, open]);
@@ -45,7 +45,7 @@ export function YearPicker({ id, value, onChange, placeholder, invalid = false }
           <span>{year}</span>{year === value && <Check size={17} aria-hidden="true" />}
         </div>)}
       </div>
-      {years.length === 0 && <div className="year-picker-empty" role="status">1956–{currentYear}</div>}
+      {years.length === 0 && <div className="year-picker-empty" role="status">1945–{currentYear}</div>}
     </div>}
   </div>;
 }

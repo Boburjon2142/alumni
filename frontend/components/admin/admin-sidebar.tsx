@@ -25,7 +25,7 @@ const navItems = [
   { href: "/admin/alumni", label: "Bitiruvchilar", icon: Users },
   { href: "/admin/news", label: "Yangiliklar", icon: Newspaper },
   { href: "/admin/recognitions", label: "Faxriy unvonlar", icon: Award },
-  { href: "/admin/stories", label: "Muvaffaqiyat hikoyalari", icon: BookOpen },
+  { href: "/admin/stories", label: "Bitiruvchilar faoliyati yo‘li", icon: BookOpen },
   { href: "/admin/interviews", label: "Intervyular", icon: Mic },
   { href: "/admin/advice", label: "Maslahatlar", icon: Lightbulb },
   { href: "/admin/feedback", label: "Murojaatlar qutisi", icon: Inbox },

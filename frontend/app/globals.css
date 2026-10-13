@@ -6664,7 +6664,8 @@ button:disabled { cursor: not-allowed; }
 .hero.hero-v2 .hero-message > p {
   max-width: 660px;
   margin: 0;
-  color: rgba(255, 255, 255, 0.70);
+  color: rgba(248, 249, 252, 0.94);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.22);
   font-size: clamp(16.5px, 1.45vw, 19.5px);
   line-height: 1.6;
   white-space: pre-line;
@@ -11936,6 +11937,23 @@ button.nav-item-link {
 
 .edit-profile-grid .edit-profile-row-2col .edit-profile-field {
   margin-bottom: 0;
+}
+
+.edit-profile-graduation-row .edit-profile-field {
+  min-width: 0;
+}
+
+.edit-profile-graduation-row .edit-profile-label-row {
+  min-height: 24px;
+}
+
+.edit-profile-graduation-row .edit-profile-locked-year-card {
+  flex-wrap: wrap;
+}
+
+.edit-profile-graduation-hint {
+  display: block;
+  margin-bottom: 14px;
 }
 
 @media (max-width: 768px) {
@@ -17636,7 +17654,7 @@ img, video, iframe, canvas {
 .directory .container,
 .news-page .container,
 .about-page .container {
-  width: min(1560px, calc(100% - 48px)) !important;
+  width: min(1560px, calc(100% - var(--content-gutter, 48px))) !important;
   max-width: 1560px !important;
   margin-inline: auto !important;
 }
@@ -17650,4 +17668,76 @@ img, video, iframe, canvas {
 @media (max-width: 680px) {
   .directory-grid .minimal-alumni-card { min-height: 0 !important; }
   .directory-grid .alumni-card-info { padding: 12px !important; }
+}
+
+/* Keep mobile sizing effective after the widescreen container overrides. */
+@media (max-width: 640px) {
+  body { --content-gutter: 32px; }
+}
+
+@media (max-width: 900px) {
+  .site-header { --mobile-header-height: 70px; }
+  .site-header .nav-links.open {
+    top: 100%;
+    max-height: calc(100dvh - var(--mobile-header-height));
+    overscroll-behavior: contain;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-header { --mobile-header-height: 66px; }
+  .terms-dialog,
+  .auth-modal-content {
+    max-height: min(88dvh, calc(100dvh - 24px)) !important;
+  }
+}
+
+/* Dialog headings stay reachable while long forms scroll on short screens. */
+.terms-dialog-heading { flex-shrink: 0; }
+.terms-dialog-body { min-height: 0; min-width: 0; }
+
+@media (max-width: 768px) {
+  .admin-topbar {
+    height: auto !important;
+    min-height: 64px;
+    padding: 12px 16px !important;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .admin-topbar-left {
+    flex: 1 1 240px;
+    min-width: 0;
+  }
+  .admin-topbar-left > div { min-width: 0; }
+  .admin-topbar-title,
+  .admin-topbar-subtitle { overflow-wrap: anywhere; }
+  .admin-topbar-user { max-width: 100%; }
+  .admin-user-pill { min-width: 0; max-width: 100%; }
+  .admin-user-info { min-width: 0; }
+  .admin-user-name { overflow-wrap: anywhere; }
+  .admin-content-area {
+    min-width: 0;
+    padding: 20px 16px !important;
+  }
+  .admin-sidebar { height: 100dvh !important; }
+}
+
+@media (max-width: 480px) {
+  .alumni-anketa-form .input-with-button,
+  .auth-modal-body .input-with-button {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .alumni-anketa-form .input-with-button .form-input,
+  .auth-modal-body .input-with-button .form-input {
+    flex: none;
+    width: 100%;
+  }
+  .alumni-anketa-form .send-code-btn,
+  .auth-modal-body .send-code-btn {
+    width: 100%;
+    white-space: normal;
+    height: auto;
+    padding-block: 10px;
+  }
 }

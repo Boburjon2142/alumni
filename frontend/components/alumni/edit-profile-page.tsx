@@ -36,7 +36,7 @@ import { CustomSelect } from "@/components/ui/custom-select";
 import { LOCATION_OPTIONS } from "@/lib/uzbekistan-locations";
 
 const CURRENT_YEAR = new Date().getFullYear();
-const YEARS = Array.from({ length: CURRENT_YEAR - 1956 + 2 }, (_, i) => CURRENT_YEAR + 1 - i);
+const YEARS = Array.from({ length: CURRENT_YEAR - 1945 + 2 }, (_, i) => CURRENT_YEAR + 1 - i);
 
 const DEGREE_LEVEL_OPTIONS = [
   { value: "master", label: "Magistratura (Magistr)" },
@@ -88,6 +88,7 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [graduationYear, setGraduationYear] = useState<number | null>(null);
+  const [graduationDegree, setGraduationDegree] = useState("bachelor");
   const [isYearLocked, setIsYearLocked] = useState(false);
   const [facultyName, setFacultyName] = useState("");
   const [bio, setBio] = useState("");
@@ -121,6 +122,7 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
         setFullName(data.full_name || "");
         setAvatarPreview(data.avatar || data.image_url || null);
         setGraduationYear(data.graduation_year ?? null);
+        setGraduationDegree(data.graduation_degree || "bachelor");
         setIsYearLocked(Boolean(data.graduation_year));
         setFacultyName(data.faculty_name || data.faculty || "");
         setBio(data.bio || "");
@@ -370,6 +372,7 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
         full_name: fullName.trim(),
         faculty_name: facultyName.trim(),
         bio: bio.trim(),
+        graduation_degree: graduationDegree,
         degree: degreeVal,
         academic_degree: academicDegreeVal,
         academic_title: academicTitleVal,
@@ -568,6 +571,21 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
             </div>
 
             {/* Bitirgan yili */}
+            <div className="edit-profile-row-2col edit-profile-graduation-row">
+            <div className="edit-profile-field">
+              <div className="edit-profile-label-row">
+                <label className="edit-profile-label" id="graduation-degree-label">Bitirgan ta’lim bosqichi</label>
+              </div>
+              <CustomSelect
+                id="graduation_degree"
+                aria-labelledby="graduation-degree-label"
+                value={graduationDegree}
+                onChange={(val) => setGraduationDegree(String(val))}
+                options={DEGREE_LEVEL_OPTIONS}
+                placeholder="Ta’lim bosqichini tanlang"
+                icon={GraduationCap}
+              />
+            </div>
             <div className="edit-profile-field">
               <div className="edit-profile-label-row">
                 <label className="edit-profile-label">Bitirgan yil</label>
@@ -613,6 +631,9 @@ export function EditProfilePage({ locale = "uz" }: { locale?: Locale }) {
                 </div>
               )}
             </div>
+
+            </div>
+            <span className="edit-profile-avatar-hint edit-profile-graduation-hint">Asosiy bitiruv yili faqat bitta ta’lim bosqichiga tegishli.</span>
 
             {/* Fakulteti */}
             <div className="edit-profile-field">

@@ -102,7 +102,7 @@ def test_directory_is_minimal_and_detail_is_public_safe(client, alumni):
     expected_fields = {
         "id", "slug", "avatar", "image_url", "image_alt", "full_name",
         "position", "current_company", "current_activity", "faculty",
-        "specialty", "graduation_year", "is_featured", "is_honorary", "recognitions"
+        "specialty", "graduation_year", "is_featured", "is_honorary", "recognitions", "card_honors"
     }
     assert set(listed) == expected_fields
     detail = client.get(f"/api/v1/alumni/{alumni.slug}/")

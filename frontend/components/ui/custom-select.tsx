@@ -11,6 +11,7 @@ export interface SelectOption {
 }
 
 interface CustomSelectProps {
+  "aria-labelledby"?: string;
   id?: string;
   name?: string;
   value: string | number | null | undefined;
@@ -26,6 +27,7 @@ interface CustomSelectProps {
 }
 
 export function CustomSelect({
+  "aria-labelledby": labelledBy,
   id,
   name,
   value,
@@ -171,6 +173,7 @@ export function CustomSelect({
       <button
         type="button"
         role="combobox"
+        aria-labelledby={labelledBy}
         aria-expanded={isOpen}
         aria-haspopup="listbox"
         aria-controls={id ? `${id}-listbox` : undefined}
