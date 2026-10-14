@@ -4,16 +4,16 @@
 }
 
 .page > .content {
-  width: min(1760px, calc(100% - 64px)) !important;
-  max-width: 1760px !important;
+  width: min(var(--page-content-width), calc(100% - var(--page-content-gutter))) !important;
+  max-width: var(--page-content-width) !important;
 }
 
 .page :global(.page-heading) {
   margin-bottom: 28px;
-  padding: 28px 32px;
-  background: #fff;
-  border: 1px solid #e3e6ef;
-  border-radius: 18px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
 }
 
 .page :global(.page-heading h1) {
@@ -31,17 +31,24 @@
 }
 
 .page :global(.story-grid) {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   margin-top: 0;
   gap: 24px;
 }
 
 .page :global(.story-card) {
+  display: grid;
+  grid-template-columns: minmax(220px, 32%) minmax(0, 1fr);
   min-width: 0;
+  min-height: 0;
   box-shadow: 0 3px 14px rgb(13 22 103 / 4%);
 }
 
 .page :global(.story-card-media) {
-  aspect-ratio: 16 / 9;
+  aspect-ratio: auto;
+  min-height: 260px;
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .page :global(.story-card-image img) {
@@ -49,9 +56,10 @@
 }
 
 .page :global(.story-card-body) {
-  margin: 0;
-  padding: 24px;
-  gap: 12px;
+  margin: 0 !important;
+  min-width: 0;
+  padding: 20px !important;
+  gap: 8px;
 }
 
 .page :global(.story-card-author strong) {
@@ -69,14 +77,18 @@
 
 .page :global(.story-card-title) {
   margin: 0;
-  font-size: 21px;
+  font-size: 19px;
   line-height: 1.4;
   overflow-wrap: anywhere;
 }
 
+.page :global(.story-card-title a:hover) {
+  text-decoration: none;
+}
+
 .page :global(.story-card-excerpt) {
-  font-size: 15px;
-  line-height: 1.7;
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 .page :global(.story-card-action) {
@@ -86,10 +98,16 @@
   justify-content: space-between;
 }
 
+@media (max-width: 1100px) {
+  .page :global(.story-grid) { grid-template-columns: minmax(0, 1fr); }
+}
+
 @media (max-width: 640px) {
+  .page :global(.story-grid) { grid-template-columns: minmax(0, 1fr); }
+  .page :global(.story-card) { grid-template-columns: minmax(0, 1fr); }
+  .page :global(.story-card-media) { aspect-ratio: 16 / 9; min-height: 0; }
   .page { padding: 24px 0 48px; }
   .page > .content { width: calc(100% - 32px) !important; }
-  .page :global(.page-heading) { padding: 22px 20px; }
-  .page :global(.story-card-body) { padding: 20px; }
+  .page :global(.story-card-body) { padding: 20px !important; }
   .page :global(.story-card-title) { font-size: 19px; }
 }

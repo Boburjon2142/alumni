@@ -1,6 +1,7 @@
 import os
 import sys
 import django
+from django.db import transaction
 
 # Setup django environment if executed standalone
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
@@ -268,37 +269,21 @@ OFFICIAL_AWARDS = [
     },
 ]
 
-DEMO_SLUGS_TO_REMOVE = {
-    "faxriy-ustoz",
-    "karyera-koprigi",
-    "faol-bitiruvchi",
-    "universitet-fidoyisi",
-    "innovatsiya-yetakchisi",
-    "tadbirkor-bitiruvchi",
-    "yil-bitiruvchisi",
-}
-
+@transaction.atomic
 def seed_official_awards():
     print("--- QarDU Official Recognition System Seed ---")
     
     # 1. Clean up demo assignments and demo titles that are no longer part of regulation
     # Remove assignments linked to legacy demo titles
-    demo_titles = RecognitionTitle.objects.filter(slug__in=DEMO_SLUGS_TO_REMOVE)
+    official_slugs = {award["slug"] for award in OFFICIAL_AWARDS}
+    demo_titles = RecognitionTitle.objects.exclude(slug__in=official_slugs)
     demo_title_count = demo_titles.count()
     if demo_title_count > 0:
         demo_assignments = AlumniRecognition.objects.filter(title__in=demo_titles)
         demo_assign_count = demo_assignments.count()
         demo_assignments.delete()
         demo_titles.delete()
-        print(f"Removed {demo_title_count} demo titles and {demo_assign_count} unapproved demo assignments.")
-
-    # 2. Also clear placeholder demo assignments on remaining titles (e.g., ilm-fan-fidoyisi) if any
-    # (Per rule: real awards exist, but no fake laureates)
-    demo_remaining_assignments = AlumniRecognition.objects.filter(justification="", approved_by__isnull=True)
-    if demo_remaining_assignments.exists():
-        c = demo_remaining_assignments.count()
-        demo_remaining_assignments.delete()
-        print(f"Removed {c} unapproved demo assignment records.")
+        print(f"Removed {demo_title_count} non-document titles and {demo_assign_count} linked assignments.")
 
     # 3. Create or update official recognition titles (idempotent)
     created_count = 0

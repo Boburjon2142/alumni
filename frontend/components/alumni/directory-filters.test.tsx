@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import { DirectoryFilters } from "./directory-filters";
-import type { Faculty } from "@/types/alumni";
+import type { Faculty, Recognition } from "@/types/alumni";
 
 const replaceMock = vi.fn();
 let mockSearchParams = new URLSearchParams();
@@ -30,6 +30,7 @@ const mockTranslations = {
 
 describe("DirectoryFilters", () => {
   afterEach(() => {
+    vi.useRealTimers();
     cleanup();
     replaceMock.mockClear();
     mockSearchParams = new URLSearchParams();
@@ -49,6 +50,16 @@ describe("DirectoryFilters", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("Barcha sohalar")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Qo‘shimcha filtrlarni ko‘rsatish/i })).toBeInTheDocument();
+  });
+
+  it("selects an honorary title, preserves other filters and resets pagination", () => {
+    mockSearchParams = new URLSearchParams("faculty=Filologiya&page=3");
+    render(<DirectoryFilters faculties={mockFaculties} locale="uz" translations={mockTranslations}
+      recognitions={[{ id: 1, slug: "ilm-fan-fidoyisi", name: "Ilm-fan fidoyisi", icon: "compass" } as Recognition]} />);
+    expect(screen.getByLabelText("Fakultet")).toBeInTheDocument();
+    fireEvent.click(screen.getByLabelText("Faxriy unvon bo‘yicha filtrlash"));
+    fireEvent.click(screen.getByRole("option", { name: "Ilm-fan fidoyisi" }));
+    expect(replaceMock).toHaveBeenCalledWith("/alumni?faculty=Filologiya&recognition=ilm-fan-fidoyisi", { scroll: false });
   });
 
   it("opens industry dropdown and selects an option", () => {

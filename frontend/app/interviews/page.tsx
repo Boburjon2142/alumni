@@ -5,6 +5,7 @@ import { getDictionary, getLocale } from "@/lib/i18n";
 import { InterviewFilters } from "@/components/interviews/interview-filters";
 import { InterviewGrid } from "@/components/interviews/interview-grid";
 import type { Interview, Page } from "@/types/alumni";
+import styles from "./interviews.module.css";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -43,8 +44,8 @@ export default async function InterviewsPage({
   const hasActiveFilters = Boolean(params.search || params.featured);
 
   return (
-    <section className="section interviews-page">
-      <div className="container">
+    <section className={`section interviews-page ${styles.page}`}>
+      <div className={`container ${styles.content}`}>
         {/* Unified Compact Header Row: Title on Left, Search on Right */}
         <div className="interviews-header-row">
           <div className="interviews-header-left">

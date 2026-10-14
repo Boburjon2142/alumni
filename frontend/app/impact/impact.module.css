@@ -10,8 +10,8 @@
 }
 
 .container {
-  width: min(1760px, calc(100% - 64px));
-  max-width: 1760px;
+  width: min(var(--page-content-width), calc(100% - var(--page-content-gutter)));
+  max-width: var(--page-content-width);
   margin: 0 auto;
   padding: 40px 0 0;
 }
@@ -35,6 +35,14 @@
     align-items: center;
     justify-content: space-between;
   }
+}
+
+.headerCard.plainHeader {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .headerLeft {

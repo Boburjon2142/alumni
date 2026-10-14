@@ -1,0 +1,28 @@
+/* Keep clickable controls from selecting text during activation. */
+a[href], button, summary, [role="button"], [role="option"],
+article:has(a[href], button, [role="button"]) {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Preserve editing and copying within controls that contain form fields. */
+input, textarea, [contenteditable="true"] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* The story/news title link also activates the surrounding card content. */
+.story-card, .news-card { position: relative; }
+.story-card-body, .news-card-body,
+.story-card-title, .news-card-title { position: static; }
+.card-primary-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.story-card-media, .news-card-media,
+.story-card-action, .news-card-action {
+  position: relative;
+  z-index: 2;
+}

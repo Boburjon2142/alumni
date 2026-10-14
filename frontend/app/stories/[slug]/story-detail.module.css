@@ -4,6 +4,8 @@
    ========================================================================== */
 
 .page {
+  -webkit-user-select: text;
+  user-select: text;
   background-color: #f8f9fc;
   min-height: 100vh;
   color: #182037;
@@ -12,11 +14,12 @@
 }
 
 .container {
-  max-width: 1240px;
+  width: min(var(--page-content-width), calc(100% - var(--page-content-gutter)));
+  max-width: var(--page-content-width);
   margin-left: auto;
   margin-right: auto;
-  padding-left: 24px;
-  padding-right: 24px;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 /* 1. Back Navigation */
@@ -50,12 +53,13 @@
 
 .heroGrid {
   display: grid;
-  grid-template-columns: 58% 42%;
-  gap: 48px;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 40px;
   align-items: center;
 }
 
 .heroLeft {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -85,7 +89,8 @@
   color: #1a247e;
   letter-spacing: -0.025em;
   margin: 0 0 18px;
-  max-width: 720px;
+  max-width: 960px;
+  overflow-wrap: anywhere;
 }
 
 .heroIntro {
@@ -93,13 +98,13 @@
   line-height: 1.6;
   color: #667085;
   margin: 0 0 28px;
-  max-width: 680px;
+  max-width: 900px;
   font-weight: 400;
 }
 
 .quickFactsGrid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
   padding: 16px 20px;
   background-color: #f8f9fc;
@@ -127,9 +132,9 @@
   font-size: 13.5px;
   font-weight: 700;
   color: #182037;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
 }
 
 .heroActions {
@@ -185,6 +190,7 @@
 }
 
 .heroRight {
+  min-width: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -194,7 +200,7 @@
 .portraitWrapper {
   position: relative;
   width: 100%;
-  max-width: 440px;
+  max-width: 520px;
 }
 
 .portraitMedia {
@@ -268,7 +274,7 @@
   line-height: 1.65;
   color: #182037;
   margin: 0 0 18px;
-  max-width: 820px;
+  max-width: 1100px;
 }
 
 .topicsList {
@@ -294,8 +300,8 @@
 
 .mainGrid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
-  gap: 56px;
+  grid-template-columns: minmax(0, 1fr) minmax(620px, .9fr);
+  gap: 40px;
   align-items: start;
 }
 
@@ -303,7 +309,8 @@
   display: flex;
   flex-direction: column;
   gap: 48px;
-  max-width: 740px;
+  min-width: 0;
+  max-width: 1100px;
 }
 
 .storySection {
@@ -341,6 +348,7 @@
 }
 
 .sectionBody {
+  overflow-wrap: anywhere;
   font-size: 17.5px;
   line-height: 1.8;
   color: #182037;
@@ -497,11 +505,28 @@
 
 /* 8. Right Rail */
 .rightRail {
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  align-items: start;
   position: sticky;
   top: 96px;
+}
+
+.milestonesColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+.railCardTitle, .timelineTitle, .adviceRailTitle {
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1200px) {
+  .mainGrid { grid-template-columns: minmax(0, 1fr); }
+  .rightRail { position: static; }
 }
 
 .railCard {
@@ -814,6 +839,11 @@
 }
 
 @media (max-width: 640px) {
+  .rightRail { grid-template-columns: minmax(0, 1fr); }
+  .container { width: calc(100% - 32px); }
+  .similarHeader { flex-wrap: wrap; gap: 14px; }
+  .profileCtaLeft { min-width: 0; }
+  .profileCtaTitle { overflow-wrap: anywhere; }
   .heroSection {
     padding: 36px 0 44px;
   }

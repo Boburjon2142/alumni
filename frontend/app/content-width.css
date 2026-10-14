@@ -1,0 +1,19 @@
+:root {
+  --page-content-width: 1760px;
+  --page-content-gutter: 64px;
+}
+
+body .container.container:not(header .container):not(footer .container),
+body .about-container.about-container,
+body .feedback-split-container.feedback-split-container,
+body .editorial-container.editorial-container,
+body .profile-wide-container.profile-wide-container,
+body .profile-edit-wide-container.profile-edit-wide-container {
+  width: min(var(--page-content-width), calc(100% - var(--page-content-gutter))) !important;
+  max-width: var(--page-content-width) !important;
+  margin-inline: auto;
+}
+
+@media (max-width: 640px) {
+  :root { --page-content-gutter: 32px; }
+}

@@ -1,4 +1,23 @@
-import type { Alumni } from "@/types/alumni";
+import type { Alumni, Recognition } from "@/types/alumni";
+
+export function sortRecognitions(honors: Recognition[]): Recognition[] {
+  const dateValue = (honor: Recognition) => {
+    const value = Date.parse(honor.awarded_at || (honor.year ? `${honor.year}-01-01` : ""));
+    return Number.isNaN(value) ? 0 : value;
+  };
+  return [...honors].filter(h => h.is_active !== false && (!h.status || h.status === "approved"))
+    .sort((a, b) => dateValue(b) - dateValue(a) || (b.assignment_id ?? b.id) - (a.assignment_id ?? a.id));
+}
+
+export function getCardRecognitions(alumni: Alumni): Recognition[] {
+  const honors = sortRecognitions(alumni.recognitions ?? alumni.card_honors ?? []);
+  if (alumni.card_honors !== undefined) {
+    const latest = sortRecognitions(alumni.card_honors)[0];
+    if (!latest) return [];
+    return [latest, ...honors.filter(h => h.slug !== latest.slug)];
+  }
+  return honors;
+}
 
 /** Original recognition artwork, indexed by the existing recognition title slug. */
 export const recognitionAssets: Readonly<Record<string, string>> = {
@@ -14,8 +33,7 @@ export const recognitionAssets: Readonly<Record<string, string>> = {
 };
 
 export function getAlumniAwards(alumni: Alumni): string[] {
-  const confirmed = (alumni.recognitions ?? alumni.card_honors ?? [])
-    .filter(honor => honor.is_active !== false && (!honor.status || honor.status === "approved"))
+  const confirmed = getCardRecognitions(alumni)
     .flatMap(honor => recognitionAssets[honor.slug] ? [recognitionAssets[honor.slug].split("/").pop()!] : []);
   return [...new Set(confirmed)].slice(0, 5);
 }

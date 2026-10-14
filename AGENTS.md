@@ -9,6 +9,8 @@ Foydalanuvchi hozirgacha yaratilgan dizayn va ko‘rinishlarni saqlashni buyurga
 
 ### Himoyalangan amaldagi holat
 
+- 2026-10-14 kuni foydalanuvchi `/interviews` kengligini barcha ommaviy sahifalarning asosiy kontenti uchun standart sifatida belgiladi: maksimal 1760px, desktopda jami 64px chet masofa, 640px va kichik ekranlarda jami 32px chet masofa. `frontend/app/content-width.css` dagi `--page-content-width` va `--page-content-gutter` shu standartning yagona manbai. Keyingi topshiriqlarda ushbu kenglik foydalanuvchining aniq ruxsatisiz o'zgartirilmasin. Navbar, footer va ichki forma/modal kengliklari alohida saqlanadi.
+
 - 2026-10-10 kuni foydalanuvchi tasdiqlagan hozirgi dizayn, jumladan `/groups/[year]` va `/alumni` sahifalaridagi kengaytirilgan kontent va kartalar panjarasi, saqlanishi shart bo‘lgan amaldagi holatdir.
 - Bu qoida keyingi suhbatlar, yangi agentlar va barcha kelajakdagi topshiriqlarda ham amal qiladi. Foydalanuvchi «dizaynni o‘zgartir» deb aniq topshiriq bermaguncha tashqi ko‘rinishga o‘zgarish kiritilmasin.
 - «Tahlil qil», «lokalda ishga tushir», «xatoni tuzat», «testlarni o‘tkaz», «build qil» yoki «deploy qil» kabi topshiriqlar dizaynni o‘zgartirishga ruxsat emas.

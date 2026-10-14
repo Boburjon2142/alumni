@@ -150,12 +150,12 @@ describe("Impact & Recognition Module", () => {
       <ImpactFilters
         t={mockT}
         category=""
-        faculty=""
+        industry=""
         year=""
         search=""
-        faculties={[{ id: 1, name: "Fizika-matematika" }]}
+        industries={["Oliy ta’lim va ilm-fan"]}
         onCategoryChange={handleCategory}
-        onFacultyChange={handleFaculty}
+        onIndustryChange={handleFaculty}
         onYearChange={handleYear}
         onSearchChange={handleSearch}
       />

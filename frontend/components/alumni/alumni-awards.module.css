@@ -1,5 +1,11 @@
 .awards { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0 10px; min-width: 0; }
-.award { display: block; width: 40px; height: 40px; flex: none; object-fit: contain; }
+.award { display: block; width: 40px; height: 40px; flex: none; object-fit: contain; border-radius: 8px; }
+.target { position: relative; z-index: 2; display: block; flex: none; border-radius: 8px; }
+.symbol { display: grid; place-items: center; color: var(--primary); }
+.target:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+.target:hover, .target:focus-visible { z-index: 3; }
+.tooltip { position: absolute; top: calc(100% + 6px); left: 0; width: max-content; max-width: 190px; padding: 6px 9px; border-radius: 6px; background: var(--primary); color: var(--surface); font-size: 12px; line-height: 1.4; pointer-events: none; visibility: hidden; opacity: 0; }
+.target:hover .tooltip, .target:focus-visible .tooltip { visibility: visible; opacity: 1; }
 @media (max-width: 1199px) {
   .awards { gap: 7px; }
   .award { width: 36px; height: 36px; }

@@ -58,6 +58,20 @@ class AlumniListView(generics.ListAPIView):
 
     def get_queryset(self):
         qs = visible_profiles(self.request)
+        if self.request.query_params.get("recognized") == "true":
+            qs = qs.filter(recognitions__status="approved", recognitions__is_active=True,
+                           recognitions__title__is_active=True)
+            category = self.request.query_params.get("category")
+            category_slugs = {
+                "career": ["yuksak-parvoz", "istiqbol-yoshlari", "kelajakka-koprik"],
+                "mentorship": ["ziyo-mashali", "ibrat", "yolchiroq"],
+                "university": ["qardu-iftixori", "ilm-fan-fidoyisi", "oliyhimmat", "istedodlar-tayanchi", "marifat-hadyasi"],
+                "community": ["ezgulik", "ona-dargoh-qadrdoni", "qardu-elchisi", "kumush-bitiruvchi", "oltin-bitiruvchi", "qardu-sulolasi"],
+            }
+            if category in category_slugs:
+                qs = qs.filter(recognitions__title__slug__in=category_slugs[category],
+                               recognitions__status="approved", recognitions__is_active=True,
+                               recognitions__title__is_active=True)
         search = self.request.query_params.get("search", "").strip()
         if len(search) > 100:
             raise ValidationError({"search": "Qidiruv matni 100 belgidan oshmasligi kerak."})

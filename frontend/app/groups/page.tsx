@@ -7,6 +7,7 @@ import { GroupsFilter } from "@/components/groups/groups-filter";
 import { AlumniCardGrid } from "@/components/alumni/alumni-card-grid";
 import { Button } from "@/components/ui/button";
 import type { Alumni, GraduationGroup } from "@/types/alumni";
+import styles from "./groups.module.css";
 
 export const metadata = {
   title: "Bitiruvchilar guruhlari — Qarshi davlat universiteti",
@@ -51,7 +52,7 @@ export default async function GroupsPage({
 
   return (
     <section className="section groups-page-section">
-      <div className="container">
+      <div className={`container ${styles.content}`}>
         <div className="page-heading">
           <span className="eyebrow gold">{t.brand}</span>
           <h1>{t.groupsTitle}</h1>
@@ -73,7 +74,7 @@ export default async function GroupsPage({
               <div className="result-count groups-result-count">
                 <strong>{totalCount}</strong> {locale === "en" ? "alumni found" : locale === "ru" ? "выпускников найдено" : "nafar bitiruvchi topildi"}
               </div>
-              <AlumniCardGrid alumni={alumniList} locale={locale} />
+              <AlumniCardGrid alumni={alumniList} locale={locale} fullWidth />
             </>
           ) : (
             <div className="empty-state">

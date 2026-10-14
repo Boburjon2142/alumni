@@ -352,6 +352,7 @@ export default async function StoryDetailPage({ params }: { params: Promise<{ sl
 
             {/* Right Rail Column (320px sticky) */}
             <aside className={styles.rightRail}>
+              <div className={styles.milestonesColumn}>
               {/* Timeline (Muhim bosqichlar) */}
               {timelineItems.length > 0 && (
                 <div className={styles.railCard}>
@@ -403,7 +404,8 @@ export default async function StoryDetailPage({ params }: { params: Promise<{ sl
                 </div>
               )}
 
-              {/* Youth Advice (Yoshlar uchun maslahat - Vertikal ketma-ketlik) */}
+              </div>
+              {/* Youth Advice alongside the milestones column. */}
               <div className={styles.adviceRailCard}>
                 <div className={styles.railCardHeader}>
                   <Lightbulb size={18} color="#D38E4F" />

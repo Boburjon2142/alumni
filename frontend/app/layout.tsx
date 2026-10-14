@@ -4,6 +4,8 @@ import { Footer } from "@/components/layout/footer";
 import { BackToTop } from "@/components/ui/back-to-top";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import "./globals.css";
+import "./interactive-controls.css";
+import "./content-width.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://alumni.qarshidu.uz"),

@@ -7,13 +7,15 @@ import { ChevronRight, ShieldCheck, Briefcase, Users, Building2, Sparkles } from
 import type { Dictionary } from "@/lib/i18n";
 import type { ImpactRankingEntry } from "@/types/alumni";
 import styles from "@/app/impact/impact.module.css";
+import { getRecognitionTitle, type Locale } from "@/lib/i18n";
 
 interface ImpactRankingTableProps {
   t: Dictionary;
   entries: ImpactRankingEntry[];
+  locale?: Locale;
 }
 
-export function ImpactRankingTable({ t, entries }: ImpactRankingTableProps) {
+export function ImpactRankingTable({ t, entries, locale = "uz" }: ImpactRankingTableProps) {
   const categoryIcons: Record<string, any> = {
     career: Briefcase,
     mentorship: Users,
@@ -63,7 +65,8 @@ export function ImpactRankingTable({ t, entries }: ImpactRankingTableProps) {
             {entries.map((entry) => {
               const avatarUrl = entry.alumni.avatar || entry.alumni.image_url;
               const DominantIcon = categoryIcons[entry.top_category] || ShieldCheck;
-              const dominantLabel = categoryLabels[entry.top_category] || entry.top_category;
+              const latestHonor = entry.recognitions?.[0];
+              const dominantLabel = latestHonor ? getRecognitionTitle(latestHonor.slug, locale, latestHonor.name) : categoryLabels[entry.top_category] || entry.top_category;
 
               return (
                 <tr key={entry.alumni.id}>

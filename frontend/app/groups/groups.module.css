@@ -1,0 +1,4 @@
+.content.content {
+  width: min(var(--page-content-width), calc(100% - var(--page-content-gutter))) !important;
+  max-width: var(--page-content-width) !important;
+}

@@ -4,6 +4,8 @@ venv
 .env.*
 db.sqlite3*
 media
+!public_snapshot/media/
+!public_snapshot/media/**
 static
 __pycache__
 **/__pycache__

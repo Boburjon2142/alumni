@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { FileText, PlusCircle, ShieldCheck } from "lucide-react";
+import { FileText, PlusCircle, ShieldCheck, Users } from "lucide-react";
+import Link from "next/link";
 import type { Dictionary, Locale } from "@/lib/i18n";
 import { AuthModal } from "@/components/auth/auth-modal";
 import styles from "@/app/impact/impact.module.css";
@@ -20,7 +21,7 @@ export function ImpactHeader({
   onOpenSubmitModal,
 }: ImpactHeaderProps) {
   return (
-    <div className={styles.headerCard}>
+    <div className={`${styles.headerCard} ${styles.plainHeader}`}>
       <div className={styles.headerLeft}>
         <div className={styles.headerBadge}>
           <ShieldCheck size={14} color="#D38E4F" />
@@ -67,6 +68,10 @@ export function ImpactHeader({
           <FileText size={15} color="#667085" />
           <span>{t.impactRegulationBtn || "Nizom bilan tanishish"}</span>
         </a>
+        <Link href="/impact/recognized" className={styles.secondaryBtn}>
+          <Users size={16} />
+          <span>{t.impactFullList}</span>
+        </Link>
       </div>
     </div>
   );

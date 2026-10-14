@@ -427,6 +427,7 @@ export type ImpactContribution = {
 };
 
 export type ImpactRankingEntry = {
+  recognitions?: Recognition[];
   rank: number;
   alumni: {
     id: number;

@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Search, ChevronDown, Check } from "lucide-react";
 import type { Dictionary } from "@/lib/i18n";
-import type { Faculty } from "@/types/alumni";
+import { DEFAULT_INDUSTRIES } from "@/components/alumni/industry-combobox";
 import styles from "@/app/impact/impact.module.css";
 
 interface CustomDropdownProps {
@@ -94,13 +94,13 @@ interface ImpactFiltersProps {
   t: Dictionary;
   period?: "year" | "lifetime";
   category: string;
-  faculty: string;
+  industry: string;
   year: string;
   search: string;
-  faculties: Faculty[];
+  industries?: string[];
   onPeriodChange?: (period: "year" | "lifetime") => void;
   onCategoryChange: (category: string) => void;
-  onFacultyChange: (faculty: string) => void;
+  onIndustryChange: (industry: string) => void;
   onYearChange: (year: string) => void;
   onSearchChange: (search: string) => void;
 }
@@ -108,12 +108,12 @@ interface ImpactFiltersProps {
 export function ImpactFilters({
   t,
   category,
-  faculty,
+  industry,
   year,
   search,
-  faculties,
+  industries = DEFAULT_INDUSTRIES,
   onCategoryChange,
-  onFacultyChange,
+  onIndustryChange,
   onYearChange,
   onSearchChange,
 }: ImpactFiltersProps) {
@@ -129,9 +129,9 @@ export function ImpactFilters({
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: currentYear - 1979 }, (_, i) => currentYear - i);
 
-  const facultyOptions = faculties.map((f) => ({
-    value: f.name,
-    label: f.name,
+  const industryOptions = industries.map((industry) => ({
+    value: industry,
+    label: industry,
   }));
 
   const yearOptions = years.map((y) => ({
@@ -158,10 +158,10 @@ export function ImpactFilters({
         {/* Custom Dropdown Selects */}
         <div className={styles.dropdownGroup}>
           <CustomDropdown
-            value={faculty}
-            options={facultyOptions}
-            placeholder={t.impactFilterFaculty}
-            onChange={onFacultyChange}
+            value={industry}
+            options={industryOptions}
+            placeholder={t.allIndustries}
+            onChange={onIndustryChange}
           />
 
           <CustomDropdown

@@ -7,6 +7,8 @@ import type { Faculty, Recognition } from "@/types/alumni";
 import type { Locale } from "@/lib/i18n";
 import { IndustryCombobox } from "./industry-combobox";
 import { ActiveFilterChips } from "./active-filter-chips";
+import { RecognitionCombobox } from "./recognition-combobox";
+import styles from "./directory-filters.module.css";
 
 interface DirectoryFiltersProps {
   faculties: Faculty[];
@@ -39,6 +41,10 @@ export function DirectoryFilters({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+  useEffect(() => () => {
+    if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
+  }, []);
 
   const currentSearch = searchParams.get("search") || "";
   const currentIndustry = searchParams.get("industry") || "";
@@ -91,6 +97,7 @@ export function DirectoryFilters({
       newGradYear: string,
       newRecognition: string = recognitionValue
     ) => {
+      if (debounceTimerRef.current) clearTimeout(debounceTimerRef.current);
       const params = new URLSearchParams(searchParams.toString());
 
       // Reset page to 1 on any filter change
@@ -135,8 +142,6 @@ export function DirectoryFilters({
     },
     [pathname, recognitionValue, router, searchParams]
   );
-
-  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -234,13 +239,22 @@ export function DirectoryFilters({
 
         {/* 2. Industry Single-Select Combobox */}
         <div className="directory-recognition-wrapper">
-          <IndustryCombobox
+          {recognitions.length > 0 ? <RecognitionCombobox
+            recognitions={recognitions}
+            value={recognitionValue}
+            onChange={slug => {
+              setRecognitionValue(slug);
+              pushFilters(searchValue, industryValue, facultyValue, gradYearValue, slug);
+            }}
+            locale={locale}
+            allLabel={t.allRecognitions}
+          /> : <IndustryCombobox
             industries={industries}
             value={industryValue}
             onChange={handleIndustryChange}
             locale={locale}
             allLabel={t.allIndustries || "Barcha sohalar"}
-          />
+          />}
         </div>
 
         {/* 3. Advanced Filters Toggle Button */}
@@ -251,6 +265,7 @@ export function DirectoryFilters({
           }`}
           onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
           aria-expanded={isAdvancedOpen}
+          aria-controls="directory-advanced-filters"
           aria-label="Qo‘shimcha filtrlarni ko‘rsatish"
         >
           <SlidersHorizontal className="filter-icon" size={17} aria-hidden="true" />
@@ -263,8 +278,12 @@ export function DirectoryFilters({
 
       {/* Expandable Advanced Filters Panel (Faculty & Year) */}
       {isAdvancedOpen && (
-        <div className="directory-advanced-panel animate-fade-in">
-          <div className="filter-grid">
+        <div id="directory-advanced-filters" className="directory-advanced-panel animate-fade-in">
+          <div className={styles.grid}>
+            {recognitions.length > 0 && <div className="filter-field">
+              <IndustryCombobox industries={industries} value={industryValue} onChange={handleIndustryChange}
+                locale={locale} allLabel={t.allIndustries || "Barcha sohalar"} />
+            </div>}
             <div className="filter-field">
               <label htmlFor="filter-faculty">{t.faculty}</label>
               <div className="select-wrapper">

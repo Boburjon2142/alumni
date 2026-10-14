@@ -7,6 +7,7 @@ import type { Dictionary, Locale } from "@/lib/i18n";
 import type { ImpactCategory, ImpactContributionPayload } from "@/types/alumni";
 import { submitContribution } from "@/lib/api";
 import { AuthModal } from "@/components/auth/auth-modal";
+import styles from "./impact-submit-modal.module.css";
 
 interface ImpactSubmitModalProps {
   isOpen: boolean;
@@ -103,11 +104,11 @@ export function ImpactSubmitModal({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200">
-      <div className="relative w-full max-w-lg rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+    <div className={styles.overlay}>
+      <div className={styles.dialog} role="dialog" aria-modal="true" aria-label={t.impactSubmitModalTitle}>
         {/* Header */}
-        <div className="px-6 py-5 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50/50 dark:bg-slate-900/50">
-          <div className="flex items-center gap-2">
+        <div className={styles.header}>
+          <div className={styles.heading}>
             <div className="w-8 h-8 rounded-lg bg-[#0D1667] text-white flex items-center justify-center">
               <Sparkles className="w-4 h-4 text-[#D38E4F]" />
             </div>
@@ -121,15 +122,17 @@ export function ImpactSubmitModal({
             </div>
           </div>
           <button
+            type="button"
+            aria-label={locale === "ru" ? "Закрыть" : locale === "en" ? "Close" : "Yopish"}
             onClick={onClose}
-            className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className={styles.close}
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 overflow-y-auto space-y-4">
+        <div className={`${styles.body} space-y-4`}>
           {!isAuthenticated ? (
             <div className="py-8 px-4 text-center space-y-4">
               <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 text-[#0D1667] dark:text-indigo-300 flex items-center justify-center mx-auto border border-indigo-100 dark:border-indigo-900/50">

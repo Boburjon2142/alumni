@@ -1,5 +1,27 @@
 # Serverni yangilash
 
+## 2026-10-14: GitHubdagi dizayn va lokal bitiruvchi snapshoti
+
+`backend/public_snapshot/data.json` 12 ta faxriy bitiruvchining public profil ma'lumotlari, tasdiqlangan unvonlari, ta'lim/ish tarixi, faoliyat yo'llari, maslahatlari va intervyularini saqlaydi. `backend/public_snapshot/media/` faqat shu public profillarning rasmlarini saqlaydi. Panjiyev intervyusi unpublished holatda import qilinadi. Lokal namuna uchun qo'shilgan unvonlar `justification` maydonida `LOKAL NAMUNA` sifatida belgilangan; snapshot aynan foydalanuvchi so'ragan lokal ko'rinishni ko'chiradi, bu haqiqiy taqdirlash dalili emas.
+
+Git push server bazasini avtomatik yangilamaydi. Serverda joriy baza va mediani zaxiralab, kod/image yangilangandan keyin:
+
+```bash
+cd /var/www/alumni
+git pull --ff-only origin main
+docker compose build backend frontend
+docker compose run --rm --no-deps backend python manage.py migrate --noinput
+# Avval tekshirish: bazaga yozilmaydi, media ko'chirilmaydi.
+docker compose run --rm --no-deps backend python manage.py sync_public_snapshot
+# Zaxira olingandan so'ng lokal public snapshotni qo'llash.
+docker compose run --rm --no-deps backend python manage.py sync_public_snapshot --apply
+docker compose up -d backend frontend
+```
+
+Import slug orqali moslashtiriladi, qayta bajarilganda profil/unvonlar takrorlanmaydi. Mavjud akkaunt, parol, kontakt va staff bog'lanishlari saqlanadi; lokal foydalanuvchi hisoblari ko'chirilmaydi. Snapshotga kirmagan profillar va ularning ma'lumotlari o'chirilmaydi. Rasmiy ro'yxatdan tashqaridagi unvonlar faol holatdan chiqariladi. Snapshotdagi public maydonlar va shu nomdagi rasm fayllari serverdagi mos yozuvlarni yangilaydi, shuning uchun baza hamda media zaxirasi kerak. Qo'llangan migratsiyalar va ma'lumotlarni tekshirish server muhitida bajariladi; ushbu repo yangilanishida productionga ulanilmadi.
+
+Lokal eksportni qayta yaratish: `backend` katalogida `venv/Scripts/python.exe manage.py sync_public_snapshot --export`. `.env`, SQLite bazasi, email/telefonlar va foydalanuvchi credentiallari eksportga kirmaydi.
+
 Server: `213.230.96.104:24050`, mavjud loyiha: `/var/www/alumni`.
 SSH foydalanuvchisi: `root`; SSH porti: `24050`.
 Avtomatik SSH ulanishi `Permission denied (publickey,password)` bilan rad etildi; parolni o?z terminalingizda kiriting.

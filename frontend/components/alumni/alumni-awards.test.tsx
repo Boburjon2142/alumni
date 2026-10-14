@@ -31,3 +31,12 @@ it("does not invent awards and excludes revoked or inactive assignments", () => 
   ] } as Alumni;
   expect(getAlumniAwards(alumni)).toEqual([files[0]]);
 });
+
+it.each([2, 3, 4, 5, 6])("shows up to five of %i assigned titles in their supplied order", count => {
+  const slugs = ["qardu-iftixori", "ilm-fan-fidoyisi", "ziyo-mashali", "yuksak-parvoz", "ibrat", "ezgulik"];
+  const honors = slugs.slice(0, count).map((slug, index) => ({ id: index + 1, slug, name: slug, icon: "award" }));
+  render(<AlumniAwards awards={[]} honors={honors} locale="uz" />);
+  expect(screen.getAllByRole("link")).toHaveLength(Math.min(count, 5));
+  expect(screen.getAllByRole("img")[0]).toHaveAttribute("src", "/recognitions/01-qardu-iftixori.png");
+  screen.getAllByRole("link").forEach(link => expect(link).toHaveAttribute("href", "/impact"));
+});

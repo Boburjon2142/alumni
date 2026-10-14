@@ -27,7 +27,7 @@ describe("AlumniCardGrid", () => {
     expect(screen.getByText("Professional activity")).toBeInTheDocument();
     expect(screen.getByText("Mathematics")).toBeInTheDocument();
     expect(container.querySelector('a [tabindex], a button, a a')).toBeNull();
-    const badge = screen.getByRole("link", { name: "Assigned Honor" });
+    const badge = cards[0].querySelector('[tabindex="0"]')!;
     expect(badge).toHaveAttribute("href", "/impact");
     fireEvent.mouseEnter(badge);
     expect(document.getElementById(badge.getAttribute("aria-describedby")!)).toHaveAttribute("data-open", "true");
@@ -63,9 +63,16 @@ describe("AlumniCardGrid", () => {
       { id: 20, slug: "revoked", name: "Revoked Award", icon: "medal", awarded_at: "2026-06-01", status: "revoked" },
     ] as Recognition[];
     render(<AlumniCardGrid horizontal alumni={[{ ...summary, recognitions: honors }]} locale="uz" />);
-    expect(screen.getByLabelText("Latest Award")).toBeInTheDocument();
-    expect(screen.queryByLabelText("Older Award")).not.toBeInTheDocument();
+    expect(screen.getAllByLabelText("Latest Award")).toHaveLength(2);
+    expect(screen.getAllByLabelText("Older Award")).toHaveLength(1);
     expect(screen.queryByLabelText("Revoked Award")).not.toBeInTheDocument();
+  });
+  it("matches the portrait honor to the leftmost award and uses the server selection", () => {
+    const older = { id: 1, slug: "ilm-fan-fidoyisi", name: "Ilm-fan fidoyisi", icon: "compass", awarded_at: "2024-01-01" } as Recognition;
+    const latest = { id: 2, slug: "qardu-elchisi", name: "QarDU elchisi", icon: "globe", awarded_at: "2025-01-01" } as Recognition;
+    const { container } = render(<AlumniCardGrid horizontal alumni={[{ ...summary, recognitions: [older, latest], card_honors: [latest], awards: ["02-ilm-fan-fidoyisi.png"] }]} locale="uz" />);
+    const links = container.querySelectorAll('a[href="/impact"]');
+    expect([...links].map(link => link.getAttribute("aria-label"))).toEqual(["QarDU elchisi", "QarDU elchisi", "Ilm-fan fidoyisi"]);
   });
   it("replaces failed image candidates with an initials fallback", () => {
     const { container } = render(<AlumniCardGrid alumni={[summary]} locale="uz" />);

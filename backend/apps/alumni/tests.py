@@ -794,12 +794,20 @@ def test_alumni_education_experiences(client, alumni):
 
 @pytest.mark.django_db
 def test_official_recognition_catalog_integrity(client):
-    from seed_official_awards import seed_official_awards
-    from apps.alumni.models import RecognitionTitle
+    from seed_official_awards import OFFICIAL_AWARDS, seed_official_awards
+    from apps.alumni.models import RecognitionTitle, AlumniRecognition
+
+    extra = RecognitionTitle.objects.create(name="Ro'yxatdan tashqari", slug="extra-title")
+    official = RecognitionTitle.objects.create(name="Ilm-fan fidoyisi", slug="ilm-fan-fidoyisi")
+    profile = AlumniProfile.objects.create(full_name="Catalog test", slug="catalog-test")
+    kept = AlumniRecognition.objects.create(alumnus=profile, title=official)
+    AlumniRecognition.objects.create(alumnus=profile, title=extra)
 
     seed_official_awards()
     titles = RecognitionTitle.objects.all()
-    assert titles.count() >= 17
+    assert set(titles.values_list("slug", flat=True)) == {award["slug"] for award in OFFICIAL_AWARDS}
+    assert AlumniRecognition.objects.filter(pk=kept.pk).exists()
+    assert not AlumniRecognition.objects.filter(title_id=extra.pk).exists()
 
     supreme = titles.get(slug="qardu-iftixori")
     assert supreme.category == RecognitionTitle.Category.SUPREME_HONOR

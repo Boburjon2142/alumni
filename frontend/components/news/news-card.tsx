@@ -71,7 +71,7 @@ export function NewsCard({ news, locale, t }: { news: NewsItem; locale: Locale; 
           )}
         </div>
         <h3 className="news-card-title">
-          <Link href={`/news/${news.slug}`}>{title}</Link>
+          <Link href={`/news/${news.slug}`} className="card-primary-link">{title}</Link>
         </h3>
         {summary && <p className="news-card-excerpt">{summary}</p>}
         <Link href={`/news/${news.slug}`} className="news-card-action">

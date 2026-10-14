@@ -18,7 +18,7 @@ with tarfile.open(archive, "w:gz") as tar:
         path = Path(name)
         if not name or (path.parts[0] not in allowed_roots and name not in allowed_files):
             continue
-        if any(part in excluded_parts for part in path.parts):
+        if any(part in excluded_parts and not (part == "media" and path.parts[:2] == ("backend", "public_snapshot")) for part in path.parts):
             continue
         if path.name.startswith(".env") or path.suffix in {".log", ".sqlite3", ".pyc", ".tsbuildinfo"}:
             continue

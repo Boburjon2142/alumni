@@ -41,6 +41,7 @@ class ImpactRankingView(APIView):
         period = request.query_params.get("period", "year")
         category_filter = request.query_params.get("category", "all")
         faculty_id = request.query_params.get("faculty")
+        industry = request.query_params.get("industry", "").strip()
         graduation_year = request.query_params.get("graduation_year")
         search = request.query_params.get("search", "").strip()
 
@@ -54,6 +55,8 @@ class ImpactRankingView(APIView):
 
         # Base alumni queryset
         alumni_qs = AlumniProfile.objects.filter(is_published=True).select_related("faculty", "specialty")
+        if industry:
+            alumni_qs = alumni_qs.filter(industry__iexact=industry)
 
         if faculty_id and faculty_id.isdigit():
             alumni_qs = alumni_qs.filter(faculty_id=int(faculty_id))

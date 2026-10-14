@@ -14,24 +14,7 @@
     "graduation_year": 1979,
     "is_featured": true,
     "is_honorary": true,
-    "recognitions": [
-      {
-        "id": 1,
-        "name": "Faxriy ustoz",
-        "slug": "faxriy-ustoz",
-        "icon": "graduation-cap",
-        "description": "Ta’lim va murabbiylik sohasida yuksak natijalarga erishgan bitiruvchilar",
-        "year": 2024
-      },
-      {
-        "id": 4,
-        "name": "Universitet fidoyisi",
-        "slug": "universitet-fidoyisi",
-        "icon": "users",
-        "description": "Universitet nufuzi va taraqqiyotiga ulkan hissa qo‘shgan bitiruvchilar",
-        "year": 2024
-      }
-    ]
+    "recognitions": []
   },
   {
     "id": 35,
@@ -48,24 +31,7 @@
     "graduation_year": 1982,
     "is_featured": true,
     "is_honorary": true,
-    "recognitions": [
-      {
-        "id": 1,
-        "name": "Faxriy ustoz",
-        "slug": "faxriy-ustoz",
-        "icon": "graduation-cap",
-        "description": "Ta’lim va murabbiylik sohasida yuksak natijalarga erishgan bitiruvchilar",
-        "year": 2024
-      },
-      {
-        "id": 4,
-        "name": "Universitet fidoyisi",
-        "slug": "universitet-fidoyisi",
-        "icon": "users",
-        "description": "Universitet nufuzi va taraqqiyotiga ulkan hissa qo‘shgan bitiruvchilar",
-        "year": 2024
-      }
-    ]
+    "recognitions": []
   },
   {
     "id": 25,
@@ -83,22 +49,6 @@
     "is_featured": true,
     "is_honorary": true,
     "recognitions": [
-      {
-        "id": 1,
-        "name": "Faxriy ustoz",
-        "slug": "faxriy-ustoz",
-        "icon": "graduation-cap",
-        "description": "Ta’lim va murabbiylik sohasida yuksak natijalarga erishgan bitiruvchilar",
-        "year": 2024
-      },
-      {
-        "id": 4,
-        "name": "Universitet fidoyisi",
-        "slug": "universitet-fidoyisi",
-        "icon": "users",
-        "description": "Universitet nufuzi va taraqqiyotiga ulkan hissa qo‘shgan bitiruvchilar",
-        "year": 2024
-      },
       {
         "id": 5,
         "name": "Ilm-fan fidoyisi",
@@ -124,24 +74,7 @@
     "graduation_year": 1995,
     "is_featured": true,
     "is_honorary": true,
-    "recognitions": [
-      {
-        "id": 2,
-        "name": "Karyera ko‘prigi",
-        "slug": "karyera-koprigi",
-        "icon": "briefcase",
-        "description": "Yosh mutaxassislar bandligiga va karyerasiga ko‘maklashuvchi bitiruvchilar",
-        "year": 2024
-      },
-      {
-        "id": 3,
-        "name": "Faol bitiruvchi",
-        "slug": "faol-bitiruvchi",
-        "icon": "activity",
-        "description": "Universitet va jamiyat hayotida faol ishtirok etuvchi bitiruvchilar",
-        "year": 2024
-      }
-    ]
+    "recognitions": []
   },
   {
     "id": 36,
@@ -159,14 +92,6 @@
     "is_featured": true,
     "is_honorary": true,
     "recognitions": [
-      {
-        "id": 4,
-        "name": "Universitet fidoyisi",
-        "slug": "universitet-fidoyisi",
-        "icon": "users",
-        "description": "Universitet nufuzi va taraqqiyotiga ulkan hissa qo‘shgan bitiruvchilar",
-        "year": 2024
-      },
       {
         "id": 5,
         "name": "Ilm-fan fidoyisi",
@@ -192,24 +117,7 @@
     "graduation_year": 1998,
     "is_featured": true,
     "is_honorary": true,
-    "recognitions": [
-      {
-        "id": 3,
-        "name": "Faol bitiruvchi",
-        "slug": "faol-bitiruvchi",
-        "icon": "activity",
-        "description": "Universitet va jamiyat hayotida faol ishtirok etuvchi bitiruvchilar",
-        "year": 2024
-      },
-      {
-        "id": 4,
-        "name": "Universitet fidoyisi",
-        "slug": "universitet-fidoyisi",
-        "icon": "users",
-        "description": "Universitet nufuzi va taraqqiyotiga ulkan hissa qo‘shgan bitiruvchilar",
-        "year": 2024
-      }
-    ]
+    "recognitions": []
   },
   {
     "id": 32,
@@ -226,24 +134,7 @@
     "graduation_year": 2000,
     "is_featured": true,
     "is_honorary": true,
-    "recognitions": [
-      {
-        "id": 2,
-        "name": "Karyera ko‘prigi",
-        "slug": "karyera-koprigi",
-        "icon": "briefcase",
-        "description": "Yosh mutaxassislar bandligiga va karyerasiga ko‘maklashuvchi bitiruvchilar",
-        "year": 2024
-      },
-      {
-        "id": 7,
-        "name": "Tadbirkor bitiruvchi",
-        "slug": "tadbirkor-bitiruvchi",
-        "icon": "trending-up",
-        "description": "Biznes va ishlab chiqarishda yetakchi bitiruvchilar",
-        "year": 2024
-      }
-    ]
+    "recognitions": []
   },
   {
     "id": 27,
@@ -260,24 +151,7 @@
     "graduation_year": 2002,
     "is_featured": true,
     "is_honorary": true,
-    "recognitions": [
-      {
-        "id": 3,
-        "name": "Faol bitiruvchi",
-        "slug": "faol-bitiruvchi",
-        "icon": "activity",
-        "description": "Universitet va jamiyat hayotida faol ishtirok etuvchi bitiruvchilar",
-        "year": 2024
-      },
-      {
-        "id": 4,
-        "name": "Universitet fidoyisi",
-        "slug": "universitet-fidoyisi",
-        "icon": "users",
-        "description": "Universitet nufuzi va taraqqiyotiga ulkan hissa qo‘shgan bitiruvchilar",
-        "year": 2024
-      }
-    ]
+    "recognitions": []
   },
   {
     "id": 26,
@@ -294,24 +168,7 @@
     "graduation_year": 2003,
     "is_featured": true,
     "is_honorary": true,
-    "recognitions": [
-      {
-        "id": 1,
-        "name": "Faxriy ustoz",
-        "slug": "faxriy-ustoz",
-        "icon": "graduation-cap",
-        "description": "Ta’lim va murabbiylik sohasida yuksak natijalarga erishgan bitiruvchilar",
-        "year": 2024
-      },
-      {
-        "id": 3,
-        "name": "Faol bitiruvchi",
-        "slug": "faol-bitiruvchi",
-        "icon": "activity",
-        "description": "Universitet va jamiyat hayotida faol ishtirok etuvchi bitiruvchilar",
-        "year": 2024
-      }
-    ]
+    "recognitions": []
   },
   {
     "id": 30,
@@ -329,14 +186,6 @@
     "is_featured": true,
     "is_honorary": true,
     "recognitions": [
-      {
-        "id": 1,
-        "name": "Faxriy ustoz",
-        "slug": "faxriy-ustoz",
-        "icon": "graduation-cap",
-        "description": "Ta’lim va murabbiylik sohasida yuksak natijalarga erishgan bitiruvchilar",
-        "year": 2024
-      },
       {
         "id": 5,
         "name": "Ilm-fan fidoyisi",
@@ -370,22 +219,6 @@
         "icon": "book-open",
         "description": "Ilmiy izlanishlar va tadqiqotlarda yetakchi olim bitiruvchilar",
         "year": 2024
-      },
-      {
-        "id": 6,
-        "name": "Innovatsiya yetakchisi",
-        "slug": "innovatsiya-yetakchisi",
-        "icon": "lightbulb",
-        "description": "Innovatsion loyihalar va ilg‘or texnologiyalar yaratuvchilari",
-        "year": 2024
-      },
-      {
-        "id": 8,
-        "name": "Yil bitiruvchisi",
-        "slug": "yil-bitiruvchisi",
-        "icon": "trophy",
-        "description": "Yil davomida eng yuqori e’tirofga sazovor bo‘lgan bitiruvchi",
-        "year": 2024
       }
     ]
   },
@@ -404,23 +237,6 @@
     "graduation_year": 2006,
     "is_featured": true,
     "is_honorary": true,
-    "recognitions": [
-      {
-        "id": 6,
-        "name": "Innovatsiya yetakchisi",
-        "slug": "innovatsiya-yetakchisi",
-        "icon": "lightbulb",
-        "description": "Innovatsion loyihalar va ilg‘or texnologiyalar yaratuvchilari",
-        "year": 2024
-      },
-      {
-        "id": 7,
-        "name": "Tadbirkor bitiruvchi",
-        "slug": "tadbirkor-bitiruvchi",
-        "icon": "trending-up",
-        "description": "Biznes va ishlab chiqarishda yetakchi bitiruvchilar",
-        "year": 2024
-      }
-    ]
+    "recognitions": []
   }
 ]

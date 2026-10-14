@@ -9,7 +9,7 @@ const dictionaries = {
     navPrideDescription: "QarDU faxriga aylangan yetuk bitiruvchilar",
     navStoriesTitle: "Bitiruvchilar faoliyati yo‘li",
     navStoriesDescription: "Bitiruvchilarning professional kamoloti va ibratli yo‘li",
-    navRecognitionTitle: "E’tirof",
+    navRecognitionTitle: "Faxriy unvonlar",
     navRecognitionDescription: "Faxriy unvonlar va e’tirofga sazovor bitiruvchilar",
     navOpportunities: "Imkoniyatlar",
     navInterviewsDescription: "Bitiruvchilarning tajribasi va hayot yo‘li",
@@ -293,7 +293,7 @@ const dictionaries = {
     submissionGroupsBtn: "Guruhlarni ko‘rish",
 
     // Groups Page
-    groupsTitle: "Bitiruvchilar guruhlari",
+    groupsTitle: "Yillar kesimida bitiruvchilar",
     groupsSubtitle: "Qarshi davlat universitetining turli yillardagi bitiruvchilarini ko‘ring.",
     groupsSearchPlaceholder: "Yil bo‘yicha qidirish (masalan: 2012)...",
     groupsEmptyTitle: "Guruhlar topilmadi",
@@ -309,7 +309,7 @@ const dictionaries = {
     groupDetailJoinCta: "Siz ham ushbu yil bitiruvchisimisiz? Hamjamiyatga qo‘shiling",
 
     // Impact & Recognition
-    impactTitle: "E’tirof",
+    impactTitle: "Faxriy unvonlar",
     impactSubtitle: "Universitet va bitiruvchilar hamjamiyatiga munosib hissa qo‘shgan nufuzli bitiruvchilar e’tirofi.",
     impactScore: "Faoliyat",
     impactRank: "O‘rni",
@@ -393,7 +393,7 @@ const dictionaries = {
     navPrideDescription: "Выдающиеся выпускники — гордость КарГУ",
     navStoriesTitle: "Истории успеха",
     navStoriesDescription: "Профессиональный рост и вдохновляющий путь выпускников",
-    navRecognitionTitle: "Признание",
+    navRecognitionTitle: "Почётные звания",
     navRecognitionDescription: "Почётные звания и достижения выпускников",
     navOpportunities: "Возможности",
     navInterviewsDescription: "Опыт и жизненный путь выпускников",
@@ -693,7 +693,7 @@ const dictionaries = {
     groupDetailJoinCta: "Вы тоже выпускник этого года? Присоединяйтесь к сообществу",
 
     // Impact & Recognition
-    impactTitle: "Признание",
+    impactTitle: "Почётные звания",
     impactSubtitle: "Признание выпускников, внесших значимый вклад в развитие университета и сообщества.",
     impactScore: "Активность",
     impactRank: "Место",
@@ -777,7 +777,7 @@ const dictionaries = {
     navPrideDescription: "Distinguished graduates of QarDU",
     navStoriesTitle: "Success Stories",
     navStoriesDescription: "Inspiring career journeys and achievements of alumni",
-    navRecognitionTitle: "Recognition",
+    navRecognitionTitle: "Honorary titles",
     navRecognitionDescription: "Honours and recognised alumni",
     navOpportunities: "Opportunities",
     navInterviewsDescription: "Alumni experiences and life journeys",
@@ -1077,7 +1077,7 @@ const dictionaries = {
     groupDetailJoinCta: "Did you graduate in this year? Join the community",
 
     // Impact & Recognition
-    impactTitle: "Recognition",
+    impactTitle: "Honorary titles",
     impactSubtitle: "Recognition of alumni who actively contribute to the university and alumni community.",
     impactScore: "Activity",
     impactRank: "Rank",

@@ -32,7 +32,7 @@ export function StoryCard({ story, locale }: { story: SuccessStory; locale: Loca
           </div>
         )}
         <h3 className="story-card-title">
-          <Link href={`/stories/${story.slug}`}>{title}</Link>
+          <Link href={`/stories/${story.slug}`} className="card-primary-link">{title}</Link>
         </h3>
         <p className="story-card-excerpt">{summary}</p>
         <Link href={`/stories/${story.slug}`} className="story-card-action">

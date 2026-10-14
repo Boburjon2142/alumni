@@ -58,6 +58,12 @@ export default async function AlumniPage({
   const hasActiveFilters = Boolean(
     params.search || params.industry || params.recognition || params.faculty || params.graduation_year
   );
+  const pageHref = (page: number) => {
+    const paginationQuery = new URLSearchParams(query);
+    paginationQuery.delete("honorary");
+    paginationQuery.set("page", String(page));
+    return `?${paginationQuery.toString()}`;
+  };
 
   return (
     <section className="directory section">
@@ -101,7 +107,7 @@ export default async function AlumniPage({
             {result.pagination.pages > 1 && (
               <nav className="pagination" aria-label="Sahifalar">
                 {result.pagination.previous && (
-                  <Link href={`?page=${result.pagination.page - 1}`}>
+                  <Link href={pageHref(result.pagination.page - 1)}>
                     {t.previous}
                   </Link>
                 )}
@@ -109,7 +115,7 @@ export default async function AlumniPage({
                   {result.pagination.page} / {result.pagination.pages}
                 </span>
                 {result.pagination.next && (
-                  <Link href={`?page=${result.pagination.page + 1}`}>
+                  <Link href={pageHref(result.pagination.page + 1)}>
                     {t.next}
                   </Link>
                 )}
