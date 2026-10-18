@@ -1,8 +1,22 @@
 import { apiErrorMessage } from "./api-error";
-export async function authSession() {
+async function fetchSession() {
   const response = await fetch("/api/v1/auth/session/", { credentials: "same-origin", cache: "no-store" });
   if (!response.ok) throw new Error("Kirish xizmatiga ulanib bo'lmadi.");
   return response.json();
+}
+
+let pendingSession: ReturnType<typeof fetchSession> | undefined;
+export function authSession() {
+  // Deduplicate concurrent header/modal mounts, without caching settled sessions.
+  // Server requests must never share a user's authentication state.
+  if (typeof window === "undefined") return fetchSession();
+  if (!pendingSession) {
+    const request = fetchSession().finally(() => {
+      if (pendingSession === request) pendingSession = undefined;
+    });
+    pendingSession = request;
+  }
+  return pendingSession;
 }
 
 export async function authenticatedFetch(path: string, options: RequestInit = {}) {
@@ -22,6 +36,7 @@ export async function authenticatedFetch(path: string, options: RequestInit = {}
 }
 
 export function authChanged() {
+  pendingSession = undefined;
   if (typeof window !== "undefined") {
     window.dispatchEvent(new Event("auth-changed"));
   }

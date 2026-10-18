@@ -8,6 +8,7 @@ import styles from "./impact-award-gallery.module.css";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X, FileText } from "lucide-react";
 import regulation from "@/lib/award-regulation.json";
+import { RecognitionArtwork } from "@/components/alumni/recognition-artwork";
 
 export function ImpactAwardGallery({ recognitions, locale }: { recognitions: Recognition[]; locale: Locale }) {
   return <section className={styles.gallery} aria-label={locale === "en" ? "Honorary awards" : locale === "ru" ? "Почётные награды" : "Faxriy unvonlar"}>
@@ -19,7 +20,7 @@ export function ImpactAwardGallery({ recognitions, locale }: { recognitions: Rec
         ({ type: "paragraph"; text: string } | { type: "list"; items: string[] })[] | undefined;
       return <Dialog.Root key={honor.slug}>
         <Dialog.Trigger asChild><button type="button" className={styles.item} aria-label={title}>
-          <span className={styles.symbol}>{src ? <img src={src} alt="" width={160} height={160} /> : <RecognitionIcon icon={honor.symbol_name || honor.icon} size={72} />}</span>
+          <span className={styles.symbol}>{src ? <RecognitionArtwork src={src} sizes="(max-width: 480px) 120px, 160px" alt="" width={160} height={160} /> : <RecognitionIcon icon={honor.symbol_name || honor.icon} size={72} />}</span>
           <span className={styles.title}>{title}</span>
           {honor.description && <span className={styles.description}>{honor.description}</span>}
         </button></Dialog.Trigger>

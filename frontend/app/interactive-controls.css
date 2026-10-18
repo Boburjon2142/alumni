@@ -1,3 +1,8 @@
+/* Suppress the browser's touch flash without changing focus-visible styles. */
+html {
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Keep clickable controls from selecting text during activation. */
 a[href], button, summary, [role="button"], [role="option"],
 article:has(a[href], button, [role="button"]) {

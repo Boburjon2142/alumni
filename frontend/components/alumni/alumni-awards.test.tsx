@@ -21,6 +21,8 @@ it("deduplicates and removes failed and unknown artwork", () => {
   render(<AlumniAwards awards={[files[0], files[0], "unknown.png"]} locale="en" />);
   expect(screen.getAllByRole("img")).toHaveLength(1);
   fireEvent.error(screen.getByRole("img"));
+  expect(screen.getByRole("img")).not.toHaveAttribute("srcset");
+  fireEvent.error(screen.getByRole("img"));
   expect(screen.queryByRole("img")).toBeNull();
 });
 it("does not invent awards and excludes revoked or inactive assignments", () => {
