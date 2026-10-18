@@ -2,10 +2,12 @@ import type { Metadata } from "next";
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { BackToTop } from "@/components/ui/back-to-top";
+import { ContentSync } from "@/components/layout/content-sync";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import "./globals.css";
 import "./interactive-controls.css";
 import "./content-width.css";
+import "./responsive.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://alumni.qarshidu.uz"),
@@ -50,6 +52,7 @@ export default async function RootLayout({
   return (
     <html lang={locale}>
       <body>
+        <ContentSync />
         <a className="skip-link" href="#main">
           Asosiy kontentga o‘tish
         </a>

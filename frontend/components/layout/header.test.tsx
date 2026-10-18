@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
-import { render, screen, fireEvent, cleanup, within } from "@testing-library/react";
+import { render, screen, fireEvent, cleanup, within, act } from "@testing-library/react";
 import { Header } from "./header";
 import { getDictionary } from "@/lib/i18n";
 
@@ -91,6 +91,22 @@ describe("Header", () => {
 
     fireEvent.keyDown(document, { key: "Escape" });
     expect(btn.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("closes the mobile navigation and releases the scroll lock after resizing to desktop", () => {
+    let onChange = () => {};
+    const media = { matches: false, addEventListener: vi.fn((_event, listener) => { onChange = listener; }), removeEventListener: vi.fn() };
+    const matchMedia = vi.spyOn(window, "matchMedia").mockReturnValue(media as unknown as MediaQueryList);
+    try {
+      render(<Header locale="en" t={mockT} />);
+      const button = screen.getByLabelText(/Menyuni ochish/i);
+      fireEvent.click(button);
+      expect(document.body).toHaveClass("nav-open");
+      media.matches = true;
+      act(() => onChange());
+      expect(button).toHaveAttribute("aria-expanded", "false");
+      expect(document.body).not.toHaveClass("nav-open");
+    } finally { cleanup(); matchMedia.mockRestore(); }
   });
 
   it("nav has correct aria-label", () => {

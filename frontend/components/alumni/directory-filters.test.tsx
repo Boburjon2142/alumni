@@ -62,6 +62,32 @@ describe("DirectoryFilters", () => {
     expect(replaceMock).toHaveBeenCalledWith("/alumni?faculty=Filologiya&recognition=ilm-fan-fidoyisi", { scroll: false });
   });
 
+  it("keeps the filter fields mounted and shows them together when the panel opens", () => {
+    render(<DirectoryFilters faculties={mockFaculties} locale="uz" translations={mockTranslations}
+      recognitions={[{ id: 1, slug: "ilm-fan-fidoyisi", name: "Ilm-fan fidoyisi", icon: "compass" } as Recognition]} />);
+    const panel = document.getElementById("directory-advanced-filters")!;
+    const toggle = screen.getByRole("button", { name: /Qo‘shimcha filtrlarni ko‘rsatish/i });
+    const faculty = screen.getByLabelText("Fakultet");
+    const year = screen.getByLabelText("Bitiruv yili");
+    expect(panel).not.toBeVisible();
+    expect(panel).toContainElement(faculty);
+    expect(panel).toContainElement(year);
+
+    fireEvent.click(toggle);
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    expect(faculty).toBeVisible();
+    expect(year).toBeVisible();
+    expect(screen.getByRole("button", { name: "Soha bo‘yicha filtrlash" })).toBeVisible();
+
+    fireEvent.change(year, { target: { value: "1979" } });
+    fireEvent.click(toggle);
+    expect(panel).not.toBeVisible();
+    fireEvent.click(toggle);
+    expect(screen.getByLabelText("Bitiruv yili")).toBe(year);
+    expect(year).toHaveValue(1979);
+    expect(faculty).toBeVisible();
+  });
+
   it("opens industry dropdown and selects an option", () => {
     render(
       <DirectoryFilters

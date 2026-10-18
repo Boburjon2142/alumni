@@ -416,7 +416,7 @@ export const saveAdminStory = async (id: number | null, payload: any): Promise<S
     body: JSON.stringify(payload),
   });
   const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(data?.message || "Faoliyat yo‘lini saqlab bo‘lmadi");
+  if (!res.ok) throw new Error(apiErrorMessage(data, "Faoliyat yo‘lini saqlab bo‘lmadi"));
   return data;
 };
 
@@ -446,7 +446,7 @@ export const saveAdminInterview = async (id: number | null, payload: any): Promi
     body: JSON.stringify(payload),
   });
   const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(data?.message || "Intervyuni saqlab bo‘lmadi");
+  if (!res.ok) throw new Error(apiErrorMessage(data, "Intervyuni saqlab bo‘lmadi"));
   return data;
 };
 
@@ -470,7 +470,7 @@ export const saveAdminAdvice = async (id: number | null, payload: any): Promise<
     body: JSON.stringify(payload),
   });
   const data = await res.json().catch(() => null);
-  if (!res.ok) throw new Error(data?.message || "Maslahatni saqlab bo‘lmadi");
+  if (!res.ok) throw new Error(apiErrorMessage(data, "Maslahatni saqlab bo‘lmadi"));
   return data;
 };
 

@@ -1,0 +1,30 @@
+/* Content-width tokens remain owned by content-width.css. */
+.admin-main-column,
+.admin-content-area,
+.admin-table-wrapper,
+.admin-table-scroll {
+  min-width: 0;
+  max-width: 100%;
+}
+
+@media (max-width: 640px) {
+  .interviews-header-left,
+  .interviews-header-right,
+  .interview-inline-search-bar {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+  .interviews-title-wrap { min-width: 0; }
+  .interviews-title-wrap h1 { min-width: 0; overflow-wrap: anywhere; }
+  .interviews-count-pill { flex-shrink: 0; }
+  .interview-search-form { width: 100%; min-width: 0; }
+  .interview-search-input { min-width: 0; flex: 1; }
+  .interview-search-form > button { flex-shrink: 0; }
+  .directory-recognition-wrapper { min-width: 0; max-width: 100%; }
+  .directory-recognition-wrapper .recognition-combobox-trigger { width: 100%; min-width: 0; }
+  .recognition-combobox-dropdown { max-width: 100%; min-width: 0; }
+  .filter-chip { max-width: 100%; }
+  .filter-chip .chip-text { min-width: 0; overflow-wrap: anywhere; }
+  .pagination { flex-wrap: wrap; }
+}

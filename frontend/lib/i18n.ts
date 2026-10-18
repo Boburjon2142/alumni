@@ -1290,6 +1290,7 @@ export const recognitionTitlesMap: Record<string, Record<Locale, string>> = {
 };
 
 export function getRecognitionTitle(slug: string, locale: Locale, fallback?: string): string {
+  if (locale === "uz" && fallback) return fallback;
   if (slug && recognitionTitlesMap[slug]?.[locale]) {
     return recognitionTitlesMap[slug][locale];
   }

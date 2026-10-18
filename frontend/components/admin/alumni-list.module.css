@@ -5,10 +5,23 @@
 .header p { margin: 6px 0 0; }
 .filters { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
 .page > :global(.p-5) { padding: 14px !important; }
-.page :global(.admin-table) { min-width: 980px; }
+.page :global(.admin-table) { min-width: 1180px; table-layout: fixed; }
+.page :global(.admin-table) th:nth-child(1) { width: 240px; }
+.page :global(.admin-table) th:nth-child(2) { width: 140px; }
+.page :global(.admin-table) th:nth-child(3) { width: 260px; }
+.page :global(.admin-table) th:nth-child(4) { width: 230px; }
+.page :global(.admin-table) th:nth-child(5) { width: 150px; }
+.page :global(.admin-table) th:nth-child(6) { width: 160px; }
 .page :global(.admin-table) th { min-width: 0 !important; }
-.page :global(.admin-table) th, .page :global(.admin-table) td { padding: 10px 12px; }
-.page :global(.admin-badge-list) { max-width: 220px; gap: 4px; }
+.page :global(.admin-table) th, .page :global(.admin-table) td { padding: 8px 12px; line-height: 1.35; }
+.page :global(.admin-table) td:nth-child(3) > div { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.page :global(.admin-table) td:first-child a, .page :global(.admin-table) td:first-child span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.page :global(.admin-badge-list) { max-width: 100%; gap: 3px; }
+.page :global(.admin-badge) { padding: 2px 6px; line-height: 1.2; max-width: 100%; }
+.page :global(.admin-badge) > span { overflow: hidden; text-overflow: ellipsis; }
+.page :global(.admin-badge) svg { width: 12px; height: 12px; }
+.page :global(.admin-status-pill), .page :global(.admin-status-featured) { padding-block: 2px; line-height: 1.25; }
+.page :global(.admin-actions-group) { gap: 4px; flex-wrap: wrap; }
 .avatar { position: relative !important; width: 40px !important; height: 40px !important; min-width: 40px; max-height: 40px; overflow: hidden; }
 .avatar img { width: 100% !important; height: 100% !important; object-fit: cover; }
 :global(.admin-portal-wrapper):has(.page) :global(.admin-content-area) { padding: 24px 28px !important; }

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { getAllAdminPages } from "@/lib/admin-pagination";
+import editorStyles from "./interviews-editor.module.css";
 import {
   Mic,
   Plus,
@@ -44,7 +46,7 @@ export default function AdminInterviewsPage() {
   const [isFeatured, setIsFeatured] = useState(false);
   const [isPublished, setIsPublished] = useState(true);
   const [items, setItems] = useState<
-    { question_uz: string; question_en: string; answer_uz: string; answer_en: string }[]
+    { id?: number; question_uz: string; question_en: string; answer_uz: string; answer_en: string }[]
   >([]);
   const [saving, setSaving] = useState(false);
 
@@ -53,7 +55,7 @@ export default function AdminInterviewsPage() {
       setLoading(true);
       const params = new URLSearchParams();
       if (search.trim()) params.set("search", search.trim());
-      const res = await getAdminInterviews(params.toString());
+      const res = await getAllAdminPages(getAdminInterviews, params.toString());
       setInterviews(res.results || []);
     } catch (err: any) {
       setError(err.message || "Intervyularni yuklab bo‘lmadi");
@@ -63,14 +65,24 @@ export default function AdminInterviewsPage() {
   };
 
   useEffect(() => {
-    getAdminAlumni("page_size=100")
+    getAllAdminPages(getAdminAlumni)
       .then((res) => setAlumniList(res.results || []))
       .catch(console.error);
   }, []);
 
   useEffect(() => {
     const timer = setTimeout(fetchInterviews, 250);
-    return () => clearTimeout(timer);
+    const refresh = () => { void fetchInterviews(); };
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === "site-content-changed") refresh();
+    };
+    window.addEventListener("focus", refresh);
+    window.addEventListener("storage", onStorage);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener("focus", refresh);
+      window.removeEventListener("storage", onStorage);
+    };
   }, [search]);
 
   const handleOpenCreate = () => {
@@ -99,8 +111,8 @@ export default function AdminInterviewsPage() {
 
   const handleOpenEdit = (interview: Interview) => {
     setEditingId(interview.id);
-    const foundAlumnus = alumniList.find((a) => a.full_name === interview.alumnus?.full_name);
-    setAlumniId(foundAlumnus?.id || "");
+    const foundAlumnus = alumniList.find((a) => a.slug === interview.alumnus?.slug);
+    setAlumniId(interview.alumni_id ?? foundAlumnus?.id ?? "");
     setTitleUz(interview.title_uz || "");
     setTitleEn(interview.title_en || "");
     setIntroUz(interview.intro_uz || "");
@@ -108,9 +120,10 @@ export default function AdminInterviewsPage() {
     setPullQuoteUz(interview.pull_quote_uz || "");
     setPullQuoteEn(interview.pull_quote_en || "");
     setIsFeatured(Boolean(interview.is_featured));
-    setIsPublished(Boolean(interview.published_at));
+    setIsPublished(interview.is_published ?? Boolean(interview.published_at));
     setItems(
       interview.items?.map((item) => ({
+        id: item.id,
         question_uz: item.question_uz || "",
         question_en: item.question_en || "",
         answer_uz: item.answer_uz || "",
@@ -270,13 +283,13 @@ export default function AdminInterviewsPage() {
                       <div className="flex flex-col gap-1.5 items-start">
                         <span
                           className={`admin-status-pill ${
-                            interview.published_at
+                            (interview.is_published ?? Boolean(interview.published_at))
                               ? "admin-status-approved"
                               : "admin-status-pending"
                           }`}
                         >
                           <span className="admin-status-dot" />
-                          <span>{interview.published_at ? "Nashr qilingan" : "Qoralama"}</span>
+                          <span>{(interview.is_published ?? Boolean(interview.published_at)) ? "Nashr qilingan" : "Qoralama"}</span>
                         </span>
                         {interview.is_featured && (
                           <span className="admin-status-featured">
@@ -288,7 +301,7 @@ export default function AdminInterviewsPage() {
                     </td>
 
                     <td className="whitespace-nowrap text-slate-500 text-xs">
-                      {interview.published_at
+                      {interview.published_at && (interview.is_published ?? true)
                         ? new Date(interview.published_at).toLocaleDateString("uz-UZ")
                         : "—"}
                     </td>
@@ -322,7 +335,7 @@ export default function AdminInterviewsPage() {
       {/* Editor Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 shadow-2xl border border-slate-200">
+          <div className={`${editorStyles.scrollArea} bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 shadow-2xl border border-slate-200`}>
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
               <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
                 <Mic className="w-5 h-5 text-[#0D1667]" />

@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { getAllAdminPages } from "@/lib/admin-pagination";
+import editorStyles from "../interviews/interviews-editor.module.css";
 import {
   BookOpen,
   Plus,
@@ -46,7 +48,7 @@ export default function AdminStoriesPage() {
   const [isFeatured, setIsFeatured] = useState(false);
   const [isPublished, setIsPublished] = useState(true);
   const [sections, setSections] = useState<
-    { kind: string; heading_uz: string; heading_en: string; content_uz: string; content_en: string }[]
+    { id?: number; kind: string; heading_uz: string; heading_en: string; content_uz: string; content_en: string }[]
   >([]);
   const [saving, setSaving] = useState(false);
 
@@ -55,7 +57,7 @@ export default function AdminStoriesPage() {
       setLoading(true);
       const params = new URLSearchParams();
       if (search.trim()) params.set("search", search.trim());
-      const res = await getAdminStories(params.toString());
+      const res = await getAllAdminPages(getAdminStories, params.toString());
       setStories(res.results || []);
     } catch (err: any) {
       setError(err.message || "Faoliyat yo‘llarini yuklab bo‘lmadi");
@@ -65,7 +67,7 @@ export default function AdminStoriesPage() {
   };
 
   useEffect(() => {
-    getAdminAlumni("page_size=100")
+    getAllAdminPages(getAdminAlumni)
       .then((res) => setAlumniList(res.results || []))
       .catch(console.error);
   }, []);
@@ -104,21 +106,22 @@ export default function AdminStoriesPage() {
 
   const handleOpenEdit = (story: SuccessStory) => {
     setEditingId(story.id);
-    const foundAlumnus = alumniList.find((a) => a.full_name === story.alumnus?.full_name);
-    setAlumniId(foundAlumnus?.id || "");
+    const foundAlumnus = alumniList.find((a) => a.slug === story.alumnus?.slug);
+    setAlumniId(story.alumni_id ?? foundAlumnus?.id ?? "");
     setTitleUz(story.title_uz || story.title || "");
     setTitleEn(story.title_en || "");
     setSummaryUz(story.summary_uz || story.summary || "");
     setSummaryEn(story.summary_en || "");
-    setHeroImageUrl(story.hero_image_url || story.hero_image || "");
+    setHeroImageUrl(story.hero_image_url || "");
     setHeroImageAlt(story.hero_image_alt || "");
     setStudentTakeawayUz(story.student_takeaway_uz || "");
     setStudentTakeawayEn(story.student_takeaway_en || "");
     setIsFeatured(Boolean(story.is_featured));
-    setIsPublished(Boolean(story.published_at));
+    setIsPublished(story.is_published ?? Boolean(story.published_at));
     setSections(
       story.sections?.map((s) => ({
-        kind: s.heading_uz || "introduction",
+        id: s.id,
+        kind: s.kind || "introduction",
         heading_uz: s.heading_uz || "",
         heading_en: s.heading_en || "",
         content_uz: s.content_uz || "",
@@ -347,7 +350,7 @@ export default function AdminStoriesPage() {
       {/* Editor Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 shadow-2xl border border-slate-200">
+          <div className={`${editorStyles.scrollArea} bg-white max-w-3xl w-full max-h-[90vh] overflow-y-auto rounded-3xl p-6 md:p-8 shadow-2xl border border-slate-200`}>
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
               <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
                 <BookOpen className="w-5 h-5 text-[#0D1667]" />

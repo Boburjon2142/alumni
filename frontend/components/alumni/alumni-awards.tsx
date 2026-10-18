@@ -18,8 +18,8 @@ export function AlumniAwards({ awards, honors, locale }: { awards: string[]; hon
       const title = getRecognitionTitle(honor.slug, locale, honor.name);
       const src = recognitionAssets[honor.slug];
       return <Link key={honor.slug} href="/impact" className={styles.target} aria-label={title} aria-describedby={`${tooltipId}-${honor.slug}`}>
-        {src && !failed.includes(src) ? <img src={src} alt={title} title={title} width={40} height={40} className={styles.award}
-          onError={() => setFailed(previous => [...previous, src])} /> : <span className={`${styles.award} ${styles.symbol}`} title={title}><RecognitionIcon icon={honor.symbol_name || honor.icon} size={24} /></span>}
+        {src && !failed.includes(src) ? <img src={src} alt={title} width={40} height={40} className={styles.award}
+          onError={() => setFailed(previous => [...previous, src])} /> : <span className={`${styles.award} ${styles.symbol}`}><RecognitionIcon icon={honor.symbol_name || honor.icon} size={24} /></span>}
         <span id={`${tooltipId}-${honor.slug}`} role="tooltip" className={styles.tooltip}>{title}</span>
       </Link>;
     })}</div>;
@@ -33,7 +33,7 @@ export function AlumniAwards({ awards, honors, locale }: { awards: string[]; hon
       const slug = Object.keys(recognitionAssets).find(key => recognitionAssets[key] === `/recognitions/${file}`)!;
       const title = getRecognitionTitle(slug, locale);
       return <Link key={file} href="/impact" className={styles.target} aria-label={title} aria-describedby={`${tooltipId}-${slug}`}>
-        <img src={`/recognitions/${file}`} alt={title} title={title}
+        <img src={`/recognitions/${file}`} alt={title}
         width={40} height={40} className={styles.award}
         onError={() => setFailed(previous => [...previous, file])} />
         <span id={`${tooltipId}-${slug}`} role="tooltip" className={styles.tooltip}>{title}</span>

@@ -19,6 +19,13 @@ export function AdminSidebarProvider({ children }: { children: React.ReactNode }
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 1025px)");
+    const closeMobileDrawer = () => { if (desktop.matches) setIsMobileOpen(false); };
+    desktop.addEventListener("change", closeMobileDrawer);
+    return () => desktop.removeEventListener("change", closeMobileDrawer);
+  }, []);
+
+  useEffect(() => {
     try {
       const saved = localStorage.getItem("ksu_admin_sidebar_collapsed");
       if (saved !== null) {

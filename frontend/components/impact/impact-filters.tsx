@@ -2,7 +2,8 @@
 
 import React, { useState, useRef, useEffect } from "react";
 import { Search, ChevronDown, Check } from "lucide-react";
-import type { Dictionary } from "@/lib/i18n";
+import { getRecognitionTitle, type Dictionary, type Locale } from "@/lib/i18n";
+import type { Recognition } from "@/types/alumni";
 import { DEFAULT_INDUSTRIES } from "@/components/alumni/industry-combobox";
 import styles from "@/app/impact/impact.module.css";
 
@@ -93,13 +94,15 @@ function CustomDropdown({ value, options, placeholder, onChange }: CustomDropdow
 interface ImpactFiltersProps {
   t: Dictionary;
   period?: "year" | "lifetime";
-  category: string;
+  recognition: string;
+  recognitions: Recognition[];
+  locale?: Locale;
   industry: string;
   year: string;
   search: string;
   industries?: string[];
   onPeriodChange?: (period: "year" | "lifetime") => void;
-  onCategoryChange: (category: string) => void;
+  onRecognitionChange: (recognition: string) => void;
   onIndustryChange: (industry: string) => void;
   onYearChange: (year: string) => void;
   onSearchChange: (search: string) => void;
@@ -107,23 +110,22 @@ interface ImpactFiltersProps {
 
 export function ImpactFilters({
   t,
-  category,
+  recognition,
+  recognitions,
+  locale = "uz",
   industry,
   year,
   search,
   industries = DEFAULT_INDUSTRIES,
-  onCategoryChange,
+  onRecognitionChange,
   onIndustryChange,
   onYearChange,
   onSearchChange,
 }: ImpactFiltersProps) {
-  const categories = [
-    { key: "", label: t.impactAllCategories },
-    { key: "career", label: t.impactCareer },
-    { key: "mentorship", label: t.impactMentorship },
-    { key: "university", label: t.impactUniversity },
-    { key: "community", label: t.impactCommunity },
-  ];
+  const titleOptions = recognitions.map(honor => ({
+    value: honor.slug,
+    label: getRecognitionTitle(honor.slug, locale, honor.name),
+  }));
 
   // Graduation years from 1980 to current year
   const currentYear = new Date().getFullYear();
@@ -158,6 +160,12 @@ export function ImpactFilters({
         {/* Custom Dropdown Selects */}
         <div className={styles.dropdownGroup}>
           <CustomDropdown
+            value={recognition}
+            options={titleOptions}
+            placeholder={t.allRecognitions}
+            onChange={onRecognitionChange}
+          />
+          <CustomDropdown
             value={industry}
             options={industryOptions}
             placeholder={t.allIndustries}
@@ -173,24 +181,6 @@ export function ImpactFilters({
         </div>
       </div>
 
-      {/* Categories Row */}
-      <div className={styles.filterBottomRow}>
-        <div className={styles.categoryPills}>
-          {categories.map((cat) => {
-            const isActive = category === cat.key;
-            return (
-              <button
-                key={cat.key}
-                type="button"
-                onClick={() => onCategoryChange(cat.key)}
-                className={`${styles.catPill} ${isActive ? styles.catPillActive : ""}`}
-              >
-                {cat.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
     </div>
   );
 }

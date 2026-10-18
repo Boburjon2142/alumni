@@ -1,6 +1,7 @@
 .awards { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 8px 0 10px; min-width: 0; }
 .award { display: block; width: 40px; height: 40px; flex: none; object-fit: contain; border-radius: 8px; }
 .target { position: relative; z-index: 2; display: block; flex: none; border-radius: 8px; }
+.target::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: rgba(255, 255, 255, .22); pointer-events: none; }
 .symbol { display: grid; place-items: center; color: var(--primary); }
 .target:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 .target:hover, .target:focus-visible { z-index: 3; }

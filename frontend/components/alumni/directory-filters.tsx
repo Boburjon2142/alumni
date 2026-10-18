@@ -263,7 +263,7 @@ export function DirectoryFilters({
           className={`directory-filter-toggle-btn ${
             isAdvancedOpen || advancedFiltersCount > 0 ? "active" : ""
           }`}
-          onClick={() => setIsAdvancedOpen(!isAdvancedOpen)}
+          onClick={() => setIsAdvancedOpen(open => !open)}
           aria-expanded={isAdvancedOpen}
           aria-controls="directory-advanced-filters"
           aria-label="Qo‘shimcha filtrlarni ko‘rsatish"
@@ -277,8 +277,7 @@ export function DirectoryFilters({
       </div>
 
       {/* Expandable Advanced Filters Panel (Faculty & Year) */}
-      {isAdvancedOpen && (
-        <div id="directory-advanced-filters" className="directory-advanced-panel animate-fade-in">
+        <div id="directory-advanced-filters" className="directory-advanced-panel animate-fade-in" hidden={!isAdvancedOpen}>
           <div className={styles.grid}>
             {recognitions.length > 0 && <div className="filter-field">
               <IndustryCombobox industries={industries} value={industryValue} onChange={handleIndustryChange}
@@ -318,7 +317,6 @@ export function DirectoryFilters({
             </div>
           </div>
         </div>
-      )}
 
       {/* Active Filter Chips */}
       <ActiveFilterChips

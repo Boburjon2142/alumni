@@ -13,7 +13,12 @@ export async function authenticatedFetch(path: string, options: RequestInit = {}
   const session = await authSession();
   const headers = new Headers(options.headers);
   headers.set("X-CSRFToken", session.csrf_token);
-  return fetch(path, { ...options, headers, credentials: "same-origin", cache: "no-store" });
+  const response = await fetch(path, { ...options, headers, credentials: "same-origin", cache: "no-store" });
+  if (response.ok && path.startsWith("/api/v1/admin/")) {
+    window.dispatchEvent(new Event("site-content-changed"));
+    try { localStorage.setItem("site-content-changed", `${Date.now()}-${Math.random()}`); } catch { /* Storage may be disabled. */ }
+  }
+  return response;
 }
 
 export function authChanged() {

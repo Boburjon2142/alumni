@@ -1,4 +1,6 @@
 "use client";
+import { getAllAdminPages } from "@/lib/admin-pagination";
+import editorStyles from "../interviews/interviews-editor.module.css";
 
 import { useEffect, useState } from "react";
 import {
@@ -60,7 +62,7 @@ export default function AdminAdvicePage() {
       const params = new URLSearchParams();
       if (search.trim()) params.set("search", search.trim());
       if (categoryFilter) params.set("category", categoryFilter);
-      const res = await getAdminAdvice(params.toString());
+      const res = await getAllAdminPages(getAdminAdvice, params.toString());
       setAdviceList(res.results || []);
     } catch (err: any) {
       setError(err.message || "Maslahatlarni yuklab bo‘lmadi");
@@ -70,7 +72,7 @@ export default function AdminAdvicePage() {
   };
 
   useEffect(() => {
-    getAdminAlumni("page_size=100")
+    getAllAdminPages(getAdminAlumni)
       .then((res) => setAlumniList(res.results || []))
       .catch(console.error);
   }, []);
@@ -99,8 +101,8 @@ export default function AdminAdvicePage() {
 
   const handleOpenEdit = (advice: Advice) => {
     setEditingId(advice.id);
-    const foundAlumnus = alumniList.find((a) => a.full_name === advice.alumnus?.full_name);
-    setAlumniId(foundAlumnus?.id || "");
+    const foundAlumnus = alumniList.find((a) => a.slug === advice.alumnus?.slug);
+    setAlumniId(advice.alumni_id ?? foundAlumnus?.id ?? "");
     setCategory(advice.category || "career");
     setTitleUz(advice.title_uz || "");
     setTitleRu(advice.title_ru || "");
@@ -109,7 +111,7 @@ export default function AdminAdvicePage() {
     setContentRu(advice.content_ru || "");
     setContentEn(advice.content_en || "");
     setIsFeatured(Boolean(advice.is_featured));
-    setIsPublished(Boolean(advice.published_at));
+    setIsPublished(advice.is_published ?? Boolean(advice.published_at));
     setError("");
     setSuccessMsg("");
     setModalOpen(true);
@@ -274,7 +276,7 @@ export default function AdminAdvicePage() {
       {/* Editor Modal */}
       {modalOpen && (
         <div className="fixed inset-0 z-50 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-white max-w-xl w-full rounded-3xl p-6 shadow-2xl border border-slate-200">
+          <div className={`${editorStyles.scrollArea} bg-white max-w-xl w-full rounded-3xl p-6 shadow-2xl border border-slate-200`}>
             <div className="flex items-center justify-between border-b border-slate-100 pb-3 mb-4">
               <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
                 <Lightbulb className="w-5 h-5 text-[#D38E4F]" />

@@ -272,7 +272,18 @@ class GoogleAuthView(APIView):
         nonce = request.session.get("google_nonce")
         try:
             payload = id_token.verify_oauth2_token(credential, GoogleRequest(), settings.GOOGLE_CLIENT_ID)
-        except (ValueError, GoogleAuthError):
+        except (ValueError, GoogleAuthError) as exc:
+            # Record the failure category without logging credentials or claims.
+            error_text = str(exc).lower()
+            reason = next((label for marker, label in (
+                ("used too early", "clock_ahead_of_server"),
+                ("expired", "expired"),
+                ("audience", "audience_mismatch"),
+                ("signature", "signature_invalid"),
+                ("issuer", "issuer_invalid"),
+                ("certificate", "certificate_error"),
+            ) if marker in error_text), type(exc).__name__)
+            logger.warning("Google sign-in token rejected: %s", reason)
             raise ValidationError({"credential": "Google tasdig'i yaroqsiz yoki muddati o'tgan. Qayta kiring."})
         if not nonce or not secrets.compare_digest(str(payload.get("nonce", "")), nonce):
             raise ValidationError({"credential": "Google kirish sessiyasi eskirgan. Oynani qayta oching."})

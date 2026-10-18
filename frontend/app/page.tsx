@@ -5,7 +5,6 @@ import { HeroCarousel } from "@/components/hero/hero-carousel";
 import { getAlumni } from "@/lib/api";
 import { getDictionary, getLocale } from "@/lib/i18n";
 import type { Alumni } from "@/types/alumni";
-import fallbackAlumni from "@/lib/fallback-alumni.json";
 
 export default async function Home() {
   const locale = await getLocale();
@@ -20,12 +19,9 @@ export default async function Home() {
       : (alumniRes as any)?.data ?? (alumniRes as any)?.results ?? [];
     if (fetched && fetched.length > 0) {
       alumniList = [...fetched].sort((a, b) => (a.graduation_year ?? 9999) - (b.graduation_year ?? 9999));
-    } else {
-      alumniList = [...(fallbackAlumni as unknown as Alumni[])].sort((a, b) => (a.graduation_year ?? 9999) - (b.graduation_year ?? 9999));
     }
   } catch (err) {
-    console.error("Failed to load alumni for home, using fallback:", err);
-    alumniList = [...(fallbackAlumni as unknown as Alumni[])].sort((a, b) => (a.graduation_year ?? 9999) - (b.graduation_year ?? 9999));
+    console.error("Failed to load alumni for home:", err);
   }
 
   return (

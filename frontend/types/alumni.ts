@@ -72,6 +72,8 @@ export type AlumniSource = {
 };
 
 export type Advice = {
+  alumni_id?: number;
+  is_published?: boolean;
   id: number;
   category: string;
   title_uz?: string;
@@ -297,6 +299,7 @@ export type FeedbackResponse = {
 
 export type StorySection = {
   id: number;
+  kind?: string;
   heading_uz: string;
   heading_en?: string;
   content_uz: string;
@@ -305,6 +308,8 @@ export type StorySection = {
 };
 
 export type SuccessStory = {
+  alumni_id?: number;
+  is_published?: boolean;
   id: number;
   slug: string;
   title: string;
@@ -362,6 +367,8 @@ export type InterviewItem = {
 };
 
 export type Interview = {
+  alumni_id?: number;
+  is_published?: boolean;
   id: number;
   slug: string;
   title_uz: string;

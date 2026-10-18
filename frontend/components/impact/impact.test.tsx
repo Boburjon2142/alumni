@@ -39,6 +39,7 @@ const mockT = {
   impactPeriodAnnual: "Joriy yil",
   impactPeriodLifetime: "Butun davr",
   impactAllCategories: "Barcha yo‘nalishlar",
+  allRecognitions: "Barcha unvonlar",
   impactCareer: "Karyera ko‘magi",
   impactMentorship: "Mentorlik",
   impactUniversity: "Universitet rivoji",
@@ -141,7 +142,7 @@ describe("Impact & Recognition Module", () => {
   });
 
   it("triggers filter callbacks in ImpactFilters", () => {
-    const handleCategory = vi.fn();
+    const handleRecognition = vi.fn();
     const handleFaculty = vi.fn();
     const handleYear = vi.fn();
     const handleSearch = vi.fn();
@@ -149,20 +150,25 @@ describe("Impact & Recognition Module", () => {
     render(
       <ImpactFilters
         t={mockT}
-        category=""
+        recognition=""
+        recognitions={[{ id: 1, slug: "qardu-iftixori", name: "QarDU iftixori", icon: "award" }]}
         industry=""
         year=""
         search=""
         industries={["Oliy ta’lim va ilm-fan"]}
-        onCategoryChange={handleCategory}
+        onRecognitionChange={handleRecognition}
         onIndustryChange={handleFaculty}
         onYearChange={handleYear}
         onSearchChange={handleSearch}
       />
     );
 
-    const careerBtn = screen.getByText(/Karyera ko‘magi/i);
-    fireEvent.click(careerBtn);
-    expect(handleCategory).toHaveBeenCalledWith("career");
+    fireEvent.click(screen.getByRole("button", { name: "Barcha unvonlar" }));
+    fireEvent.click(screen.getByRole("option", { name: "QarDU iftixori" }));
+    expect(handleRecognition).toHaveBeenCalledWith("qardu-iftixori");
+    expect(screen.queryByRole("button", { name: "Karyera ko‘magi" })).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Barcha unvonlar" }));
+    fireEvent.click(screen.getByRole("option", { name: "Barcha unvonlar" }));
+    expect(handleRecognition).toHaveBeenLastCalledWith("");
   });
 });

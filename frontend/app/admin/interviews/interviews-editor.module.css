@@ -1,0 +1,7 @@
+.scrollArea {
+  max-height: 90vh;
+  max-height: min(90vh, calc(100dvh - 32px));
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+}

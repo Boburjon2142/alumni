@@ -3,6 +3,24 @@ import { authenticatedFetch } from "@/lib/auth";
 
 afterEach(() => vi.unstubAllGlobals());
 
+it("announces successful admin writes but not rejected writes", async () => {
+  const listener = vi.fn();
+  window.addEventListener("site-content-changed", listener);
+  const fetchMock = vi.fn()
+    .mockResolvedValueOnce({ ok: true, json: async () => ({ csrf_token: "token" }) })
+    .mockResolvedValueOnce({ ok: true })
+    .mockResolvedValueOnce({ ok: true, json: async () => ({ csrf_token: "token" }) })
+    .mockResolvedValueOnce({ ok: false });
+  vi.stubGlobal("fetch", fetchMock);
+  try {
+    await authenticatedFetch("/api/v1/admin/interviews/1/", { method: "PUT" });
+    await authenticatedFetch("/api/v1/admin/interviews/1/", { method: "PUT" });
+    expect(listener).toHaveBeenCalledTimes(1);
+  } finally {
+    window.removeEventListener("site-content-changed", listener);
+  }
+});
+
 it("reads authenticated data in one request without fetching a CSRF token", async () => {
   const fetchMock = vi.fn().mockResolvedValue({ ok: true });
   vi.stubGlobal("fetch", fetchMock);

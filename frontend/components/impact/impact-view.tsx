@@ -20,14 +20,16 @@ interface ImpactViewProps {
   locale?: Locale;
   initialRankings: ImpactRankingEntry[];
   initialIndustry?: string;
+  initialRecognition?: string;
+  initialYear?: string;
   recognitions?: Recognition[];
   showRegistry?: boolean;
 }
 
-export function ImpactView({ t, locale = "uz", initialRankings, initialIndustry = "", recognitions = [], showRegistry = false }: ImpactViewProps) {
-  const [category, setCategory] = useState("");
+export function ImpactView({ t, locale = "uz", initialRankings, initialIndustry = "", initialRecognition = "", initialYear = "", recognitions = [], showRegistry = false }: ImpactViewProps) {
+  const [recognition, setRecognition] = useState(initialRecognition);
   const [industry, setIndustry] = useState(initialIndustry);
-  const [year, setYear] = useState("");
+  const [year, setYear] = useState(initialYear);
   const [search, setSearch] = useState("");
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -47,14 +49,14 @@ export function ImpactView({ t, locale = "uz", initialRankings, initialIndustry 
     return () => window.removeEventListener("auth-changed", sync);
   }, []);
 
-  // Fetch rankings when category, faculty, or year change
+  // Fetch the registry when the selected title, industry, or year changes.
   useEffect(() => {
     if (!showRegistry) return;
     let mounted = true;
     setLoading(true);
 
     const params = new URLSearchParams();
-    if (category) params.set("category", category);
+    if (recognition) params.set("recognition", recognition);
     if (industry) params.set("industry", industry);
     if (year) params.set("graduation_year", year);
 
@@ -74,7 +76,7 @@ export function ImpactView({ t, locale = "uz", initialRankings, initialIndustry 
     return () => {
       mounted = false;
     };
-  }, [category, industry, year, showRegistry]);
+  }, [recognition, industry, year, showRegistry]);
 
   // Client-side search filter & sort by graduation year ascending (eng oldingi yil birinchi)
   const filteredRankings = useMemo(() => {
@@ -110,11 +112,13 @@ export function ImpactView({ t, locale = "uz", initialRankings, initialIndustry 
       {/* 2. Simplified Filters */}
       {showRegistry && <ImpactFilters
         t={t}
-        category={category}
+        recognition={recognition}
+        recognitions={recognitions}
+        locale={locale}
         industry={industry}
         year={year}
         search={search}
-        onCategoryChange={setCategory}
+        onRecognitionChange={setRecognition}
         onIndustryChange={setIndustry}
         onYearChange={setYear}
         onSearchChange={setSearch}

@@ -12,7 +12,9 @@ it.each([3, 4, 5])("renders %i original PNGs with accessible names", count => {
   expect(screen.getAllByRole("img")).toHaveLength(count);
   screen.getAllByRole("img").forEach(img => {
     expect(img.getAttribute("src")).toMatch(/^\/recognitions\/\d\d-.+\.png$/);
-    expect(img.getAttribute("alt")).toBe(img.getAttribute("title"));
+    expect(img.getAttribute("alt")).toBeTruthy();
+    expect(img).not.toHaveAttribute("title");
+    expect(img.closest("a")).toHaveAttribute("aria-label", img.getAttribute("alt"));
   });
 });
 it("deduplicates and removes failed and unknown artwork", () => {

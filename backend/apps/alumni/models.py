@@ -134,6 +134,9 @@ def clear_alumni_cache(sender, **kwargs):
     invalidate_cache_prefix("api:graduation_group")
     invalidate_cache_prefix("api:stats")
     invalidate_cache_prefix("api:impact")
+    # Editorial lists embed the profile name, portrait and employment details.
+    for prefix in ("stories", "interviews", "advice"):
+        invalidate_cache_prefix(f"api:{prefix}")
 
 
 class Achievement(models.Model):

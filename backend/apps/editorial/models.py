@@ -282,6 +282,9 @@ from django.dispatch import receiver
 @receiver([post_save, post_delete], sender=AlumniInterview)
 @receiver([post_save, post_delete], sender=AlumniAdvice)
 @receiver([post_save, post_delete], sender=Event)
+@receiver([post_save, post_delete], sender=InterviewItem)
+@receiver([post_save, post_delete], sender=StorySection)
+@receiver([post_save, post_delete], sender=EventSpeaker)
 def clear_editorial_cache(sender, **kwargs):
     from common.cache_utils import invalidate_cache_prefix
     invalidate_cache_prefix("api:news")
@@ -290,5 +293,11 @@ def clear_editorial_cache(sender, **kwargs):
     invalidate_cache_prefix("api:advice")
     invalidate_cache_prefix("api:events")
     invalidate_cache_prefix("api:stats")
+    # A request during a nested edit can refill a cache before commit.
+    # Invalidate again once the entire edit is visible to other connections.
+    from django.db import transaction
+    if transaction.get_connection().in_atomic_block:
+        transaction.on_commit(lambda: [invalidate_cache_prefix(f"api:{name}") for name in
+                                      ("news", "stories", "interviews", "advice", "events", "stats")])
 
 

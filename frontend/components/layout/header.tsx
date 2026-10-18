@@ -50,6 +50,13 @@ export function Header({ locale, t }: { locale: Locale; t: Dictionary }) {
   const close = () => setOpen(false);
 
   useEffect(() => {
+    const desktop = window.matchMedia("(min-width: 901px)");
+    const closeMobileMenu = () => { if (desktop.matches) setOpen(false); };
+    desktop.addEventListener("change", closeMobileMenu);
+    return () => desktop.removeEventListener("change", closeMobileMenu);
+  }, []);
+
+  useEffect(() => {
     setOpen(false);
   }, [pathname]);
 
