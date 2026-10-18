@@ -9,7 +9,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models, transaction
 
 from apps.alumni.models import AlumniProfile, RecognitionTitle, AlumniRecognition
-from apps.editorial.models import SuccessStory, AlumniInterview, AlumniAdvice, InterviewItem
+from apps.editorial.models import SuccessStory, AlumniInterview, AlumniAdvice, InterviewItem, News
 from apps.universities.models import Faculty, Specialty
 
 
@@ -39,6 +39,8 @@ class Command(BaseCommand):
                 raise CommandError("Export is limited to local DEBUG environments.")
             profiles = AlumniProfile.objects.filter(is_honorary=True, is_published=True, visibility="public").order_by("slug")
             data = {"version": 1, "profiles": [], "titles": [scalars(t) for t in RecognitionTitle.objects.filter(is_active=True)], "media": {}}
+            data["news"] = [{key: value for key, value in scalars(n).items() if key != "views_count"}
+                            for n in News.objects.filter(is_published=True).order_by("slug")]
             for profile in profiles:
                 row = {"fields": scalars(profile), "faculty": profile.faculty.name if profile.faculty else None,
                        "specialty": profile.specialty.name if profile.specialty else None,
@@ -67,9 +69,10 @@ class Command(BaseCommand):
                     for item in value:
                         collect(item)
             collect(data["profiles"])
+            collect(data["news"])
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(json.dumps(data, cls=DjangoJSONEncoder, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-            self.stdout.write(f"Exported {len(data['profiles'])} public honorary profiles and {len(data['media'])} public media files.")
+            self.stdout.write(f"Exported {len(data['profiles'])} public honorary profiles, {len(data['news'])} published news and {len(data['media'])} public media files.")
             return
         data = json.loads(path.read_text(encoding="utf-8"))
         if data.get("version") != 1:
@@ -97,6 +100,8 @@ class Command(BaseCommand):
             return obj
 
         with transaction.atomic():
+            for row in data.get("news", []):
+                upsert(News, {"slug": row["slug"]}, row)
             titles = {r["slug"]: upsert(RecognitionTitle, {"slug": r["slug"]}, r) for r in data["titles"]}
             RecognitionTitle.objects.exclude(slug__in=titles).update(is_active=False)
             for row in data["profiles"]:
@@ -132,6 +137,10 @@ class Command(BaseCommand):
                 destination = Path(settings.MEDIA_ROOT) / name
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(path.parent / "media" / name, destination)
+                # Git checkout or a private backup umask must not make these
+                # explicitly public images unreadable by the Nginx worker.
+                destination.chmod(0o644)
             from django.core.cache import cache
             cache.clear()
-        self.stdout.write(f"{'APPLIED' if options['apply'] else 'DRY RUN'}: {len(data['profiles'])} profiles. Accounts and contacts preserved.")
+        assignments = sum(len(row["recognitions"]) for row in data["profiles"])
+        self.stdout.write(f"{'APPLIED' if options['apply'] else 'DRY RUN'}: {len(data['profiles'])} profiles, {assignments} recognition assignments, {len(data.get('news', []))} news. Accounts and contacts preserved.")
