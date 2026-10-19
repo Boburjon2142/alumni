@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Copy, Send, Share2 } from "lucide-react";
+import { Check, Copy } from "lucide-react";
 
 interface ProfileShareButtonsProps {
   fullName: string;
@@ -13,10 +13,6 @@ interface ProfileShareButtonsProps {
 }
 
 export function ProfileShareButtons({
-  fullName,
-  position,
-  faculty,
-  graduationYear,
   slug,
   locale = "uz",
 }: ProfileShareButtonsProps) {
@@ -28,26 +24,6 @@ export function ProfileShareButtons({
       return `${origin}/alumni/${slug}`;
     }
     return `${origin}/alumni`;
-  };
-
-  const getShareText = () => {
-    const yearStr = graduationYear ? ` (${graduationYear}-yil)` : "";
-    const roleStr = position ? ` — ${position}` : "";
-    
-    if (locale === "ru") {
-      return `🎓 ${fullName}${yearStr}${roleStr}\nКаршинский государственный университет — Профиль выпускника`;
-    }
-    if (locale === "en") {
-      return `🎓 ${fullName}${yearStr}${roleStr}\nKarshi State University — Alumni Profile`;
-    }
-    return `🎓 ${fullName}${yearStr}${roleStr}\nQarshi davlat universiteti — Bitiruvchi profili:`;
-  };
-
-  const handleTelegramShare = () => {
-    const url = getProfileUrl();
-    const text = getShareText();
-    const telegramUrl = `https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`;
-    window.open(telegramUrl, "_blank", "noopener,noreferrer");
   };
 
   const handleCopyLink = async () => {
@@ -73,25 +49,8 @@ export function ProfileShareButtons({
     ? "Copy link"
     : "Havolani nusxalash";
 
-  const telegramLabel =
-    locale === "ru"
-      ? "Поделиться в Telegram"
-      : locale === "en"
-      ? "Share to Telegram"
-      : "Telegramda ulashish";
-
   return (
     <div className="profile-share-group" role="group" aria-label="Profilni ulashish">
-      <button
-        type="button"
-        onClick={handleTelegramShare}
-        className="share-btn share-btn-telegram"
-        title={telegramLabel}
-      >
-        <Send size={15} />
-        <span>{telegramLabel}</span>
-      </button>
-
       <button
         type="button"
         onClick={handleCopyLink}

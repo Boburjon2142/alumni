@@ -17,27 +17,10 @@ describe("ProfileShareButtons Component", () => {
     cleanup();
   });
 
-  it("renders share buttons and handles Telegram sharing", () => {
-    render(
-      <ProfileShareButtons
-        fullName="Sherzod Nematov"
-        position="Rektor"
-        faculty="Fizika-texnika"
-        graduationYear={2005}
-        slug="nematov-sherzod"
-        locale="uz"
-      />
-    );
-
-    const telegramBtn = screen.getByRole("button", { name: /Telegramda ulashish/i });
-    expect(telegramBtn).toBeInTheDocument();
-
-    fireEvent.click(telegramBtn);
-    expect(window.open).toHaveBeenCalledWith(
-      expect.stringContaining("https://t.me/share/url?url="),
-      "_blank",
-      "noopener,noreferrer"
-    );
+  it("shows only the copy control", () => {
+    render(<ProfileShareButtons fullName="Sherzod Nematov" slug="nematov-sherzod" locale="uz" />);
+    expect(screen.getAllByRole("button")).toHaveLength(1);
+    expect(screen.queryByRole("button", { name: /Telegram/i })).toBeNull();
   });
 
   it("handles copying link to clipboard", async () => {
@@ -53,6 +36,6 @@ describe("ProfileShareButtons Component", () => {
     expect(copyBtn).toBeInTheDocument();
 
     fireEvent.click(copyBtn);
-    expect(navigator.clipboard.writeText).toHaveBeenCalled();
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(`${window.location.origin}/alumni/nematov-sherzod`);
   });
 });

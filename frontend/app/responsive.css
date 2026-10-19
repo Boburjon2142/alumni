@@ -1,8 +1,33 @@
 /* Content-width tokens remain owned by content-width.css. */
 .honorary-profile-mobile-awards { display: none; }
+.honorary-profile-landscape-awards { display: none; }
+.honorary-profile-portrait-column { min-width: 0; }
+.honorary-profile-desktop-awards { display: none; }
+.honorary-profile-summary > .honorary-meta > .profile-share-group { display: flex; width: auto; }
+.honorary-profile-summary > .honorary-meta .share-btn-copy { border-radius: 9999px; }
+
+@media (min-width: 769px) {
+  .honorary-profile-summary { min-width: 0; container-type: inline-size; }
+  .honorary-profile-summary > h1 {
+    max-width: none;
+    white-space: nowrap;
+    font-size: clamp(16px, 4.4cqw, 56px);
+  }
+  .honorary-profile-desktop-awards { display: block; }
+}
+
+@media (min-width: 769px) and (orientation: landscape) and (hover: none) and (pointer: coarse) {
+  .honorary-profile-landscape-awards {
+    display: flex;
+    justify-content: center;
+    margin-top: 12px;
+  }
+  .honorary-profile-landscape-awards > div { justify-content: center; }
+  .honorary-profile-desktop-awards { display: none; }
+}
 
 @media (max-width: 768px) {
-  .honorary-profile-hero-grid > .honorary-profile-photo-wrapper {
+  .honorary-profile-portrait-column > .honorary-profile-photo-wrapper {
     margin-inline: auto;
   }
   .honorary-profile-mobile-awards {
@@ -11,6 +36,35 @@
   }
   .honorary-profile-mobile-awards > div { justify-content: center; }
   .honorary-profile-summary > h1 { text-align: center; }
+  .honorary-profile-summary > .honorary-meta {
+    display: grid;
+    grid-template-columns: minmax(0, 1.8fr) minmax(0, 1fr);
+    align-items: stretch;
+    gap: 8px;
+  }
+  .honorary-profile-summary .honorary-meta-item {
+    min-width: 0;
+    padding: 8px 10px;
+  }
+  .honorary-profile-summary .honorary-meta-loc,
+  .honorary-profile-summary .honorary-meta-spec {
+    grid-column: 1 / -1;
+  }
+  .honorary-profile-summary .honorary-meta-text {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+  .honorary-profile-summary .share-btn {
+    min-width: 0;
+    min-height: 44px;
+    padding-inline: 10px;
+    justify-content: center;
+  }
+  .honorary-profile-summary .share-btn svg { flex-shrink: 0; }
+  .honorary-profile-summary .share-btn span {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
 }
 
 @media (max-width: 900px) {

@@ -62,6 +62,18 @@
   .horizontalCard .year { right: 12px; }
   .horizontalCard .honors { right: 4px; top: 5px; }
   .horizontalCard .tooltip { max-width: 110px; white-space: normal; }
+  :global(.featured-section) .horizontalCard .info {
+    gap: 4px;
+    padding: 32px 12px 8px;
+  }
+  :global(.featured-section) .horizontalCard .info > div {
+    margin-top: 0;
+    margin-bottom: 2px;
+  }
+  :global(.featured-section) .horizontalCard .details {
+    margin-top: 4px;
+    padding-top: 6px;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   .card, .portrait img, .tooltip { transition: none; }

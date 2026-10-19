@@ -155,6 +155,7 @@ export default async function Profile({ params }: Props) {
       {/* Profile Hero */}
       <header className="honorary-profile-hero">
         <div className="container honorary-profile-hero-grid">
+          <div className="honorary-profile-portrait-column">
           <div className="honorary-profile-photo-wrapper">
             <RemoteImage
               className="honorary-profile-photo-img"
@@ -166,12 +167,19 @@ export default async function Profile({ params }: Props) {
               priority
             />
           </div>
+          <div className="honorary-profile-landscape-awards">
+            <AlumniAwards awards={getAlumniAwards(a)} honors={getCardRecognitions(a)} locale={locale} />
+          </div>
+          </div>
 
           <div className="honorary-profile-summary">
             <div className="honorary-profile-mobile-awards">
               <AlumniAwards awards={getAlumniAwards(a)} honors={getCardRecognitions(a)} locale={locale} />
             </div>
             <h1>{a.full_name}</h1>
+            <div className="honorary-profile-desktop-awards">
+              <AlumniAwards awards={getAlumniAwards(a)} honors={getCardRecognitions(a)} locale={locale} />
+            </div>
             <p className="honorary-role">
               <span className="honorary-role-title">{displayPosition}</span>
               {displayCompany && (
@@ -229,18 +237,11 @@ export default async function Profile({ params }: Props) {
                   <span className="honorary-meta-text">{a.specialty}</span>
                 </div>
               )}
+              <ProfileShareButtons fullName={a.full_name} slug={a.slug} locale={locale} />
             </div>
 
             <div style={{ marginTop: "1.25rem", display: "flex", gap: "0.75rem", flexWrap: "wrap", alignItems: "center" }}>
               <EditProfileModal alumnus={a} locale={locale} />
-              <ProfileShareButtons
-                fullName={a.full_name}
-                position={a.position || a.current_activity}
-                faculty={a.faculty}
-                graduationYear={a.graduation_year}
-                slug={a.slug}
-                locale={locale}
-              />
             </div>
           </div>
         </div>
