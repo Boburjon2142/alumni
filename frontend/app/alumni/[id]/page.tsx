@@ -15,6 +15,8 @@ import {
   User,
 } from "lucide-react";
 import { RemoteImage } from "@/components/ui/remote-image";
+import { AlumniAwards } from "@/components/alumni/alumni-awards";
+import { getAlumniAwards, getCardRecognitions } from "@/lib/recognition-assets";
 import { EditProfileModal } from "@/components/alumni/edit-profile-modal";
 import { PeerConfirmation } from "@/components/alumni/peer-confirmation";
 import { ProfileShareButtons } from "@/components/alumni/profile-share-buttons";
@@ -166,11 +168,9 @@ export default async function Profile({ params }: Props) {
           </div>
 
           <div className="honorary-profile-summary">
-            {a.is_featured && (
-              <span className="honorary-badge">
-                <Award size={16} /> {t.featuredTitle}
-              </span>
-            )}
+            <div className="honorary-profile-mobile-awards">
+              <AlumniAwards awards={getAlumniAwards(a)} honors={getCardRecognitions(a)} locale={locale} />
+            </div>
             <h1>{a.full_name}</h1>
             <p className="honorary-role">
               <span className="honorary-role-title">{displayPosition}</span>

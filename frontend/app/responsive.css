@@ -1,4 +1,18 @@
 /* Content-width tokens remain owned by content-width.css. */
+.honorary-profile-mobile-awards { display: none; }
+
+@media (max-width: 768px) {
+  .honorary-profile-hero-grid > .honorary-profile-photo-wrapper {
+    margin-inline: auto;
+  }
+  .honorary-profile-mobile-awards {
+    display: flex;
+    justify-content: center;
+  }
+  .honorary-profile-mobile-awards > div { justify-content: center; }
+  .honorary-profile-summary > h1 { text-align: center; }
+}
+
 @media (max-width: 900px) {
   .nav-menu-grid {
     display: grid;
